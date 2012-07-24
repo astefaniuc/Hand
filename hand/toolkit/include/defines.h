@@ -78,7 +78,7 @@ struct Position
 #define FONT_FILE "/usr/share/fonts/truetype/freefont/FreeSans.ttf"
 
 // Themes strings
-#define THEMES_DIRECTORY "file:///home/james/workspace/test_app/toolkit/themes/"
+#define THEMES_DIRECTORY "file://./toolkit/themes/"
 #define DEFAULT_THEME "file://default.so"
 #define LIBRARY_FILE_EXTENSION ".so"
 

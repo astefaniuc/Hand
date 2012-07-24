@@ -167,7 +167,7 @@ void HandServer::SetLayerManagerPositions()
 bool HandServer::Present(string file)
 {
     Functoid* app = Produce(new Note("Command line input", file), "");
-    if(app)
+    if(app && app->IsType(TYPE_HANDAPP))
     {
         LayerMgrs[0]->LoadAppInterface(app, true);
         return true;

@@ -58,8 +58,8 @@ HandServer* HandApp::Server()
 
 
 HandAppLoader::HandAppLoader(FileFunctoid* path_obj) : Factory(NAME_NOT_INIT,
-                                                                 TYPE_FILEFUNCTOID,
-                                                                 TYPE_HANDAPP, "")
+                                                               TYPE_FILEFUNCTOID,
+                                                               TYPE_HANDAPP, "")
 {
     SetType(TYPE_APPLOADER);
     if(!path_obj)
