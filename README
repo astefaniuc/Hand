@@ -1,34 +1,34 @@
 #### Status: ####
-=================
-pre-alpha
+-----------------
+pre-alpha (https://github.com/astefaniuc/Hand/wiki/Software-Status)
 
 # Supported OS: #
-=================
+-----------------
 Ubuntu Linux 12.04
 
 #### Build: #####
-=================
+-----------------
 > make
 (No "configure")
 
 ##### Run: ######
-=================
+-----------------
 > cd <your_path>/hand
 > ./hand.sh
 or
 > ./hand.sh file://./apps/test1/test1.so
 
 # Dependencies: #
-=================
+-----------------
 libsdl1.2
 libsdl-ttf2.0
 libboost-regex1.46
 libboost-system1.46
 
 ### License: ####
-=================
+-----------------
 LGPL
 
 ##### Wiki: #####
-=================
+-----------------
 https://github.com/astefaniuc/Hand/wiki
