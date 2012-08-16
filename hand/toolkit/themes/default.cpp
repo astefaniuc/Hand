@@ -84,11 +84,17 @@ bool Default::GetLMLayout(Functoid* out)
 bool Default::GetViewLayout(Functoid* out)
 {
     Layout* layout = dynamic_cast<Layout*>(out);
-
-    layout->Set(new Rect(GUI_RECT_SIZEANDPOS, 0.1, 0.1, 0.8, 0.8));
-    layout->Set(new Rect(DRAW_PROPERTY_ALIGNMENT, 1, 0, 1, 0));
+    // Vertical list alignment
+    layout->Set(new Rect(DRAW_PROPERTY_ALIGNMENT, 0, 1, 0, 1));
     layout->Add("Methods", new Link("DrawFunc", GUI_DRAWER_LIST));
-    layout->Add(new Layout("Frame", GUI_LAYOUT_FRAME));
+    layout->AddField("ListElement", "Any");
+
+    Layout* controls = new Layout("Controls", GUI_LAYOUT_FRAMEDLIST);
+    // Horizontal list alignment
+    controls->Set(new Rect(DRAW_PROPERTY_ALIGNMENT, 1, 0, 1, 0));
+    layout->Add(TAG_RELATION_CHILD, controls);
+    controls->Set(TAG_RELATION_PARENT, layout);
+    controls->AddField("ListElement", TYPE_BUTTONLAYER);
     return true;
 }
 
@@ -99,7 +105,8 @@ bool Default::GetListLayout(Functoid* out)
 
     layout->Set(new Rect(DRAW_PROPERTY_ALIGNMENT, 0, 1, 0, 1));
     layout->Add("Methods", new Link("DrawFunc", GUI_DRAWER_LIST));
-    layout->AddField("ListElement", TYPE_BUTTONLAYER);
+//    layout->AddField("ListElement", TYPE_BUTTONLAYER);
+    layout->AddField("ListElement", "Any");
     return true;
 }
 

@@ -46,7 +46,7 @@ class ListLayerFactory : public Factory
 {
     public:
         ListLayerFactory() : Factory(LAYER_TOPOGRAPHY,
-                                     TYPE_FUNCTOIDLIST,
+                                     TYPE_FUNCTOIDNODE,
                                      TYPE_LISTLAYER, ""){};
         ~ListLayerFactory(){};
 

@@ -18,8 +18,8 @@
  */
 
 #include "functoid.h"
-#include "functoidlist.h"
 #include "searchexpression.h"
+#include "functoidsearch.h"
 
 #include <typeinfo>
 
@@ -30,53 +30,133 @@ using namespace std;
 Functoid::Functoid(string name)
 {
     SetName(name);
-    SetType("Functoid");
+}
+
+
+Functoid::~Functoid()
+{
+    CleanUp();
+}
+
+
+void Functoid::CleanUp()
+{
+    uint s = size();
+    for(uint i=0; i<s; i++)
+        // Recursivelly delete all childrens:
+        delete at(i);
+    if(s != 0)
+        clear();
 }
 
 
 Functoid* Functoid::Find(string name, int max_depth)
 {
-    return _Find(name, max_depth);
+    int depth = 0;
+    Functoid* result = NULL;
+    while(depth <= max_depth)
+    {
+        result = _Find(name, depth);
+
+        if(result)
+            break;
+        depth++;
+    }
+    return result;
 }
 
 
 Functoid* Functoid::_Find(string name, int depth)
 {
-    if((depth==0) && (Name==name))
-        return this;
-    return NULL;
+    if(depth < 0)
+        return NULL;
+    if(depth == 0)
+    {
+        if(Name == name)
+            return this;
+        return NULL;
+    }
+
+    Functoid* ret = NULL;
+    uint s = size();
+    --depth;
+    for(uint i=0; i<s; i++)
+    {
+        ret = at(i)->_Find(name, depth);
+        if(ret != NULL)
+            break;
+    }
+    return ret;
 }
 
 
-bool Functoid::IsList()
+Functoid* Functoid::Find(SearchExpression* expression)
 {
-    return false;
+    // "Plain" find, don't descend
+    uint s = size();
+    Functoid* ret;
+    for(uint i=0; i<s; i++)
+    {
+        ret = at(i);
+        if(expression->Matches(ret->GetName()))
+            return ret;
+    }
+    return NULL;
 }
 
 
 bool Functoid::IsOpen(FunctoidSearch* search)
 {
+    // The search cookie should be the last element
+    Functoid* last = back();
+    if(last && (last->GetName()==search->GetCookieName()))
+        // Already searched from different branch
+        return false;
     return true;
 }
 
 
-bool Functoid::Add(Functoid* ignore)
+bool Functoid::Add(Functoid* child)
 {
-    // Only FunctoidList can do this
-    return false;
+    if(!child)
+        return false;
+    push_back(child);
+    return true;
 }
 
 
-bool Functoid::Set(Functoid* ignore)
+bool Functoid::Set(Functoid* child)
 {
-    // Only FunctoidList can do this
-    return false;
+    if(!child)
+        return false;
+
+    string s = child->GetName();
+    FunctoidIterator curr = begin();
+    while(curr!=end())
+    {
+        // TODO: is Type relevant?
+        if((*curr)->GetName() == s)
+        {
+            delete(*curr);
+            erase(curr);
+        }
+        else
+            curr++;
+    }
+    push_back(child);
+    return true;
 }
 
 
 Functoid* Functoid::Get(string s)
 {
-    // No children in the base class
+    FunctoidIterator curr;
+    FunctoidIterator _end = end();
+    for(curr=begin(); curr!=_end; curr++)
+    {
+        if((*curr)->GetName() == s)
+            return (*curr);
+    }
     return NULL;
 }
 
@@ -88,23 +168,36 @@ Functoid* Functoid::Get(uint child)
 }
 
 
-bool Functoid::Delete(Functoid* ignore)
+bool Functoid::Delete(Functoid* child)
 {
-    // Only FunctoidList can do this
-    return false;
+    if(!Detach(child))
+        return false;
+
+    delete(child);
+    return true;
 }
 
 
-bool Functoid::Attach(Functoid* ignore)
+bool Functoid::Attach(Functoid* child)
 {
-    // Only FunctoidList and above can do this
-    return false;
+    Add(child);
+    return true;
 }
 
 
 bool Functoid::Detach(Functoid* child)
 {
-    // Only FunctoidList can do this
+    if(!child) return false;
+
+    FunctoidIterator curr;
+    for(curr=begin(); curr!=end(); curr++)
+    {
+        if((*curr) == child)
+        {
+            erase(curr);
+            return true;
+        }
+    }
     return false;
 }
 
@@ -112,29 +205,36 @@ bool Functoid::Detach(Functoid* child)
 void Functoid::SetType(string type)
 {
     if(type != "")
-        Type = type;
+        Set(new Note(TAG_TYPE, type));
 }
 
 
 string Functoid::GetType()
 {
-    return Type;
+    Functoid* ret = Get(TAG_TYPE);
+    if(ret)
+        return ret->GetName();
+    return "Functoid";
 }
 
 
 bool Functoid::IsType(string type)
 {
-    if(Type == type)
-        return true;
+    Functoid* ret = Get(TAG_TYPE);
+    if(ret)
+        return (ret->GetName() == type);
     return false;
 }
 
 
-bool Functoid::IsType(SearchExpression* type)
+bool Functoid::IsType(SearchExpression* s_type)
 {
-    if(type && type->Matches(Type))
-        return true;
-    return false;
+    if(!s_type)
+        return false;
+    Functoid* type = Get(TAG_TYPE);
+    if(!type)
+        return false;
+    return s_type->Matches(type->GetName());
 }
 
 
@@ -208,9 +308,7 @@ Link::Link(string name, string type, uint size) : Functoid(name)
     SetType(type);
     IsMulti = false;
     if(size > 1)
-    {
         IsMulti = true;
-    }
 }
 
 
@@ -317,7 +415,7 @@ void Link::MakeMultiLink(bool cond)
     }
     else
     {
-        FunctoidList* new_val = new FunctoidList("Value");
+        FunctoidNode* new_val = new FunctoidNode("Value");
         if(Value)
             // Rescue old value
             new_val->Add(Value);

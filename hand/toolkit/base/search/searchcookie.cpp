@@ -24,7 +24,7 @@
 using namespace std;
 
 
-SearchCookie::SearchCookie() : FunctoidList(SEARCHCOOKIE)
+SearchCookie::SearchCookie() : FunctoidNode(SEARCHCOOKIE)
 {
     Target = NULL;
     Parent = NULL;
@@ -71,7 +71,7 @@ bool SearchCookie::Detach(Functoid* ignore)
 
 Functoid* Pool::Get()
 {
-    if(!empty())
+    if(size()>1)
     {
         Functoid* cookie = back();
         pop_back();
@@ -90,12 +90,11 @@ void Pool::Take(Functoid* cookie)
     // Add to the pool
     push_back(cookie);
     ((SearchCookie*)cookie)->IsDeadBranch = false;
-    FunctoidList* cookie_list = (FunctoidList*)cookie;
-    FunctoidIterator curr;
-    FunctoidIterator _end = cookie_list->end();
-    for(curr=cookie_list->begin(); curr!=_end; curr++)
+    FunctoidList* cookie_l = (FunctoidList*)cookie;
+    uint i = cookie_l->size();
+    while(i > 1)
     {
-        Take((*curr));
+        Take(cookie_l->Get(--i));
+        cookie_l->pop_back();
     }
-    cookie_list->clear();
 }

@@ -64,13 +64,9 @@ void FunctoidSearch::ClearFindings()
     if(!Findings) return;
     // Don't call destructor for the findings from container
     if(MultipleFinds)
-    {
-        ((FunctoidList*)Findings)->clear();
-    }
+        Findings->clear();
     else
-    {
         Detach(Findings);
-    }
 }
 
 
@@ -133,15 +129,13 @@ void FunctoidSearch::AddFinding(Functoid* finding)
     {
         if(!Findings)
         {
-            Findings = new FunctoidList("Findings");
+            Findings = new FunctoidNode("Findings");
             Add(Findings);
         }
         Findings->Add(finding);
     }
     else
-    {
         Findings = finding;
-    }
 }
 
 
@@ -170,8 +164,6 @@ bool FunctoidSearch::Search(Functoid* target)
         found = true;
     }
 
-    if(!target->IsList())
-        return found;
     SearchCookie* path = (SearchCookie*)(CookiePool->Get());
     target->Attach(path);
     path->Target = target;
@@ -188,9 +180,7 @@ bool FunctoidSearch::Search(Functoid* target)
         if(path->IsDeadBranch)
             break;
         if(RemoveDeadBranch)
-        {
             DecomposeDeathBranches(path);
-        }
     }
     delete(path);
     return found;
@@ -200,14 +190,12 @@ bool FunctoidSearch::Search(Functoid* target)
 bool FunctoidSearch::Step(SearchCookie* path)
 {
     bool found = false;
-    if(!path->empty())
+    if(path->size()>1)
     {
         SearchCookie* branch;
-        FunctoidIterator curr;
-        FunctoidIterator _end = path->end();
-        for(curr=path->begin(); curr!=_end; curr++)
+        uint i = 0;
+        while((branch=(SearchCookie*)path->Get(++i)) != NULL)
         {
-            branch = (SearchCookie*)(*curr);
             if((!branch->IsDeadBranch) && Step(branch))
             {
                 found = true;
@@ -251,7 +239,7 @@ bool FunctoidSearch::SearchAllChilds(SearchCookie* path_end)
 
 void FunctoidSearch::ExtendPath(Functoid* tree_node, SearchCookie* path_end)
 {
-    if(!tree_node || !tree_node->IsList())
+    if(!tree_node)
         return;
 
     Functoid* path_extension = CookiePool->Get();
@@ -280,12 +268,15 @@ bool FunctoidSearch::MarkDeathBranch(SearchCookie* branch)
     if(!branch)
         return false;
 
-    FunctoidIterator b;
+    FunctoidIterator b = branch->begin();
     FunctoidIterator _end = branch->end();
-    for(b=branch->begin(); b!=_end; b++)
+    if(b != _end)
+        b++;
+    while(b != _end)
     {
         if(!((SearchCookie*)(*b))->IsDeadBranch)
             return false;
+        b++;
     }
     branch->IsDeadBranch = true;
 
@@ -300,6 +291,8 @@ void FunctoidSearch::DecomposeDeathBranches(SearchCookie* path)
     SearchCookie* branch;
     FunctoidIterator curr = path->begin();
     FunctoidIterator _end = path->end();
+    if(curr != _end)
+        curr++;
     while(curr != _end)
     {
         branch = (SearchCookie*)(*curr);

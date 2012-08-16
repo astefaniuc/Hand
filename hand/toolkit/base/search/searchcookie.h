@@ -20,7 +20,7 @@
 #ifndef HAND_SEARCHCOOKIE_H
 #define HAND_SEARCHCOOKIE_H
 
-#include "functoidlist.h"
+#include "functoidnode.h"
 
 
 using namespace std;
@@ -30,7 +30,7 @@ using namespace std;
 
 class FunctoidSearch;
 
-class SearchCookie : public FunctoidList
+class SearchCookie : public FunctoidNode
 {
     public:
         SearchCookie();
@@ -45,10 +45,10 @@ class SearchCookie : public FunctoidList
 };
 
 
-class Pool : public FunctoidList
+class Pool : public FunctoidNode
 {
     public:
-        Pool() : FunctoidList("SearchCookiePool"){};
+        Pool() : FunctoidNode("SearchCookiePool"){};
         virtual ~Pool(){};
         Functoid* Get();
         void Take(Functoid* cookie);

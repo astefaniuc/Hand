@@ -25,8 +25,9 @@
 using namespace std;
 
 
-FunctoidNode::FunctoidNode(string name) : FunctoidList(name)
+FunctoidNode::FunctoidNode(string name) : Functoid(name)
 {
+    Add(new Functoid("Runtime"));
     SetType(TYPE_FUNCTOIDNODE);
 }
 
@@ -39,34 +40,8 @@ FunctoidNode::~FunctoidNode()
 
 void FunctoidNode::SetType(string type)
 {
-    // Type as "relation"
-    Add(TAG_TYPE, new FunctoidType(Type));
-    // Store the latest type as string (returned by GetType())
-    Functoid::SetType(type);
-}
-
-
-bool FunctoidNode::IsType(string type)
-{
-    if(Type==type)
-        return true;
-    Functoid* types = Get(TAG_TYPE);
-    if(types && types->Get(type))
-        return true;
-    return false;
-}
-
-
-bool FunctoidNode::IsType(SearchExpression* type)
-{
-    if(!type)
-        return false;
-    if(Functoid::IsType(type))
-        return true;
-    Relation* type_node = dynamic_cast<Relation*>(Get(TAG_TYPE));
-    if(!type_node)
-        return false;
-    return type_node->Find(type);
+    if(type != "")
+        Get(0)->Set(new Note(TAG_TYPE, type));
 }
 
 

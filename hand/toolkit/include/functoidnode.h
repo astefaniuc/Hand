@@ -20,7 +20,7 @@
 #ifndef HAND_FUNCTOIDNODE_H
 #define HAND_FUNCTOIDNODE_H
 
-#include "functoidlist.h"
+#include "functoid.h"
 
 
 using namespace std;
@@ -36,23 +36,28 @@ using namespace std;
 class Relation;
 class Factory;
 
-class FunctoidNode : public FunctoidList
+class FunctoidNode : public Functoid
 {
     public:
         FunctoidNode(string name);
         virtual ~FunctoidNode();
 
         virtual void SetType(string type);
-        virtual bool IsType(string type);
-        virtual bool IsType(SearchExpression* search);
         // Set one directional relation to given functoid
-        using FunctoidList::Add;
+        using Functoid::Add;
         virtual bool Add(string relation_name, Functoid* functoid);
-        using FunctoidList::Set;
+        using Functoid::Set;
         virtual bool Set(string relation_name, Functoid* functoid);
-        using FunctoidList::Get;
+        using Functoid::Get;
+
         // Get the child by position, 0-based; overloads the FunctoidList
-        // method which is 1-based. Element '0' stores type information.
+        // method which is 1-based. Element '0' stores hidden system information
+        // e.g. type and layout. "Public" elements can be iterated through:
+        /*
+        uint i = 0;
+        while((child=list->Get(++i)) != NULL)
+            ...
+        */
         virtual Functoid* Get(uint child);
         virtual Functoid* Get(string relation_name, string element);
 
@@ -67,7 +72,7 @@ class FunctoidNode : public FunctoidList
 
 #define FUNCTOIDRELATION "FUNCTOIDRELATION"
 
-class Relation : public FunctoidList
+class Relation : public Functoid
 {
     public:
         Relation(string name);

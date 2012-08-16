@@ -25,6 +25,7 @@
 #include <string>
 #include <sstream>
 #include <typeinfo>
+#include <vector>
 
 
 using namespace std;
@@ -38,18 +39,20 @@ using namespace std;
 class FunctoidSearch;
 class SearchExpression;
 
-class Functoid
+class Functoid : public vector<Functoid*>
 {
     public:
         Functoid(string name);
-        virtual ~Functoid(){};
+        virtual ~Functoid();
+        // Delete all children
+        virtual void CleanUp();
 
         // Check first if the string "name" contains a scheme
         virtual Functoid* Find(string name, int max_depth = MAX_SEARCH_DEPTH);
         // Iterative deepening depth-first search recursive calls
         virtual Functoid* _Find(string name, int depth);
+        virtual Functoid* Find(SearchExpression* expression);
         virtual bool IsOpen(FunctoidSearch* search);
-        virtual bool IsList();
 
         // Searches only one level down
         virtual bool Set(Functoid* child);
@@ -68,7 +71,7 @@ class Functoid
         virtual string GetType();
         virtual bool IsType(string type);
         virtual bool IsType(SearchExpression* type);
-        virtual string GetAsString() = 0;
+//        virtual string GetAsString() = 0;
         virtual bool Execute(Functoid* func_param);
 
         virtual bool SetOwner(Functoid* ignore);
@@ -85,13 +88,11 @@ class Functoid
         // Get the name with uri scheme
         virtual string GetUriString();
 
-        // Clean-up object
-//        virtual void Clean(void) = 0;
-
     protected:
         string Name;
-        string Type;
 };
+
+typedef vector<Functoid*>::iterator FunctoidIterator;
 
 
 #define FUNCTOIDDATA "FUNCTOIDDATA"
@@ -108,12 +109,12 @@ class Data : public Functoid
             SetType(string(typeid(val).name()));
         };
 
-        virtual bool Set(I val)
+        bool Set(I val)
         {
             Value = val;
             return true;
         };
-        virtual I Get()
+        I Get()
         {
             return Value;
         };
@@ -128,6 +129,53 @@ class Data : public Functoid
 };
 
 typedef Data<string> Note;
+
+
+template <class I>
+class Callback : public Functoid
+{
+    typedef bool (I::*TFunction)(Functoid*);
+
+    public:
+        Callback(string name, I* obj, TFunction func) : Functoid(name)
+        {
+            Object = obj;
+            Function = func;
+            SetType(BUTTON_ITEM);
+        };
+        // Clean-up object
+        void Clean(void)
+        {
+            delete(Object);
+        };
+
+        // Execute the Callback
+        bool Execute(Functoid* param)
+        {
+            if(Function)
+                return (Object->*Function)(param);
+            return false;
+        };
+
+        void Set(TFunction func)
+        {
+            Function = func;
+        };
+        virtual I* Get()
+        {
+            // Only makes sense to return the object
+            return Object;
+        };
+
+        string GetAsString()
+        {
+            // TODO: what kind of a string to create: for the GUI? for persistent storage? for both?
+            return "";
+        };
+    private:
+        TFunction Function;
+        I* Object;
+};
 
 
 #define TYPE_DESCRIPTOR "Link"
@@ -153,53 +201,6 @@ class Link : public Functoid
    protected:
         Functoid* Value;
         bool IsMulti;
-};
-
-
-template <class I>
-class Callback : public Functoid
-{
-    typedef bool (I::*TFunction)(Functoid*);
-
-    public:
-        Callback(string name, I* obj, TFunction func) : Functoid(name)
-        {
-            Object = obj;
-            Function = func;
-            Type = BUTTON_ITEM;
-        };
-        // Clean-up object
-        void Clean(void)
-        {
-            delete(Object);
-        };
-
-        // Execute the Callback
-        virtual bool Execute(Functoid* param)
-        {
-            if(Function)
-                return (Object->*Function)(param);
-            return false;
-        };
-
-        virtual void Set(TFunction func)
-        {
-            Function = func;
-        };
-        virtual I* Get()
-        {
-            // Only makes sense to return the object
-            return Object;
-        };
-
-        string GetAsString()
-        {
-            // TODO: what kind of a string to create: for the GUI? for persistent storage? for both?
-            return "";
-        };
-    private:
-        TFunction Function;
-        I* Object;
 };
 
 #endif /* HAND_FUNCTOID_H */
