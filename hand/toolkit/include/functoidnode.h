@@ -48,8 +48,9 @@ class FunctoidNode : public Functoid
         virtual bool Add(string relation_name, Functoid* functoid);
         using Functoid::Set;
         virtual bool Set(string relation_name, Functoid* functoid);
-        using Functoid::Get;
 
+        // Get the child by name
+        virtual Functoid* Get(string child);
         // Get the child by position, 0-based; overloads the FunctoidList
         // method which is 1-based. Element '0' stores hidden system information
         // e.g. type and layout. "Public" elements can be iterated through:
@@ -70,25 +71,34 @@ class FunctoidNode : public Functoid
 };
 
 
+// TODO: combine Link and Relation?
+#define TYPE_DESCRIPTOR "Link"
+
+class Link : public FunctoidNode
+{
+    public:
+        Link(string name, string type, bool is_multi_link=false);
+        virtual ~Link(){};
+
+        virtual bool Add(Functoid* val);
+        virtual bool Set(Functoid* val);
+        bool Execute(Functoid* vs);
+        void MakeMultiLink(bool);
+        bool IsMultiLink();
+
+   protected:
+        bool IsMulti;
+};
+
+
 #define FUNCTOIDRELATION "FUNCTOIDRELATION"
 
-class Relation : public Functoid
+class Relation : public FunctoidNode
 {
     public:
         Relation(string name);
         virtual ~Relation(){};
         bool IsOpen(FunctoidSearch* search);
-};
-
-
-#define FUNCTOIDTYPE "FUNCTOIDTYPE"
-
-class FunctoidType : public Functoid
-{
-    public:
-        FunctoidType(string name);
-        virtual ~FunctoidType(){};
-        virtual string GetAsString();
 };
 
 #endif // HAND_FUNCTOIDNODE_H

@@ -112,7 +112,7 @@ class PropertyFactory : public Factory
             Link* descr = dynamic_cast<Link*>(in_out);
             if(!descr || !descr->IsType(GetInputType()))
                 return NULL;
-            Functoid* layout = descr->Get();
+            Functoid* layout = descr->Get(1);
             // Already initialized?
             if(layout)
                 return layout;

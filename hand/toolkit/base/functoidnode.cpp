@@ -27,6 +27,7 @@ using namespace std;
 
 FunctoidNode::FunctoidNode(string name) : Functoid(name)
 {
+    // reserve the first list entry for runtime information
     Add(new Functoid("Runtime"));
     SetType(TYPE_FUNCTOIDNODE);
 }
@@ -41,7 +42,7 @@ FunctoidNode::~FunctoidNode()
 void FunctoidNode::SetType(string type)
 {
     if(type != "")
-        Get(0)->Set(new Note(TAG_TYPE, type));
+        Get(0)->SetType(type);
 }
 
 
@@ -62,9 +63,7 @@ bool FunctoidNode::Add(string relation_name, Functoid* child)
 bool FunctoidNode::Set(string relation_name, Functoid* child)
 {
     Relation* r = dynamic_cast<Relation*>(Get(relation_name));
-    if(r)
-        r->clear();
-    else
+    if(!r)
     {
         // Create relation (link functoid) if not existing
         r = new Relation(relation_name);
@@ -72,6 +71,16 @@ bool FunctoidNode::Set(string relation_name, Functoid* child)
         Add(r);
     }
     return r->Set(child);
+}
+
+
+Functoid* FunctoidNode::Get(string s)
+{
+    Functoid* ret = Functoid::Get(s);
+    if(!ret)
+        // Search hidden elements
+        return Get(0)->Get(s);
+    return ret;
 }
 
 
@@ -97,17 +106,7 @@ Functoid* FunctoidNode::Get(uint i)
 
 bool FunctoidNode::IsOwner(Functoid* caller)
 {
-    Functoid* parent = Get(TAG_RELATION_PARENT);
-    if(!parent)
-        return true;
-    if(parent->IsType(TYPE_FUNCTOIDLIST))
-    {
-        FunctoidList* lparent = (FunctoidList*)parent;
-        if((lparent->size()==1) && (lparent->at(0)==caller))
-            // This node has only one parent and this parent is the caller
-            return true;
-    }
-    return false;
+    return Get(0)->IsOwner(caller);
 }
 
 
@@ -115,9 +114,9 @@ void FunctoidNode::CleanUp()
 {
     Functoid* curr;
     // Don't delete the parent(s)
-    FunctoidList* parents = dynamic_cast<FunctoidList*>(Get(TAG_RELATION_PARENT));
-    if(parents)
-        parents->clear();
+    Functoid* parent = Get(TAG_RELATION_PARENT);
+    if(parent)
+        parent->clear();
 
     uint s = size();
     for(uint i=0; i<s; i++)
@@ -164,12 +163,74 @@ Factory* FunctoidNode::GetFactory()
     return NULL;
 }
 
+
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 
 
-Relation::Relation(string name) : FunctoidList(name)
+Link::Link(string name, string type, bool is_multi) : FunctoidNode(name)
+{
+    IsMulti = is_multi;
+    SetType(type);
+}
+
+
+bool Link::Set(Functoid* val)
+{
+    if(!IsMulti && (size()>1))
+        // TODO: delete or don't the linked element?
+        pop_back();
+    return Functoid::Set(val);
+}
+
+
+bool Link::Add(Functoid* val)
+{
+    if(IsMulti)
+        return Add(val);
+    if(size() > 1)
+        return false;
+    return Functoid::Add(val);
+}
+
+
+bool Link::Execute(Functoid* vs)
+{
+    uint i = 0;
+    Functoid* child;
+    while((child=Get(++i)) != NULL)
+        // TODO: needs concrete use cases for MultiLink
+        return child->Execute(vs);
+    return false;
+}
+
+
+void Link::MakeMultiLink(bool cond)
+{
+    if(IsMulti == cond)
+        return;
+    if(IsMulti)
+        while(size() > 2)
+            // TODO: delete or don't the linked elements?
+            pop_back();
+
+    IsMulti = cond;
+}
+
+
+bool Link::IsMultiLink()
+{
+    return IsMulti;
+}
+
+
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
+
+
+Relation::Relation(string name) : FunctoidNode(name)
 {
     SetType(FUNCTOIDRELATION);
 }
@@ -180,26 +241,7 @@ bool Relation::IsOpen(FunctoidSearch* search)
     // Does it match in its role as relation
     SearchExpression* se = search->GetSearchRelation();
     if(se && !se->Matches(Name))
-    {
         // Don't look further if it's not the right relation
         return false;
-    }
     return true;
-}
-
-
-// ----------------------------------------------------------------
-// ----------------------------------------------------------------
-// ----------------------------------------------------------------
-
-
-FunctoidType::FunctoidType(string name) : Functoid(name)
-{
-    SetType(FUNCTOIDTYPE);
-}
-
-
-string FunctoidType::GetAsString()
-{
-    return Name;
 }

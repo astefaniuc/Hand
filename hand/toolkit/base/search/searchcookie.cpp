@@ -83,18 +83,20 @@ Functoid* Pool::Get()
 
 void Pool::Take(Functoid* cookie)
 {
+    SearchCookie* sc = dynamic_cast<SearchCookie*>(cookie);
+    if(!sc)
+        return;
     // Detach the Target functoid
-    cookie->Detach(NULL);
+    sc->Detach(NULL);
 
-    ((SearchCookie*)cookie)->Parent = NULL;
+    sc->Parent = NULL;
     // Add to the pool
-    push_back(cookie);
-    ((SearchCookie*)cookie)->IsDeadBranch = false;
-    FunctoidList* cookie_l = (FunctoidList*)cookie;
-    uint i = cookie_l->size();
+    push_back(sc);
+    sc->IsDeadBranch = false;
+    uint i = sc->size();
     while(i > 1)
     {
-        Take(cookie_l->Get(--i));
-        cookie_l->pop_back();
+        Take(sc->Get(--i));
+        sc->pop_back();
     }
 }

@@ -40,7 +40,8 @@ void ListLayer::SetContent(Functoid* data)
     // Connect list and layer
     Layer::SetContent(data);
 
-    uint nr_of_childs = ((FunctoidList*)(data))->size();
+    uint nr_of_childs = ((FunctoidNode*)(data))->size();
+    nr_of_childs--;
     Data<uint>* max_c = dynamic_cast<Data<uint>*>(Get("Layout")->Get(1)->Get("MaxSize"));
     if(max_c)
     {
@@ -88,7 +89,7 @@ void ListLayer::Configure(Functoid* sub_layout)
 
 bool ListLayerFactory::IsValidInput(Functoid* input)
 {
-    if(input->IsType(TYPE_FUNCTOIDLIST))
+    if(input->IsType(TYPE_FUNCTOIDNODE))
         return true;
     return false;
 }

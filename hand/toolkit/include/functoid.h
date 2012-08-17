@@ -74,8 +74,6 @@ class Functoid : public vector<Functoid*>
 //        virtual string GetAsString() = 0;
         virtual bool Execute(Functoid* func_param);
 
-        virtual bool SetOwner(Functoid* ignore);
-        virtual Functoid* GetOwner();
         // Returns true if it can be deleted
         virtual bool IsOwner(Functoid* caller);
 
@@ -175,32 +173,6 @@ class Callback : public Functoid
     private:
         TFunction Function;
         I* Object;
-};
-
-
-#define TYPE_DESCRIPTOR "Link"
-
-class Link : public Functoid
-{
-    public:
-        Link(string name, string type, uint size=1);
-        virtual ~Link();
-
-        Functoid* Find(string name, int max_depth);
-        Functoid* _Find(string name, int depth);
-        virtual bool Add(Functoid* val);
-        virtual bool Set(Functoid* val);
-        Functoid* Get(uint i);
-        virtual Functoid* Get();
-        string GetAsString();
-        bool Execute(Functoid* vs);
-        bool IsList();
-        void MakeMultiLink(bool);
-        bool IsMultiLink();
-
-   protected:
-        Functoid* Value;
-        bool IsMulti;
 };
 
 #endif /* HAND_FUNCTOID_H */

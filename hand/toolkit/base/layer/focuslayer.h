@@ -32,7 +32,6 @@ class Functoid;
 class FocusLayer : public ListLayer
 {
     public:
-        // Init with link to the parent layer
         FocusLayer();
         virtual ~FocusLayer();
 

@@ -94,12 +94,8 @@ bool Theme::FillOut(Functoid* input)
 
 bool Theme::_FillOut(Functoid* input)
 {
-    FunctoidList* list = dynamic_cast<FunctoidList*>(input);
-    if(!list)
-        return true;
-
-    FunctoidIterator _end = list->end();
-    for(FunctoidIterator curr=list->begin(); curr!=_end; curr++)
+    FunctoidIterator _end = input->end();
+    for(FunctoidIterator curr=input->begin(); curr!=_end; curr++)
         Execute((*curr));
 
     return true;

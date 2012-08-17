@@ -137,7 +137,7 @@ bool Functoid::Set(Functoid* child)
         // TODO: is Type relevant?
         if((*curr)->GetName() == s)
         {
-            delete(*curr);
+//            delete(*curr);
             erase(curr);
         }
         else
@@ -153,10 +153,9 @@ Functoid* Functoid::Get(string s)
     FunctoidIterator curr;
     FunctoidIterator _end = end();
     for(curr=begin(); curr!=_end; curr++)
-    {
         if((*curr)->GetName() == s)
             return (*curr);
-    }
+
     return NULL;
 }
 
@@ -204,37 +203,50 @@ bool Functoid::Detach(Functoid* child)
 
 void Functoid::SetType(string type)
 {
-    if(type != "")
-        Set(new Note(TAG_TYPE, type));
+    if(type.empty())
+        return;
+    Functoid* types = Get(TAG_TYPE);
+    if(!types)
+    {
+        types = new Functoid(TAG_TYPE);
+        Set(types);
+    }
+    types->Set(new Functoid(type));
 }
 
 
 string Functoid::GetType()
 {
-    Functoid* ret = Get(TAG_TYPE);
-    if(ret)
-        return ret->GetName();
+    Functoid* types = Get(TAG_TYPE);
+    if(types)
+        return types->back()->GetName();
     return "Functoid";
 }
 
 
 bool Functoid::IsType(string type)
 {
-    Functoid* ret = Get(TAG_TYPE);
-    if(ret)
-        return (ret->GetName() == type);
+    Functoid* types = Get(TAG_TYPE);
+    FunctoidIterator _end = types->end();
+    for(FunctoidIterator curr=types->begin(); curr!=_end; curr++)
+        if((*curr)->GetName() == type)
+            return true;
+
     return false;
 }
 
 
-bool Functoid::IsType(SearchExpression* s_type)
+bool Functoid::IsType(SearchExpression* se)
 {
-    if(!s_type)
+    if(!se)
         return false;
-    Functoid* type = Get(TAG_TYPE);
-    if(!type)
-        return false;
-    return s_type->Matches(type->GetName());
+    Functoid* types = Get(TAG_TYPE);
+    FunctoidIterator _end = types->end();
+    for(FunctoidIterator curr=types->begin(); curr!=_end; curr++)
+        if(se->Matches((*curr)->GetName()))
+            return true;
+
+    return false;
 }
 
 
@@ -244,23 +256,15 @@ bool Functoid::Execute(Functoid* func_param)
 }
 
 
-bool Functoid::SetOwner(Functoid* ignore)
+bool Functoid::IsOwner(Functoid* caller)
 {
+    Functoid* parent = Get(TAG_RELATION_PARENT);
+    if(!parent)
+        return true;
+    if((parent->size()==2) && (parent->at(1)==caller))
+        // This node has only one parent and this parent is the caller
+        return true;
     return false;
-}
-
-
-Functoid* Functoid::GetOwner()
-{
-    return false;
-}
-
-
-bool Functoid::IsOwner(Functoid* ignore)
-{
-    // Data and Callback Functoids are always directly tied to only one ListFunctoid
-    // thus can be deleted from there
-    return true;
 }
 
 
@@ -296,136 +300,3 @@ bool Functoid::NotifyChanged()
 
 }
 */
-
-// ----------------------------------------------------------------
-// ----------------------------------------------------------------
-// ----------------------------------------------------------------
-
-
-Link::Link(string name, string type, uint size) : Functoid(name)
-{
-    Value = NULL;
-    SetType(type);
-    IsMulti = false;
-    if(size > 1)
-        IsMulti = true;
-}
-
-
-Link::~Link()
-{
-    // Is owner
-    delete(Value);
-}
-
-
-Functoid* Link::Find(string name, int max_depth)
-{
-    int depth = 0;
-    Functoid* result = NULL;
-    while(depth <= max_depth)
-    {
-        result = _Find(name, depth);
-
-        if(result)
-            break;
-        depth++;
-    }
-    return result;
-}
-
-
-Functoid* Link::_Find(string name, int depth)
-{
-    if(depth <= 0)
-    {
-        if(Name == name)
-            return this;
-    }
-    else if(Value)
-        return Value->_Find(name, --depth);
-    return NULL;
-}
-
-
-bool Link::Set(Functoid* val)
-{
-    if(IsMulti)
-        return Value->Set(val);
-    Value = val;
-    return true;
-}
-
-
-Functoid* Link::Get(uint i)
-{
-    if(IsMulti)
-        return Value->Get(i);
-    if(i == 1)
-        return Value;
-    return NULL;
-}
-
-
-bool Link::Add(Functoid* val)
-{
-    if(IsMulti)
-        return Value->Add(val);
-    if(Value)
-        return false;
-    Value = val;
-    return true;
-}
-
-
-Functoid* Link::Get()
-{
-    return Value;
-}
-
-
-string Link::GetAsString()
-{
-    return GetName() + "/" + GetType();
-}
-
-
-bool Link::Execute(Functoid* vs)
-{
-    if(Value)
-        return Value->Execute(vs);
-    return false;
-}
-
-
-bool Link::IsList()
-{
-    return true;
-}
-
-
-void Link::MakeMultiLink(bool cond)
-{
-    if(IsMulti == cond)
-        return;
-    if(IsMulti)
-    {
-        // TODO: delete or don't the linked elements?
-        Value = Value->Get(1);
-    }
-    else
-    {
-        FunctoidNode* new_val = new FunctoidNode("Value");
-        if(Value)
-            // Rescue old value
-            new_val->Add(Value);
-        Value = new_val;
-    }
-    IsMulti = cond;
-}
-
-
-bool Link::IsMultiLink()
-{
-    return IsMulti;
-}

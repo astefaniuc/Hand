@@ -29,7 +29,6 @@ using namespace std;
 class ListLayer : public Layer
 {
     public:
-        // Init with link to the parent layer
         ListLayer();
         virtual ~ListLayer();
         // Generate list names

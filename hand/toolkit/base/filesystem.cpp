@@ -66,24 +66,19 @@ FileFunctoid::FileFunctoid(string file_name) : FunctoidNode(file_name)
 {
     SetType(TYPE_FILEFUNCTOID);
     if(file_name.find(URISCHEME_FILE) == 0)
-    {
         // Remove the URI string from the name
         file_name.erase(0, sizeof(URISCHEME_FILE)-1);
-    }
+
     path file_path(file_name);
     if(is_regular_file(file_path))
     {
         if(file_path.has_parent_path())
-        {
             Set(RELATION_PARENT_PATH, new FileFunctoid(file_path.parent_path().string()));
-        }
 
         SetName(file_path.filename().string());
     }
     else // is directory
-    {
         SetName(file_name);
-    }
 }
 
 

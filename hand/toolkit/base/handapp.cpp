@@ -132,14 +132,11 @@ bool HandAppLoader_Factory::IsValidInput(Functoid* entry)
 {
     FileFunctoid* ff = dynamic_cast<FileFunctoid*>(entry);
     if(!ff)
-    {
         return false;
-    }
+
     boost::filesystem::path _path = ff->GetPath();
     if(is_regular_file(_path) && (_path.extension()==LIBRARY_FILE_EXTENSION))
-    {
         return true;
-    }
     return false;
 }
 

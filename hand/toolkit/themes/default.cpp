@@ -105,7 +105,7 @@ bool Default::GetListLayout(Functoid* out)
 
     layout->Set(new Rect(DRAW_PROPERTY_ALIGNMENT, 0, 1, 0, 1));
     layout->Add("Methods", new Link("DrawFunc", GUI_DRAWER_LIST));
-//    layout->AddField("ListElement", TYPE_BUTTONLAYER);
+    layout->AddField("ListElement", TYPE_BUTTONLAYER);
     layout->AddField("ListElement", "Any");
     return true;
 }
@@ -262,11 +262,14 @@ bool Default::DrawFrame(Functoid* layout)
     Rect* sap = GetRect(GUI_RECT_SIZEANDPOS, layout);
     sap->MultiplyTo(content_size);
 
-    FunctoidList* children = dynamic_cast<FunctoidList*>(layout->Get("Update"));
-    Functoid* to_update;
-    uint i = 0;
-    while((to_update=children->Get(++i)) != NULL)
-        GetRect(GUI_RECT_SIZEANDPOS, to_update)->Multiply(sap);
+    Functoid* children = layout->Get("Update");
+    if(children)
+    {
+        Functoid* to_update;
+        uint i = 0;
+        while((to_update=children->Get(++i)) != NULL)
+            GetRect(GUI_RECT_SIZEANDPOS, to_update)->Multiply(sap);
+    }
 
     // Draw each frame line separately
     SDL_Rect up, down, left, right;
@@ -362,11 +365,12 @@ bool Default::DrawText(Functoid* layout)
 
 bool Default::DrawList(Functoid* layout)
 {
-    FunctoidList* children = dynamic_cast<FunctoidList*>(layout->Get("Update"));
+    Functoid* children = layout->Get("Update");
     if(!children)
         return false;
-    uint child_cnt = children->size();
-    if(child_cnt < 1)
+    // Ignore the "runtime" child
+    uint child_cnt = children->size() - 1;
+    if(child_cnt <= 1)
         return true;
 
     Rect* align = GetRect(DRAW_PROPERTY_ALIGNMENT, layout);

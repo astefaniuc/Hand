@@ -125,7 +125,7 @@ bool LayerManager::Update(bool forced)
 
 Functoid* LayerManager::GetCommandList(Functoid* menu)
 {
-    FunctoidList* menu_list = dynamic_cast<FunctoidList*>(menu);
+    FunctoidNode* menu_list = dynamic_cast<FunctoidNode*>(menu);
     if(!menu_list)
         return NULL;
     Functoid* child;
@@ -230,7 +230,7 @@ bool LayerManager::LoadTheme(Functoid* f)
 bool LayerManager::GetAllThemes(Functoid* themes_dir)
 {
     // (Re-)read the list of available themes
-    FunctoidList* themes_list = dynamic_cast<FunctoidList*>(Server()->Produce(themes_dir, TYPE_FILEFUNCTOID));
+    FunctoidNode* themes_list = dynamic_cast<FunctoidNode*>(Server()->Produce(themes_dir, TYPE_FILEFUNCTOID));
     if(!themes_list)
         return false;
 
