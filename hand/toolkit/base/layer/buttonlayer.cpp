@@ -57,7 +57,8 @@ void ButtonLayer::SetContent(Functoid* data)
     // The button name
     Insert(data, BTN_FIELD_NAME);
     // The button description
-    Insert(data, BTN_FIELD_DESCRIPTION);
+    Functoid* test_descr = new Functoid("Description Test");
+    Insert(test_descr, BTN_FIELD_DESCRIPTION);
     // The icon
 /*    Insert(data->Find(string("Icon")), DRAW_ITEM, BTN_FIELD_ICON);*/
 }

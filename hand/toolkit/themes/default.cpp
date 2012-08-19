@@ -106,7 +106,7 @@ bool Default::GetListLayout(Functoid* out)
     layout->Set(new Rect(DRAW_PROPERTY_ALIGNMENT, 0, 1, 0, 1));
     layout->Add("Methods", new Link("DrawFunc", GUI_DRAWER_LIST));
     layout->AddField("ListElement", TYPE_BUTTONLAYER);
-    layout->AddField("ListElement", "Any");
+//    layout->AddField("ListElement", "Any");
     return true;
 }
 
@@ -370,7 +370,7 @@ bool Default::DrawList(Functoid* layout)
         return false;
     // Ignore the "runtime" child
     uint child_cnt = children->size() - 1;
-    if(child_cnt <= 1)
+    if(child_cnt < 1)
         return true;
 
     Rect* align = GetRect(DRAW_PROPERTY_ALIGNMENT, layout);
