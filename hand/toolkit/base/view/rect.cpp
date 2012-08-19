@@ -24,14 +24,14 @@
 using namespace std;
 
 
-Rect::Rect(string name, double x_, double y_, double w_, double h_) : FunctoidNode(name)
+Rect::Rect(string name, double x_, double y_, double w_, double h_) : FunctoidList(name)
 {
     SetType(GUI_TYPE_RECT);
     Init(x_, y_, w_, h_);
 }
 
 
-Rect::Rect() : FunctoidNode("No name")
+Rect::Rect() : FunctoidList("No name")
 {
     SetType(GUI_TYPE_RECT);
     Init(0.0, 0.0, 1.0, 1.0);

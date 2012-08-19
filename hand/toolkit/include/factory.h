@@ -55,7 +55,7 @@ class Factory : public HandApp
 
 #define TYPE_FACTORYMAP "TYPE_FACTORYMAP"
 
-class FactoryMap : public FunctoidNode
+class FactoryMap : public FunctoidList
 {
     public:
         FactoryMap(string name);

@@ -23,7 +23,7 @@
 using namespace std;
 
 
-Rgb::Rgb(string name, Uint8 r_, Uint8 g_, Uint8 b_) : FunctoidNode(name)
+Rgb::Rgb(string name, Uint8 r_, Uint8 g_, Uint8 b_) : FunctoidList(name)
 {
     SetType(GUI_TYPE_RGB);
     // For now add plain data directly

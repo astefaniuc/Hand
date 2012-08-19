@@ -79,7 +79,7 @@ string Factory::GetSpecifierString(string name)
 // ----------------------------------------------------------------
 
 
-FactoryMap::FactoryMap(string name) : FunctoidNode(name)
+FactoryMap::FactoryMap(string name) : FunctoidList(name)
 {
     SetType(TYPE_FACTORYMAP);
 }

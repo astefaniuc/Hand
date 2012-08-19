@@ -24,7 +24,7 @@
 using namespace std;
 
 
-SearchCookie::SearchCookie() : FunctoidNode(SEARCHCOOKIE)
+SearchCookie::SearchCookie() : FunctoidList(SEARCHCOOKIE)
 {
     Target = NULL;
     Parent = NULL;

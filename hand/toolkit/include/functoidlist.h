@@ -17,16 +17,15 @@
  *  License along with Hand. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HAND_FUNCTOIDNODE_H
-#define HAND_FUNCTOIDNODE_H
+#ifndef HAND_FUNCTOIDLIST_H
+#define HAND_FUNCTOIDLIST_H
 
 #include "functoid.h"
 
 
 using namespace std;
 
-
-#define TYPE_FUNCTOIDNODE "FunctoidNode"
+#define TYPE_FUNCTOIDLIST "FunctoidList"
 // Reserved tags/names for Functoid elements
 #define TAG_RELATION_PARENT "TAG_RELATION_PARENT"
 #define TAG_RELATION_CHILD "TAG_RELATION_CHILD"
@@ -36,11 +35,11 @@ using namespace std;
 class Relation;
 class Factory;
 
-class FunctoidNode : public Functoid
+class FunctoidList : public Functoid
 {
     public:
-        FunctoidNode(string name);
-        virtual ~FunctoidNode();
+        FunctoidList(string name);
+        virtual ~FunctoidList();
 
         virtual void SetType(string type);
         // Set one directional relation to given functoid
@@ -74,7 +73,7 @@ class FunctoidNode : public Functoid
 // TODO: combine Link and Relation?
 #define TYPE_DESCRIPTOR "Link"
 
-class Link : public FunctoidNode
+class Link : public FunctoidList
 {
     public:
         Link(string name, string type, bool is_multi_link=false);
@@ -93,7 +92,7 @@ class Link : public FunctoidNode
 
 #define FUNCTOIDRELATION "FUNCTOIDRELATION"
 
-class Relation : public FunctoidNode
+class Relation : public FunctoidList
 {
     public:
         Relation(string name);
@@ -101,4 +100,4 @@ class Relation : public FunctoidNode
         bool IsOpen(FunctoidSearch* search);
 };
 
-#endif // HAND_FUNCTOIDNODE_H
+#endif // HAND_FUNCTOIDLIST_H

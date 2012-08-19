@@ -21,7 +21,7 @@
 #ifndef HAND_FUNCTOIDSEARCH_H
 #define HAND_FUNCTOIDSEARCH_H
 
-#include "functoidnode.h"
+#include "functoidlist.h"
 #include "searchexpression.h"
 
 
@@ -31,7 +31,7 @@ using namespace std;
 class SearchCookie;
 class Pool;
 
-class FunctoidSearch : public FunctoidNode
+class FunctoidSearch : public FunctoidList
 {
     public:
         FunctoidSearch();

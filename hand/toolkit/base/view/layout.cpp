@@ -24,7 +24,7 @@
 using namespace std;
 
 
-Layout::Layout(string name, string type) : FunctoidNode(name)
+Layout::Layout(string name, string type) : FunctoidList(name)
 {
     SetType(GUI_LAYOUT);
     SetType(type);
@@ -41,9 +41,9 @@ Layout::Layout(string name, string type) : FunctoidNode(name)
 }
 
 
-FunctoidNode* Layout::AddField(string name, string type)
+FunctoidList* Layout::AddField(string name, string type)
 {
-    FunctoidNode* field = new FunctoidNode(name);
+    FunctoidList* field = new FunctoidList(name);
     field->SetType(type);
     field->Set("Layout", this);
     Add("Fields", field);
@@ -51,9 +51,9 @@ FunctoidNode* Layout::AddField(string name, string type)
 }
 
 
-FunctoidNode* Layout::GetField(string position)
+FunctoidList* Layout::GetField(string position)
 {
-    FunctoidNode* s = dynamic_cast<FunctoidNode*>(Get("Fields", position));
+    FunctoidList* s = dynamic_cast<FunctoidList*>(Get("Fields", position));
     if(s)
         return s;
     Functoid* childs = Get(TAG_RELATION_CHILD);

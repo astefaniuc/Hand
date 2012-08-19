@@ -45,7 +45,7 @@ Screen::Screen() : HandApp("Screen")
 void Screen::Init()
 {
     // Add a func to toggle fullscreen <-> windowed mode
-    FunctoidNode* button = new FunctoidNode("ToggleFullscreen");
+    FunctoidList* button = new FunctoidList("ToggleFullscreen");
     button->Add(new Callback<Screen>("Button", this, &Screen::ToggleFullscreen));
     button->Add(new Note(TAG_DESCRIPTION, "Toggle full screen"));
     Add(button);

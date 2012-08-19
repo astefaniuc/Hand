@@ -46,17 +46,17 @@ bool Device::Init()
 {
     // Two main entries: a keylist and the description
     Add(new Note(TAG_DESCRIPTION, "Press 5 keys on the keyboard"));
-    Functoid* keys_tree = new FunctoidNode(DEVICE_KEYLIST);
+    Functoid* keys_tree = new FunctoidList(DEVICE_KEYLIST);
     Add(keys_tree);
 
     // Load un-initialized keys
-    FunctoidNode* key;
+    FunctoidList* key;
     Callback<Device>* show_key = new Callback<Device>("Show Key", this, &Device::ShowPressedKey);
     string key_name = "";
     for(int i=0; i < NUMBER_OF_BUTTONS; ++i)
     {
         // Set the callback method
-        key = new FunctoidNode(GetKeyName(i));
+        key = new FunctoidList(GetKeyName(i));
         key->Add(show_key);
         key->Add(new Note("Data", ""));
         keys_tree->Add(key);
@@ -144,9 +144,9 @@ int Device::GetKeyIndex(SDLKey k)
 }
 
 
-FunctoidNode* Device::GetKey(uint pos)
+FunctoidList* Device::GetKey(uint pos)
 {
-    return dynamic_cast<FunctoidNode*>(Get(DEVICE_KEYLIST)->Get(GetKeyName(pos)));
+    return dynamic_cast<FunctoidList*>(Get(DEVICE_KEYLIST)->Get(GetKeyName(pos)));
 }
 
 

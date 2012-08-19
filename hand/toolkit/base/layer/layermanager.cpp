@@ -66,15 +66,15 @@ void LayerManager::Init()
     SetName("System");
 
     // Theme menu
-    FunctoidNode* theme_menu = new FunctoidNode(THEMES_MENU);
+    FunctoidList* theme_menu = new FunctoidList(THEMES_MENU);
     Add(theme_menu);
     // The path to the theme files
-    FunctoidNode* theme_dir = new FileFunctoid(THEMES_DIRECTORY);
+    FunctoidList* theme_dir = new FileFunctoid(THEMES_DIRECTORY);
     theme_menu->Add(theme_dir);
     // Add a method to create a menu with the themes one HD
     theme_menu->Add(new Callback<LayerManager>(THEMES_MENU, this, &LayerManager::GetAllThemes));
     // The default theme (to be loaded) (TODO: get this from persistent object)
-    FunctoidNode* curr_theme = new FileFunctoid(DEFAULT_THEME);
+    FunctoidList* curr_theme = new FileFunctoid(DEFAULT_THEME);
     // Add the default theme to the theme folder (without scanning if it really is there)
     theme_dir->Add(curr_theme);
     curr_theme->Set(RELATION_PARENT_PATH, theme_dir);
@@ -125,7 +125,7 @@ bool LayerManager::Update(bool forced)
 
 Functoid* LayerManager::GetCommandList(Functoid* menu)
 {
-    FunctoidNode* menu_list = dynamic_cast<FunctoidNode*>(menu);
+    FunctoidList* menu_list = dynamic_cast<FunctoidList*>(menu);
     if(!menu_list)
         return NULL;
     Functoid* child;
@@ -230,7 +230,7 @@ bool LayerManager::LoadTheme(Functoid* f)
 bool LayerManager::GetAllThemes(Functoid* themes_dir)
 {
     // (Re-)read the list of available themes
-    FunctoidNode* themes_list = dynamic_cast<FunctoidNode*>(Server()->Produce(themes_dir, TYPE_FILEFUNCTOID));
+    FunctoidList* themes_list = dynamic_cast<FunctoidList*>(Server()->Produce(themes_dir, TYPE_FILEFUNCTOID));
     if(!themes_list)
         return false;
 

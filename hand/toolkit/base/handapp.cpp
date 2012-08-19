@@ -30,7 +30,7 @@
 using namespace std;
 
 
-HandApp::HandApp(string name) : FunctoidNode(name)
+HandApp::HandApp(string name) : FunctoidList(name)
 {
     _LayerManager = NULL;
     SetType(TYPE_HANDAPP);

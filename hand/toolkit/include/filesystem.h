@@ -48,7 +48,7 @@ class DirectoryLoader : public Factory
 };
 
 
-class FileFunctoid : public FunctoidNode
+class FileFunctoid : public FunctoidList
 {
     public:
         FileFunctoid(string file);

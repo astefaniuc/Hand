@@ -17,7 +17,7 @@
  *  License along with Hand. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "functoidnode.h"
+#include "functoidlist.h"
 #include "functoidsearch.h"
 #include "factory.h"
 
@@ -25,28 +25,28 @@
 using namespace std;
 
 
-FunctoidNode::FunctoidNode(string name) : Functoid(name)
+FunctoidList::FunctoidList(string name) : Functoid(name)
 {
     // reserve the first list entry for runtime information
     Add(new Functoid("Runtime"));
-    SetType(TYPE_FUNCTOIDNODE);
+    SetType(TYPE_FUNCTOIDLIST);
 }
 
 
-FunctoidNode::~FunctoidNode()
+FunctoidList::~FunctoidList()
 {
     CleanUp();
 }
 
 
-void FunctoidNode::SetType(string type)
+void FunctoidList::SetType(string type)
 {
     if(type != "")
         Get(0)->SetType(type);
 }
 
 
-bool FunctoidNode::Add(string relation_name, Functoid* child)
+bool FunctoidList::Add(string relation_name, Functoid* child)
 {
     Relation* r = dynamic_cast<Relation*>(Get(relation_name));
     if(!r)
@@ -60,7 +60,7 @@ bool FunctoidNode::Add(string relation_name, Functoid* child)
 }
 
 
-bool FunctoidNode::Set(string relation_name, Functoid* child)
+bool FunctoidList::Set(string relation_name, Functoid* child)
 {
     Relation* r = dynamic_cast<Relation*>(Get(relation_name));
     if(!r)
@@ -74,7 +74,7 @@ bool FunctoidNode::Set(string relation_name, Functoid* child)
 }
 
 
-Functoid* FunctoidNode::Get(string s)
+Functoid* FunctoidList::Get(string s)
 {
     Functoid* ret = Functoid::Get(s);
     if(!ret)
@@ -84,7 +84,7 @@ Functoid* FunctoidNode::Get(string s)
 }
 
 
-Functoid* FunctoidNode::Get(string relation, string element)
+Functoid* FunctoidList::Get(string relation, string element)
 {
     FunctoidIterator curr;
     FunctoidIterator _end = end();
@@ -96,7 +96,7 @@ Functoid* FunctoidNode::Get(string relation, string element)
 }
 
 
-Functoid* FunctoidNode::Get(uint i)
+Functoid* FunctoidList::Get(uint i)
 {
     if(i < size())
         return at(i);
@@ -104,13 +104,13 @@ Functoid* FunctoidNode::Get(uint i)
 }
 
 
-bool FunctoidNode::IsOwner(Functoid* caller)
+bool FunctoidList::IsOwner(Functoid* caller)
 {
     return Get(0)->IsOwner(caller);
 }
 
 
-void FunctoidNode::CleanUp()
+void FunctoidList::CleanUp()
 {
     Functoid* curr;
     // Don't delete the parent(s)
@@ -132,7 +132,7 @@ void FunctoidNode::CleanUp()
 }
 
 
-bool FunctoidNode::Detach(Functoid* child)
+bool FunctoidList::Detach(Functoid* child)
 {
     Relation* relation;
     FunctoidIterator curr;
@@ -152,7 +152,7 @@ bool FunctoidNode::Detach(Functoid* child)
 
 
 
-Factory* FunctoidNode::GetFactory()
+Factory* FunctoidList::GetFactory()
 {
     FunctoidSearch search;
     search.MaxDepth = 2;
@@ -169,7 +169,7 @@ Factory* FunctoidNode::GetFactory()
 // ----------------------------------------------------------------
 
 
-Link::Link(string name, string type, bool is_multi) : FunctoidNode(name)
+Link::Link(string name, string type, bool is_multi) : FunctoidList(name)
 {
     IsMulti = is_multi;
     SetType(type);
@@ -230,7 +230,7 @@ bool Link::IsMultiLink()
 // ----------------------------------------------------------------
 
 
-Relation::Relation(string name) : FunctoidNode(name)
+Relation::Relation(string name) : FunctoidList(name)
 {
     SetType(FUNCTOIDRELATION);
 }

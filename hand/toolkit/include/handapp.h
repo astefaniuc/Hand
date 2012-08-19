@@ -20,7 +20,7 @@
 #ifndef HANDAPP_H
 #define HANDAPP_H
 
-#include "functoidnode.h"
+#include "functoidlist.h"
 #include "functoidsearch.h"
 
 
@@ -33,7 +33,7 @@ using namespace std;
 class HandServer;
 class LayerManager;
 
-class HandApp : public FunctoidNode
+class HandApp : public FunctoidList
 {
     public:
                       HandApp(string name);

@@ -38,8 +38,8 @@ class Persistence : public Factory
 {
     public:
         Persistence() : Factory("Persistence",
-                                TYPE_FUNCTOIDNODE,
-                                TYPE_FUNCTOIDNODE,
+                                TYPE_FUNCTOIDLIST,
+                                TYPE_FUNCTOIDLIST,
                                 TYPE_URI_SETTINGS){};
         virtual ~Persistence(){};
 

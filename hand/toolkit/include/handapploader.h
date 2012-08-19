@@ -30,7 +30,7 @@ using namespace std;
 #define NAME_NOT_INIT "Not initialized"
 
 // Class factories for dynamic linking
-typedef FunctoidNode* creator();
+typedef FunctoidList* creator();
 typedef void destroyer(void*);
 
 class FileFunctoid;

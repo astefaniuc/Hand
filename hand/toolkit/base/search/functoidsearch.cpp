@@ -25,7 +25,7 @@
 using namespace std;
 
 
-FunctoidSearch::FunctoidSearch() : FunctoidNode("FunctoidSearch")
+FunctoidSearch::FunctoidSearch() : FunctoidList("FunctoidSearch")
 {
     InitVars();
     CookiePool = new Pool();
@@ -129,7 +129,7 @@ void FunctoidSearch::AddFinding(Functoid* finding)
     {
         if(!Findings)
         {
-            Findings = new FunctoidNode("Findings");
+            Findings = new FunctoidList("Findings");
             Add(Findings);
         }
         Findings->Add(finding);

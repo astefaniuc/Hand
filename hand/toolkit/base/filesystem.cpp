@@ -62,7 +62,7 @@ void FileFunctoid_Factory::TakeBack(Functoid* product)
 // ----------------------------------------------------------------
 
 
-FileFunctoid::FileFunctoid(string file_name) : FunctoidNode(file_name)
+FileFunctoid::FileFunctoid(string file_name) : FunctoidList(file_name)
 {
     SetType(TYPE_FILEFUNCTOID);
     if(file_name.find(URISCHEME_FILE) == 0)

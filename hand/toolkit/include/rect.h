@@ -20,7 +20,7 @@
 #ifndef HAND_RECT_H
 #define HAND_RECT_H
 
-#include "functoidnode.h"
+#include "functoidlist.h"
 
 
 using namespace std;
@@ -29,7 +29,7 @@ using namespace std;
 #define GUI_TYPE_RECT "GUI_TYPE_RECT"
 
 
-class Rect : public FunctoidNode
+class Rect : public FunctoidList
 {
     public:
         Rect(string name, double x_, double y_, double w_, double h_);

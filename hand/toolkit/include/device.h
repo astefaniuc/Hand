@@ -48,7 +48,7 @@ class Device : public virtual HandApp
         InputState* GetInputState();
     protected:
         // Returns the Key symbol at specified position
-        FunctoidNode* GetKey(uint index);
+        FunctoidList* GetKey(uint index);
         string GetKeyName(uint pos);
         void   AddKey(SDLKey);
         void   DeleteCurrentKey();

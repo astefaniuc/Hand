@@ -20,7 +20,7 @@
 #ifndef HAND_RGB_H
 #define HAND_RGB_H
 
-#include "functoidnode.h"
+#include "functoidlist.h"
 
 
 using namespace std;
@@ -29,7 +29,7 @@ using namespace std;
 #define GUI_TYPE_RGB "GUI_TYPE_RGB"
 
 
-class Rgb : public FunctoidNode
+class Rgb : public FunctoidList
 {
     public:
         Rgb(string name, Uint8 r_, Uint8 g_, Uint8 b_);

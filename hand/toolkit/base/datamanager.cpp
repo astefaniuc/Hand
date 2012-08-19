@@ -48,7 +48,7 @@ Functoid* Persistence::Produce(Functoid* keys_tree)
 {
     // Change name
     keys_tree->SetName("settings:Keyboard::1");
-    keys_tree = dynamic_cast<FunctoidNode*>(keys_tree->Get("Keylist"));
+    keys_tree = dynamic_cast<FunctoidList*>(keys_tree->Get("Keylist"));
 
     // TEMP:
     string key_ids[] = {"97", "119", "101"," 102", "32"};

@@ -33,15 +33,15 @@ enum alignment
 class Rgb;
 class Rect;
 
-class Layout : public FunctoidNode
+class Layout : public FunctoidList
 {
     public:
         Layout(string name, string type);
         virtual ~Layout(){};
 //        void Reset();
 
-        FunctoidNode* GetField(string position);
-        FunctoidNode* AddField(string name, string type);
+        FunctoidList* GetField(string position);
+        FunctoidList* AddField(string name, string type);
         void AddForUpdate(Functoid* sublayout);
         bool Execute(Functoid* surface);
         void Reset();

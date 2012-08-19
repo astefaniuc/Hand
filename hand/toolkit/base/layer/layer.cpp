@@ -191,7 +191,7 @@ Layer* Layer::Insert(Functoid* data, string position)
     if(!layout)
         return NULL;
 
-    FunctoidNode* field = layout->GetField(position);
+    FunctoidList* field = layout->GetField(position);
     if(!field)
         return NULL;
 
