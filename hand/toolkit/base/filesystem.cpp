@@ -73,7 +73,7 @@ FileFunctoid::FileFunctoid(string file_name) : FunctoidList(file_name)
     if(is_regular_file(file_path))
     {
         if(file_path.has_parent_path())
-            Set(RELATION_PARENT_PATH, new FileFunctoid(file_path.parent_path().string()));
+            Get(RELATION_PARENT_PATH)->Set(new FileFunctoid(file_path.parent_path().string()));
 
         SetName(file_path.filename().string());
     }
@@ -149,7 +149,7 @@ Functoid*  DirectoryLoader::Produce(Functoid* dir_obj)
             if(dir_it->path().extension() == LIBRARY_FILE_EXTENSION)
             {
                 file = new FileFunctoid(dir_it->path().filename().string());
-                file->Set(RELATION_PARENT_PATH, ff_dir);
+                file->Get(RELATION_PARENT_PATH)->Set(ff_dir);
                 ff_dir->Add(file);
                 // Set return value != NULL
                 ret = dir_obj;

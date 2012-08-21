@@ -85,9 +85,7 @@ Rect* GetRect(string name, Functoid* tree)
     search.SetSearchName(name);
     search.SetSearchType(GUI_TYPE_RECT);
     if(search.Search(tree))
-    {
         return dynamic_cast<Rect*>(search.GetFindings());
-    }
-    // Return default Rect if not found
+
     return NULL;
 }

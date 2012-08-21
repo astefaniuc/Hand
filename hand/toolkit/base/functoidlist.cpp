@@ -27,72 +27,37 @@ using namespace std;
 
 FunctoidList::FunctoidList(string name) : Functoid(name)
 {
-    // reserve the first list entry for runtime information
-    Add(new Functoid("Runtime"));
+    // Reserve the first list entry for runtime information
+    Attach(new Functoid("Runtime"));
     SetType(TYPE_FUNCTOIDLIST);
 }
 
 
 FunctoidList::~FunctoidList()
 {
-    CleanUp();
-}
-
-
-void FunctoidList::SetType(string type)
-{
-    if(type != "")
-        Get(0)->SetType(type);
-}
-
-
-bool FunctoidList::Add(string relation_name, Functoid* child)
-{
-    Relation* r = dynamic_cast<Relation*>(Get(relation_name));
-    if(!r)
-    {
-        // Create relation (link functoid) if not existing
-        r = new Relation(relation_name);
-        Add(r);
-    }
-    // Add the parent to the current functoid
-    return r->Add(child);
-}
-
-
-bool FunctoidList::Set(string relation_name, Functoid* child)
-{
-    Relation* r = dynamic_cast<Relation*>(Get(relation_name));
-    if(!r)
-    {
-        // Create relation (link functoid) if not existing
-        r = new Relation(relation_name);
-        // TODO: alternatively call Set() to have a unique child of this name
-        Add(r);
-    }
-    return r->Set(child);
+    // Don't delete the parent(s); same source code as in ~Functoid()
+    // because that destructor doesn't calls the overloaded method
+    Functoid* p = Get(TAG_RELATION_PARENT, IGNORE);
+    // CleanUp() doesn't work here
+    if(p && (p->size()== 2))
+        p->pop_back();
 }
 
 
 Functoid* FunctoidList::Get(string s)
 {
-    Functoid* ret = Functoid::Get(s);
-    if(!ret)
-        // Search hidden elements
-        return Get(0)->Get(s);
+    // Search public elements
+    Functoid* ret = Functoid::Get(s, IGNORE);
+    if(ret)
+        return ret;
+    // Search hidden elements
+    ret = Get(RUNTIME)->Get(s, IGNORE);
+    if(ret)
+        return ret;
+    // Return a new public relation
+    ret = new Relation(s);
+    Add(ret);
     return ret;
-}
-
-
-Functoid* FunctoidList::Get(string relation, string element)
-{
-    FunctoidIterator curr;
-    FunctoidIterator _end = end();
-    for(curr=begin(); curr!=_end; curr++)
-        if(((*curr)->GetName()==relation) && (*curr)->IsType(FUNCTOIDRELATION))
-            return (*curr)->Get(element);
-
-    return NULL;
 }
 
 
@@ -104,52 +69,64 @@ Functoid* FunctoidList::Get(uint i)
 }
 
 
-bool FunctoidList::IsOwner(Functoid* caller)
+Functoid* FunctoidList::Get(string rel, string elem)
 {
-    return Get(0)->IsOwner(caller);
+    Functoid* ret = Functoid::Get(rel, elem);
+    if(!ret)
+        return Get(RUNTIME)->Functoid::Get(rel, elem);
+    return ret;
+}
+
+
+void FunctoidList::SetType(string type)
+{
+    if(type != "")
+        Get(RUNTIME)->SetType(type);
+}
+
+
+string FunctoidList::GetType()
+{
+    return Get(RUNTIME)->GetType();
+}
+
+
+bool FunctoidList::IsType(string type)
+{
+    return Get(RUNTIME)->IsType(type);
+}
+
+
+bool FunctoidList::IsType(SearchExpression* se)
+{
+    return Get(RUNTIME)->IsType(se);
+}
+
+
+void FunctoidList::SetOwner(Functoid* owner)
+{
+    Get(RUNTIME)->SetOwner(owner);
+}
+
+
+bool FunctoidList::HasOwner(Functoid* caller)
+{
+    return Get(RUNTIME)->HasOwner(caller);
 }
 
 
 void FunctoidList::CleanUp()
 {
-    Functoid* curr;
-    // Don't delete the parent(s)
-    Functoid* parent = Get(TAG_RELATION_PARENT);
-    if(parent)
-        parent->clear();
-
-    uint s = size();
-    for(uint i=0; i<s; i++)
+    FunctoidIterator curr = begin();
+    // Don't delete the runtime info
+    curr++;
+    while(curr!=end())
     {
-        curr = at(i);
-        if(curr->IsOwner(this))
-            // Recursively delete all childrens:
-            delete curr;
+        if((*curr)->HasOwner(this))
+            delete((*curr));
+        erase(curr);
     }
-    // Avoid that FunctoidList destructor deletes the parent(s)
-    if(s != 0)
-        clear();
 }
-
-
-bool FunctoidList::Detach(Functoid* child)
-{
-    Relation* relation;
-    FunctoidIterator curr;
-    for(curr=begin(); curr!=end(); curr++)
-    {
-        if((*curr) == child)
-        {
-            erase(curr);
-            return true;
-        }
-        relation = dynamic_cast<Relation*>(*curr);
-        if(relation && relation->Detach(child))
-            return true;
-    }
-    return false;
-}
-
 
 
 Factory* FunctoidList::GetFactory()
@@ -233,6 +210,14 @@ bool Link::IsMultiLink()
 Relation::Relation(string name) : FunctoidList(name)
 {
     SetType(FUNCTOIDRELATION);
+}
+
+
+bool Relation::Set(Functoid* item)
+{
+    CleanUp();
+    push_back(item);
+    return true;
 }
 
 

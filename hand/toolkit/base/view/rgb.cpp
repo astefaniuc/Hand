@@ -18,6 +18,7 @@
  */
 
 #include "rgb.h"
+#include "functoidsearch.h"
 
 
 using namespace std;
@@ -46,8 +47,11 @@ void Rgb::Reset()
 
 Rgb* GetRgb(string name, Functoid* tree)
 {
-    Functoid* found = tree->Find(name);
-    if(found && found->IsType(GUI_TYPE_RGB))
-        return dynamic_cast<Rgb*>(found);
+    FunctoidSearch search;
+    search.SetSearchName(name);
+    search.SetSearchType(GUI_TYPE_RGB);
+    if(search.Search(tree))
+        return dynamic_cast<Rgb*>(search.GetFindings());
+
     return NULL;
 }

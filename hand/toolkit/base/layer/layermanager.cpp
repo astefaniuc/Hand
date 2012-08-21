@@ -77,7 +77,7 @@ void LayerManager::Init()
     FunctoidList* curr_theme = new FileFunctoid(DEFAULT_THEME);
     // Add the default theme to the theme folder (without scanning if it really is there)
     theme_dir->Add(curr_theme);
-    curr_theme->Set(RELATION_PARENT_PATH, theme_dir);
+    curr_theme->Get(RELATION_PARENT_PATH)->Set(theme_dir);
     // Load the theme
     LoadTheme(curr_theme);
 
@@ -100,8 +100,7 @@ void LayerManager::LoadAppInterface(Functoid* tree, bool make_default)
         return;
 
     // Insert to the local Functoid tree
-    Add(tree);
-//    tree->Set(TAG_RELATION_PARENT, this);
+    Add(tree); // or Attach()?
     if(make_default)
         Layer::SetContent(tree);
 }
@@ -278,13 +277,11 @@ bool LayerManager::Expand(Functoid* to_expand)
         if(MasterView->IsType("Expansive"))
         {
             // Insert() = Add() != SetContent()
-            MasterView->Set(TAG_RELATION_CHILD, new_view);
-            new_view->Set(TAG_RELATION_PARENT, MasterView);
+            MasterView->Set(TAG_RELATION_CHILD)->Add(new_view);
             return true;
         }
 
-        if(MasterView->IsOwner(this))
-            delete(MasterView);
+        Delete(MasterView);
     }
     MasterView = new_view;
     MasterView->SetParent(this);
@@ -325,7 +322,7 @@ Layer* LayerManager::CreateLayer(Functoid* content, string layer_type)
 
     if(layer_type == "Any")
     {
-        Functoid* attached_layout = content->Get("Layout");
+        Functoid* attached_layout = content->Get("Layout", IGNORE);
         if(attached_layout)
             layer_type = attached_layout->Get(1)->GetType();
         else

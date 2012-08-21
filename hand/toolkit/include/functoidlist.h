@@ -26,11 +26,6 @@
 using namespace std;
 
 #define TYPE_FUNCTOIDLIST "FunctoidList"
-// Reserved tags/names for Functoid elements
-#define TAG_RELATION_PARENT "TAG_RELATION_PARENT"
-#define TAG_RELATION_CHILD "TAG_RELATION_CHILD"
-#define TAG_TYPE "TAG_TYPE"
-#define TAG_DESCRIPTION "TAG_DESCRIPTION"
 
 class Relation;
 class Factory;
@@ -41,36 +36,31 @@ class FunctoidList : public Functoid
         FunctoidList(string name);
         virtual ~FunctoidList();
 
-        virtual void SetType(string type);
-        // Set one directional relation to given functoid
-        using Functoid::Add;
-        virtual bool Add(string relation_name, Functoid* functoid);
-        using Functoid::Set;
-        virtual bool Set(string relation_name, Functoid* functoid);
-
         // Get the child by name
         virtual Functoid* Get(string child);
-        // Get the child by position, 0-based; overloads the FunctoidList
-        // method which is 1-based. Element '0' stores hidden system information
-        // e.g. type and layout. "Public" elements can be iterated through:
-        /*
-        uint i = 0;
-        while((child=list->Get(++i)) != NULL)
-            ...
-        */
+        virtual Functoid* Get(string name, string type);
+        // Get the child by position, 1-based; Element '0' stores
+        // hidden system information e.g. type and layout.
         virtual Functoid* Get(uint child);
-        virtual Functoid* Get(string relation_name, string element);
 
-        virtual bool IsOwner(Functoid* caller);
-        // Delete all sub-functoids it owns
-        virtual void CleanUp(void);
-        // Remove first found reference to child from direct childs & direct relations
-        virtual bool Detach(Functoid* child);
+        virtual void SetType(string type);
+        virtual string GetType();
+        virtual bool IsType(string type);
+        virtual bool IsType(SearchExpression* type);
+
+        // Set object owner (for memory management)
+        virtual void SetOwner(Functoid* owner);
+        virtual bool HasOwner(Functoid* caller);
+
+        // Remove all public children
+        virtual void CleanUp();
+
+        // ???
         virtual Factory* GetFactory();
 };
 
 
-// TODO: combine Link and Relation?
+// TODO: combine Link and Relation? Or even get rid of both?
 #define TYPE_DESCRIPTOR "Link"
 
 class Link : public FunctoidList
@@ -97,6 +87,11 @@ class Relation : public FunctoidList
     public:
         Relation(string name);
         virtual ~Relation(){};
+        // Inserts a sub-item to the current functoid without changing
+        // the ownership of 'item'; it replaces *all* objects referenced
+        // by the Relation (only public elements)
+        virtual bool Set(Functoid* sub);
+        // Helper method for the search engine
         bool IsOpen(FunctoidSearch* search);
 };
 

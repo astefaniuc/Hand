@@ -141,6 +141,14 @@ struct Position
 #define BTN_FIELD_DESCRIPTION "BTN_FIELD_DESCRIPTION"
 
 
+// Reserved tags/names for Functoid elements
+#define TAG_RELATION_PARENT "TAG_RELATION_PARENT"
+#define TAG_RELATION_CHILD "TAG_RELATION_CHILD"
+#define TAG_TYPE "TAG_TYPE"
+#define TAG_DESCRIPTION "TAG_DESCRIPTION"
+#define IGNORE "*"
+#define RUNTIME 0
+
 // Name of the Functoid containing the Theme object and the drawing func
 #define DRAWOBJ_DRAWER "Drawer"
 

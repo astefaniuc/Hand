@@ -119,9 +119,9 @@ void HandAppLoader::TakeBack(Functoid* app)
 
 
 HandAppLoader_Factory::HandAppLoader_Factory() : Factory("Library Loader",
-                                                           TYPE_FILEFUNCTOID,
-                                                           TYPE_APPLOADER,
-                                                           URISCHEME_FILE)
+                                                         TYPE_FILEFUNCTOID,
+                                                         TYPE_APPLOADER,
+                                                         URISCHEME_FILE)
 {
     SetType(TYPE_APPLOADERFACTORY);
 }

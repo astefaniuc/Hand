@@ -130,7 +130,7 @@ LayerManager* HandServer::GetLayerManager()
     // Start the layer manager
     LayerManager* layer_mgr = new LayerManager();
     LayerMgrs.push_back(layer_mgr);
-    layer_mgr->Set(TAG_RELATION_PARENT, this);
+    layer_mgr->SetOwner(this);
 //    layer_mgr->Init();
 
     // Create device object with input state

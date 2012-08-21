@@ -118,7 +118,7 @@ SearchExpression* FunctoidSearch::AddSearchExpression(string relation_name, stri
         se = new SearchString(s);
 
     // Add to the own interface for the GUI (only one entry allowed)
-    Set(relation_name, se);
+    Get(relation_name)->Set(se);
     return se;
 }
 

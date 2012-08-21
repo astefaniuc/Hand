@@ -44,41 +44,47 @@ class Functoid : public vector<Functoid*>
     public:
         Functoid(string name);
         virtual ~Functoid();
-        // Delete all children
-        virtual void CleanUp();
+        virtual void CleanUp(){};
 
-        // Check first if the string "name" contains a scheme
-        virtual Functoid* Find(string name, int max_depth = MAX_SEARCH_DEPTH);
-        // Iterative deepening depth-first search recursive calls
-        virtual Functoid* _Find(string name, int depth);
-        virtual Functoid* Find(SearchExpression* expression);
-        virtual bool IsOpen(FunctoidSearch* search);
-
-        // Searches only one level down
-        virtual bool Set(Functoid* child);
-        // Get the child by name
-        virtual Functoid* Get(string child);
-        // Get the child by position, 1-based
-        virtual Functoid* Get(uint child);
-
+        // Inserts a sub-item to the current functoid and makes the current
+        // functoid the owner of it => 'child' object gets deleted when
+        // the current functoid gets deleted; allows multiple objects with
+        // the same name
         virtual bool Add(Functoid* child);
+        // Inserts a sub-item to the current functoid without changing
+        // the ownership of 'item'; it replaces any object with same name
+        virtual bool Set(Functoid* sub);
+        // Appends a sub-item to the current functoid without changing
+        // the ownership of 'item'; allows multiple objects with same name
+        virtual bool Attach(Functoid* sub);
+
+        // Removes the reference to 'item' but keeps item alive
+        virtual bool Detach(Functoid* item);
+        // Removes the reference to 'item' and deletes the object if it
+        // is the owner
         virtual bool Delete(Functoid* child);
 
-        virtual bool Attach(Functoid* item);
-        virtual bool Detach(Functoid* item);
+        // Get the first sub-item by name.
+        // If the item doesn't exist it returns a new Relation functoid;
+        // use Get(name, IGNORE) to test if a functoid exists
+        virtual Functoid* Get(string name);
+        // Get the first sub-item by name and type; if the item is not found
+        // it returns NULL; the parameters can be set to IGNORE e.g.
+        // Get(IGNORE, IGNORE) returns the first stored item
+        virtual Functoid* Get(string name, string type);
+        // Interface to method defined in a derived class; returns always
+        // NULL in this base class
+        virtual Functoid* Get(uint item);
 
-        virtual void SetType(string type);
-        virtual string GetType();
-        virtual bool IsType(string type);
-        virtual bool IsType(SearchExpression* type);
-//        virtual string GetAsString() = 0;
-        virtual bool Execute(Functoid* func_param);
+        // Simple iterative deepening depth-first search.
+        // Omits owner/parent (TAG_RELATION_PARENT) from the search
+        // but might fail with any other graph cycles!
+        // Use the FunctoidSearch engine for deeper searches.
+        virtual Functoid* Find(string name, int max_depth = 2);
+        // Flat search with support for (boost-typed) regular expressions
+        // TODO: make it iterative or rename to it "Get()"?
+        virtual Functoid* Find(SearchExpression* expression);
 
-        // Returns true if it can be deleted
-        virtual bool IsOwner(Functoid* caller);
-
-//        virtual bool NotifyChanged();
-        // The following five methods operate all on the same private "Name" member
         // Set "name" with or without uri scheme
         virtual void SetName(string name);
         // Get the name without uri scheme
@@ -86,7 +92,29 @@ class Functoid : public vector<Functoid*>
         // Get the name with uri scheme
         virtual string GetUriString();
 
+        virtual void SetType(string type);
+        virtual string GetType();
+        virtual bool IsType(string type);
+        virtual bool IsType(SearchExpression* type);
+
+        // Set object owner (for memory management).
+        // Owner is stored under TAG_RELATION_PARENT
+        virtual void SetOwner(Functoid* owner);
+        // Returns true if 'caller' is the owner or if no owner is registered
+        virtual bool HasOwner(Functoid* caller);
+
+        // Interface to method defined in a derived class
+        virtual bool Execute(Functoid* func_param);
+
+        // Helper method for the search engine
+        virtual bool IsOpen(FunctoidSearch* search);
+        // TODO:
+//        virtual string GetAsString() = 0;
+//        virtual bool NotifyChanged();
+
     protected:
+        virtual Functoid* _Find(string name, int depth);
+
         string Name;
 };
 

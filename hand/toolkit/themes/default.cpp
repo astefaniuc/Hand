@@ -86,14 +86,13 @@ bool Default::GetViewLayout(Functoid* out)
     Layout* layout = dynamic_cast<Layout*>(out);
     // Vertical list alignment
     layout->Set(new Rect(DRAW_PROPERTY_ALIGNMENT, 0, 1, 0, 1));
-    layout->Add("Methods", new Link("DrawFunc", GUI_DRAWER_LIST));
+    layout->Get("Methods")->Add(new Link("DrawFunc", GUI_DRAWER_LIST));
     layout->AddField("ListElement", "Any");
 
     Layout* controls = new Layout("Controls", GUI_LAYOUT_FRAMEDLIST);
     // Horizontal list alignment
     controls->Set(new Rect(DRAW_PROPERTY_ALIGNMENT, 1, 0, 1, 0));
-    layout->Add(TAG_RELATION_CHILD, controls);
-    controls->Set(TAG_RELATION_PARENT, layout);
+    layout->Get(TAG_RELATION_CHILD)->Add(controls);
     controls->AddField("ListElement", TYPE_BUTTONLAYER);
     return true;
 }
@@ -104,7 +103,7 @@ bool Default::GetListLayout(Functoid* out)
     Layout* layout = dynamic_cast<Layout*>(out);
 
     layout->Set(new Rect(DRAW_PROPERTY_ALIGNMENT, 0, 1, 0, 1));
-    layout->Add("Methods", new Link("DrawFunc", GUI_DRAWER_LIST));
+    layout->Get("Methods")->Add(new Link("DrawFunc", GUI_DRAWER_LIST));
     layout->AddField("ListElement", TYPE_BUTTONLAYER);
 //    layout->AddField("ListElement", "Any");
     return true;
@@ -118,13 +117,11 @@ bool Default::GetFramedListLayout(Functoid* out)
     layout->Set(new Rect(GUI_RECT_SIZEANDPOS, 0.1, 0.1, 0.8, 0.8));
 
     Layout* frame = new Layout("Background", GUI_LAYOUT_BACKGROUND);
-    layout->Add(TAG_RELATION_CHILD, frame);
-    frame->Set(TAG_RELATION_PARENT, layout);
+    layout->Get(TAG_RELATION_CHILD)->Add(frame);
 
     Layout* content = new Layout("Content", GUI_LAYOUT_LIST);
-    layout->Add(TAG_RELATION_CHILD, content);
-    content->Set(TAG_RELATION_PARENT, layout);
-    frame->Add("Update", content);
+    layout->Get(TAG_RELATION_CHILD)->Add(content);
+    frame->Get("Update")->Attach(content);
 
     return true;
 }
@@ -134,32 +131,28 @@ bool Default::GetButtonLayout(Functoid* out)
 {
     Layout* layout = dynamic_cast<Layout*>(out);
 
-    layout->Add("Methods", new Link("DrawFunc", GUI_DRAWER_BUTTON));
+    layout->Get("Methods")->Add(new Link("DrawFunc", GUI_DRAWER_BUTTON));
     layout->Set(new Rect(GUI_RECT_SIZEANDPOS, 0.1, 0.1, 0.8, 0.8));
 
     Layout* frame = new Layout("Frame", GUI_LAYOUT_FRAME);
-    layout->Add(TAG_RELATION_CHILD, frame);
-    frame->Set(TAG_RELATION_PARENT, layout);
+    layout->Get(TAG_RELATION_CHILD)->Add(frame);
     // The Button container
     Layout* content = new Layout("Button Content", GUI_LAYOUT_LIST);
     content->Set(new Rect(DRAW_PROPERTY_ALIGNMENT, 0, 1, 0, 1));
-    layout->Add(TAG_RELATION_CHILD, content);
-    content->Set(TAG_RELATION_PARENT, layout);
-    frame->Add("Update", content);
+    layout->Get(TAG_RELATION_CHILD)->Add(content);
+    frame->Get("Update")->Attach(content);
 
     Layout* upper = new Layout("Upper", GUI_LAYOUT_LIST);
     upper->Set(new Rect(DRAW_PROPERTY_ALIGNMENT, 1, 0, 0.5, 0));
     upper->AddField(BTN_FIELD_ICON, TYPE_TEXTLAYER);
     upper->AddField(BTN_FIELD_NAME, TYPE_TEXTLAYER);
-    content->Add(TAG_RELATION_CHILD, upper);
-    upper->Set(TAG_RELATION_PARENT, content);
+    content->Get(TAG_RELATION_CHILD)->Add(upper);
 
     Layout* lower = new Layout("Lower", GUI_LAYOUT_LIST);
     lower->Set(new Rect(DRAW_PROPERTY_ALIGNMENT, 1, 0, 0.5, 0));
     lower->AddField(BTN_FIELD_DESCRIPTION, TYPE_TEXTLAYER);
     lower->AddField(BTN_FIELD_CONTROL, TYPE_BUTTONLAYER);
-    content->Add(TAG_RELATION_CHILD, lower);
-    lower->Set(TAG_RELATION_PARENT, content);
+    content->Get(TAG_RELATION_CHILD)->Add(lower);
 
     return true;
 }
@@ -170,8 +163,7 @@ bool Default::GetControlLayout(Functoid* out)
     Layout* layout = dynamic_cast<Layout*>(out);
 
     Layout* frame = new Layout("Frame", GUI_LAYOUT_FRAME);
-    layout->Add(TAG_RELATION_CHILD, frame);
-    frame->Set(TAG_RELATION_PARENT, layout);
+    layout->Get(TAG_RELATION_CHILD)->Add(frame);
     return true;
 }
 
@@ -182,12 +174,11 @@ bool Default::GetFrameLayout(Functoid* out)
 
     layout->Set(new Rect(GUI_RECT_SIZEANDPOS, 0.01, 0.03, 0.98, 0.94));
     layout->Set(new Link("Color", GUI_COLOR_FRAME));
-    layout->Add("Methods", new Link("DrawFunc", GUI_DRAWER_FRAME));
+    layout->Get("Methods")->Add(new Link("DrawFunc", GUI_DRAWER_FRAME));
 
     Layout* bgrd = new Layout("Background", GUI_LAYOUT_BACKGROUND);
-    layout->Add("Update", bgrd);
-    layout->Add(TAG_RELATION_CHILD, bgrd);
-    bgrd->Set(TAG_RELATION_PARENT, layout);
+    layout->Get(TAG_RELATION_CHILD)->Add(bgrd);
+    layout->Get("Update")->Attach(bgrd);
 
     return true;
 }
@@ -198,7 +189,7 @@ bool Default::GetBackgroundLayout(Functoid* out)
     Layout* layout = dynamic_cast<Layout*>(out);
     layout->SetName("Background Layout");
 
-    layout->Add("Methods", new Link("DrawFunc", GUI_DRAWER_BACKGROUND));
+    layout->Get("Methods")->Add(new Link("DrawFunc", GUI_DRAWER_BACKGROUND));
     layout->Set(new Link("Color", GUI_COLOR_BACKGR_LIST));
     return true;
 }
@@ -210,7 +201,7 @@ bool Default::GetTextLayout(Functoid* out)
     layout->SetName("Text Layout");
 
     layout->Set(new Rect(GUI_RECT_SIZEANDPOS, 0.1, 0.1, 0.8, 0.8));
-    layout->Add("Methods", new Link("DrawFunc", GUI_DRAWER_TEXT));
+    layout->Get("Methods")->Add(new Link("DrawFunc", GUI_DRAWER_TEXT));
     layout->Set(new Link("Color", GUI_COLOR_FONT));
 
 /*    Dim_Font_Preferred = 32;

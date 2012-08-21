@@ -56,7 +56,7 @@ Functoid* Persistence::Produce(Functoid* keys_tree)
     for(uint i=0; i < (sizeof(key_ids)/sizeof(key_ids[0])); ++i)
     {
         // Init keys with SDLKey values
-//        (FunctoidList*)keys_tree->List[i]->Set(key_ids[i]);
+//        keys_tree->List[i]->Set(key_ids[i]);
     }
     return keys_tree;
 }

@@ -22,7 +22,7 @@ extern "C" void Destroy(HandApp* app)
 
 FindTester::FindTester(void) : HandApp("FindTester")
 {
-//    TestDelete();
+    TestDelete();
     TestFindBigTree();
     // For setting the breakpoint
     return;
@@ -33,7 +33,7 @@ void FindTester::TestDelete()
 {
     string type = "TestDelete";
     Functoid* last_build;
-    Functoid* root_node = _Build(this, 1, 1, type);
+    Functoid* root_node = new Functoid("RootNode");
     last_build = _Build(root_node, 8, 10, type);
     string last_name = last_build->GetName();
     Delete(root_node);
@@ -42,7 +42,7 @@ void FindTester::TestDelete()
     for(uint i=0; i<10; i++)
     {
         // Memory consumption shouldn't grow during this
-        root_node = _Build(this, 1, 1, type);
+        root_node = new Functoid("RootNode");
         last_build = _Build(root_node, 8, 10, type);
         CheckFound(last_build, TestFind(last_build->GetName(), TYPE_FUNCTOIDLIST, false));
         Delete(root_node);
@@ -120,8 +120,7 @@ Functoid* FindTester::_Build
             f = new FunctoidList(name);
         }
         f->SetType(type);
-        ((FunctoidList*)entry)->Add(TAG_RELATION_CHILD, f);
-        ((FunctoidList*)f)->Set(TAG_RELATION_PARENT, entry);
+        entry->Get(TAG_RELATION_CHILD)->Add(f);
         if(depth > 1)
             f = _Build(f, depth-1, i, type);
     }

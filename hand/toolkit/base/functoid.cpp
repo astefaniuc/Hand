@@ -35,18 +35,147 @@ Functoid::Functoid(string name)
 
 Functoid::~Functoid()
 {
-    CleanUp();
+    // Don't delete the parent(s)
+    Functoid* curr = Get(TAG_RELATION_PARENT, IGNORE);
+    // CleanUp() doesn't work here
+    if(curr && (curr->size()== 2))
+        curr->pop_back();
+
+    uint s = size();
+    for(uint i=0; i<s; i++)
+    {
+        curr = at(i);
+
+        if(curr->HasOwner(this))
+        {
+            // Recursively delete all children
+            delete curr;
+        }
+    }
+    if(s != 0)
+        clear();
 }
 
 
-void Functoid::CleanUp()
+bool Functoid::Add(Functoid* child)
 {
-    uint s = size();
-    for(uint i=0; i<s; i++)
-        // Recursivelly delete all childrens:
-        delete at(i);
-    if(s != 0)
-        clear();
+    if(!child)
+        return false;
+    push_back(child);
+    child->SetOwner(this);
+    return true;
+}
+
+
+bool Functoid::Set(Functoid* child)
+{
+    if(!child)
+        return false;
+
+    string s = child->GetName();
+    FunctoidIterator curr = begin();
+    while(curr!=end())
+    {
+        // TODO: is Type relevant?
+        if((*curr)->GetName() == s)
+        {
+            if((*curr)->HasOwner(this))
+                delete((*curr));
+            erase(curr);
+        }
+        else
+            curr++;
+    }
+    push_back(child);
+    return true;
+}
+
+
+bool Functoid::Attach(Functoid* child)
+{
+    if(!child)
+        return false;
+    push_back(child);
+    return true;
+}
+
+
+Functoid* Functoid::Get(string s)
+{
+    FunctoidIterator curr;
+    FunctoidIterator _end = end();
+    for(curr=begin(); curr!=_end; curr++)
+        if((*curr)->GetName() == s)
+            return (*curr);
+
+    Relation* r = new Relation(s);
+    Add(r);
+    return r;
+}
+
+
+Functoid* Functoid::Get(string name, string type)
+{
+    FunctoidIterator curr = begin();
+    FunctoidIterator _end = end();
+
+    if(name == IGNORE)
+    {
+        if((type==IGNORE) && (curr!=_end))
+            return (*curr);
+        else
+            for(; curr!=_end; curr++)
+                if((*curr)->IsType(type))
+                    return (*curr);
+    }
+    else if(type == IGNORE)
+    {
+        for(; curr!=_end; curr++)
+            if((*curr)->GetName()==name)
+                return (*curr);
+    }
+    else
+        for(; curr!=_end; curr++)
+            if(((*curr)->GetName()==name) && (*curr)->IsType(type))
+                return (*curr);
+
+    return NULL;
+}
+
+
+Functoid* Functoid::Get(uint child)
+{
+    // Reserved for the FunctoidList class
+    return NULL;
+}
+
+
+bool Functoid::Delete(Functoid* child)
+{
+    Detach(child);
+    if(child->HasOwner(this))
+    {
+        delete(child);
+        return true;
+    }
+    return false;
+}
+
+
+bool Functoid::Detach(Functoid* child)
+{
+    if(!child) return false;
+
+    FunctoidIterator curr;
+    for(curr=begin(); curr!=end(); curr++)
+    {
+        if((*curr) == child)
+        {
+            erase(curr);
+            return true;
+        }
+    }
+    return false;
 }
 
 
@@ -76,6 +205,9 @@ Functoid* Functoid::_Find(string name, int depth)
             return this;
         return NULL;
     }
+    // Don't search parent/owner to avoid a sure graph cycle
+    if(Name == TAG_RELATION_PARENT)
+        return NULL;
 
     Functoid* ret = NULL;
     uint s = size();
@@ -105,99 +237,22 @@ Functoid* Functoid::Find(SearchExpression* expression)
 }
 
 
-bool Functoid::IsOpen(FunctoidSearch* search)
+void Functoid::SetName(string name)
 {
-    // The search cookie should be the last element
-    Functoid* last = back();
-    if(last && (last->GetName()==search->GetCookieName()))
-        // Already searched from different branch
-        return false;
-    return true;
+    Name = name;
 }
 
 
-bool Functoid::Add(Functoid* child)
+string& Functoid::GetName()
 {
-    if(!child)
-        return false;
-    push_back(child);
-    return true;
+    return Name;
 }
 
 
-bool Functoid::Set(Functoid* child)
+string Functoid::GetUriString()
 {
-    if(!child)
-        return false;
-
-    string s = child->GetName();
-    FunctoidIterator curr = begin();
-    while(curr!=end())
-    {
-        // TODO: is Type relevant?
-        if((*curr)->GetName() == s)
-        {
-//            delete(*curr);
-            erase(curr);
-        }
-        else
-            curr++;
-    }
-    push_back(child);
-    return true;
-}
-
-
-Functoid* Functoid::Get(string s)
-{
-    FunctoidIterator curr;
-    FunctoidIterator _end = end();
-    for(curr=begin(); curr!=_end; curr++)
-        if((*curr)->GetName() == s)
-            return (*curr);
-
-    return NULL;
-}
-
-
-Functoid* Functoid::Get(uint child)
-{
-    // No children in the base class
-    return NULL;
-}
-
-
-bool Functoid::Delete(Functoid* child)
-{
-    if(!Detach(child))
-        return false;
-
-    delete(child);
-    return true;
-}
-
-
-bool Functoid::Attach(Functoid* child)
-{
-    Add(child);
-    return true;
-}
-
-
-bool Functoid::Detach(Functoid* child)
-{
-    if(!child) return false;
-
-    FunctoidIterator curr;
-    for(curr=begin(); curr!=end(); curr++)
-    {
-        if((*curr) == child)
-        {
-            erase(curr);
-            return true;
-        }
-    }
-    return false;
+    // TODO: needs context sensitive type
+    return (GetType() + Name);
 }
 
 
@@ -205,7 +260,7 @@ void Functoid::SetType(string type)
 {
     if(type.empty())
         return;
-    Functoid* types = Get(TAG_TYPE);
+    Functoid* types = Get(TAG_TYPE, IGNORE);
     if(!types)
     {
         types = new Functoid(TAG_TYPE);
@@ -250,40 +305,39 @@ bool Functoid::IsType(SearchExpression* se)
 }
 
 
+void Functoid::SetOwner(Functoid* owner)
+{
+    Relation* r = new Relation(TAG_RELATION_PARENT);
+    Attach(r);
+    r->Set(owner);
+}
+
+
+bool Functoid::HasOwner(Functoid* caller)
+{
+    Functoid* rel_p = Get(TAG_RELATION_PARENT, IGNORE);
+    if(!rel_p)
+        return true;
+    uint ps = rel_p->size();
+    // Check if this node has only the caller as parent
+    return ((ps < 2) || ((ps == 2) && (parent->at(1) == caller)));
+}
+
+
 bool Functoid::Execute(Functoid* func_param)
 {
     return false;
 }
 
 
-bool Functoid::IsOwner(Functoid* caller)
+bool Functoid::IsOpen(FunctoidSearch* search)
 {
-    Functoid* parent = Get(TAG_RELATION_PARENT);
-    if(!parent)
-        return true;
-    if((parent->size()==2) && (parent->at(1)==caller))
-        // This node has only one parent and this parent is the caller
-        return true;
-    return false;
-}
-
-
-void Functoid::SetName(string name)
-{
-    Name = name;
-}
-
-
-string& Functoid::GetName()
-{
-    return Name;
-}
-
-
-string Functoid::GetUriString()
-{
-    // TODO: needs context sensitive type
-    return (GetType() + Name);
+    // The search cookie should be the last element
+    Functoid* last = back();
+    if(last && (last->GetName()==search->GetCookieName()))
+        // Already searched from different branch
+        return false;
+    return true;
 }
 
 /*

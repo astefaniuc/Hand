@@ -201,8 +201,7 @@ Layer* Layer::Insert(Functoid* data, string position)
 
     // Connect the components
     // on Layer/VS level
-    Add(TAG_RELATION_CHILD, sub_layer);
-    sub_layer->Set(TAG_RELATION_PARENT, this);
+    Get(TAG_RELATION_CHILD)->Add(sub_layer);
     sub_layer->SetParent(this);
     // on Layout level
     Layout* field_layout = dynamic_cast<Layout*>(field->Get("Layout")->Get(1));
@@ -230,7 +229,7 @@ void Layer::SetTheme(Theme* theme)
     // TODO: generic recursive Set() on a sub-tree defined by a "relation"
     // (possibly using Search() with MultipleFindings)
     SetLayout(theme);
-    Functoid* children = Get(TAG_RELATION_CHILD);
+    Functoid* children = Get(TAG_RELATION_CHILD, IGNORE);
     if(!children)
         return;
 
@@ -249,14 +248,12 @@ void Layer::SetTheme(Theme* theme)
 void Layer::SetLayout(Functoid* drawer_lib) // string type, uint position
 {
     // Delete from the layout items owned by the previous theme
-    Functoid* layout = Get("Layout");
+    Functoid* layout = Get("Layout")->Get(1);
     if(!layout)
     {
         layout = new Layout("Layout", GetType()+"_Layout");
-        Set("Layout", layout);
+        Get("Layout")->Set(layout);
     }
-    else
-        layout = layout->Get(1);
 //        _Theme->TakeBack(layout);
     if(!drawer_lib->Execute(layout))
     {
@@ -311,7 +308,7 @@ void Layer::Draw(bool forced)
 
 void Layer::DrawChilds(bool forced)
 {
-    Functoid* children = Get(TAG_RELATION_CHILD);
+    Functoid* children = Get(TAG_RELATION_CHILD, IGNORE);
     if(!children)
         return;
 
