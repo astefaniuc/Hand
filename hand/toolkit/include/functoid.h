@@ -45,7 +45,6 @@ class Functoid : public vector<Functoid*>
     public:
         Functoid(string name);
         virtual ~Functoid();
-        virtual void CleanUp(){};
 
         // Inserts a sub-item to the current functoid and makes the current
         // functoid the owner of it => 'child' object gets deleted when
@@ -67,7 +66,7 @@ class Functoid : public vector<Functoid*>
 
         // Get the first sub-item by name.
         // If the item doesn't exist it returns a new Relation functoid;
-        // use Get(name, ANY) to test if a functoid exists
+        // use Get(ANY, name) to test if a functoid exists
         virtual Functoid* Get(string name);
         // Get the first sub-item by name and type; if the item is not found
         // it returns NULL; the parameters can be set to ANY e.g.
@@ -78,9 +77,8 @@ class Functoid : public vector<Functoid*>
         virtual Functoid* Get(uint item);
 
         // Simple iterative deepening depth-first search.
-        // Omits owner/parent (OWNER) from the search
-        // but might fail with any other graph cycles!
-        // Use the FunctoidSearch engine for deeper searches.
+        // Omits OWNER from the search but might fail with any other graph
+        // cycles, use the FunctoidSearch engine in case of doubt.
         virtual Functoid* Find(string name, int max_depth = 2);
         // Flat search with support for (boost-typed) regular expressions
         // TODO: make it iterative or rename to it "Get()"?
@@ -94,6 +92,7 @@ class Functoid : public vector<Functoid*>
         virtual string GetUriString();
 
         virtual void SetType(string type);
+        // Returns the last set type
         virtual string GetType();
         virtual bool IsType(string type);
         virtual bool IsType(SearchExpression* type);
@@ -104,8 +103,9 @@ class Functoid : public vector<Functoid*>
         // Returns true if 'caller' is the owner or if no owner is registered
         virtual bool HasOwner(Functoid* caller);
 
-        // Interface to method defined in a derived class
+        // Interface to methods defined in a derived class
         virtual bool Execute(Functoid* func_param);
+        virtual void CleanUp(){};
 
         // Helper method for the search engine
         virtual bool IsOpen(FunctoidSearch* search);
