@@ -38,13 +38,13 @@ void FindTester::TestDelete()
     string last_name = last_build->GetName();
     Delete(root_node);
     // Should print an error
-    CheckFound(last_build, TestFind(last_name, TYPE_FUNCTOIDLIST, false));
+    CheckFound(last_build, TestFind(last_name, FUNCTOIDLIST, false));
     for(uint i=0; i<10; i++)
     {
         // Memory consumption shouldn't grow during this
         root_node = new Functoid("RootNode");
         last_build = _Build(root_node, 8, 10, type);
-        CheckFound(last_build, TestFind(last_build->GetName(), TYPE_FUNCTOIDLIST, false));
+        CheckFound(last_build, TestFind(last_build->GetName(), FUNCTOIDLIST, false));
         Delete(root_node);
     }
 
@@ -59,7 +59,7 @@ void FindTester::TestFindBigTree()
     Functoid* found;
     // Search for the last one (depth 0 is the deepest)
     Functoid* last_build = Build(this, 8, 10, last_type);
-    found = TestFind(last_build->GetName(), TYPE_FUNCTOIDLIST, false);
+    found = TestFind(last_build->GetName(), FUNCTOIDLIST, false);
     CheckFound(last_build, found);
 
     // Only for building purposes
@@ -120,7 +120,7 @@ Functoid* FindTester::_Build
             f = new FunctoidList(name);
         }
         f->SetType(type);
-        entry->Get(TAG_RELATION_CHILD)->Add(f);
+        entry->Get(CHILDREN)->Add(f);
         if(depth > 1)
             f = _Build(f, depth-1, i, type);
     }
@@ -140,7 +140,7 @@ Functoid* FindTester::TestFind(string name, string type, bool relation)
         cout << ", type " << type;
         if(relation)
         {
-            search.SetSearchRelation(TAG_RELATION_CHILD);
+            search.SetSearchRelation(CHILDREN);
             cout << ", relation ";
         }
     }

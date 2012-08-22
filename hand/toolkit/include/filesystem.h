@@ -29,15 +29,15 @@ using namespace std;
 
 #define URISCHEME_FILE "file://"
 #define RELATION_PARENT_PATH "RELATION_PARENT_PATH"
-#define TYPE_FILEFUNCTOID "FileFunctoid"
+#define FILEFUNCTOID "FileFunctoid"
 
 
 class DirectoryLoader : public Factory
 {
     public:
         DirectoryLoader() : Factory("DirectoryLoader",
-                                    TYPE_FILEFUNCTOID,
-                                    TYPE_FILEFUNCTOID,
+                                    FILEFUNCTOID,
+                                    FILEFUNCTOID,
                                     URISCHEME_FILE){};
         ~DirectoryLoader();
 
@@ -63,8 +63,8 @@ class FileFunctoid_Factory : public Factory
 {
     public:
         FileFunctoid_Factory() : Factory("FileFunctoid_Factory",
-                                 TYPE_DATA_STRING,
-                                 TYPE_FILEFUNCTOID,
+                                 DATA_STRING,
+                                 FILEFUNCTOID,
                                  URISCHEME_FILE){};
         virtual ~FileFunctoid_Factory(){};
 

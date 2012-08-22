@@ -26,7 +26,7 @@ using namespace std;
 ListLayer::ListLayer() : Layer()
 {
     BufferType = OVERLAY;
-    SetType(TYPE_LISTLAYER);
+    SetType(LISTLAYER);
 }
 
 
@@ -89,7 +89,7 @@ void ListLayer::Configure(Functoid* sub_layout)
 
 bool ListLayerFactory::IsValidInput(Functoid* input)
 {
-    if(input->IsType(TYPE_FUNCTOIDLIST))
+    if(input->IsType(FUNCTOIDLIST))
         return true;
     return false;
 }

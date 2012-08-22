@@ -27,7 +27,7 @@ using namespace std;
 ButtonLayer::ButtonLayer() : Layer()
 {
     BufferType = COLLECTOR;
-    SetType(TYPE_BUTTONLAYER);
+    SetType(BUTTONLAYER);
 
     VisibleItems = 0;
     // BTN_NAME, BTN_DESCRIPTION, BTN_ICON, BTN_CONTROL, BTN_PREVIEW
@@ -48,7 +48,7 @@ void ButtonLayer::SetContent(Functoid* data)
 /*
     // Create the sub-elements of the button
     // The preview
-    if(Content->IsType(TYPE_FUNCTOIDLIST))
+    if(Content->IsType(FUNCTOIDLIST))
     {
         SetExpandable();
         // Add list as preview // or data->Children[i] ?
@@ -117,7 +117,7 @@ void ButtonLayer::ReleaseGui()
 
 bool ButtonLayerFactory::IsValidInput(Functoid* input)
 {
-//    if(input->IsType(BUTTON_ITEM) || input->IsType(TYPE_DESCRIPTOR))
+//    if(input->IsType(BUTTON_ITEM) || input->IsType(DESCRIPTOR))
     if(input)
         return true;
     return false;

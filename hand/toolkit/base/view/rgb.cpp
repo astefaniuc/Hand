@@ -26,7 +26,7 @@ using namespace std;
 
 Rgb::Rgb(string name, Uint8 r_, Uint8 g_, Uint8 b_) : FunctoidList(name)
 {
-    SetType(GUI_TYPE_RGB);
+    SetType(RGB);
     // For now add plain data directly
     Add(new Data<Uint8>("r", r_));
     Add(new Data<Uint8>("g", g_));
@@ -49,7 +49,7 @@ Rgb* GetRgb(string name, Functoid* tree)
 {
     FunctoidSearch search;
     search.SetSearchName(name);
-    search.SetSearchType(GUI_TYPE_RGB);
+    search.SetSearchType(RGB);
     if(search.Search(tree))
         return dynamic_cast<Rgb*>(search.GetFindings());
 

@@ -27,7 +27,7 @@
 using namespace std;
 
 
-#define TYPE_HANDAPP "HandApp"
+#define HANDAPP "HandApp"
 
 
 class HandServer;

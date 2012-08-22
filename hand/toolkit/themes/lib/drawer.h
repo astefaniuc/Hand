@@ -26,11 +26,11 @@
 using namespace std;
 
 
-#define BGRD_TYPE_SOLID_COLOR "BGRD_TYPE_SOLID_COLOR"
-#define BGRD_TYPE_IMAGE "BGRD_TYPE_IMAGE"
+#define BGRD_SOLID_COLOR "BGRD_SOLID_COLOR"
+#define BGRD_IMAGE "BGRD_IMAGE"
 
 
-#define TYPE_DRAWOBJ_DRAWER "Drawer"
+#define DRAWOBJ_DRAWER "Drawer"
 
 
 class Theme;

@@ -52,7 +52,7 @@ class ButtonLayerFactory : public Factory
     public:
         ButtonLayerFactory() : Factory(LAYER_TOPOGRAPHY,
                                        "",
-                                       TYPE_BUTTONLAYER, ""){};
+                                       BUTTONLAYER, ""){};
         ~ButtonLayerFactory(){};
 
         bool IsValidInput(Functoid* input);

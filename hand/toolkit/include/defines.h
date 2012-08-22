@@ -87,9 +87,9 @@ struct Position
 #define THEMES_MENU "Themes"
 
 // Default URI schemes / types
-#define TYPE_URI_DATA "data:"
-#define TYPE_URI_ACTION "action:"
-#define TYPE_URI_SETTINGS "settings:"
+#define URI_DATA "data:"
+#define URI_ACTION "action:"
+#define URI_SETTINGS "settings:"
 
 
 // Basic GUI and Item types
@@ -99,11 +99,11 @@ struct Position
 #define FOCUS_ITEM_HACK "FOCUS_ITEM_HACK"
 
 // Layer types
-#define TYPE_LAYERMANAGER "LayerManager"
-#define TYPE_VIEWLAYER "ViewLayer"
-#define TYPE_LISTLAYER "ListLayer"
-#define TYPE_BUTTONLAYER "ButtonLayer"
-#define TYPE_TEXTLAYER "TextLayer"
+#define LAYERMANAGER "LayerManager"
+#define VIEWLAYER "ViewLayer"
+#define LISTLAYER "ListLayer"
+#define BUTTONLAYER "ButtonLayer"
+#define TEXTLAYER "TextLayer"
 
 // Layout types
 #define GUI_LAYOUT "Layout"
@@ -142,11 +142,11 @@ struct Position
 
 
 // Reserved tags/names for Functoid elements
-#define TAG_RELATION_PARENT "TAG_RELATION_PARENT"
-#define TAG_RELATION_CHILD "TAG_RELATION_CHILD"
-#define TAG_TYPE "TAG_TYPE"
+#define OWNER "OWNER"
+#define CHILDREN "CHILDREN"
+#define TYPE "TYPE"
 #define TAG_DESCRIPTION "TAG_DESCRIPTION"
-#define IGNORE "*"
+#define ANY "*"
 #define RUNTIME 0
 
 // Name of the Functoid containing the Theme object and the drawing func

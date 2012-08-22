@@ -50,7 +50,7 @@ class AnimationsList
 
 
 // GUI types (Functoid tags)
-#define GUI_TYPE_VIRTUAL_SURFACE "GUI_TYPE_VIRTUAL_SURFACE"
+#define VIRTUALSURFACE "VIRTUALSURFACE"
 
 enum buffer_type
 {

@@ -31,28 +31,28 @@ Factory::Factory
         string uri_scheme
 ) : HandApp(name)
 {
-    SetType(TYPE_FACTORY);
-    SetSpecifierString(TYPE_FACTORY_INPUTSTRING, input_type);
-    SetSpecifierString(TYPE_FACTORY_OUTPUTSTRING, output_type);
-    SetSpecifierString(TYPE_FACTORY_URISCHEME, uri_scheme);
+    SetType(FACTORY);
+    SetSpecifierString(FACTORY_INPUTSTRING, input_type);
+    SetSpecifierString(FACTORY_OUTPUTSTRING, output_type);
+    SetSpecifierString(FACTORY_URISCHEME, uri_scheme);
 }
 
 
 string Factory::GetInputType()
 {
-    return GetSpecifierString(TYPE_FACTORY_INPUTSTRING);
+    return GetSpecifierString(FACTORY_INPUTSTRING);
 }
 
 
 string Factory::GetOutputType()
 {
-    return GetSpecifierString(TYPE_FACTORY_OUTPUTSTRING);
+    return GetSpecifierString(FACTORY_OUTPUTSTRING);
 }
 
 
 string Factory::GetUriScheme()
 {
-    return GetSpecifierString(TYPE_FACTORY_URISCHEME);
+    return GetSpecifierString(FACTORY_URISCHEME);
 }
 
 
@@ -81,7 +81,7 @@ string Factory::GetSpecifierString(string name)
 
 FactoryMap::FactoryMap(string name) : FunctoidList(name)
 {
-    SetType(TYPE_FACTORYMAP);
+    SetType(FACTORYMAP);
 }
 
 

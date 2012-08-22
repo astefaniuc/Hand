@@ -39,8 +39,7 @@ class Node;
 class Theme;
 class FactoryMap;
 
-#define TYPE_LAYER "Layer"
-#define TAG_RELATION_LAYER "TAG_RELATION_LAYER"
+#define LAYER "Layer"
 #define LAYER_TOPOGRAPHY "Layer Topography"
 
 

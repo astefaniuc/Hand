@@ -45,8 +45,8 @@ class ListLayerFactory : public Factory
 {
     public:
         ListLayerFactory() : Factory(LAYER_TOPOGRAPHY,
-                                     TYPE_FUNCTOIDLIST,
-                                     TYPE_LISTLAYER, ""){};
+                                     FUNCTOIDLIST,
+                                     LISTLAYER, ""){};
         ~ListLayerFactory(){};
 
         bool IsValidInput(Functoid* input);

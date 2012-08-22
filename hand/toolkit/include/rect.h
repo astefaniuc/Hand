@@ -26,7 +26,7 @@
 using namespace std;
 
 
-#define GUI_TYPE_RECT "GUI_TYPE_RECT"
+#define RECT "RECT"
 
 
 class Rect : public FunctoidList

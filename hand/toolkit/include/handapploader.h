@@ -26,7 +26,7 @@
 using namespace std;
 
 
-#define TYPE_APPLOADER "HandAppLoader"
+#define APPLOADER "HandAppLoader"
 #define NAME_NOT_INIT "Not initialized"
 
 // Class factories for dynamic linking
@@ -57,7 +57,7 @@ class HandAppLoader : public Factory
 };
 
 
-#define TYPE_APPLOADERFACTORY "HandAppLoader_Factory"
+#define APPLOADERFACTORY "HandAppLoader_Factory"
 
 class HandAppLoader_Factory : public Factory
 {

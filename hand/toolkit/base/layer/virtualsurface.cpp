@@ -119,7 +119,7 @@ Animation* AnimationsList::GetCurrentAnimation()
 
 VirtualSurface::VirtualSurface(string name) : HandApp(name)
 {
-    SetType(GUI_TYPE_VIRTUAL_SURFACE);
+    SetType(VIRTUALSURFACE);
     Changed = true;
     Buffer = NULL;
     Parent = NULL;

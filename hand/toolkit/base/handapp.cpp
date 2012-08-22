@@ -33,7 +33,7 @@ using namespace std;
 HandApp::HandApp(string name) : FunctoidList(name)
 {
     _LayerManager = NULL;
-    SetType(TYPE_HANDAPP);
+    SetType(HANDAPP);
 }
 
 
@@ -58,10 +58,10 @@ HandServer* HandApp::Server()
 
 
 HandAppLoader::HandAppLoader(FileFunctoid* path_obj) : Factory(NAME_NOT_INIT,
-                                                               TYPE_FILEFUNCTOID,
-                                                               TYPE_HANDAPP, "")
+                                                               FILEFUNCTOID,
+                                                               HANDAPP, "")
 {
-    SetType(TYPE_APPLOADER);
+    SetType(APPLOADER);
     if(!path_obj)
         return; // false
     LibraryPath = path_obj->GetFullPath();
@@ -119,11 +119,11 @@ void HandAppLoader::TakeBack(Functoid* app)
 
 
 HandAppLoader_Factory::HandAppLoader_Factory() : Factory("Library Loader",
-                                                         TYPE_FILEFUNCTOID,
-                                                         TYPE_APPLOADER,
+                                                         FILEFUNCTOID,
+                                                         APPLOADER,
                                                          URISCHEME_FILE)
 {
-    SetType(TYPE_APPLOADERFACTORY);
+    SetType(APPLOADERFACTORY);
 }
 
 

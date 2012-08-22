@@ -28,7 +28,7 @@ using namespace std;
 DrawerFactory::DrawerFactory
 (
         Functoid* draw_func
-) : Factory(DRAWOBJ_DRAWER, TYPE_DESCRIPTOR, draw_func->GetName(), "")
+) : Factory(DRAWOBJ_DRAWER, DESCRIPTOR, draw_func->GetName(), "")
 {
     // Basic implementation check
     if(!draw_func)

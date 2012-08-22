@@ -25,7 +25,7 @@
 
 using namespace std;
 
-#define TYPE_FUNCTOIDLIST "FunctoidList"
+#define FUNCTOIDLIST "FunctoidList"
 
 class Relation;
 class Factory;
@@ -61,7 +61,7 @@ class FunctoidList : public Functoid
 
 
 // TODO: combine Link and Relation? Or even get rid of both?
-#define TYPE_DESCRIPTOR "Link"
+#define DESCRIPTOR "Link"
 
 class Link : public FunctoidList
 {
@@ -80,7 +80,7 @@ class Link : public FunctoidList
 };
 
 
-#define FUNCTOIDRELATION "FUNCTOIDRELATION"
+#define RELATION "RELATION"
 
 class Relation : public FunctoidList
 {

@@ -81,7 +81,7 @@ bool Theme::FillOut(Functoid* input)
     for(FunctoidIterator curr=layout->begin(); curr!=_end; curr++)
     {
         name = (*curr)->GetName();
-        if((name==TAG_RELATION_CHILD) || (name=="Methods"))
+        if((name==CHILDREN) || (name=="Methods"))
             _FillOut((*curr));
         else if((name=="Fields") || (name=="Components"))
             continue;

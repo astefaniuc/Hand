@@ -38,9 +38,9 @@ class Persistence : public Factory
 {
     public:
         Persistence() : Factory("Persistence",
-                                TYPE_FUNCTOIDLIST,
-                                TYPE_FUNCTOIDLIST,
-                                TYPE_URI_SETTINGS){};
+                                FUNCTOIDLIST,
+                                FUNCTOIDLIST,
+                                URI_SETTINGS){};
         virtual ~Persistence(){};
 
         Functoid* Produce(Functoid* descriptor);

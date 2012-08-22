@@ -26,14 +26,14 @@ using namespace std;
 
 Rect::Rect(string name, double x_, double y_, double w_, double h_) : FunctoidList(name)
 {
-    SetType(GUI_TYPE_RECT);
+    SetType(RECT);
     Init(x_, y_, w_, h_);
 }
 
 
 Rect::Rect() : FunctoidList("No name")
 {
-    SetType(GUI_TYPE_RECT);
+    SetType(RECT);
     Init(0.0, 0.0, 1.0, 1.0);
 }
 
@@ -83,7 +83,7 @@ Rect* GetRect(string name, Functoid* tree)
 {
     FunctoidSearch search;
     search.SetSearchName(name);
-    search.SetSearchType(GUI_TYPE_RECT);
+    search.SetSearchType(RECT);
     if(search.Search(tree))
         return dynamic_cast<Rect*>(search.GetFindings());
 

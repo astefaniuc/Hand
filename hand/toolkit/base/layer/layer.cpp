@@ -37,7 +37,7 @@ Layer::Layer() : VirtualSurface("Layer")
     IsVisible = true;
     IsExpanded = false;
     _Node = NULL;
-    SetType(TYPE_LAYER);
+    SetType(LAYER);
 }
 
 
@@ -201,7 +201,7 @@ Layer* Layer::Insert(Functoid* data, string position)
 
     // Connect the components
     // on Layer/VS level
-    Get(TAG_RELATION_CHILD)->Add(sub_layer);
+    Get(CHILDREN)->Add(sub_layer);
     sub_layer->SetParent(this);
     // on Layout level
     Layout* field_layout = dynamic_cast<Layout*>(field->Get("Layout")->Get(1));
@@ -216,8 +216,8 @@ Layer* Layer::GetAttachedLayer(Functoid* target)
 {
     FunctoidSearch search;
     search.MaxDepth = 2;
-    search.SetSearchType(TYPE_LAYER);
-    search.SetSearchRelation(TAG_RELATION_LAYER);
+    search.SetSearchType(LAYER);
+    search.SetSearchRelation(LAYER);
     if(search.Search(target))
         return dynamic_cast<Layer*>(search.GetFindings());
     return NULL;
@@ -229,7 +229,7 @@ void Layer::SetTheme(Theme* theme)
     // TODO: generic recursive Set() on a sub-tree defined by a "relation"
     // (possibly using Search() with MultipleFindings)
     SetLayout(theme);
-    Functoid* children = Get(FUNCTOIDRELATION, TAG_RELATION_CHILD);
+    Functoid* children = Get(RELATION, CHILDREN);
     if(!children)
         return;
 
@@ -259,7 +259,7 @@ void Layer::SetLayout(Functoid* drawer_lib) // string type, uint position
     {
         FunctoidSearch search;
         search.SetSearchName(GetType());
-        search.SetSearchType(TYPE_DRAWOBJ_DRAWER);
+        search.SetSearchType(DRAWOBJ_DRAWER);
         search.MaxDepth = 4;
         if(search.Search(drawer_lib))
             layout->Set(search.GetFindings());
@@ -308,7 +308,7 @@ void Layer::Draw(bool forced)
 
 void Layer::DrawChilds(bool forced)
 {
-    Functoid* children = Get(FUNCTOIDRELATION, TAG_RELATION_CHILD);
+    Functoid* children = Get(RELATION, CHILDREN);
     if(!children)
         return;
 

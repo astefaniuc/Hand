@@ -29,7 +29,7 @@ FunctoidList::FunctoidList(string name) : Functoid(name)
 {
     // Reserve the first list entry for runtime information
     Attach(new Functoid("Runtime"));
-    SetType(TYPE_FUNCTOIDLIST);
+    SetType(FUNCTOIDLIST);
 }
 
 
@@ -37,7 +37,7 @@ FunctoidList::~FunctoidList()
 {
     // Don't delete the parent(s); same source code as in ~Functoid()
     // because that destructor doesn't calls the overloaded method
-    Functoid* p = Get(FUNCTOIDRELATION, TAG_RELATION_PARENT);
+    Functoid* p = Get(RELATION, OWNER);
     // CleanUp() doesn't work here
     if(p && (p->size()== 2))
         p->pop_back();
@@ -47,11 +47,11 @@ FunctoidList::~FunctoidList()
 Functoid* FunctoidList::Get(string s)
 {
     // Search public elements
-    Functoid* ret = Functoid::Get(IGNORE, s);
+    Functoid* ret = Functoid::Get(ANY, s);
     if(ret)
         return ret;
     // Search hidden elements
-    ret = Get(RUNTIME)->Get(IGNORE, s);
+    ret = Get(RUNTIME)->Get(ANY, s);
     if(ret)
         return ret;
     // Return a new public relation
@@ -134,7 +134,7 @@ Factory* FunctoidList::GetFactory()
     FunctoidSearch search;
     search.MaxDepth = 2;
     search.SetSearchRelation(RELATION_PRODUCER);
-    search.SetSearchType(TYPE_FACTORY);
+    search.SetSearchType(FACTORY);
     if(search.Search(this))
         return dynamic_cast<Factory*>(search.GetFindings());
     return NULL;
@@ -209,7 +209,7 @@ bool Link::IsMultiLink()
 
 Relation::Relation(string name) : FunctoidList(name)
 {
-    SetType(FUNCTOIDRELATION);
+    SetType(RELATION);
 }
 
 

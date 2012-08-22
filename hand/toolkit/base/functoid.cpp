@@ -36,7 +36,7 @@ Functoid::Functoid(string name)
 Functoid::~Functoid()
 {
     // Don't delete the parent(s)
-    Functoid* curr = Get(FUNCTOIDRELATION, TAG_RELATION_PARENT);
+    Functoid* curr = Get(RELATION, OWNER);
     // CleanUp() doesn't work here
     if(curr && (curr->size()== 2))
         curr->pop_back();
@@ -119,16 +119,16 @@ Functoid* Functoid::Get(string type, string name)
     FunctoidIterator curr = begin();
     FunctoidIterator _end = end();
 
-    if(name == IGNORE)
+    if(name == ANY)
     {
-        if((type==IGNORE) && (curr!=_end))
+        if((type==ANY) && (curr!=_end))
             return (*curr);
         else
             for(; curr!=_end; curr++)
                 if((*curr)->IsType(type))
                     return (*curr);
     }
-    else if(type == IGNORE)
+    else if(type == ANY)
     {
         for(; curr!=_end; curr++)
             if((*curr)->GetName()==name)
@@ -206,7 +206,7 @@ Functoid* Functoid::_Find(string name, int depth)
         return NULL;
     }
     // Don't search parent/owner to avoid a sure graph cycle
-    if(Name == TAG_RELATION_PARENT)
+    if(Name == OWNER)
         return NULL;
 
     Functoid* ret = NULL;
@@ -260,10 +260,10 @@ void Functoid::SetType(string type)
 {
     if(type.empty())
         return;
-    Functoid* types = Get(IGNORE, TAG_TYPE);
+    Functoid* types = Get(ANY, TYPE);
     if(!types)
     {
-        types = new Functoid(TAG_TYPE);
+        types = new Functoid(TYPE);
         Set(types);
     }
     types->Set(new Functoid(type));
@@ -272,7 +272,7 @@ void Functoid::SetType(string type)
 
 string Functoid::GetType()
 {
-    Functoid* types = Get(TAG_TYPE);
+    Functoid* types = Get(TYPE);
     if(types)
         return types->back()->GetName();
     return "Functoid";
@@ -281,7 +281,7 @@ string Functoid::GetType()
 
 bool Functoid::IsType(string type)
 {
-    Functoid* types = Get(TAG_TYPE);
+    Functoid* types = Get(TYPE);
     FunctoidIterator _end = types->end();
     for(FunctoidIterator curr=types->begin(); curr!=_end; curr++)
         if((*curr)->GetName() == type)
@@ -295,7 +295,7 @@ bool Functoid::IsType(SearchExpression* se)
 {
     if(!se)
         return false;
-    Functoid* types = Get(TAG_TYPE);
+    Functoid* types = Get(TYPE);
     FunctoidIterator _end = types->end();
     for(FunctoidIterator curr=types->begin(); curr!=_end; curr++)
         if(se->Matches((*curr)->GetName()))
@@ -307,7 +307,7 @@ bool Functoid::IsType(SearchExpression* se)
 
 void Functoid::SetOwner(Functoid* owner)
 {
-    Relation* r = new Relation(TAG_RELATION_PARENT);
+    Relation* r = new Relation(OWNER);
     Attach(r);
     r->Set(owner);
 }
@@ -315,7 +315,7 @@ void Functoid::SetOwner(Functoid* owner)
 
 bool Functoid::HasOwner(Functoid* caller)
 {
-    Functoid* rel_p = Get(FUNCTOIDRELATION, TAG_RELATION_PARENT);
+    Functoid* rel_p = Get(RELATION, OWNER);
     if(!rel_p)
         return true;
     uint ps = rel_p->size();

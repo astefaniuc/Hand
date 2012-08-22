@@ -92,8 +92,8 @@ bool Default::GetViewLayout(Functoid* out)
     Layout* controls = new Layout("Controls", GUI_LAYOUT_FRAMEDLIST);
     // Horizontal list alignment
     controls->Set(new Rect(DRAW_PROPERTY_ALIGNMENT, 1, 0, 1, 0));
-    layout->Get(TAG_RELATION_CHILD)->Add(controls);
-    controls->AddField("ListElement", TYPE_BUTTONLAYER);
+    layout->Get(CHILDREN)->Add(controls);
+    controls->AddField("ListElement", BUTTONLAYER);
     return true;
 }
 
@@ -104,7 +104,7 @@ bool Default::GetListLayout(Functoid* out)
 
     layout->Set(new Rect(DRAW_PROPERTY_ALIGNMENT, 0, 1, 0, 1));
     layout->Get("Methods")->Add(new Link("DrawFunc", GUI_DRAWER_LIST));
-    layout->AddField("ListElement", TYPE_BUTTONLAYER);
+    layout->AddField("ListElement", BUTTONLAYER);
 //    layout->AddField("ListElement", "Any");
     return true;
 }
@@ -117,10 +117,10 @@ bool Default::GetFramedListLayout(Functoid* out)
     layout->Set(new Rect(GUI_RECT_SIZEANDPOS, 0.1, 0.1, 0.8, 0.8));
 
     Layout* frame = new Layout("Background", GUI_LAYOUT_BACKGROUND);
-    layout->Get(TAG_RELATION_CHILD)->Add(frame);
+    layout->Get(CHILDREN)->Add(frame);
 
     Layout* content = new Layout("Content", GUI_LAYOUT_LIST);
-    layout->Get(TAG_RELATION_CHILD)->Add(content);
+    layout->Get(CHILDREN)->Add(content);
     frame->Get("Update")->Attach(content);
 
     return true;
@@ -135,24 +135,24 @@ bool Default::GetButtonLayout(Functoid* out)
     layout->Set(new Rect(GUI_RECT_SIZEANDPOS, 0.1, 0.1, 0.8, 0.8));
 
     Layout* frame = new Layout("Frame", GUI_LAYOUT_FRAME);
-    layout->Get(TAG_RELATION_CHILD)->Add(frame);
+    layout->Get(CHILDREN)->Add(frame);
     // The Button container
     Layout* content = new Layout("Button Content", GUI_LAYOUT_LIST);
     content->Set(new Rect(DRAW_PROPERTY_ALIGNMENT, 0, 1, 0, 1));
-    layout->Get(TAG_RELATION_CHILD)->Add(content);
+    layout->Get(CHILDREN)->Add(content);
     frame->Get("Update")->Attach(content);
 
     Layout* upper = new Layout("Upper", GUI_LAYOUT_LIST);
     upper->Set(new Rect(DRAW_PROPERTY_ALIGNMENT, 1, 0, 0.5, 0));
-    upper->AddField(BTN_FIELD_ICON, TYPE_TEXTLAYER);
-    upper->AddField(BTN_FIELD_NAME, TYPE_TEXTLAYER);
-    content->Get(TAG_RELATION_CHILD)->Add(upper);
+    upper->AddField(BTN_FIELD_ICON, TEXTLAYER);
+    upper->AddField(BTN_FIELD_NAME, TEXTLAYER);
+    content->Get(CHILDREN)->Add(upper);
 
     Layout* lower = new Layout("Lower", GUI_LAYOUT_LIST);
     lower->Set(new Rect(DRAW_PROPERTY_ALIGNMENT, 1, 0, 0.5, 0));
-    lower->AddField(BTN_FIELD_DESCRIPTION, TYPE_TEXTLAYER);
-    lower->AddField(BTN_FIELD_CONTROL, TYPE_BUTTONLAYER);
-    content->Get(TAG_RELATION_CHILD)->Add(lower);
+    lower->AddField(BTN_FIELD_DESCRIPTION, TEXTLAYER);
+    lower->AddField(BTN_FIELD_CONTROL, BUTTONLAYER);
+    content->Get(CHILDREN)->Add(lower);
 
     return true;
 }
@@ -163,7 +163,7 @@ bool Default::GetControlLayout(Functoid* out)
     Layout* layout = dynamic_cast<Layout*>(out);
 
     Layout* frame = new Layout("Frame", GUI_LAYOUT_FRAME);
-    layout->Get(TAG_RELATION_CHILD)->Add(frame);
+    layout->Get(CHILDREN)->Add(frame);
     return true;
 }
 
@@ -177,7 +177,7 @@ bool Default::GetFrameLayout(Functoid* out)
     layout->Get("Methods")->Add(new Link("DrawFunc", GUI_DRAWER_FRAME));
 
     Layout* bgrd = new Layout("Background", GUI_LAYOUT_BACKGROUND);
-    layout->Get(TAG_RELATION_CHILD)->Add(bgrd);
+    layout->Get(CHILDREN)->Add(bgrd);
     layout->Get("Update")->Attach(bgrd);
 
     return true;
@@ -302,21 +302,21 @@ bool Default::DrawView(Functoid* layout)
     if(!vs)
         return false;
 
-/*    if(!drawing || !drawing->IsType(TYPE_GUI_DRAWER_VIEW) ||
-            !drawing->IsType(GUI_TYPE_VIRTUAL_SURFACE))
+/*    if(!drawing || !drawing->IsType(GUI_DRAWER_VIEW) ||
+            !drawing->IsType(VIRTUALSURFACE))
         return false;
 
     // A View has three possible components, 1. the frame
     Functoid* sub = drawing->Get(LAYOUT_COMPONENT_FRAME);
-    if(sub && sub->IsType(GUI_TYPE_VIRTUAL_SURFACE))
+    if(sub && sub->IsType(VIRTUALSURFACE))
         ((VirtualSurface*)sub)->Draw(true);
     // 2. the background
     sub = drawing->Get(LAYOUT_COMPONENT_FRAME);
-    if(sub && sub->IsType(GUI_TYPE_VIRTUAL_SURFACE))
+    if(sub && sub->IsType(VIRTUALSURFACE))
         ((VirtualSurface*)sub)->Draw(true);
     // 3. the content
     sub = drawing->Get(LAYOUT_COMPONENT_CONTENT);
-    if(sub && sub->IsType(GUI_TYPE_VIRTUAL_SURFACE))
+    if(sub && sub->IsType(VIRTUALSURFACE))
         ((VirtualSurface*)sub)->Draw(true);*/
     return true;
 }

@@ -26,7 +26,7 @@
 using namespace std;
 
 
-#define GUI_TYPE_RGB "GUI_TYPE_RGB"
+#define RGB "RGB"
 
 
 class Rgb : public FunctoidList

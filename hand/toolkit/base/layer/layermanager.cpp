@@ -35,7 +35,7 @@ using namespace std;
 LayerManager::LayerManager() : ListLayer()
 {
     SetLayerManager(this);
-    SetType(TYPE_LAYERMANAGER);
+    SetType(LAYERMANAGER);
     _Theme = NULL;
     NextRequest = NULL;
     _InputState = NULL;
@@ -149,7 +149,7 @@ void LayerManager::SetScreen(SDL_Surface* screen)
 
 bool LayerManager::GetCommand(Functoid* f, int level)
 {
-    Layer* l = CreateLayer(f, TYPE_BUTTONLAYER);
+    Layer* l = CreateLayer(f, BUTTONLAYER);
     return GetCommand(l, level);
 }
 
@@ -214,9 +214,9 @@ bool LayerManager::LoadTheme(Functoid* f)
 /* This would be the proper solution but gives link error:
  * undefined reference to `typeinfo for Theme'
  *
-    Theme* theme = dynamic_cast<Theme*>(Server()->Produce(f, TYPE_HANDAPP));
+    Theme* theme = dynamic_cast<Theme*>(Server()->Produce(f, HANDAPP));
 */
-    Theme* theme = (Theme*)(Server()->Produce(f, TYPE_HANDAPP));
+    Theme* theme = (Theme*)(Server()->Produce(f, HANDAPP));
 
     if(!theme)
         return false;
@@ -229,7 +229,7 @@ bool LayerManager::LoadTheme(Functoid* f)
 bool LayerManager::GetAllThemes(Functoid* themes_dir)
 {
     // (Re-)read the list of available themes
-    FunctoidList* themes_list = dynamic_cast<FunctoidList*>(Server()->Produce(themes_dir, TYPE_FILEFUNCTOID));
+    FunctoidList* themes_list = dynamic_cast<FunctoidList*>(Server()->Produce(themes_dir, FILEFUNCTOID));
     if(!themes_list)
         return false;
 
@@ -277,7 +277,7 @@ bool LayerManager::Expand(Functoid* to_expand)
         if(MasterView->IsType("Expansive"))
         {
             // Insert() = Add() != SetContent()
-            MasterView->Set(TAG_RELATION_CHILD)->Add(new_view);
+            MasterView->Set(CHILDREN)->Add(new_view);
             return true;
         }
 
@@ -322,7 +322,7 @@ Layer* LayerManager::CreateLayer(Functoid* content, string layer_type)
 
     if(layer_type == "Any")
     {
-        Functoid* attached_layout = content->Get(FUNCTOIDRELATION, "Layout");
+        Functoid* attached_layout = content->Get(RELATION, "Layout");
         if(attached_layout)
             layer_type = attached_layout->Get(1)->GetType();
         else

@@ -42,7 +42,7 @@ class TextLayerFactory : public Factory
     public:
         TextLayerFactory() : Factory(LAYER_TOPOGRAPHY,
                                      "",
-                                     TYPE_TEXTLAYER, ""){};
+                                     TEXTLAYER, ""){};
         ~TextLayerFactory(){};
 
         bool IsValidInput(Functoid* input);

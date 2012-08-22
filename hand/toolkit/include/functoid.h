@@ -67,18 +67,18 @@ class Functoid : public vector<Functoid*>
 
         // Get the first sub-item by name.
         // If the item doesn't exist it returns a new Relation functoid;
-        // use Get(name, IGNORE) to test if a functoid exists
+        // use Get(name, ANY) to test if a functoid exists
         virtual Functoid* Get(string name);
         // Get the first sub-item by name and type; if the item is not found
-        // it returns NULL; the parameters can be set to IGNORE e.g.
-        // Get(IGNORE, IGNORE) returns the first stored item
+        // it returns NULL; the parameters can be set to ANY e.g.
+        // Get(ANY, ANY) returns the first stored item
         virtual Functoid* Get(string name, string type);
         // Interface to method defined in a derived class; returns always
         // NULL in this base class
         virtual Functoid* Get(uint item);
 
         // Simple iterative deepening depth-first search.
-        // Omits owner/parent (TAG_RELATION_PARENT) from the search
+        // Omits owner/parent (OWNER) from the search
         // but might fail with any other graph cycles!
         // Use the FunctoidSearch engine for deeper searches.
         virtual Functoid* Find(string name, int max_depth = 2);
@@ -99,7 +99,7 @@ class Functoid : public vector<Functoid*>
         virtual bool IsType(SearchExpression* type);
 
         // Set object owner (for memory management).
-        // Owner is stored under TAG_RELATION_PARENT
+        // Owner is stored under OWNER
         virtual void SetOwner(Functoid* owner);
         // Returns true if 'caller' is the owner or if no owner is registered
         virtual bool HasOwner(Functoid* caller);
@@ -124,7 +124,7 @@ typedef vector<Functoid*>::iterator FunctoidIterator;
 
 #define FUNCTOIDDATA "FUNCTOIDDATA"
 // TODO: This string varies on different platforms
-#define TYPE_DATA_STRING "Ss"
+#define DATA_STRING "Ss"
 
 template <typename I>
 class Data : public Functoid
