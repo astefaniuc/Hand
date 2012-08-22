@@ -322,7 +322,7 @@ Layer* LayerManager::CreateLayer(Functoid* content, string layer_type)
 
     if(layer_type == "Any")
     {
-        Functoid* attached_layout = content->Get("Layout", IGNORE);
+        Functoid* attached_layout = content->Get(FUNCTOIDRELATION, "Layout");
         if(attached_layout)
             layer_type = attached_layout->Get(1)->GetType();
         else

@@ -38,7 +38,7 @@ class FunctoidList : public Functoid
 
         // Get the child by name
         virtual Functoid* Get(string child);
-        virtual Functoid* Get(string name, string type);
+        virtual Functoid* Get(string type, string name);
         // Get the child by position, 1-based; Element '0' stores
         // hidden system information e.g. type and layout.
         virtual Functoid* Get(uint child);

@@ -54,10 +54,10 @@ FunctoidList* Layout::AddField(string name, string type)
 FunctoidList* Layout::GetField(string position)
 {
     FunctoidList* s = dynamic_cast<FunctoidList*>(
-            Get("Fields")->Get(position, IGNORE));
+            Get("Fields")->Get(IGNORE, position));
     if(s)
         return s;
-    Functoid* childs = Get(TAG_RELATION_CHILD, IGNORE);
+    Functoid* childs = Get(FUNCTOIDRELATION, TAG_RELATION_CHILD);
     if(childs)
     {
         Functoid* layout;
@@ -88,11 +88,11 @@ bool Layout::Execute(Functoid* vs)
     // Set the surface in the layout and use the layout
     // as parameter for the drawer
     Get("Surface")->Set(vs);
-    Functoid* f = Get("Methods")->Get("DrawFunc", IGNORE);
+    Functoid* f = Get("Methods")->Get(IGNORE, "DrawFunc");
     if(f)
         // Execute drawer on current layout
         f->Execute(this);
-    f = Get(TAG_RELATION_CHILD, IGNORE);
+    f = Get(FUNCTOIDRELATION, TAG_RELATION_CHILD);
     if(f)
     {
         Functoid* layout;
@@ -111,7 +111,7 @@ void Layout::Reset()
     if(sub)
         // Reset size and position to factory settings
         sub->Reset();
-    Functoid* children = Get(TAG_RELATION_CHILD, IGNORE);
+    Functoid* children = Get(FUNCTOIDRELATION, TAG_RELATION_CHILD);
     if(!children)
         return;
     Layout* layout;

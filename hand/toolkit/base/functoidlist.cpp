@@ -37,7 +37,7 @@ FunctoidList::~FunctoidList()
 {
     // Don't delete the parent(s); same source code as in ~Functoid()
     // because that destructor doesn't calls the overloaded method
-    Functoid* p = Get(TAG_RELATION_PARENT, IGNORE);
+    Functoid* p = Get(FUNCTOIDRELATION, TAG_RELATION_PARENT);
     // CleanUp() doesn't work here
     if(p && (p->size()== 2))
         p->pop_back();
@@ -47,11 +47,11 @@ FunctoidList::~FunctoidList()
 Functoid* FunctoidList::Get(string s)
 {
     // Search public elements
-    Functoid* ret = Functoid::Get(s, IGNORE);
+    Functoid* ret = Functoid::Get(IGNORE, s);
     if(ret)
         return ret;
     // Search hidden elements
-    ret = Get(RUNTIME)->Get(s, IGNORE);
+    ret = Get(RUNTIME)->Get(IGNORE, s);
     if(ret)
         return ret;
     // Return a new public relation
@@ -69,11 +69,11 @@ Functoid* FunctoidList::Get(uint i)
 }
 
 
-Functoid* FunctoidList::Get(string rel, string elem)
+Functoid* FunctoidList::Get(string type, string name)
 {
-    Functoid* ret = Functoid::Get(rel, elem);
+    Functoid* ret = Functoid::Get(type, name);
     if(!ret)
-        return Get(RUNTIME)->Functoid::Get(rel, elem);
+        return Get(RUNTIME)->Functoid::Get(type, name);
     return ret;
 }
 

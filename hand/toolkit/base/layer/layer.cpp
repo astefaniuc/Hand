@@ -229,7 +229,7 @@ void Layer::SetTheme(Theme* theme)
     // TODO: generic recursive Set() on a sub-tree defined by a "relation"
     // (possibly using Search() with MultipleFindings)
     SetLayout(theme);
-    Functoid* children = Get(TAG_RELATION_CHILD, IGNORE);
+    Functoid* children = Get(FUNCTOIDRELATION, TAG_RELATION_CHILD);
     if(!children)
         return;
 
@@ -308,7 +308,7 @@ void Layer::Draw(bool forced)
 
 void Layer::DrawChilds(bool forced)
 {
-    Functoid* children = Get(TAG_RELATION_CHILD, IGNORE);
+    Functoid* children = Get(FUNCTOIDRELATION, TAG_RELATION_CHILD);
     if(!children)
         return;
 

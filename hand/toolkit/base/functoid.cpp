@@ -36,7 +36,7 @@ Functoid::Functoid(string name)
 Functoid::~Functoid()
 {
     // Don't delete the parent(s)
-    Functoid* curr = Get(TAG_RELATION_PARENT, IGNORE);
+    Functoid* curr = Get(FUNCTOIDRELATION, TAG_RELATION_PARENT);
     // CleanUp() doesn't work here
     if(curr && (curr->size()== 2))
         curr->pop_back();
@@ -114,7 +114,7 @@ Functoid* Functoid::Get(string s)
 }
 
 
-Functoid* Functoid::Get(string name, string type)
+Functoid* Functoid::Get(string type, string name)
 {
     FunctoidIterator curr = begin();
     FunctoidIterator _end = end();
@@ -260,7 +260,7 @@ void Functoid::SetType(string type)
 {
     if(type.empty())
         return;
-    Functoid* types = Get(TAG_TYPE, IGNORE);
+    Functoid* types = Get(IGNORE, TAG_TYPE);
     if(!types)
     {
         types = new Functoid(TAG_TYPE);
@@ -315,12 +315,12 @@ void Functoid::SetOwner(Functoid* owner)
 
 bool Functoid::HasOwner(Functoid* caller)
 {
-    Functoid* rel_p = Get(TAG_RELATION_PARENT, IGNORE);
+    Functoid* rel_p = Get(FUNCTOIDRELATION, TAG_RELATION_PARENT);
     if(!rel_p)
         return true;
     uint ps = rel_p->size();
     // Check if this node has only the caller as parent
-    return ((ps < 2) || ((ps == 2) && (parent->at(1) == caller)));
+    return ((ps < 2) || ((ps == 2) && (rel_p->at(1) == caller)));
 }
 
 

@@ -33,6 +33,7 @@ using namespace std;
 
 // Arbitrary search depth (should be big enough to find everything
 // and small enough to return fast from circles)
+#define FUNCTOID "Functoid"
 #define MAX_SEARCH_DEPTH 1024
 
 
