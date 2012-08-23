@@ -12,7 +12,7 @@ else
 CXXFLAGS = -g -O0 -Wall -fPIC -std=c++0x
 endif
 # Include directories
-INCLUDES = -I/usr/local/include -I./..
+INCLUDES = -I/usr/local/include -I./../.. -I/usr/include/SDL
 
 
 all: $(OBJ)
@@ -24,4 +24,3 @@ all: $(OBJ)
 
 clean:
 	rm -f *.o
-

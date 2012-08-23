@@ -1,7 +1,8 @@
 # Sub-directories and source files.
 SRC = $(shell find *.cpp)
-# Makefile output
 OBJ = $(SRC:.cpp=.o)
+# Makefile output
+OUT = test2.so
 
 # C++ compiler
 CXX = g++
@@ -12,16 +13,25 @@ else
 CXXFLAGS = -g -O0 -Wall -fPIC -std=c++0x
 endif
 # Include directories
-INCLUDES = -I/usr/local/include -I./..
+INCLUDES = -I./../../../toolkit 
+# Library paths
+LIBS= -L./../../../toolkit
+# Linker flags
+LDFLAGS = -g -shared -Wl,-soname,$(OUT) -Wl,-E
+# -Wl,--export-dynamic 
 
 
-all: $(OBJ)
+all: $(OUT)
 
 
 .cpp.o:
 	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
 
+$(OUT):	$(OBJ) 
+	$(CXX) $(LDFLAGS) -o $(OUT) $(OBJ) $(LIBS)
+	cp $(OUT) ./../$(OUT)
+
 
 clean:
 	rm -f *.o
-
+	rm -f *.so

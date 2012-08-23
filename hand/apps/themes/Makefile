@@ -1,4 +1,4 @@
-DIRS = test themes
+DIRS = default nr2
 
 
 all:
@@ -8,6 +8,7 @@ all:
 
 
 clean:
+	rm -f *.so
 	for dir in $(DIRS); do\
         make clean -C $$dir;\
     done

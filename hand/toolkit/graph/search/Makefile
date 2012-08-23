@@ -1,3 +1,5 @@
+# "search" makefile
+
 # Sub-directories and source files.
 SRC = $(shell find *.cpp)
 # Makefile output
@@ -12,7 +14,7 @@ else
 CXXFLAGS = -g -O0 -Wall -fPIC -std=c++0x
 endif
 # Include directories
-INCLUDES = -I/usr/local/include -I./..
+INCLUDES = -I/usr/local/include -I./../..
 
 
 all: $(OBJ)
@@ -24,4 +26,3 @@ all: $(OBJ)
 
 clean:
 	rm -f *.o
-

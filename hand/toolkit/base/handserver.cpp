@@ -17,12 +17,12 @@
  *  License along with Hand. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "handserver.h"
-#include "layer.h"
-#include "layermanager.h"
-#include "device.h"
-#include "inputstate.h"
-#include "screen.h"
+#include "base/handserver.h"
+#include "view/layer/layer.h"
+#include "view/layer/layermanager.h"
+#include "input/device.h"
+#include "input/inputstate.h"
+#include "view/screen.h"
 
 
 using namespace std;

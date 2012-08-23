@@ -1,4 +1,5 @@
 # Sub-directories and source files.
+DIRS = datatypes layer theme
 SRC = $(shell find *.cpp)
 # Makefile output
 OBJ = $(SRC:.cpp=.o)
@@ -14,8 +15,13 @@ endif
 # Include directories
 INCLUDES = -I/usr/local/include -I./..
 
+all: subs $(OBJ)
 
-all: $(OBJ)
+
+subs:
+	for dir in $(DIRS); do\
+        make -C $$dir;\
+    done
 
 
 .cpp.o:
@@ -24,4 +30,7 @@ all: $(OBJ)
 
 clean:
 	rm -f *.o
+	for dir in $(DIRS); do\
+        make clean -C $$dir;\
+    done
 

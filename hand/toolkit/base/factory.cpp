@@ -17,7 +17,7 @@
  *  License along with Hand. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "factory.h"
+#include "base/factory.h"
 
 
 using namespace std;

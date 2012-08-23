@@ -14,7 +14,6 @@ endif
 # Include directories
 INCLUDES = -I/usr/local/include -I./..
 
-
 all: $(OBJ)
 
 
@@ -24,4 +23,3 @@ all: $(OBJ)
 
 clean:
 	rm -f *.o
-

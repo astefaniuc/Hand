@@ -17,10 +17,10 @@
  *  License along with Hand. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "handapp.h"
-#include "handapploader.h"
-#include "handserver.h"
-#include "filesystem.h"
+#include "base/handapp.h"
+#include "base/handapploader.h"
+#include "base/handserver.h"
+#include "base/filesystem.h"
 
 #include <dlfcn.h>
 #include <boost/filesystem/path.hpp>

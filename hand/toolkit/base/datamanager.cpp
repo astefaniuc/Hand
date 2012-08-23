@@ -17,9 +17,9 @@
  *  License along with Hand. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "datamanager.h"
-#include "filesystem.h"
-#include "handapploader.h"
+#include "base/datamanager.h"
+#include "base/filesystem.h"
+#include "base/handapploader.h"
 
 
 using namespace std;
