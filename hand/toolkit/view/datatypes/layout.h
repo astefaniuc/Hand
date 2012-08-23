@@ -36,12 +36,12 @@ class Rect;
 class Layout : public FunctoidList
 {
     public:
-        Layout(string name, string type);
+        Layout(std::string name, std::string type);
         virtual ~Layout(){};
 //        void Reset();
 
-        FunctoidList* GetField(string position);
-        FunctoidList* AddField(string name, string type);
+        FunctoidList* GetField(std::string position);
+        FunctoidList* AddField(std::string name, std::string type);
         void AddForUpdate(Functoid* sublayout);
         bool Execute(Functoid* surface);
         void Reset();
@@ -54,7 +54,7 @@ class LayoutFactory : public Factory
     typedef bool (I::*Method)(Functoid*);
 
     public:
-        LayoutFactory(string output_type, I* theme, Method func) :
+        LayoutFactory(std::string output_type, I* theme, Method func) :
             Factory("LayoutFactory", GUI_LAYOUT, output_type, "")
         {
             Producer = theme;
@@ -98,7 +98,7 @@ class PropertyFactory : public Factory
     typedef bool (I::*Method)(Functoid*);
 
     public:
-    PropertyFactory(string output_type, I* theme, Method func) :
+    PropertyFactory(std::string output_type, I* theme, Method func) :
             Factory("PropertyFactory", output_type, output_type, "")
         {
             Producer = theme;

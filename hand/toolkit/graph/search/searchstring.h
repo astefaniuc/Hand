@@ -25,26 +25,23 @@
 #include <regex>
 
 
-using namespace std;
-
-
 class SearchString : public SearchExpression
 {
     public:
-        SearchString(string name) : SearchExpression(name){};
+        SearchString(std::string name) : SearchExpression(name){};
         virtual ~SearchString(){};
-        virtual bool Matches(string s);
+        virtual bool Matches(std::string s);
  };
 
 
 class SearchRegex : public SearchExpression
 {
     public:
-        SearchRegex(string name);
+        SearchRegex(std::string name);
         virtual ~SearchRegex(){};
-        virtual bool Matches(string s);
+        virtual bool Matches(std::string s);
     protected:
-        regex* RegEx;
+        std::regex* RegEx;
 };
 
 

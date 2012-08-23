@@ -26,9 +26,6 @@
 #include <string>
 
 
-using namespace std;
-
-
 class Device;
 class StateTree;
 class Layer;
@@ -49,7 +46,7 @@ class InputState
         // Returns the number of controls set
         uint  GetNumberOfKeys();
         Node* GetKey(key_pointer);
-        vector<Node*>* GetLevelVector(int);
+        std::vector<Node*>* GetLevelVector(int);
         // Returns the pointer to the associated device
         Device* GetDevice();
         void SetDevice(Device*);

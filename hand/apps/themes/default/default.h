@@ -23,9 +23,6 @@
 #include "view/theme/theme.h"
 
 
-using namespace std;
-
-
 class Default : public Theme
 {
     public:
@@ -60,7 +57,7 @@ class Default : public Theme
         bool DrawView(Functoid* drawing);
 
     private:
-        string GetString(Functoid* vs);
+        std::string GetString(Functoid* vs);
 };
 
 /*

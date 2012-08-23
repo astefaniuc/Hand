@@ -25,9 +25,6 @@
 #include "graph/search/searchexpression.h"
 
 
-using namespace std;
-
-
 class SearchCookie;
 class Pool;
 
@@ -43,14 +40,14 @@ class FunctoidSearch : public FunctoidList
         void ClearFindings();
         // Search setters and getters
         // The setters are called from "outside", from the application code
-        void SetSearchName(string s, bool make_regex=false);
+        void SetSearchName(std::string s, bool make_regex=false);
         // The getters are called from inside, the Find methods
         SearchExpression* GetSearchName();
-        void SetSearchType(string s, bool make_regex=false);
+        void SetSearchType(std::string s, bool make_regex=false);
         SearchExpression* GetSearchType();
-        void SetSearchRelation(string s, bool make_regex=false);
+        void SetSearchRelation(std::string s, bool make_regex=false);
         SearchExpression* GetSearchRelation();
-        virtual string GetCookieName();
+        virtual std::string GetCookieName();
         virtual bool Search(Functoid* target);
     protected:
         virtual bool Matches(Functoid* target);
@@ -59,7 +56,9 @@ class FunctoidSearch : public FunctoidList
         void ExtendPath(Functoid* tree_node, SearchCookie* path_end);
         bool MarkDeathBranch(SearchCookie* branch);
         void DecomposeDeathBranches(SearchCookie* branch);
-        SearchExpression* AddSearchExpression(string name, string s, bool make_regex);
+        SearchExpression* AddSearchExpression(std::string name,
+                                              std::string s,
+                                              bool make_regex);
     public:
         // Result setter and getter
         void AddFinding(Functoid* finding);

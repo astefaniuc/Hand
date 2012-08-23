@@ -23,9 +23,6 @@
 #include <SDL/SDL.h>
 
 
-using namespace std;
-
-
 enum default_number_of_items
 {
     NUMBER_OF_BUTTONS = 5

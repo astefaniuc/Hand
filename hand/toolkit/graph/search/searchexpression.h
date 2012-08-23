@@ -23,16 +23,13 @@
 #include "graph/functoid.h"
 
 
-using namespace std;
-
-
 class SearchExpression : public Functoid
 {
     public:
-        SearchExpression(string name) : Functoid(name){};
+        SearchExpression(std::string name) : Functoid(name){};
         virtual ~SearchExpression(){};
-        virtual bool Matches(string s) = 0;
-        virtual string GetAsString()
+        virtual bool Matches(std::string s) = 0;
+        virtual std::string GetAsString()
         {
             return Name;
         };

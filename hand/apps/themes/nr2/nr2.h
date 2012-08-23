@@ -22,9 +22,6 @@
 
 #include "view/theme/theme.h"
 
-
-using namespace std;
-
 /*
 
 class Nr2 : public virtual Theme

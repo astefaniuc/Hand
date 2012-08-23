@@ -23,9 +23,6 @@
 #include "base/datamanager.h"
 
 
-using namespace std;
-
-
 class Layer;
 class LayerManager;
 class Device;
@@ -47,7 +44,7 @@ class HandServer : public virtual DataManager
         // Re-calculate position for all layer manager
         void SetLayerManagerPositions();
         // Called from main() of stand-alone apps
-        bool Present(string file);
+        bool Present(std::string file);
         // Starts timer
         void Beat();
 
@@ -68,11 +65,11 @@ class HandServer : public virtual DataManager
         // Members:
         // The one and only server (singleton)
         static HandServer* Instance;
-        vector<LayerManager*> LayerMgrs;
+        std::vector<LayerManager*> LayerMgrs;
         // TODO: declare here iterator for LM as for Device
-        vector<Device*> Devices;
-        vector<Device*>::iterator currentDevice;
-        vector<Device*>::iterator endDevice;
+        std::vector<Device*> Devices;
+        std::vector<Device*>::iterator currentDevice;
+        std::vector<Device*>::iterator endDevice;
         // TODO: multiple drawers e.g. touch screen device
         Screen* _Screen;
         // The queue for system device events

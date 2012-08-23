@@ -28,9 +28,6 @@
 #include <map>
 
 
-using namespace std;
-
-
 #define DIM_FONT_PREFERRED "DIM_FONT_PREFERRED"
 #define DIM_FONT_MAX "DIM_FONT_MAX"
 #define DRAW_PROPERTY_ALIGNMENT "DRAW_PROPERTY_ALIGNMENT"
@@ -45,7 +42,7 @@ class VirtualSurface;
 class Theme : public HandApp
 {
     public:
-        Theme(string name);
+        Theme(std::string name);
         virtual ~Theme();
 
         bool Execute(Functoid* request);
@@ -57,10 +54,10 @@ class Theme : public HandApp
 
         // Drawing interface
         virtual void FillRect(SDL_Surface* sf, SDL_Rect* r, Rgb* c);
-        virtual SDL_Surface* RenderText(string* text, int size, Rgb* color);
+        virtual SDL_Surface* RenderText(std::string* text, int size, Rgb* color);
 
         // Stores once rendered fonts
-        map<int, TTF_Font*> Fonts;
+        std::map<int, TTF_Font*> Fonts;
 
     private:
         bool FillOut(Functoid* layout);

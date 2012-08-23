@@ -23,9 +23,6 @@
 #include "base/handapp.h"
 
 
-using namespace std;
-
-
 class Animation;
 
 class AnimationsList
@@ -42,10 +39,10 @@ class AnimationsList
         Animation* GetCurrentAnimation();
 
     private:
-        vector<Animation*> Animations;
-        vector<Animation*>::iterator Current;
-        vector<Animation*>::iterator Begin;
-        vector<Animation*>::iterator End;
+        std::vector<Animation*> Animations;
+        std::vector<Animation*>::iterator Current;
+        std::vector<Animation*>::iterator Begin;
+        std::vector<Animation*>::iterator End;
 };
 
 
@@ -67,7 +64,7 @@ class Rect;
 class VirtualSurface : public HandApp
 {
     public:
-        VirtualSurface(string name);
+        VirtualSurface(std::string name);
         ~VirtualSurface();
         virtual void Show(SDL_Rect* rect_abs_on_buffer,
                           Rect* rect_relative_to_parent);

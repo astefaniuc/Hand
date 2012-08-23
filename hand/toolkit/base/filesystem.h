@@ -24,9 +24,6 @@
 #include "boost/filesystem/path.hpp"
 
 
-using namespace std;
-
-
 #define URISCHEME_FILE "file://"
 #define RELATION_PARENT_PATH "RELATION_PARENT_PATH"
 #define FILEFUNCTOID "FileFunctoid"
@@ -51,10 +48,10 @@ class DirectoryLoader : public Factory
 class FileFunctoid : public FunctoidList
 {
     public:
-        FileFunctoid(string file);
+        FileFunctoid(std::string file);
         virtual ~FileFunctoid(){};
 
-        string GetFullPath();
+        std::string GetFullPath();
         boost::filesystem::path GetPath();
 };
 

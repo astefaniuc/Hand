@@ -24,9 +24,6 @@
 #include "graph/search/functoidsearch.h"
 
 
-using namespace std;
-
-
 #define HANDAPP "HandApp"
 
 
@@ -36,7 +33,7 @@ class LayerManager;
 class HandApp : public FunctoidList
 {
     public:
-                      HandApp(string name);
+                      HandApp(std::string name);
               virtual ~HandApp(){};
         HandServer*  Server();
         LayerManager* GetLayerManager();

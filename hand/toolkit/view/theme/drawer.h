@@ -23,9 +23,6 @@
 #include "base/factory.h"
 
 
-using namespace std;
-
-
 #define BGRD_SOLID_COLOR "BGRD_SOLID_COLOR"
 #define BGRD_IMAGE "BGRD_IMAGE"
 

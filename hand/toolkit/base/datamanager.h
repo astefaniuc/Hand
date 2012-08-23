@@ -23,9 +23,6 @@
 #include "base/factory.h"
 
 
-using namespace std;
-
-
 class DataManager : public FactoryMap
 {
     public:

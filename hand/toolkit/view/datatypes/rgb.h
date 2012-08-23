@@ -23,16 +23,13 @@
 #include "graph/functoidlist.h"
 
 
-using namespace std;
-
-
 #define RGB "RGB"
 
 
 class Rgb : public FunctoidList
 {
     public:
-        Rgb(string name, Uint8 r_, Uint8 g_, Uint8 b_);
+        Rgb(std::string name, Uint8 r_, Uint8 g_, Uint8 b_);
         ~Rgb(){};
         void Reset();
 
@@ -43,7 +40,7 @@ class Rgb : public FunctoidList
 
 
 // Helper func for extracting a Rgb from a Functoid tree
-Rgb* GetRgb(string rgb_name, Functoid* from_tree);
+Rgb* GetRgb(std::string rgb_name, Functoid* from_tree);
 
 
 #endif /* HAND_RGB_H */

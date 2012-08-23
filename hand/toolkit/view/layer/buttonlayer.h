@@ -23,9 +23,6 @@
 #include "view/layer/layer.h"
 
 
-using namespace std;
-
-
 class ButtonLayer : public Layer
 {
     public:

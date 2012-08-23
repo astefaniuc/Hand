@@ -28,9 +28,6 @@
 #include <vector>
 
 
-using namespace std;
-
-
 // Arbitrary search depth (should be big enough to find everything
 // and small enough to return fast from circles)
 #define FUNCTOID "Functoid"
@@ -40,10 +37,10 @@ using namespace std;
 class FunctoidSearch;
 class SearchExpression;
 
-class Functoid : public vector<Functoid*>
+class Functoid : public std::vector<Functoid*>
 {
     public:
-        Functoid(string name);
+        Functoid(std::string name);
         virtual ~Functoid();
 
         // Inserts a sub-item to the current functoid and makes the current
@@ -67,11 +64,11 @@ class Functoid : public vector<Functoid*>
         // Get the first sub-item by name.
         // If the item doesn't exist it returns a new Relation functoid;
         // use Get(ANY, name) to test if a functoid exists
-        virtual Functoid* Get(string name);
+        virtual Functoid* Get(std::string name);
         // Get the first sub-item by name and type; if the item is not found
         // it returns NULL; the parameters can be set to ANY e.g.
         // Get(ANY, ANY) returns the first stored item
-        virtual Functoid* Get(string name, string type);
+        virtual Functoid* Get(std::string name, std::string type);
         // Interface to method defined in a derived class; returns always
         // NULL in this base class
         virtual Functoid* Get(uint item);
@@ -79,22 +76,22 @@ class Functoid : public vector<Functoid*>
         // Simple iterative deepening depth-first search.
         // Omits OWNER from the search but might fail with any other graph
         // cycles, use the FunctoidSearch engine in case of doubt.
-        virtual Functoid* Find(string name, int max_depth = 2);
+        virtual Functoid* Find(std::string name, int max_depth = 2);
         // Flat search with support for (boost-typed) regular expressions
         // TODO: make it iterative or rename to it "Get()"?
         virtual Functoid* Find(SearchExpression* expression);
 
         // Set "name" with or without uri scheme
-        virtual void SetName(string name);
+        virtual void SetName(std::string name);
         // Get the name without uri scheme
-        virtual string& GetName();
+        virtual std::string& GetName();
         // Get the name with uri scheme
-        virtual string GetUriString();
+        virtual std::string GetUriString();
 
-        virtual void SetType(string type);
+        virtual void SetType(std::string type);
         // Returns the last set type
-        virtual string GetType();
-        virtual bool IsType(string type);
+        virtual std::string GetType();
+        virtual bool IsType(std::string type);
         virtual bool IsType(SearchExpression* type);
 
         // Set object owner (for memory management).
@@ -114,12 +111,12 @@ class Functoid : public vector<Functoid*>
 //        virtual bool NotifyChanged();
 
     protected:
-        virtual Functoid* _Find(string name, int depth);
+        virtual Functoid* _Find(std::string name, int depth);
 
-        string Name;
+        std::string Name;
 };
 
-typedef vector<Functoid*>::iterator FunctoidIterator;
+typedef std::vector<Functoid*>::iterator FunctoidIterator;
 
 
 #define FUNCTOIDDATA "FUNCTOIDDATA"
@@ -130,10 +127,10 @@ template <typename I>
 class Data : public Functoid
 {
     public:
-        Data(string name, I val) : Functoid(name)
+        Data(std::string name, I val) : Functoid(name)
         {
             Value = val;
-            SetType(string(typeid(val).name()));
+            SetType(std::string(typeid(val).name()));
         };
 
         bool Set(I val)
@@ -145,9 +142,9 @@ class Data : public Functoid
         {
             return Value;
         };
-        string GetAsString()
+        std::string GetAsString()
         {
-            ostringstream s;
+            std::ostringstream s;
             s << Value;
             return s.str();
         };
@@ -155,7 +152,7 @@ class Data : public Functoid
         I Value;
 };
 
-typedef Data<string> Note;
+typedef Data<std::string> Note;
 
 
 template <class I>
@@ -164,7 +161,7 @@ class Callback : public Functoid
     typedef bool (I::*TFunction)(Functoid*);
 
     public:
-        Callback(string name, I* obj, TFunction func) : Functoid(name)
+        Callback(std::string name, I* obj, TFunction func) : Functoid(name)
         {
             Object = obj;
             Function = func;
@@ -194,7 +191,7 @@ class Callback : public Functoid
             return Object;
         };
 
-        string GetAsString()
+        std::string GetAsString()
         {
             // TODO: what kind of a string to create: for the GUI? for persistent storage? for both?
             return "";

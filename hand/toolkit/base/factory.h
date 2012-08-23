@@ -23,9 +23,6 @@
 #include "base/handapp.h"
 
 
-using namespace std;
-
-
 #define FACTORY "FACTORY"
 #define RELATION_PRODUCER "RELATION_PRODUCER"
 #define FACTORY_INPUTSTRING "FACTORY_INPUTSTRING"
@@ -35,7 +32,10 @@ using namespace std;
 class Factory : public HandApp
 {
     public:
-        Factory(string name, string input_type, string output_type, string uri_scheme);
+        Factory(std::string name,
+                std::string input_type,
+                std::string output_type,
+                std::string uri_scheme);
         virtual ~Factory(){};
 
         virtual Functoid* Produce(Functoid* input) = 0;
@@ -43,13 +43,13 @@ class Factory : public HandApp
 
         virtual bool IsValidInput(Functoid* input) = 0;
 
-        string GetInputType();
-        string GetOutputType();
-        string GetUriScheme();
+        std::string GetInputType();
+        std::string GetOutputType();
+        std::string GetUriScheme();
 
     private:
-        bool SetSpecifierString(string name, string value);
-        string GetSpecifierString(string name);
+        bool SetSpecifierString(std::string name, std::string value);
+        std::string GetSpecifierString(std::string name);
 };
 
 
@@ -58,13 +58,13 @@ class Factory : public HandApp
 class FactoryMap : public FunctoidList
 {
     public:
-        FactoryMap(string name);
+        FactoryMap(std::string name);
         virtual ~FactoryMap(){};
 
-        virtual Functoid* Produce(Functoid* input, string output_type);
+        virtual Functoid* Produce(Functoid* input, std::string output_type);
 
         Factory* GetFactory(Functoid* input);
-        Factory* GetFactory(string output_type);
+        Factory* GetFactory(std::string output_type);
 //        virtual void RegisterFactory(Factory* resolver);
 //        virtual void UnregisterFactory(Factory* resolver);
 };

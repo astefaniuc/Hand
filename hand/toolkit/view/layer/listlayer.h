@@ -23,16 +23,13 @@
 #include "view/layer/layer.h"
 
 
-using namespace std;
-
-
 class ListLayer : public Layer
 {
     public:
         ListLayer();
         virtual ~ListLayer();
         // Generate list names
-        virtual string GetFieldName(uint position);
+        virtual std::string GetFieldName(uint position);
 
         // Set pointer to a data tree node
         void SetContent(Functoid* focus);

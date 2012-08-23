@@ -26,15 +26,12 @@
 #include <vector>
 
 
-using namespace std;
-
-
 class Layer;
 
 class Node
 {
     public:
-        Node(int, int, vector<Node*>*);
+        Node(int, int, std::vector<Node*>*);
         ~Node();
         void SetNode(Node*, int, bool);
         // Returns the sub-node at given position
@@ -49,7 +46,7 @@ class Node
         bool SetLayer(Layer* cmd_target);
         Layer* GetLayer();
 
-        vector<Node*>* GetPeerNodes(void);
+        std::vector<Node*>* GetPeerNodes(void);
 
     private:
         struct NodeVector
@@ -59,10 +56,10 @@ class Node
         };
 
         int Level;
-        vector<NodeVector*> TreeNodes;
+        std::vector<NodeVector*> TreeNodes;
         // TEMP:
         friend class StateTree;
-        vector<Node*>* PeerNodes;
+        std::vector<Node*>* PeerNodes;
         Layer* AssocLayer;
 };
 

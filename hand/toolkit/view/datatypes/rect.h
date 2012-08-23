@@ -23,16 +23,13 @@
 #include "graph/functoidlist.h"
 
 
-using namespace std;
-
-
 #define RECT "RECT"
 
 
 class Rect : public FunctoidList
 {
     public:
-        Rect(string name, double x_, double y_, double w_, double h_);
+        Rect(std::string name, double x_, double y_, double w_, double h_);
         Rect();
         ~Rect(){};
 
@@ -48,6 +45,6 @@ class Rect : public FunctoidList
 
 
 // Helper func for extracting a Rect from a Functoid tree
-Rect* GetRect(string rect_name, Functoid* from_tree);
+Rect* GetRect(std::string rect_name, Functoid* from_tree);
 
 #endif /* HAND_RECT_H */

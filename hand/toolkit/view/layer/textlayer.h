@@ -23,9 +23,6 @@
 #include "view/layer/layer.h"
 
 
-using namespace std;
-
-
 class TextLayer : public virtual Layer
 {
     public:

@@ -23,9 +23,6 @@
 #include "view/layer/listlayer.h"
 
 
-using namespace std;
-
-
 class Functoid;
 
 

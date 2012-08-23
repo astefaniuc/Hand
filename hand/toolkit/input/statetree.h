@@ -33,7 +33,7 @@ class StateTree
         void AddNodes(int, int);
         void ConnectNodes(Node*, Node*, int);
         Node* GetParentNode(int, int, int);
-        vector<Node*>* GetCreateLevelVector(int);
+        std::vector<Node*>* GetCreateLevelVector(int);
         Node* RootKey;
 };
 

@@ -23,9 +23,6 @@
 #include "view/layer/listlayer.h"
 
 
-using namespace std;
-
-
 class Device;
 class InputState;
 
@@ -53,8 +50,8 @@ class LayerManager : public ListLayer
         void    LoadAppInterface(Functoid* app,  bool make_default=false);
         bool    UnloadAppInterface(Functoid*);
         void    RegisterLayerFactory(Factory* resolver);
-        string  GetContentType(Functoid* target);
-        Layer*  CreateLayer(Functoid* content, string layer_type);
+        std::string  GetContentType(Functoid* target);
+        Layer*  CreateLayer(Functoid* content, std::string layer_type);
 
     protected:
         void    Init();

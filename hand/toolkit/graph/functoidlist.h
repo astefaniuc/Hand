@@ -23,8 +23,6 @@
 #include "graph/functoid.h"
 
 
-using namespace std;
-
 #define FUNCTOIDLIST "FunctoidList"
 
 class Relation;
@@ -33,19 +31,19 @@ class Factory;
 class FunctoidList : public Functoid
 {
     public:
-        FunctoidList(string name);
+        FunctoidList(std::string name);
         virtual ~FunctoidList();
 
         // Get the child by name
-        virtual Functoid* Get(string child);
-        virtual Functoid* Get(string type, string name);
+        virtual Functoid* Get(std::string child);
+        virtual Functoid* Get(std::string type, std::string name);
         // Get the child by position, 1-based; Element '0' stores
         // hidden system information e.g. type and layout.
         virtual Functoid* Get(uint child);
 
-        virtual void SetType(string type);
-        virtual string GetType();
-        virtual bool IsType(string type);
+        virtual void SetType(std::string type);
+        virtual std::string GetType();
+        virtual bool IsType(std::string type);
         virtual bool IsType(SearchExpression* type);
 
         // Set object owner (for memory management)
@@ -66,7 +64,7 @@ class FunctoidList : public Functoid
 class Link : public FunctoidList
 {
     public:
-        Link(string name, string type, bool is_multi_link=false);
+        Link(std::string name, std::string type, bool is_multi_link=false);
         virtual ~Link(){};
 
         virtual bool Add(Functoid* val);
@@ -85,7 +83,7 @@ class Link : public FunctoidList
 class Relation : public FunctoidList
 {
     public:
-        Relation(string name);
+        Relation(std::string name);
         virtual ~Relation(){};
         // Inserts a sub-item to the current functoid without changing
         // the ownership of 'item'; it replaces *all* objects referenced

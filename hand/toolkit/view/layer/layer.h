@@ -25,9 +25,6 @@
 #include "base/factory.h"
 
 
-using namespace std;
-
-
 enum maximum_number_of_buttons
 {
     MAX_NUMBER_OF_BUTTONS = 5
@@ -80,13 +77,13 @@ class Layer : public VirtualSurface
     protected:
         virtual bool Exit();
         // Insert "data" as layer of type layer_type at "position"
-        virtual Layer* Insert(Functoid* data, string position);
+        virtual Layer* Insert(Functoid* data, std::string position);
         virtual void Configure(Functoid* parent_layout) = 0;
         virtual void DrawChilds(bool forced);
 
         Layer*         ParentLayer;
         // Internal map of enabled key/button pairs
-        vector<Layer*> SubLayers;
+        std::vector<Layer*> SubLayers;
 
 //        bool Updated;
     public:

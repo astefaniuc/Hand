@@ -23,9 +23,6 @@
 #include "base/handapp.h"
 
 
-using namespace std;
-
-
 class InputState;
 
 class Device : public virtual HandApp
@@ -49,7 +46,7 @@ class Device : public virtual HandApp
     protected:
         // Returns the Key symbol at specified position
         FunctoidList* GetKey(uint index);
-        string GetKeyName(uint pos);
+        std::string GetKeyName(uint pos);
         void   AddKey(SDLKey);
         void   DeleteCurrentKey();
         // Returns the key number

@@ -23,9 +23,6 @@
 #include "base/handapp.h"
 
 
-using namespace std;
-
-
 class Screen : public virtual HandApp
 {
     public:

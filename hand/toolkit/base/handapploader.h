@@ -23,9 +23,6 @@
 #include "base/factory.h"
 
 
-using namespace std;
-
-
 #define APPLOADER "HandAppLoader"
 #define NAME_NOT_INIT "Not initialized"
 
@@ -53,7 +50,7 @@ class HandAppLoader : public Factory
         destroyer* Destroy;
         // Stores a path to the library;
         // once this variable is set it can't be changed anymore
-        string LibraryPath;
+        std::string LibraryPath;
 };
 
 

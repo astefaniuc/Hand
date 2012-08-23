@@ -23,9 +23,6 @@
 #include "base/handapp.h"
 
 
-using namespace std;
-
-
 class Animation : public virtual HandApp
 {
     public:

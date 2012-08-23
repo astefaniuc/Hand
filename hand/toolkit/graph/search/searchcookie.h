@@ -23,9 +23,6 @@
 #include "graph/functoidlist.h"
 
 
-using namespace std;
-
-
 #define SEARCHCOOKIE "SearchCookie"
 
 class FunctoidSearch;
