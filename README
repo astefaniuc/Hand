@@ -16,7 +16,7 @@ Ubuntu Linux 12.04
 > cd <your_path>/hand
 > ./hand.sh
 or
-> ./hand.sh file://./apps/test1/test1.so
+> ./hand.sh file://./apps/test/test1.so
 
 # Dependencies: #
 -----------------
