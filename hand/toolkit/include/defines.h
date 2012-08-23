@@ -20,8 +20,6 @@
 #ifndef HAND_DEFINES_H
 #define HAND_DEFINES_H
 
-#include <SDL/SDL.h>
-
 
 enum default_number_of_items
 {
@@ -127,7 +125,7 @@ struct Position
 #define GUI_COLOR_BACKGR_BUTTON "GUI_COLOR_BACKGR_BUTTON"
 #define GUI_COLOR_FONT "GUI_COLOR_FONT"
 
-#define GUI_RECT_SIZEANDPOS "SizeAndPosition"
+#define SIZEANDPOSITION "SizeAndPosition"
 
 // Special Content (Layout) fields for lists and buttons
 #define LST_FIELD_NR "LST_FIELD_"

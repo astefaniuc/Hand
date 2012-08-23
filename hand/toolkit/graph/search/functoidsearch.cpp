@@ -52,7 +52,7 @@ void FunctoidSearch::InitVars()
 }
 
 
-void FunctoidSearch::CleanUp()
+void FunctoidSearch::Reset()
 {
     ClearFindings();
     InitVars();

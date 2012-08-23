@@ -102,7 +102,7 @@ class Functoid : public std::vector<Functoid*>
 
         // Interface to methods defined in a derived class
         virtual bool Execute(Functoid* func_param);
-        virtual void CleanUp(){};
+        virtual void Reset(){};
 
         // Helper method for the search engine
         virtual bool IsOpen(FunctoidSearch* search);

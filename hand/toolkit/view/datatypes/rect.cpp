@@ -24,14 +24,14 @@
 using namespace std;
 
 
-Rect::Rect(string name, double x_, double y_, double w_, double h_) : FunctoidList(name)
+Rect::Rect(string name, double x_, double y_, double w_, double h_) : Functoid(name)
 {
     SetType(RECT);
     Init(x_, y_, w_, h_);
 }
 
 
-Rect::Rect() : FunctoidList("No name")
+Rect::Rect() : Functoid("No name")
 {
     SetType(RECT);
     Init(0.0, 0.0, 1.0, 1.0);

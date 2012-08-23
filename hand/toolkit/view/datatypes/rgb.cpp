@@ -24,7 +24,7 @@
 using namespace std;
 
 
-Rgb::Rgb(string name, Uint8 r_, Uint8 g_, Uint8 b_) : FunctoidList(name)
+Rgb::Rgb(string name, Uint8 r_, Uint8 g_, Uint8 b_) : Functoid(name)
 {
     SetType(RGB);
     // For now add plain data directly

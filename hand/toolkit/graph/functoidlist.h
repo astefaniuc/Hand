@@ -51,7 +51,7 @@ class FunctoidList : public Functoid
         virtual bool HasOwner(Functoid* caller);
 
         // Remove all public children
-        virtual void CleanUp();
+        virtual void Reset();
 
         // ???
 //        virtual Factory* GetFactory();

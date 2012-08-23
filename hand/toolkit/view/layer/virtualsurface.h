@@ -21,6 +21,7 @@
 #define HAND_VIRTUALSURFACE_H
 
 #include "base/handapp.h"
+#include <SDL/SDL.h>
 
 
 class Animation;

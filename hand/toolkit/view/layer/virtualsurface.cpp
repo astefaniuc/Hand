@@ -155,7 +155,7 @@ void VirtualSurface::MapSurface(Rect* src_rect, SDL_Rect &tgt_rect, SDL_Surface*
     }
 
     // Get the next layers buffer and absolute position
-    Rect* sap = GetRect(GUI_RECT_SIZEANDPOS, Get("Layout"));
+    Rect* sap = GetRect(SIZEANDPOSITION, Get("Layout"));
     src_rect->Multiply(sap);
     if(Parent)
         Parent->MapSurface(src_rect, tgt_rect, tgt_surface);
@@ -202,9 +202,9 @@ void VirtualSurface::BlitSurface
 void VirtualSurface::SetSize(SDL_Rect size)
 {
     // Store only the size, position from layout
-    Rect* layout = GetRect(GUI_RECT_SIZEANDPOS, Get("Layout")->Get(1));
-    if(layout)
-        layout->MultiplyTo(size);
+    Rect* sap = GetRect(SIZEANDPOSITION, Get("Layout")->Get(1));
+    if(sap)
+        sap->MultiplyTo(size);
     if((size.w!=SizeAndPositionOnBuffer.w) || (size.h!=SizeAndPositionOnBuffer.h))
     {
         SizeAndPositionOnBuffer.w = size.w;

@@ -28,7 +28,7 @@ Layout::Layout(string name, string type) : FunctoidList(name)
 {
     SetType(GUI_LAYOUT);
     SetType(type);
-    Set(new Rect(GUI_RECT_SIZEANDPOS, 0, 0, 1, 1));
+    Set(new Rect(SIZEANDPOSITION, 0, 0, 1, 1));
     // Colours.Set(r[ed], g[reen], b[lue])
 /*    Color_Frame.Set(0, 3, 200);
     Color_Background.Set(0, 0, 0);
@@ -107,17 +107,14 @@ bool Layout::Execute(Functoid* vs)
 
 void Layout::Reset()
 {
-    Rect* sub = dynamic_cast<Rect*>(Get(GUI_RECT_SIZEANDPOS));
+    Functoid* sub = Get(RECT, SIZEANDPOSITION);
     if(sub)
-        // TODO: rename to CleanUp() and get rid of cast and inclusion
-        // Reset size and position to factory settings
         sub->Reset();
     Functoid* children = Get(RELATION, CHILDREN);
     if(!children)
         return;
-    Layout* layout;
+    Functoid* layout;
     uint i = 0;
-    while((layout=dynamic_cast<Layout*>(children->Get(++i))) != NULL)
-        if(layout)
-            layout->Reset();
+    while((layout=children->Get(++i)) != NULL)
+        layout->Reset();
 }

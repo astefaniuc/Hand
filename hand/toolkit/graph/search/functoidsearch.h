@@ -36,7 +36,7 @@ class FunctoidSearch : public FunctoidList
     protected:
         virtual void InitVars();
     public:
-        void CleanUp();
+        void Reset();
         void ClearFindings();
         // Search setters and getters
         // The setters are called from "outside", from the application code

@@ -85,13 +85,13 @@ bool Default::GetViewLayout(Functoid* out)
 {
     Layout* layout = dynamic_cast<Layout*>(out);
     // Vertical list alignment
-    layout->Set(new Rect(DRAW_PROPERTY_ALIGNMENT, 0, 1, 0, 1));
+    layout->Set(new Rect(ALIGNMENT, 0, 1, 0, 1));
     layout->Get("Methods")->Add(new Link("DrawFunc", GUI_DRAWER_LIST));
     layout->AddField("ListElement", "Any");
 
     Layout* controls = new Layout("Controls", GUI_LAYOUT_FRAMEDLIST);
     // Horizontal list alignment
-    controls->Set(new Rect(DRAW_PROPERTY_ALIGNMENT, 1, 0, 1, 0));
+    controls->Set(new Rect(ALIGNMENT, 1, 0, 1, 0));
     layout->Get(CHILDREN)->Add(controls);
     controls->AddField("ListElement", BUTTONLAYER);
     return true;
@@ -102,7 +102,7 @@ bool Default::GetListLayout(Functoid* out)
 {
     Layout* layout = dynamic_cast<Layout*>(out);
 
-    layout->Set(new Rect(DRAW_PROPERTY_ALIGNMENT, 0, 1, 0, 1));
+    layout->Set(new Rect(ALIGNMENT, 0, 1, 0, 1));
     layout->Get("Methods")->Add(new Link("DrawFunc", GUI_DRAWER_LIST));
     layout->AddField("ListElement", BUTTONLAYER);
 //    layout->AddField("ListElement", "Any");
@@ -114,7 +114,7 @@ bool Default::GetFramedListLayout(Functoid* out)
 {
     Layout* layout = dynamic_cast<Layout*>(out);
 
-    layout->Set(new Rect(GUI_RECT_SIZEANDPOS, 0.1, 0.1, 0.8, 0.8));
+    layout->Set(new Rect(SIZEANDPOSITION, 0.1, 0.1, 0.8, 0.8));
 
     Layout* frame = new Layout("Background", GUI_LAYOUT_BACKGROUND);
     layout->Get(CHILDREN)->Add(frame);
@@ -132,24 +132,24 @@ bool Default::GetButtonLayout(Functoid* out)
     Layout* layout = dynamic_cast<Layout*>(out);
 
     layout->Get("Methods")->Add(new Link("DrawFunc", GUI_DRAWER_BUTTON));
-    layout->Set(new Rect(GUI_RECT_SIZEANDPOS, 0.1, 0.1, 0.8, 0.8));
+    layout->Set(new Rect(SIZEANDPOSITION, 0.1, 0.1, 0.8, 0.8));
 
     Layout* frame = new Layout("Frame", GUI_LAYOUT_FRAME);
     layout->Get(CHILDREN)->Add(frame);
     // The Button container
     Layout* content = new Layout("Button Content", GUI_LAYOUT_LIST);
-    content->Set(new Rect(DRAW_PROPERTY_ALIGNMENT, 0, 1, 0, 1));
+    content->Set(new Rect(ALIGNMENT, 0, 1, 0, 1));
     layout->Get(CHILDREN)->Add(content);
     frame->Get("Update")->Attach(content);
 
     Layout* upper = new Layout("Upper", GUI_LAYOUT_LIST);
-    upper->Set(new Rect(DRAW_PROPERTY_ALIGNMENT, 1, 0, 0.5, 0));
+    upper->Set(new Rect(ALIGNMENT, 1, 0, 0.5, 0));
     upper->AddField(BTN_FIELD_ICON, TEXTLAYER);
     upper->AddField(BTN_FIELD_NAME, TEXTLAYER);
     content->Get(CHILDREN)->Add(upper);
 
     Layout* lower = new Layout("Lower", GUI_LAYOUT_LIST);
-    lower->Set(new Rect(DRAW_PROPERTY_ALIGNMENT, 1, 0, 0.5, 0));
+    lower->Set(new Rect(ALIGNMENT, 1, 0, 0.5, 0));
     lower->AddField(BTN_FIELD_DESCRIPTION, TEXTLAYER);
     lower->AddField(BTN_FIELD_CONTROL, BUTTONLAYER);
     content->Get(CHILDREN)->Add(lower);
@@ -172,7 +172,7 @@ bool Default::GetFrameLayout(Functoid* out)
 {
     Layout* layout = dynamic_cast<Layout*>(out);
 
-    layout->Set(new Rect(GUI_RECT_SIZEANDPOS, 0.01, 0.03, 0.98, 0.94));
+    layout->Set(new Rect(SIZEANDPOSITION, 0.01, 0.03, 0.98, 0.94));
     layout->Set(new Link("Color", GUI_COLOR_FRAME));
     layout->Get("Methods")->Add(new Link("DrawFunc", GUI_DRAWER_FRAME));
 
@@ -200,7 +200,7 @@ bool Default::GetTextLayout(Functoid* out)
     Layout* layout = dynamic_cast<Layout*>(out);
     layout->SetName("Text Layout");
 
-    layout->Set(new Rect(GUI_RECT_SIZEANDPOS, 0.1, 0.1, 0.8, 0.8));
+    layout->Set(new Rect(SIZEANDPOSITION, 0.1, 0.1, 0.8, 0.8));
     layout->Get("Methods")->Add(new Link("DrawFunc", GUI_DRAWER_TEXT));
     layout->Set(new Link("Color", GUI_COLOR_FONT));
 
@@ -250,7 +250,7 @@ bool Default::DrawFrame(Functoid* layout)
 
     SDL_Rect total_size = vs->GetSize();
     SDL_Rect content_size = total_size;
-    Rect* sap = GetRect(GUI_RECT_SIZEANDPOS, layout);
+    Rect* sap = GetRect(SIZEANDPOSITION, layout);
     sap->MultiplyTo(content_size);
 
     Functoid* children = layout->Get("Update");
@@ -259,7 +259,7 @@ bool Default::DrawFrame(Functoid* layout)
         Functoid* to_update;
         uint i = 0;
         while((to_update=children->Get(++i)) != NULL)
-            GetRect(GUI_RECT_SIZEANDPOS, to_update)->Multiply(sap);
+            GetRect(SIZEANDPOSITION, to_update)->Multiply(sap);
     }
 
     // Draw each frame line separately
@@ -347,7 +347,7 @@ bool Default::DrawText(Functoid* layout)
     }
     Rect sub;
     PlaceCentered(source, size, sub);
-    GetRect(GUI_RECT_SIZEANDPOS, layout)->Multiply(&sub);
+    GetRect(SIZEANDPOSITION, layout)->Multiply(&sub);
 
     vs->SetBuffer(source);
     return true;
@@ -364,8 +364,8 @@ bool Default::DrawList(Functoid* layout)
     if(child_cnt < 1)
         return true;
 
-    Rect* align = GetRect(DRAW_PROPERTY_ALIGNMENT, layout);
-    Rect* size = GetRect(GUI_RECT_SIZEANDPOS, layout);
+    Rect* align = GetRect(ALIGNMENT, layout);
+    Rect* size = GetRect(SIZEANDPOSITION, layout);
     Rect calc;
 
     for(uint i=0; i<child_cnt; i++)
@@ -374,7 +374,7 @@ bool Default::DrawList(Functoid* layout)
         calc.w = (1 - (c * align->w))*(1 - calc.x);
         calc.h = (1 - (c * align->h))*(1 - calc.y);
 
-        Rect* sub = GetRect(GUI_RECT_SIZEANDPOS, children->Get(i+1));
+        Rect* sub = GetRect(SIZEANDPOSITION, children->Get(i+1));
         sub->Multiply(size);
         sub->Multiply(&calc);
         // Set the coordinates for the next iteration
@@ -404,7 +404,7 @@ bool Default::ColorSurface(Functoid* layout)
 
     SDL_Surface* sf = vs->GetBuffer();
     SDL_Rect size = vs->GetSize();
-    Rect* csap = GetRect(GUI_RECT_SIZEANDPOS, layout);
+    Rect* csap = GetRect(SIZEANDPOSITION, layout);
     csap->MultiplyTo(size);
     SDL_SetClipRect(sf, &size);
     FillRect(sf, &size, GetRgb("BackgroundColor", layout));

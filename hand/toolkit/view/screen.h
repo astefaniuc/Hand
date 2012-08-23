@@ -21,6 +21,7 @@
 #define HAND_DRAWER_H
 
 #include "base/handapp.h"
+#include <SDL/SDL.h>
 
 
 class Screen : public virtual HandApp

@@ -289,7 +289,7 @@ void Layer::Draw(bool forced)
         DrawChilds(forced);
 
     Rect tmp;
-    Rect* sap = GetRect(GUI_RECT_SIZEANDPOS, layout);
+    Rect* sap = GetRect(SIZEANDPOSITION, layout);
     if(sap)
         tmp.Init(sap->x, sap->y, sap->w, sap->h);
 

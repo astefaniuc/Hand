@@ -20,13 +20,14 @@
 #ifndef HAND_RECT_H
 #define HAND_RECT_H
 
-#include "graph/functoidlist.h"
+#include "graph/functoid.h"
+#include <SDL/SDL.h>
 
 
 #define RECT "RECT"
 
 
-class Rect : public FunctoidList
+class Rect : public Functoid
 {
     public:
         Rect(std::string name, double x_, double y_, double w_, double h_);

@@ -37,7 +37,7 @@ Functoid::~Functoid()
 {
     // Don't delete the parent(s)
     Functoid* curr = Get(RELATION, OWNER);
-    // CleanUp() doesn't work here
+    // Reset() doesn't work here
     if(curr && (curr->size()== 2))
         curr->pop_back();
 

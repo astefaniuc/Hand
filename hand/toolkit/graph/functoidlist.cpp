@@ -38,7 +38,7 @@ FunctoidList::~FunctoidList()
     // Don't delete the parent(s); same source code as in ~Functoid()
     // because that destructor doesn't calls the overloaded method
     Functoid* p = Get(RELATION, OWNER);
-    // CleanUp() doesn't work here
+    // Reset() doesn't work here
     if(p && (p->size()== 2))
         p->pop_back();
 }
@@ -115,7 +115,7 @@ bool FunctoidList::HasOwner(Functoid* caller)
 }
 
 
-void FunctoidList::CleanUp()
+void FunctoidList::Reset()
 {
     FunctoidIterator curr = begin();
     // Don't delete the runtime info
@@ -215,7 +215,7 @@ Relation::Relation(string name) : FunctoidList(name)
 
 bool Relation::Set(Functoid* item)
 {
-    CleanUp();
+    Reset();
     push_back(item);
     return true;
 }

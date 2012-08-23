@@ -140,7 +140,7 @@ Functoid*  DirectoryLoader::Produce(Functoid* dir_obj)
 
     directory_iterator end;
     // (Re-)read the themes in
-    ff_dir->CleanUp();
+    ff_dir->Reset();
     FileFunctoid* file;
     for(directory_iterator dir_it(dir_path); dir_it!=end; dir_it++)
     {
@@ -168,6 +168,6 @@ void DirectoryLoader::TakeBack(Functoid* dir_obj)
 {
     FileFunctoid* ff_dir = dynamic_cast<FileFunctoid*>(dir_obj);
     if(ff_dir && is_directory(ff_dir->GetPath()))
-        ff_dir->CleanUp();
+        ff_dir->Reset();
 }
 

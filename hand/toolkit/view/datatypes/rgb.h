@@ -21,12 +21,13 @@
 #define HAND_RGB_H
 
 #include "graph/functoidlist.h"
+#include <SDL/SDL.h>
 
 
 #define RGB "RGB"
 
 
-class Rgb : public FunctoidList
+class Rgb : public Functoid
 {
     public:
         Rgb(std::string name, Uint8 r_, Uint8 g_, Uint8 b_);

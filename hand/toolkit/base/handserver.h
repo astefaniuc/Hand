@@ -21,6 +21,7 @@
 #define HAND_HANDSERVER_H
 
 #include "base/datamanager.h"
+#include <SDL/SDL.h>
 
 
 class Layer;
