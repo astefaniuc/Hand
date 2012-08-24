@@ -20,6 +20,7 @@
 #include "view/theme/drawer.h"
 #include "view/theme/theme.h"
 #include "view/layer/virtualsurface.h"
+#include "graph/link.h"
 
 
 using namespace std;

@@ -17,14 +17,13 @@
  *  License along with Hand. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HAND_HANDSERVER_H
-#define HAND_HANDSERVER_H
+#ifndef BASE_HANDSERVER_H
+#define BASE_HANDSERVER_H
 
 #include "base/datamanager.h"
 #include <SDL/SDL.h>
 
 
-class Layer;
 class LayerManager;
 class Device;
 class Screen;
@@ -33,7 +32,7 @@ class HandServer : public virtual DataManager
 {
     public:
         static HandServer* GetInstance(void);
-        void Exit(Layer*);
+        void Exit(LayerManager*);
         void Pump();
 
         // Adds device (keys) to the input poll
@@ -83,4 +82,4 @@ class HandServer : public virtual DataManager
         bool DeleteDeviceIfEmpty;
 };
 
-#endif /* HAND_HANDSERVER_H */
+#endif /* BASE_HANDSERVER_H */

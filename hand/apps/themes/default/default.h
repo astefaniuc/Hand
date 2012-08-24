@@ -20,7 +20,7 @@
 #ifndef THEME_DEFAULT_H
 #define THEME_DEFAULT_H
 
-#include "view/theme/theme.h"
+#include "include/theme.h"
 
 
 class Default : public Theme

@@ -17,11 +17,13 @@
  *  License along with Hand. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HAND_BASE_H
-#define HAND_BASE_H
+#ifndef INCLUDE_HAND_H
+#define INCLUDE_HAND_H
 
 
 #include "base/handapp.h"
-#include "base/handserver.h"
+#include "graph/link.h"
+#include "graph/data.h"
+#include "graph/method.h"
 
-#endif /* HAND_BASE_H */
+#endif /* INCLUDE_HAND_H */

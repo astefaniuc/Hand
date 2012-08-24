@@ -19,6 +19,7 @@
 
 #include "base/filesystem.h"
 #include "base/handserver.h"
+#include "graph/data.h"
 
 #include <boost/filesystem/path.hpp>
 #include <boost/filesystem/operations.hpp>
@@ -35,7 +36,7 @@ bool FileVertex_Factory::IsValidInput(Vertex* input)
     if(!d_path)
         return false;
     string s_path = d_path->Get();
-    if(s_path.find(URISCHEME_FILE) == 0)
+    if(s_path.find(URI_FILE) == 0)
         return true;
     return false;
 }
@@ -64,10 +65,10 @@ void FileVertex_Factory::TakeBack(Vertex* product)
 
 FileVertex::FileVertex(string file_name) : List(file_name)
 {
-    SetType(FILEFUNCTOID);
-    if(file_name.find(URISCHEME_FILE) == 0)
+    SetType(FILEVERTEX);
+    if(file_name.find(URI_FILE) == 0)
         // Remove the URI string from the name
-        file_name.erase(0, sizeof(URISCHEME_FILE)-1);
+        file_name.erase(0, sizeof(URI_FILE)-1);
 
     path file_path(file_name);
     if(is_regular_file(file_path))

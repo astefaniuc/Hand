@@ -24,6 +24,13 @@
 #include <SDL/SDL.h>
 
 
+struct Size
+{
+    int w;
+    int h;
+};
+
+
 class Screen : public virtual HandApp
 {
     public:

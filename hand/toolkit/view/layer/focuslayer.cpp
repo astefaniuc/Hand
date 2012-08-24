@@ -28,7 +28,7 @@ using namespace std;
 
 FocusLayer::FocusLayer() : ListLayer()
 {
-    SetType(FOCUS_ITEM_HACK);
+    SetType(FOCUSLAYER);
 //    DrawObject.BufferType = OVERLAY;
     KeyList = NULL;
 }
@@ -86,7 +86,7 @@ void FocusLayer::SetContent(Vertex* data)
     for(uint i=0; i<data->Children.size(); i++)
     {
         button = data->Children[i];
-        if((button->GetType() == BUTTON_ITEM) &&
+        if((button->GetType() == METHOD) &&
             (_LayerManager->GetCommand(button, 1))) // Map command to button
         {
             button->GetLayer()->Insert(GetControlSurface(j), BTN_FIELD_CONTROL);

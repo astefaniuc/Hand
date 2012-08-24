@@ -17,59 +17,14 @@
  *  License along with Hand. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HAND_DEFINES_H
-#define HAND_DEFINES_H
+#ifndef INCLUDE_DEFINES_H
+#define INCLUDE_DEFINES_H
 
 
-enum default_number_of_items
-{
-    NUMBER_OF_BUTTONS = 5
-};
+#include "graph/defines.h"
 
 
-enum key_pointer
-{
-    ROOT,
-    PRESSED,
-    RELEASED,
-    FOLLOWER
-};
-
-
-enum key_position
-{
-    THUMB,
-    FOREFINGER,
-    MIDDLEFINGER,
-    RINGFINGER,
-    LITTLEFINGER
-};
-
-
-enum button_string
-{
-    BTN_NAME = 1,
-    BTN_DESCRIPTION = 2,
-    BTN_ICON = 4,
-    BTN_CONTROL = 8,
-    BTN_PREVIEW = 16
-};
-
-
-struct Size
-{
-    int w;
-    int h;
-};
-
-
-struct Position
-{
-    int x;
-    int y;
-};
-
-
+// TODO: font engine
 #define FONT_FILE "/usr/share/fonts/truetype/freefont/FreeSans.ttf"
 
 // Themes strings
@@ -81,17 +36,13 @@ struct Position
 #define SETTINGS_MENU "DrawObject"
 #define THEMES_MENU "Themes"
 
-// Default URI schemes / types
-#define URI_DATA "data:"
+// Default URI schemes / types (TODO)
 #define URI_ACTION "action:"
+#define URI_DATA "data:"
+#define URI_FILE "file://"
 #define URI_SETTINGS "settings:"
+#define URI_FACTORY "prod:"
 
-
-// Basic GUI and Item types
-#define BUTTON_ITEM "BUTTON_ITEM"
-#define TEXT_ITEM "TEXT_ITEM"
-#define DRAW_ITEM "DRAW_ITEM"
-#define FOCUS_ITEM_HACK "FOCUS_ITEM_HACK"
 
 // Layer types
 #define LAYERMANAGER "LayerManager"
@@ -99,6 +50,7 @@ struct Position
 #define LISTLAYER "ListLayer"
 #define BUTTONLAYER "ButtonLayer"
 #define TEXTLAYER "TextLayer"
+#define FOCUSLAYER "FocusLayer"
 
 // Layout types
 #define GUI_LAYOUT "Layout"
@@ -135,16 +87,47 @@ struct Position
 #define BTN_FIELD_PREVIEW "BTN_FIELD_PREVIEW"
 #define BTN_FIELD_DESCRIPTION "BTN_FIELD_DESCRIPTION"
 
-
-// Reserved tags/names for Vertex elements
-#define OWNER "OWNER"
-#define CHILDREN "CHILDREN"
-#define TYPE "TYPE"
-#define TAG_DESCRIPTION "TAG_DESCRIPTION"
-#define ANY "*"
-#define RUNTIME 0
+// Content items
+#define DESCRIPTION "Description"
+#define CHILDREN "Children"
 
 // Name of the Vertex containing the Theme object and the drawing func
 #define DRAWOBJ_DRAWER "Drawer"
 
-#endif /* HAND_DEFINES_H */
+
+
+enum default_number_of_items
+{
+    NUMBER_OF_BUTTONS = 5
+};
+
+
+enum key_pointer
+{
+    ROOT,
+    PRESSED,
+    RELEASED,
+    FOLLOWER
+};
+
+
+enum key_position
+{
+    THUMB,
+    FOREFINGER,
+    MIDDLEFINGER,
+    RINGFINGER,
+    LITTLEFINGER
+};
+
+
+enum button_string
+{
+    BTN_NAME = 1,
+    BTN_DESCRIPTION = 2,
+    BTN_ICON = 4,
+    BTN_CONTROL = 8,
+    BTN_PREVIEW = 16
+};
+
+#endif /* INCLUDE_DEFINES_H */

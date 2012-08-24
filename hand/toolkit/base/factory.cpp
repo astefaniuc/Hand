@@ -18,6 +18,7 @@
  */
 
 #include "base/factory.h"
+#include "graph/data.h"
 
 
 using namespace std;
@@ -34,7 +35,7 @@ Factory::Factory
     SetType(FACTORY);
     SetSpecifierString(FACTORY_INPUTSTRING, input_type);
     SetSpecifierString(FACTORY_OUTPUTSTRING, output_type);
-    SetSpecifierString(FACTORY_URISCHEME, uri_scheme);
+    SetSpecifierString(URI_FACTORY, uri_scheme);
 }
 
 
@@ -52,7 +53,7 @@ string Factory::GetOutputType()
 
 string Factory::GetUriScheme()
 {
-    return GetSpecifierString(FACTORY_URISCHEME);
+    return GetSpecifierString(URI_FACTORY);
 }
 
 

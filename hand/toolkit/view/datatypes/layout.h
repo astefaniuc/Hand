@@ -22,6 +22,8 @@
 
 #include "include/defines.h"
 #include "base/factory.h"
+#include "graph/data.h"
+#include "graph/link.h"
 
 
 enum alignment
@@ -38,7 +40,6 @@ class Layout : public List
     public:
         Layout(std::string name, std::string type);
         virtual ~Layout(){};
-//        void Reset();
 
         List* GetField(std::string position);
         List* AddField(std::string name, std::string type);

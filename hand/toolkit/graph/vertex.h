@@ -17,20 +17,19 @@
  *  License along with Hand. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HAND_FUNCTOID_H
-#define HAND_FUNCTOID_H
+#ifndef HAND_VERTEX_H
+#define HAND_VERTEX_H
 
 #include "include/defines.h"
 
 #include <string>
 #include <sstream>
-#include <typeinfo>
 #include <vector>
 
 
 // Arbitrary search depth (should be big enough to find everything
 // and small enough to return fast from circles)
-#define FUNCTOID "Vertex"
+#define VERTEX "Vertex"
 #define MAX_SEARCH_DEPTH 1024
 
 
@@ -118,87 +117,4 @@ class Vertex : public std::vector<Vertex*>
 
 typedef std::vector<Vertex*>::iterator VertexIterator;
 
-
-#define FUNCTOIDDATA "FUNCTOIDDATA"
-// TODO: This string varies on different platforms
-#define DATA_STRING "Ss"
-
-template <typename I>
-class Data : public Vertex
-{
-    public:
-        Data(std::string name, I val) : Vertex(name)
-        {
-            Value = val;
-            SetType(std::string(typeid(val).name()));
-        };
-
-        bool Set(I val)
-        {
-            Value = val;
-            return true;
-        };
-        I Get()
-        {
-            return Value;
-        };
-        std::string GetAsString()
-        {
-            std::ostringstream s;
-            s << Value;
-            return s.str();
-        };
-   protected:
-        I Value;
-};
-
-typedef Data<std::string> Note;
-
-
-template <class I>
-class Method : public Vertex
-{
-    typedef bool (I::*TFunction)(Vertex*);
-
-    public:
-        Method(std::string name, I* obj, TFunction func) : Vertex(name)
-        {
-            Object = obj;
-            Function = func;
-            SetType(BUTTON_ITEM);
-        };
-        // Clean-up object
-        void Clean(void)
-        {
-            delete(Object);
-        };
-
-        // Execute the Method
-        bool Execute(Vertex* param)
-        {
-            if(Function)
-                return (Object->*Function)(param);
-            return false;
-        };
-
-        void Set(TFunction func)
-        {
-            Function = func;
-        };
-        virtual I* Get()
-        {
-            // Only makes sense to return the object
-            return Object;
-        };
-
-        std::string GetAsString()
-        {
-            // TODO: what kind of a string to create: for the GUI? for persistent storage? for both?
-            return "";
-        };
-    private:
-        TFunction Function;
-        I* Object;
-};
-
-#endif /* HAND_FUNCTOID_H */
+#endif /* HAND_VERTEX_H */

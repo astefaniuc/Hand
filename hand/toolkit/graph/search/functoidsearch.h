@@ -18,8 +18,8 @@
  */
 
 
-#ifndef HAND_FUNCTOIDSEARCH_H
-#define HAND_FUNCTOIDSEARCH_H
+#ifndef HAND_VERTEXSEARCH_H
+#define HAND_VERTEXSEARCH_H
 
 #include "graph/list.h"
 #include "graph/search/searchexpression.h"
@@ -78,4 +78,4 @@ class VertexSearch : public List
         bool RemoveDeadBranch;
 };
 
-#endif // HAND_FUNCTOIDSEARCH_H
+#endif // HAND_VERTEXSEARCH_H

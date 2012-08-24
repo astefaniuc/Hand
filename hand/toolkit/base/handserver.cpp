@@ -23,6 +23,7 @@
 #include "input/device.h"
 #include "input/inputstate.h"
 #include "view/screen.h"
+#include "graph/data.h"
 
 
 using namespace std;
@@ -79,7 +80,7 @@ void HandServer::Start()
 }
 
 
-void HandServer::Exit(Layer* lm)
+void HandServer::Exit(LayerManager* lm)
 {
     if(LayerMgrs.size() <= 1)
         exit(0);

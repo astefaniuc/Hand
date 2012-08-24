@@ -17,16 +17,11 @@
  *  License along with Hand. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HAND_LIST_H
-#define HAND_LIST_H
+#ifndef TOOLKIT_GRAPH_LIST_H
+#define TOOLKIT_GRAPH_LIST_H
 
 #include "graph/vertex.h"
 
-
-#define LIST "List"
-
-class Relation;
-class Factory;
 
 class List : public Vertex
 {
@@ -52,45 +47,6 @@ class List : public Vertex
 
         // Remove all public children
         virtual void Reset();
-
-        // ???
-//        virtual Factory* GetFactory();
 };
 
-
-// TODO: combine Link and Relation? Or even get rid of both?
-#define DESCRIPTOR "Link"
-
-class Link : public List
-{
-    public:
-        Link(std::string name, std::string type, bool is_multi_link=false);
-        virtual ~Link(){};
-
-        virtual bool Add(Vertex* val);
-        virtual bool Set(Vertex* val);
-        bool Execute(Vertex* vs);
-        void MakeMultiLink(bool);
-        bool IsMultiLink();
-
-   protected:
-        bool IsMulti;
-};
-
-
-#define RELATION "RELATION"
-
-class Relation : public List
-{
-    public:
-        Relation(std::string name);
-        virtual ~Relation(){};
-        // Inserts a sub-item to the current functoid without changing
-        // the ownership of 'item'; it replaces *all* objects referenced
-        // by the Relation (only public elements)
-        virtual bool Set(Vertex* sub);
-        // Helper method for the search engine
-        bool IsOpen(VertexSearch* search);
-};
-
-#endif // HAND_LIST_H
+#endif /* TOOLKIT_GRAPH_LIST_H */

@@ -17,8 +17,8 @@
  *  License along with Hand. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HAND_FACTORY_H
-#define HAND_FACTORY_H
+#ifndef BASE_FACTORY_H
+#define BASE_FACTORY_H
 
 #include "base/handapp.h"
 
@@ -27,7 +27,6 @@
 #define RELATION_PRODUCER "RELATION_PRODUCER"
 #define FACTORY_INPUTSTRING "FACTORY_INPUTSTRING"
 #define FACTORY_OUTPUTSTRING "FACTORY_OUTPUTSTRING"
-#define FACTORY_URISCHEME "FACTORY_URISCHEME"
 
 class Factory : public HandApp
 {
@@ -69,4 +68,4 @@ class FactoryMap : public List
 //        virtual void UnregisterFactory(Factory* resolver);
 };
 
-#endif /* HAND_FACTORY_H */
+#endif /* BASE_FACTORY_H */

@@ -18,6 +18,7 @@
  */
 
 #include "graph/vertex.h"
+#include "graph/link.h"
 #include "graph/search/searchexpression.h"
 #include "graph/search/functoidsearch.h"
 

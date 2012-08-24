@@ -17,8 +17,8 @@
  *  License along with Hand. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HANDAPP_H
-#define HANDAPP_H
+#ifndef BASE_HANDAPP_H
+#define BASE_HANDAPP_H
 
 #include "graph/list.h"
 #include "graph/search/functoidsearch.h"
@@ -39,10 +39,8 @@ class HandApp : public List
         LayerManager* GetLayerManager();
         void          SetLayerManager(LayerManager* lm);
 
-        typedef bool  (*tFunction)();
-
     protected:
         LayerManager* _LayerManager;
 };
 
-#endif /* HANDAPP_H */
+#endif /* BASE_HANDAPP_H */

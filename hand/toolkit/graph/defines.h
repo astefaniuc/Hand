@@ -17,33 +17,28 @@
  *  License along with Hand. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef BASE_DATAMANAGER_H
-#define BASE_DATAMANAGER_H
-
-#include "base/factory.h"
+#ifndef GRAPH_DEFINES_H
+#define GRAPH_DEFINES_H
 
 
-class DataManager : public FactoryMap
-{
-    public:
-        DataManager();
-        virtual ~DataManager();
-};
+// Class type IDs
+#define VERTEX "Vertex"
+#define LIST   "List"
+#define METHOD "Method"
+#define RELATION "Relation"
+#define DESCRIPTOR "Link"
+#define DATA   "Data"
+// TODO: This string varies on different platforms
+#define DATA_STRING "Ss"
 
+// Reserved tags/names for Vertex elements
+#define OWNER "OWNER"
+#define TYPE "TYPE"
+#define ANY "*"
+#define RUNTIME 0
 
-class Persistence : public Factory
-{
-    public:
-        Persistence() : Factory("Persistence",
-                                LIST,
-                                LIST,
-                                URI_SETTINGS){};
-        virtual ~Persistence(){};
+// Arbitrary search depth (should be big enough to find everything
+// and small enough to return fast from circles)
+#define MAX_SEARCH_DEPTH 1024
 
-        Vertex* Produce(Vertex* descriptor);
-        void TakeBack(Vertex* product);
-
-        bool IsValidInput(Vertex* input);
-};
-
-#endif /* BASE_DATAMANAGER_H */
+#endif /* GRAPH_DEFINES_H */

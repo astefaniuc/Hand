@@ -16,34 +16,16 @@
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with Hand. If not, see <http://www.gnu.org/licenses/>.
  */
+#ifndef INCLUDE_THEME_H
+#define INCLUDE_THEME_H
 
-#ifndef BASE_DATAMANAGER_H
-#define BASE_DATAMANAGER_H
+#include "include/hand.h"
 
-#include "base/factory.h"
+#include "view/theme/theme.h"
+#include "view/datatypes/rect.h"
+#include "view/datatypes/rgb.h"
+#include "view/datatypes/layout.h"
+#include "view/theme/drawer.h"
+#include "view/layer/virtualsurface.h"
 
-
-class DataManager : public FactoryMap
-{
-    public:
-        DataManager();
-        virtual ~DataManager();
-};
-
-
-class Persistence : public Factory
-{
-    public:
-        Persistence() : Factory("Persistence",
-                                LIST,
-                                LIST,
-                                URI_SETTINGS){};
-        virtual ~Persistence(){};
-
-        Vertex* Produce(Vertex* descriptor);
-        void TakeBack(Vertex* product);
-
-        bool IsValidInput(Vertex* input);
-};
-
-#endif /* BASE_DATAMANAGER_H */
+#endif /* INCLUDE_THEME_H */

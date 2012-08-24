@@ -19,6 +19,7 @@
 
 #include "view/layer/buttonlayer.h"
 #include "view/layer/textlayer.h"
+#include "graph/method.h"
 
 
 using namespace std;
@@ -117,7 +118,7 @@ void ButtonLayer::ReleaseGui()
 
 bool ButtonLayerFactory::IsValidInput(Vertex* input)
 {
-//    if(input->IsType(BUTTON_ITEM) || input->IsType(DESCRIPTOR))
+//    if(input->IsType(METHOD) || input->IsType(DESCRIPTOR))
     if(input)
         return true;
     return false;

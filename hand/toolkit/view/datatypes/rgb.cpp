@@ -19,6 +19,7 @@
 
 #include "view/datatypes/rgb.h"
 #include "graph/search/functoidsearch.h"
+#include "graph/data.h"
 
 
 using namespace std;

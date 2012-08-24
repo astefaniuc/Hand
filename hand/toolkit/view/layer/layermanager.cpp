@@ -27,6 +27,7 @@
 #include "view/theme/theme.h"
 #include "base/filesystem.h"
 #include "view/datatypes/layout.h"
+#include "graph/method.h"
 
 
 using namespace std;
@@ -88,7 +89,7 @@ void LayerManager::Init()
     // Request command at highest level
     GetCommand(Get("Exit"), _InputState->GetNumberOfKeys());
     // Start the focus handling layer
-/*    MasterView = CreateLayer(FOCUS_ITEM_HACK);
+/*    MasterView = CreateLayer(FOCUSLAYER);
     MasterView->Init();
     SubLayers.push_back(MasterView);*/
 }
@@ -131,7 +132,7 @@ Vertex* LayerManager::GetCommandList(Vertex* menu)
     for(uint i=0; i<menu_list->size(); i++)
     {
         child = menu_list->at(i);
-        if(child->IsType(BUTTON_ITEM))
+        if(child->IsType(METHOD))
             return menu;
 
         else if((child=GetCommandList(child)) != NULL)
@@ -229,7 +230,7 @@ bool LayerManager::LoadTheme(Vertex* f)
 bool LayerManager::GetAllThemes(Vertex* themes_dir)
 {
     // (Re-)read the list of available themes
-    List* themes_list = dynamic_cast<List*>(Server()->Produce(themes_dir, FILEFUNCTOID));
+    List* themes_list = dynamic_cast<List*>(Server()->Produce(themes_dir, FILEVERTEX));
     if(!themes_list)
         return false;
 

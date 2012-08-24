@@ -30,48 +30,48 @@ void App::Init()
     // Set the dummy callback methods
     List* func_folder = new List("button 1");
     func_folder->Add(new Method<App>("button 1", this, &App::PrintSelf));
-    func_folder->Add(new Note(TAG_DESCRIPTION, "l1b1: prints this to Output"));
+    func_folder->Add(new Note(DESCRIPTION, "l1b1: prints this to Output"));
     folder->Add(func_folder);
 
     func_folder = new List("button 2");
     func_folder->Add(new Method<App>("button 2", this, &App::PrintSelf));
-    func_folder->Add(new Note(TAG_DESCRIPTION, "l1b2: prints this to Output,\n with newline"));
+    func_folder->Add(new Note(DESCRIPTION, "l1b2: prints this to Output,\n with newline"));
     folder->Add(func_folder);
 
     // Create sub-menu folder
     List* sub_menu = new List("Level 2");
-    sub_menu->Add(new Note(TAG_DESCRIPTION, "l1b3: calls sub-menu"));
+    sub_menu->Add(new Note(DESCRIPTION, "l1b3: calls sub-menu"));
     folder->Add(sub_menu);
     // Set the dummy callback methods
     func_folder = new List("button 1");
     func_folder->Add(new Method<App>("button 1", this, &App::PrintSelf));
-    func_folder->Add(new Note(TAG_DESCRIPTION, "l2b1: Func C bug"));
+    func_folder->Add(new Note(DESCRIPTION, "l2b1: Func C bug"));
     sub_menu->Add(func_folder);
 
     func_folder = new List("button 2");
     func_folder->Add(new Method<App>("button 2", this, &App::PrintSelf));
-    func_folder->Add(new Note(TAG_DESCRIPTION, "l2b2: prints this to Output"));
+    func_folder->Add(new Note(DESCRIPTION, "l2b2: prints this to Output"));
     sub_menu->Add(func_folder);
 
     func_folder = new List("button 3");
     func_folder->Add(new Method<App>("button 3", this, &App::PrintSelf));
-    func_folder->Add(new Note(TAG_DESCRIPTION, "l2b3: prints this to Output"));
+    func_folder->Add(new Note(DESCRIPTION, "l2b3: prints this to Output"));
     sub_menu->Add(func_folder);
 
     func_folder = new List("button 4");
     func_folder->Add(new Method<App>("button 4", this, &App::PrintSelf));
-    func_folder->Add(new Note(TAG_DESCRIPTION, "l2b4: prints this to Output"));
+    func_folder->Add(new Note(DESCRIPTION, "l2b4: prints this to Output"));
     sub_menu->Add(func_folder);
 
     func_folder = new List("button 5");
     func_folder->Add(new Method<App>("button 5", this, &App::PrintSelf));
-    func_folder->Add(new Note(TAG_DESCRIPTION, "l2b5: prints this to Output"));
+    func_folder->Add(new Note(DESCRIPTION, "l2b5: prints this to Output"));
     sub_menu->Add(func_folder);
 }
 
 
 bool App::PrintSelf(Vertex* self)
 {
-    Output->Set(((Note*)(self->Get(TAG_DESCRIPTION)))->Get());
+    Output->Set(((Note*)(self->Get(DESCRIPTION)))->Get());
     return true;
 }

@@ -19,6 +19,8 @@
 
 #include "input/device.h"
 #include "input/inputstate.h"
+#include "graph/data.h"
+#include "graph/method.h"
 
 
 using namespace std;
@@ -45,7 +47,7 @@ Device::~Device()
 bool Device::Init()
 {
     // Two main entries: a keylist and the description
-    Add(new Note(TAG_DESCRIPTION, "Press 5 keys on the keyboard"));
+    Add(new Note(DESCRIPTION, "Press 5 keys on the keyboard"));
     Vertex* keys_tree = new List(DEVICE_KEYLIST);
     Add(keys_tree);
 

@@ -18,6 +18,7 @@
  */
 
 #include "view/layer/listlayer.h"
+#include "graph/data.h"
 
 
 using namespace std;

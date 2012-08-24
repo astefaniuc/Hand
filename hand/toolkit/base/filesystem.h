@@ -17,25 +17,24 @@
  *  License along with Hand. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HAND_FILESYSTEM_H
-#define HAND_FILESYSTEM_H
+#ifndef BASE_FILESYSTEM_H
+#define BASE_FILESYSTEM_H
 
 #include "base/factory.h"
 #include "boost/filesystem/path.hpp"
 
 
-#define URISCHEME_FILE "file://"
 #define RELATION_PARENT_PATH "RELATION_PARENT_PATH"
-#define FILEFUNCTOID "FileVertex"
+#define FILEVERTEX "FileVertex"
 
 
 class DirectoryLoader : public Factory
 {
     public:
         DirectoryLoader() : Factory("DirectoryLoader",
-                                    FILEFUNCTOID,
-                                    FILEFUNCTOID,
-                                    URISCHEME_FILE){};
+                                    FILEVERTEX,
+                                    FILEVERTEX,
+                                    URI_FILE){};
         ~DirectoryLoader();
 
         virtual Vertex* Produce(Vertex* descriptor);
@@ -60,9 +59,9 @@ class FileVertex_Factory : public Factory
 {
     public:
         FileVertex_Factory() : Factory("FileVertex_Factory",
-                                 DATA_STRING,
-                                 FILEFUNCTOID,
-                                 URISCHEME_FILE){};
+                                       DATA_STRING,
+                                       FILEVERTEX,
+                                       URI_FILE){};
         virtual ~FileVertex_Factory(){};
 
         Vertex* Produce(Vertex* input);
@@ -71,4 +70,4 @@ class FileVertex_Factory : public Factory
         bool IsValidInput(Vertex* input);
 };
 
-#endif /* HAND_FILESYSTEM_H */
+#endif /* BASE_FILESYSTEM_H */

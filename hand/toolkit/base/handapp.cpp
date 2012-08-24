@@ -58,8 +58,8 @@ HandServer* HandApp::Server()
 
 
 HandAppLoader::HandAppLoader(FileVertex* path_obj) : Factory(NAME_NOT_INIT,
-                                                               FILEFUNCTOID,
-                                                               HANDAPP, "")
+                                                             FILEVERTEX,
+                                                             HANDAPP, "")
 {
     SetType(APPLOADER);
     if(!path_obj)
@@ -119,9 +119,9 @@ void HandAppLoader::TakeBack(Vertex* app)
 
 
 HandAppLoader_Factory::HandAppLoader_Factory() : Factory("Library Loader",
-                                                         FILEFUNCTOID,
+                                                         FILEVERTEX,
                                                          APPLOADER,
-                                                         URISCHEME_FILE)
+                                                         URI_FILE)
 {
     SetType(APPLOADERFACTORY);
 }

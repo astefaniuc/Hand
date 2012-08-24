@@ -18,11 +18,6 @@
  */
 
 #include "default.h"
-#include "view/datatypes/rect.h"
-#include "view/datatypes/rgb.h"
-#include "view/datatypes/layout.h"
-#include "view/theme/drawer.h"
-#include "view/layer/virtualsurface.h"
 
 
 using namespace std;

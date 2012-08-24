@@ -17,33 +17,45 @@
  *  License along with Hand. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef BASE_DATAMANAGER_H
-#define BASE_DATAMANAGER_H
+#ifndef TOOLKIT_GRAPH_DATA_H
+#define TOOLKIT_GRAPH_DATA_H
 
-#include "base/factory.h"
+#include "graph/vertex.h"
+
+#include <sstream>
+#include <typeinfo>
 
 
-class DataManager : public FactoryMap
+template <typename I>
+class Data : public Vertex
 {
     public:
-        DataManager();
-        virtual ~DataManager();
+        Data(std::string name, I val) : Vertex(name)
+        {
+            Value = val;
+            SetType(DATA);
+            SetType(std::string(typeid(val).name()));
+        };
+
+        bool Set(I val)
+        {
+            Value = val;
+            return true;
+        };
+        I Get()
+        {
+            return Value;
+        };
+        std::string GetAsString()
+        {
+            std::ostringstream s;
+            s << Value;
+            return s.str();
+        };
+   protected:
+        I Value;
 };
 
+typedef Data<std::string> Note;
 
-class Persistence : public Factory
-{
-    public:
-        Persistence() : Factory("Persistence",
-                                LIST,
-                                LIST,
-                                URI_SETTINGS){};
-        virtual ~Persistence(){};
-
-        Vertex* Produce(Vertex* descriptor);
-        void TakeBack(Vertex* product);
-
-        bool IsValidInput(Vertex* input);
-};
-
-#endif /* BASE_DATAMANAGER_H */
+#endif /* TOOLKIT_GRAPH_DATA_H */

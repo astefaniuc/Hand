@@ -19,6 +19,8 @@
 
 #include "view/screen.h"
 #include "base/handserver.h"
+#include "graph/data.h"
+#include "graph/method.h"
 
 #include <iostream>
 
@@ -47,7 +49,7 @@ void Screen::Init()
     // Add a func to toggle fullscreen <-> windowed mode
     List* button = new List("ToggleFullscreen");
     button->Add(new Method<Screen>("Button", this, &Screen::ToggleFullscreen));
-    button->Add(new Note(TAG_DESCRIPTION, "Toggle full screen"));
+    button->Add(new Note(DESCRIPTION, "Toggle full screen"));
     Add(button);
 }
 
