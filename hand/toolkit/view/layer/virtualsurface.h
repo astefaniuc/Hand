@@ -32,7 +32,7 @@ class AnimationsList
         AnimationsList();
         ~AnimationsList();
         void Reset();
-        bool Update(Functoid* layout);
+        bool Update(Vertex* layout);
         void AppendAnimation(Animation* to_append);
         void RemoveCurrentAnimation();
         Animation* GetFirstAnimation();
@@ -47,7 +47,7 @@ class AnimationsList
 };
 
 
-// GUI types (Functoid tags)
+// GUI types (Vertex tags)
 #define VIRTUALSURFACE "VIRTUALSURFACE"
 
 enum buffer_type

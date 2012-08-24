@@ -20,7 +20,7 @@
 #ifndef HANDAPP_H
 #define HANDAPP_H
 
-#include "graph/functoidlist.h"
+#include "graph/list.h"
 #include "graph/search/functoidsearch.h"
 
 
@@ -30,7 +30,7 @@
 class HandServer;
 class LayerManager;
 
-class HandApp : public FunctoidList
+class HandApp : public List
 {
     public:
                       HandApp(std::string name);

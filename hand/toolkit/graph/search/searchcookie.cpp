@@ -24,7 +24,7 @@
 using namespace std;
 
 
-SearchCookie::SearchCookie() : FunctoidList(SEARCHCOOKIE)
+SearchCookie::SearchCookie() : List(SEARCHCOOKIE)
 {
     Target = NULL;
     Parent = NULL;
@@ -39,13 +39,13 @@ SearchCookie::~SearchCookie()
 }
 
 
-bool SearchCookie::IsOpen(FunctoidSearch* search)
+bool SearchCookie::IsOpen(VertexSearch* search)
 {
     return false;
 }
 
 
-bool SearchCookie::Add(Functoid* child)
+bool SearchCookie::Add(Vertex* child)
 {
     push_back(child);
     ((SearchCookie*)child)->Parent = this;
@@ -53,7 +53,7 @@ bool SearchCookie::Add(Functoid* child)
 }
 
 
-bool SearchCookie::Detach(Functoid* ignore)
+bool SearchCookie::Detach(Vertex* ignore)
 {
     bool ret = false;
     if(Target)
@@ -69,11 +69,11 @@ bool SearchCookie::Detach(Functoid* ignore)
 // ----------------------------------------------------------------
 
 
-Functoid* Pool::Get()
+Vertex* Pool::Get()
 {
     if(size()>1)
     {
-        Functoid* cookie = back();
+        Vertex* cookie = back();
         pop_back();
         return cookie;
     }
@@ -81,7 +81,7 @@ Functoid* Pool::Get()
 }
 
 
-void Pool::Take(Functoid* cookie)
+void Pool::Take(Vertex* cookie)
 {
     SearchCookie* sc = dynamic_cast<SearchCookie*>(cookie);
     if(!sc)

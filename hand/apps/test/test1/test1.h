@@ -11,7 +11,7 @@ class App : public HandApp
     public:
         App(void) : HandApp("Gui_Test") {Init();};
     private:
-        bool PrintSelf(Functoid* self);
+        bool PrintSelf(Vertex* self);
         void Init(void);
         Note* Output;
 };

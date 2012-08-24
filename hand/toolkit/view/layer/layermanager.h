@@ -36,36 +36,36 @@ class LayerManager : public ListLayer
         bool    Update(bool force);
         void    SetScreen(SDL_Surface* screen);
 
-        bool    GetCommand(Functoid* func, int level);
+        bool    GetCommand(Vertex* func, int level);
         bool    GetCommand(Layer* func, int level);
         // Returns the list which should be mapped to the InputState
         // TODO: better move it to the "view" layer or to base layer?
-        Functoid* GetCommandList(Functoid* base);
+        Vertex* GetCommandList(Vertex* base);
         Device* GetDevice();
         void    SetDevice(Device*);
 
         // Stores the pointer to the (SDL) drawing object
-        bool    Request(Functoid* request);
+        bool    Request(Vertex* request);
         // Called by HandApps to export their interface
-        void    LoadAppInterface(Functoid* app,  bool make_default=false);
-        bool    UnloadAppInterface(Functoid*);
+        void    LoadAppInterface(Vertex* app,  bool make_default=false);
+        bool    UnloadAppInterface(Vertex*);
         void    RegisterLayerFactory(Factory* resolver);
-        std::string  GetContentType(Functoid* target);
-        Layer*  CreateLayer(Functoid* content, std::string layer_type);
+        std::string  GetContentType(Vertex* target);
+        Layer*  CreateLayer(Vertex* content, std::string layer_type);
 
     protected:
         void    Init();
 
     private:
-        bool    Exit(Functoid* ignore);
-        bool    GetAllThemes(Functoid* themes_dir);
-        bool    LoadTheme(Functoid* theme);
+        bool    Exit(Vertex* ignore);
+        bool    GetAllThemes(Vertex* themes_dir);
+        bool    LoadTheme(Vertex* theme);
         void    UnloadTheme();
-        bool    Expand(Functoid* list);
+        bool    Expand(Vertex* list);
 
         // Contains the only pointer to the Device
         InputState*  _InputState;
-        Functoid*    NextRequest;
+        Vertex*    NextRequest;
         SDL_Surface* Screen;
         Layer*       MasterView;
         FactoryMap*  LayerTopos;

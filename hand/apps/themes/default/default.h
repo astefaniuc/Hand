@@ -31,33 +31,33 @@ class Default : public Theme
 
     protected:
         // Layout creators
-        bool GetLMLayout(Functoid* out);
-        bool GetViewLayout(Functoid* out);
-        bool GetFramedListLayout(Functoid* out);
-        bool GetListLayout(Functoid* out);
-        bool GetButtonLayout(Functoid* out);
-        bool GetControlLayout(Functoid* drawing);
-        bool GetContainerLayout(Functoid* out);
-        bool GetFrameLayout(Functoid* out);
-        bool GetBackgroundLayout(Functoid* out);
-        bool GetTextLayout(Functoid* out);
+        bool GetLMLayout(Vertex* out);
+        bool GetViewLayout(Vertex* out);
+        bool GetFramedListLayout(Vertex* out);
+        bool GetListLayout(Vertex* out);
+        bool GetButtonLayout(Vertex* out);
+        bool GetControlLayout(Vertex* drawing);
+        bool GetContainerLayout(Vertex* out);
+        bool GetFrameLayout(Vertex* out);
+        bool GetBackgroundLayout(Vertex* out);
+        bool GetTextLayout(Vertex* out);
        // Colors
-        bool GetColorFrame(Functoid* out);
-        bool GetColorBgrdList(Functoid* out);
-        bool GetColorBgrdButton(Functoid* out);
-        bool GetColorFont(Functoid* out);
+        bool GetColorFrame(Vertex* out);
+        bool GetColorBgrdList(Vertex* out);
+        bool GetColorBgrdButton(Vertex* out);
+        bool GetColorFont(Vertex* out);
 
         // Drawing methods
-        bool ColorSurface(Functoid* drawing);
-        bool DrawFrame(Functoid* drawing);
-        bool DrawList(Functoid* drawing);
-        bool DrawButton(Functoid* drawing);
-        bool DrawText(Functoid* drawing);
+        bool ColorSurface(Vertex* drawing);
+        bool DrawFrame(Vertex* drawing);
+        bool DrawList(Vertex* drawing);
+        bool DrawButton(Vertex* drawing);
+        bool DrawText(Vertex* drawing);
 
-        bool DrawView(Functoid* drawing);
+        bool DrawView(Vertex* drawing);
 
     private:
-        std::string GetString(Functoid* vs);
+        std::string GetString(Vertex* vs);
 };
 
 /*

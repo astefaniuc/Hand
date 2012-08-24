@@ -28,7 +28,7 @@
 using namespace std;
 
 
-extern "C" Functoid* Create()
+extern "C" Vertex* Create()
 {
     return (new Default());
 }
@@ -43,11 +43,11 @@ extern "C" void Destroy(Theme* theme)
 Default::Default() : Theme("DefaultTheme")
 {
     // Drawer factories
-    Register(new DrawerFactory(new Callback<Default>(GUI_DRAWER_LIST, this, &Default::DrawList)));
-    Register(new DrawerFactory(new Callback<Default>(GUI_DRAWER_BUTTON, this, &Default::DrawButton)));
-    Register(new DrawerFactory(new Callback<Default>(GUI_DRAWER_FRAME, this, &Default::DrawFrame)));
-    Register(new DrawerFactory(new Callback<Default>(GUI_DRAWER_BACKGROUND, this, &Default::ColorSurface)));
-    Register(new DrawerFactory(new Callback<Default>(GUI_DRAWER_TEXT, this, &Default::DrawText)));
+    Register(new DrawerFactory(new Method<Default>(GUI_DRAWER_LIST, this, &Default::DrawList)));
+    Register(new DrawerFactory(new Method<Default>(GUI_DRAWER_BUTTON, this, &Default::DrawButton)));
+    Register(new DrawerFactory(new Method<Default>(GUI_DRAWER_FRAME, this, &Default::DrawFrame)));
+    Register(new DrawerFactory(new Method<Default>(GUI_DRAWER_BACKGROUND, this, &Default::ColorSurface)));
+    Register(new DrawerFactory(new Method<Default>(GUI_DRAWER_TEXT, this, &Default::DrawText)));
 
     // Layouts
     Register(new LayoutFactory<Default>(GUI_LAYOUT_LAYERMANAGER, this, &Default::GetLMLayout));
@@ -72,7 +72,7 @@ Default::Default() : Theme("DefaultTheme")
 // ----------------------------------------------------------------
 
 
-bool Default::GetLMLayout(Functoid* out)
+bool Default::GetLMLayout(Vertex* out)
 {
     Layout* layout = dynamic_cast<Layout*>(out);
 
@@ -81,7 +81,7 @@ bool Default::GetLMLayout(Functoid* out)
 }
 
 
-bool Default::GetViewLayout(Functoid* out)
+bool Default::GetViewLayout(Vertex* out)
 {
     Layout* layout = dynamic_cast<Layout*>(out);
     // Vertical list alignment
@@ -98,7 +98,7 @@ bool Default::GetViewLayout(Functoid* out)
 }
 
 
-bool Default::GetListLayout(Functoid* out)
+bool Default::GetListLayout(Vertex* out)
 {
     Layout* layout = dynamic_cast<Layout*>(out);
 
@@ -110,7 +110,7 @@ bool Default::GetListLayout(Functoid* out)
 }
 
 
-bool Default::GetFramedListLayout(Functoid* out)
+bool Default::GetFramedListLayout(Vertex* out)
 {
     Layout* layout = dynamic_cast<Layout*>(out);
 
@@ -127,7 +127,7 @@ bool Default::GetFramedListLayout(Functoid* out)
 }
 
 
-bool Default::GetButtonLayout(Functoid* out)
+bool Default::GetButtonLayout(Vertex* out)
 {
     Layout* layout = dynamic_cast<Layout*>(out);
 
@@ -158,7 +158,7 @@ bool Default::GetButtonLayout(Functoid* out)
 }
 
 
-bool Default::GetControlLayout(Functoid* out)
+bool Default::GetControlLayout(Vertex* out)
 {
     Layout* layout = dynamic_cast<Layout*>(out);
 
@@ -168,7 +168,7 @@ bool Default::GetControlLayout(Functoid* out)
 }
 
 
-bool Default::GetFrameLayout(Functoid* out)
+bool Default::GetFrameLayout(Vertex* out)
 {
     Layout* layout = dynamic_cast<Layout*>(out);
 
@@ -184,7 +184,7 @@ bool Default::GetFrameLayout(Functoid* out)
 }
 
 
-bool Default::GetBackgroundLayout(Functoid* out)
+bool Default::GetBackgroundLayout(Vertex* out)
 {
     Layout* layout = dynamic_cast<Layout*>(out);
     layout->SetName("Background Layout");
@@ -195,7 +195,7 @@ bool Default::GetBackgroundLayout(Functoid* out)
 }
 
 
-bool Default::GetTextLayout(Functoid* out)
+bool Default::GetTextLayout(Vertex* out)
 {
     Layout* layout = dynamic_cast<Layout*>(out);
     layout->SetName("Text Layout");
@@ -216,22 +216,22 @@ bool Default::GetTextLayout(Functoid* out)
 // ----------------------------------------------------------------
 
 
-bool Default::GetColorFrame(Functoid* out)
+bool Default::GetColorFrame(Vertex* out)
 {
     return out->Set(new Rgb("FrameColor", 0, 0, 200));
 }
 
-bool Default::GetColorBgrdList(Functoid* out)
+bool Default::GetColorBgrdList(Vertex* out)
 {
     return out->Set(new Rgb("BackgroundColor", 20, 20, 50));
 }
 
-bool Default::GetColorBgrdButton(Functoid* out)
+bool Default::GetColorBgrdButton(Vertex* out)
 {
     return out->Set(new Rgb("BackgroundColor", 40, 40, 40));
 }
 
-bool Default::GetColorFont(Functoid* out)
+bool Default::GetColorFont(Vertex* out)
 {
     return out->Set(new Rgb("FontColor", 200, 200, 200));
 }
@@ -242,7 +242,7 @@ bool Default::GetColorFont(Functoid* out)
 // ----------------------------------------------------------------
 
 
-bool Default::DrawFrame(Functoid* layout)
+bool Default::DrawFrame(Vertex* layout)
 {
     VirtualSurface* vs = GetSurface(layout);
     if(!vs)
@@ -253,10 +253,10 @@ bool Default::DrawFrame(Functoid* layout)
     Rect* sap = GetRect(SIZEANDPOSITION, layout);
     sap->MultiplyTo(content_size);
 
-    Functoid* children = layout->Get("Update");
+    Vertex* children = layout->Get("Update");
     if(children)
     {
-        Functoid* to_update;
+        Vertex* to_update;
         uint i = 0;
         while((to_update=children->Get(++i)) != NULL)
             GetRect(SIZEANDPOSITION, to_update)->Multiply(sap);
@@ -296,7 +296,7 @@ bool Default::DrawFrame(Functoid* layout)
 }
 
 
-bool Default::DrawView(Functoid* layout)
+bool Default::DrawView(Vertex* layout)
 {
     VirtualSurface* vs = GetSurface(layout);
     if(!vs)
@@ -307,7 +307,7 @@ bool Default::DrawView(Functoid* layout)
         return false;
 
     // A View has three possible components, 1. the frame
-    Functoid* sub = drawing->Get(LAYOUT_COMPONENT_FRAME);
+    Vertex* sub = drawing->Get(LAYOUT_COMPONENT_FRAME);
     if(sub && sub->IsType(VIRTUALSURFACE))
         ((VirtualSurface*)sub)->Draw(true);
     // 2. the background
@@ -322,7 +322,7 @@ bool Default::DrawView(Functoid* layout)
 }
 
 
-bool Default::DrawText(Functoid* layout)
+bool Default::DrawText(Vertex* layout)
 {
     VirtualSurface* vs = GetSurface(layout);
     if(!vs)
@@ -354,9 +354,9 @@ bool Default::DrawText(Functoid* layout)
 }
 
 
-bool Default::DrawList(Functoid* layout)
+bool Default::DrawList(Vertex* layout)
 {
-    Functoid* children = layout->Get("Update");
+    Vertex* children = layout->Get("Update");
     if(!children)
         return false;
     // Ignore the "runtime" child
@@ -386,7 +386,7 @@ bool Default::DrawList(Functoid* layout)
 }
 
 
-bool Default::DrawButton(Functoid* layout)
+bool Default::DrawButton(Vertex* layout)
 {
     VirtualSurface* vs = GetSurface(layout);
     if(!vs)
@@ -396,7 +396,7 @@ bool Default::DrawButton(Functoid* layout)
 }
 
 
-bool Default::ColorSurface(Functoid* layout)
+bool Default::ColorSurface(Vertex* layout)
 {
     VirtualSurface* vs = GetSurface(layout);
     if(!vs)
@@ -413,9 +413,9 @@ bool Default::ColorSurface(Functoid* layout)
 }
 
 
-string Default::GetString(Functoid* vs)
+string Default::GetString(Vertex* vs)
 {
-    Functoid* content = vs->Get("Content")->Get(1);
+    Vertex* content = vs->Get("Content")->Get(1);
     if(content)
         return content->GetName();
     return "";

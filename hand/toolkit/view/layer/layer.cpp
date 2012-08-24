@@ -84,7 +84,7 @@ bool Layer::Update(bool forced)
 }
 
 
-void Layer::SetContent(Functoid* data)
+void Layer::SetContent(Vertex* data)
 {
     // ReleaseContent
     Get("Content")->Set(data);
@@ -92,7 +92,7 @@ void Layer::SetContent(Functoid* data)
 }
 
 
-Functoid* Layer::GetContent()
+Vertex* Layer::GetContent()
 {
     return Get("Content")->Get(1);
 }
@@ -175,13 +175,13 @@ uint Layer::GetLevel()
 }
 
 
-bool Layer::Request(Functoid* req)
+bool Layer::Request(Vertex* req)
 {
     return ParentLayer->Request(req);
 }
 
 
-Layer* Layer::Insert(Functoid* data, string position)
+Layer* Layer::Insert(Vertex* data, string position)
 {
     // TODO: check if there is already a Layer at searched
     // position and if it has the right type
@@ -191,7 +191,7 @@ Layer* Layer::Insert(Functoid* data, string position)
     if(!layout)
         return NULL;
 
-    FunctoidList* field = layout->GetField(position);
+    List* field = layout->GetField(position);
     if(!field)
         return NULL;
 
@@ -212,9 +212,9 @@ Layer* Layer::Insert(Functoid* data, string position)
 }
 
 
-Layer* Layer::GetAttachedLayer(Functoid* target)
+Layer* Layer::GetAttachedLayer(Vertex* target)
 {
-    FunctoidSearch search;
+    VertexSearch search;
     search.MaxDepth = 2;
     search.SetSearchType(LAYER);
     search.SetSearchRelation(LAYER);
@@ -229,12 +229,12 @@ void Layer::SetTheme(Theme* theme)
     // TODO: generic recursive Set() on a sub-tree defined by a "relation"
     // (possibly using Search() with MultipleFindings)
     SetLayout(theme);
-    Functoid* children = Get(RELATION, CHILDREN);
+    Vertex* children = Get(RELATION, CHILDREN);
     if(!children)
         return;
 
     Layer* layer;
-    Functoid* child;
+    Vertex* child;
     uint i = 0;
     while((child=children->Get(++i)) != NULL)
     {
@@ -245,10 +245,10 @@ void Layer::SetTheme(Theme* theme)
 }
 
 
-void Layer::SetLayout(Functoid* drawer_lib) // string type, uint position
+void Layer::SetLayout(Vertex* drawer_lib) // string type, uint position
 {
     // Delete from the layout items owned by the previous theme
-    Functoid* layout = Get("Layout")->Get(1);
+    Vertex* layout = Get("Layout")->Get(1);
     if(!layout)
     {
         layout = new Layout("Layout", GetType()+"_Layout");
@@ -257,7 +257,7 @@ void Layer::SetLayout(Functoid* drawer_lib) // string type, uint position
 //        _Theme->TakeBack(layout);
     if(!drawer_lib->Execute(layout))
     {
-        FunctoidSearch search;
+        VertexSearch search;
         search.SetSearchName(GetType());
         search.SetSearchType(DRAWOBJ_DRAWER);
         search.MaxDepth = 4;
@@ -308,12 +308,12 @@ void Layer::Draw(bool forced)
 
 void Layer::DrawChilds(bool forced)
 {
-    Functoid* children = Get(RELATION, CHILDREN);
+    Vertex* children = Get(RELATION, CHILDREN);
     if(!children)
         return;
 
     Layer* layer;
-    Functoid* child;
+    Vertex* child;
     uint i = 0;
     while((child=children->Get(++i)) != NULL)
     {

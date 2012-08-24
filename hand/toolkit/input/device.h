@@ -46,7 +46,7 @@ class Device : public virtual HandApp
         InputState* GetInputState();
     protected:
         // Returns the Key symbol at specified position
-        FunctoidList* GetKey(uint index);
+        List* GetKey(uint index);
         std::string GetKeyName(uint pos);
         void   AddKey(SDLKey);
         void   DeleteCurrentKey();
@@ -54,7 +54,7 @@ class Device : public virtual HandApp
         int    GetKeyIndex(SDLKey);
         int    GetInitializationIndex(SDLKey);
 
-        bool   ShowPressedKey(Functoid*);
+        bool   ShowPressedKey(Vertex*);
 
         // Members:
         InputState* StateMachine;

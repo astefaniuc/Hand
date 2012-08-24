@@ -65,7 +65,7 @@ void AnimationsList::AppendAnimation(Animation* a)
 
 
 
-bool AnimationsList::Update(Functoid* layout)
+bool AnimationsList::Update(Vertex* layout)
 {
     bool changed = false;
     Animation* animation = GetFirstAnimation();

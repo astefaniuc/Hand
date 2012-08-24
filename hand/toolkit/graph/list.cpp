@@ -17,7 +17,7 @@
  *  License along with Hand. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "graph/functoidlist.h"
+#include "graph/list.h"
 #include "graph/search/functoidsearch.h"
 //#include "factory.h"
 
@@ -25,29 +25,29 @@
 using namespace std;
 
 
-FunctoidList::FunctoidList(string name) : Functoid(name)
+List::List(string name) : Vertex(name)
 {
     // Reserve the first list entry for runtime information
-    Attach(new Functoid("Runtime"));
-    SetType(FUNCTOIDLIST);
+    Attach(new Vertex("Runtime"));
+    SetType(LIST);
 }
 
 
-FunctoidList::~FunctoidList()
+List::~List()
 {
-    // Don't delete the parent(s); same source code as in ~Functoid()
+    // Don't delete the parent(s); same source code as in ~Vertex()
     // because that destructor doesn't calls the overloaded method
-    Functoid* p = Get(RELATION, OWNER);
+    Vertex* p = Get(RELATION, OWNER);
     // Reset() doesn't work here
     if(p && (p->size()== 2))
         p->pop_back();
 }
 
 
-Functoid* FunctoidList::Get(string s)
+Vertex* List::Get(string s)
 {
     // Search public elements
-    Functoid* ret = Functoid::Get(ANY, s);
+    Vertex* ret = Vertex::Get(ANY, s);
     if(ret)
         return ret;
     // Search hidden elements
@@ -61,7 +61,7 @@ Functoid* FunctoidList::Get(string s)
 }
 
 
-Functoid* FunctoidList::Get(uint i)
+Vertex* List::Get(uint i)
 {
     if(i < size())
         return at(i);
@@ -69,55 +69,55 @@ Functoid* FunctoidList::Get(uint i)
 }
 
 
-Functoid* FunctoidList::Get(string type, string name)
+Vertex* List::Get(string type, string name)
 {
-    Functoid* ret = Functoid::Get(type, name);
+    Vertex* ret = Vertex::Get(type, name);
     if(!ret)
-        return Get(RUNTIME)->Functoid::Get(type, name);
+        return Get(RUNTIME)->Vertex::Get(type, name);
     return ret;
 }
 
 
-void FunctoidList::SetType(string type)
+void List::SetType(string type)
 {
     if(type != "")
         Get(RUNTIME)->SetType(type);
 }
 
 
-string FunctoidList::GetType()
+string List::GetType()
 {
     return Get(RUNTIME)->GetType();
 }
 
 
-bool FunctoidList::IsType(string type)
+bool List::IsType(string type)
 {
     return Get(RUNTIME)->IsType(type);
 }
 
 
-bool FunctoidList::IsType(SearchExpression* se)
+bool List::IsType(SearchExpression* se)
 {
     return Get(RUNTIME)->IsType(se);
 }
 
 
-void FunctoidList::SetOwner(Functoid* owner)
+void List::SetOwner(Vertex* owner)
 {
     Get(RUNTIME)->SetOwner(owner);
 }
 
 
-bool FunctoidList::HasOwner(Functoid* caller)
+bool List::HasOwner(Vertex* caller)
 {
     return Get(RUNTIME)->HasOwner(caller);
 }
 
 
-void FunctoidList::Reset()
+void List::Reset()
 {
-    FunctoidIterator curr = begin();
+    VertexIterator curr = begin();
     // Don't delete the runtime info
     curr++;
     while(curr!=end())
@@ -129,9 +129,9 @@ void FunctoidList::Reset()
 }
 
 /*
-Factory* FunctoidList::GetFactory()
+Factory* List::GetFactory()
 {
-    FunctoidSearch search;
+    VertexSearch search;
     search.MaxDepth = 2;
     search.SetSearchRelation(RELATION_PRODUCER);
     search.SetSearchType(FACTORY);
@@ -146,36 +146,36 @@ Factory* FunctoidList::GetFactory()
 // ----------------------------------------------------------------
 
 
-Link::Link(string name, string type, bool is_multi) : FunctoidList(name)
+Link::Link(string name, string type, bool is_multi) : List(name)
 {
     IsMulti = is_multi;
     SetType(type);
 }
 
 
-bool Link::Set(Functoid* val)
+bool Link::Set(Vertex* val)
 {
     if(!IsMulti && (size()>1))
         // TODO: delete or don't the linked element?
         pop_back();
-    return Functoid::Set(val);
+    return Vertex::Set(val);
 }
 
 
-bool Link::Add(Functoid* val)
+bool Link::Add(Vertex* val)
 {
     if(IsMulti)
         return Add(val);
     if(size() > 1)
         return false;
-    return Functoid::Add(val);
+    return Vertex::Add(val);
 }
 
 
-bool Link::Execute(Functoid* vs)
+bool Link::Execute(Vertex* vs)
 {
     uint i = 0;
-    Functoid* child;
+    Vertex* child;
     while((child=Get(++i)) != NULL)
         // TODO: needs concrete use cases for MultiLink
         return child->Execute(vs);
@@ -207,13 +207,13 @@ bool Link::IsMultiLink()
 // ----------------------------------------------------------------
 
 
-Relation::Relation(string name) : FunctoidList(name)
+Relation::Relation(string name) : List(name)
 {
     SetType(RELATION);
 }
 
 
-bool Relation::Set(Functoid* item)
+bool Relation::Set(Vertex* item)
 {
     Reset();
     push_back(item);
@@ -221,7 +221,7 @@ bool Relation::Set(Functoid* item)
 }
 
 
-bool Relation::IsOpen(FunctoidSearch* search)
+bool Relation::IsOpen(VertexSearch* search)
 {
     // Does it match in its role as relation
     SearchExpression* se = search->GetSearchRelation();

@@ -35,7 +35,7 @@ ListLayer::~ListLayer()
 }
 
 
-void ListLayer::SetContent(Functoid* data)
+void ListLayer::SetContent(Vertex* data)
 {
     // Connect list and layer
     Layer::SetContent(data);
@@ -50,7 +50,7 @@ void ListLayer::SetContent(Functoid* data)
             nr_of_childs = max_size;
     }
 
-    Functoid* child;
+    Vertex* child;
     uint i = 0;
     uint j = 0;
     // Now create layout
@@ -74,7 +74,7 @@ string ListLayer::GetFieldName(uint position)
 }
 
 
-void ListLayer::Configure(Functoid* sub_layout)
+void ListLayer::Configure(Vertex* sub_layout)
 {
     // Inherit parent settings
 /*    GetSubRect(sub_layout->Position, sub_layout->SizeAndPosition);
@@ -87,22 +87,22 @@ void ListLayer::Configure(Functoid* sub_layout)
 // ----------------------------------------------------------------
 
 
-bool ListLayerFactory::IsValidInput(Functoid* input)
+bool ListLayerFactory::IsValidInput(Vertex* input)
 {
-    if(input->IsType(FUNCTOIDLIST))
+    if(input->IsType(LIST))
         return true;
     return false;
 }
 
 
-Functoid* ListLayerFactory::Produce(Functoid* descriptor)
+Vertex* ListLayerFactory::Produce(Vertex* descriptor)
 {
     Layer* ret = new ListLayer();
     return ret;
 }
 
 
-void ListLayerFactory::TakeBack(Functoid* product)
+void ListLayerFactory::TakeBack(Vertex* product)
 {
     // TODO: shouldn't delete objects of derived classes
     if(dynamic_cast<ListLayer*>(product))

@@ -42,13 +42,13 @@ ButtonLayer::~ButtonLayer()
 }
 
 
-void ButtonLayer::SetContent(Functoid* data)
+void ButtonLayer::SetContent(Vertex* data)
 {
     Layer::SetContent(data);
 /*
     // Create the sub-elements of the button
     // The preview
-    if(Content->IsType(FUNCTOIDLIST))
+    if(Content->IsType(LIST))
     {
         SetExpandable();
         // Add list as preview // or data->Children[i] ?
@@ -57,7 +57,7 @@ void ButtonLayer::SetContent(Functoid* data)
     // The button name
     Insert(data, BTN_FIELD_NAME);
     // The button description
-    Functoid* test_descr = new Functoid("Description Test");
+    Vertex* test_descr = new Vertex("Description Test");
     Insert(test_descr, BTN_FIELD_DESCRIPTION);
     // The icon
 /*    Insert(data->Find(string("Icon")), DRAW_ITEM, BTN_FIELD_ICON);*/
@@ -66,12 +66,12 @@ void ButtonLayer::SetContent(Functoid* data)
 
 void ButtonLayer::SetExpandable()
 {
-    Callback<ButtonLayer>* tmp_cb = new Callback<ButtonLayer>("ExpandList", this, &ButtonLayer::ExpandList);
+    Method<ButtonLayer>* tmp_cb = new Method<ButtonLayer>("ExpandList", this, &ButtonLayer::ExpandList);
     FunctionBox = tmp_cb;
 }
 
 
-bool ButtonLayer::ExpandList(Functoid* ignore)
+bool ButtonLayer::ExpandList(Vertex* ignore)
 {
     if(ParentLayer->Request(GetContent()))
     {
@@ -81,7 +81,7 @@ bool ButtonLayer::ExpandList(Functoid* ignore)
 }
 
 
-void ButtonLayer::Configure(Functoid* sub_layout)
+void ButtonLayer::Configure(Vertex* sub_layout)
 {
 /*    SetMap(VisibleItems);
     // Inherit parent settings
@@ -115,7 +115,7 @@ void ButtonLayer::ReleaseGui()
 // ----------------------------------------------------------------
 
 
-bool ButtonLayerFactory::IsValidInput(Functoid* input)
+bool ButtonLayerFactory::IsValidInput(Vertex* input)
 {
 //    if(input->IsType(BUTTON_ITEM) || input->IsType(DESCRIPTOR))
     if(input)
@@ -124,14 +124,14 @@ bool ButtonLayerFactory::IsValidInput(Functoid* input)
 }
 
 
-Functoid* ButtonLayerFactory::Produce(Functoid* descriptor)
+Vertex* ButtonLayerFactory::Produce(Vertex* descriptor)
 {
     Layer* ret = new ButtonLayer();
     return ret;
 }
 
 
-void ButtonLayerFactory::TakeBack(Functoid* product)
+void ButtonLayerFactory::TakeBack(Vertex* product)
 {
     // TODO: shouldn't delete objects of derived classes
     if(dynamic_cast<ButtonLayer*>(product))

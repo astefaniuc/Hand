@@ -30,7 +30,7 @@ class Screen : public virtual HandApp
         Screen(void);
 
         // App mode interface
-        bool ToggleFullscreen(Functoid* ignore);
+        bool ToggleFullscreen(Vertex* ignore);
         bool SetFullscreen(void);
         bool SetWindowed(void);
         void Init(void);

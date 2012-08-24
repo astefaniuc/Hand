@@ -17,7 +17,7 @@
  *  License along with Hand. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "graph/functoid.h"
+#include "graph/vertex.h"
 #include "graph/search/searchexpression.h"
 #include "graph/search/functoidsearch.h"
 
@@ -27,16 +27,16 @@
 using namespace std;
 
 
-Functoid::Functoid(string name)
+Vertex::Vertex(string name)
 {
     SetName(name);
 }
 
 
-Functoid::~Functoid()
+Vertex::~Vertex()
 {
     // Don't delete the parent(s)
-    Functoid* curr = Get(RELATION, OWNER);
+    Vertex* curr = Get(RELATION, OWNER);
     // Reset() doesn't work here
     if(curr && (curr->size()== 2))
         curr->pop_back();
@@ -57,7 +57,7 @@ Functoid::~Functoid()
 }
 
 
-bool Functoid::Add(Functoid* child)
+bool Vertex::Add(Vertex* child)
 {
     if(!child)
         return false;
@@ -67,13 +67,13 @@ bool Functoid::Add(Functoid* child)
 }
 
 
-bool Functoid::Set(Functoid* child)
+bool Vertex::Set(Vertex* child)
 {
     if(!child)
         return false;
 
     string s = child->GetName();
-    FunctoidIterator curr = begin();
+    VertexIterator curr = begin();
     while(curr!=end())
     {
         // TODO: is Type relevant?
@@ -91,7 +91,7 @@ bool Functoid::Set(Functoid* child)
 }
 
 
-bool Functoid::Attach(Functoid* child)
+bool Vertex::Attach(Vertex* child)
 {
     if(!child)
         return false;
@@ -100,10 +100,10 @@ bool Functoid::Attach(Functoid* child)
 }
 
 
-Functoid* Functoid::Get(string s)
+Vertex* Vertex::Get(string s)
 {
-    FunctoidIterator curr;
-    FunctoidIterator _end = end();
+    VertexIterator curr;
+    VertexIterator _end = end();
     for(curr=begin(); curr!=_end; curr++)
         if((*curr)->GetName() == s)
             return (*curr);
@@ -114,10 +114,10 @@ Functoid* Functoid::Get(string s)
 }
 
 
-Functoid* Functoid::Get(string type, string name)
+Vertex* Vertex::Get(string type, string name)
 {
-    FunctoidIterator curr = begin();
-    FunctoidIterator _end = end();
+    VertexIterator curr = begin();
+    VertexIterator _end = end();
 
     if(name == ANY)
     {
@@ -143,14 +143,14 @@ Functoid* Functoid::Get(string type, string name)
 }
 
 
-Functoid* Functoid::Get(uint child)
+Vertex* Vertex::Get(uint child)
 {
-    // Reserved for the FunctoidList class
+    // Reserved for the List class
     return NULL;
 }
 
 
-bool Functoid::Delete(Functoid* child)
+bool Vertex::Delete(Vertex* child)
 {
     Detach(child);
     if(child->HasOwner(this))
@@ -162,11 +162,11 @@ bool Functoid::Delete(Functoid* child)
 }
 
 
-bool Functoid::Detach(Functoid* child)
+bool Vertex::Detach(Vertex* child)
 {
     if(!child) return false;
 
-    FunctoidIterator curr;
+    VertexIterator curr;
     for(curr=begin(); curr!=end(); curr++)
     {
         if((*curr) == child)
@@ -179,10 +179,10 @@ bool Functoid::Detach(Functoid* child)
 }
 
 
-Functoid* Functoid::Find(string name, int max_depth)
+Vertex* Vertex::Find(string name, int max_depth)
 {
     int depth = 0;
-    Functoid* result = NULL;
+    Vertex* result = NULL;
     while(depth <= max_depth)
     {
         result = _Find(name, depth);
@@ -195,7 +195,7 @@ Functoid* Functoid::Find(string name, int max_depth)
 }
 
 
-Functoid* Functoid::_Find(string name, int depth)
+Vertex* Vertex::_Find(string name, int depth)
 {
     if(depth < 0)
         return NULL;
@@ -209,7 +209,7 @@ Functoid* Functoid::_Find(string name, int depth)
     if(Name == OWNER)
         return NULL;
 
-    Functoid* ret = NULL;
+    Vertex* ret = NULL;
     uint s = size();
     --depth;
     for(uint i=0; i<s; i++)
@@ -222,11 +222,11 @@ Functoid* Functoid::_Find(string name, int depth)
 }
 
 
-Functoid* Functoid::Find(SearchExpression* expression)
+Vertex* Vertex::Find(SearchExpression* expression)
 {
     // "Plain" find, don't descend
     uint s = size();
-    Functoid* ret;
+    Vertex* ret;
     for(uint i=0; i<s; i++)
     {
         ret = at(i);
@@ -237,53 +237,53 @@ Functoid* Functoid::Find(SearchExpression* expression)
 }
 
 
-void Functoid::SetName(string name)
+void Vertex::SetName(string name)
 {
     Name = name;
 }
 
 
-string& Functoid::GetName()
+string& Vertex::GetName()
 {
     return Name;
 }
 
 
-string Functoid::GetUriString()
+string Vertex::GetUriString()
 {
     // TODO: needs context sensitive type
     return (GetType() + Name);
 }
 
 
-void Functoid::SetType(string type)
+void Vertex::SetType(string type)
 {
     if(type.empty())
         return;
-    Functoid* types = Get(ANY, TYPE);
+    Vertex* types = Get(ANY, TYPE);
     if(!types)
     {
-        types = new Functoid(TYPE);
+        types = new Vertex(TYPE);
         Set(types);
     }
-    types->Set(new Functoid(type));
+    types->Set(new Vertex(type));
 }
 
 
-string Functoid::GetType()
+string Vertex::GetType()
 {
-    Functoid* types = Get(TYPE);
+    Vertex* types = Get(TYPE);
     if(types)
         return types->back()->GetName();
-    return "Functoid";
+    return "Vertex";
 }
 
 
-bool Functoid::IsType(string type)
+bool Vertex::IsType(string type)
 {
-    Functoid* types = Get(TYPE);
-    FunctoidIterator _end = types->end();
-    for(FunctoidIterator curr=types->begin(); curr!=_end; curr++)
+    Vertex* types = Get(TYPE);
+    VertexIterator _end = types->end();
+    for(VertexIterator curr=types->begin(); curr!=_end; curr++)
         if((*curr)->GetName() == type)
             return true;
 
@@ -291,13 +291,13 @@ bool Functoid::IsType(string type)
 }
 
 
-bool Functoid::IsType(SearchExpression* se)
+bool Vertex::IsType(SearchExpression* se)
 {
     if(!se)
         return false;
-    Functoid* types = Get(TYPE);
-    FunctoidIterator _end = types->end();
-    for(FunctoidIterator curr=types->begin(); curr!=_end; curr++)
+    Vertex* types = Get(TYPE);
+    VertexIterator _end = types->end();
+    for(VertexIterator curr=types->begin(); curr!=_end; curr++)
         if(se->Matches((*curr)->GetName()))
             return true;
 
@@ -305,7 +305,7 @@ bool Functoid::IsType(SearchExpression* se)
 }
 
 
-void Functoid::SetOwner(Functoid* owner)
+void Vertex::SetOwner(Vertex* owner)
 {
     Relation* r = new Relation(OWNER);
     Attach(r);
@@ -313,9 +313,9 @@ void Functoid::SetOwner(Functoid* owner)
 }
 
 
-bool Functoid::HasOwner(Functoid* caller)
+bool Vertex::HasOwner(Vertex* caller)
 {
-    Functoid* rel_p = Get(RELATION, OWNER);
+    Vertex* rel_p = Get(RELATION, OWNER);
     if(!rel_p)
         return true;
     uint ps = rel_p->size();
@@ -324,16 +324,16 @@ bool Functoid::HasOwner(Functoid* caller)
 }
 
 
-bool Functoid::Execute(Functoid* func_param)
+bool Vertex::Execute(Vertex* func_param)
 {
     return false;
 }
 
 
-bool Functoid::IsOpen(FunctoidSearch* search)
+bool Vertex::IsOpen(VertexSearch* search)
 {
     // The search cookie should be the last element
-    Functoid* last = back();
+    Vertex* last = back();
     if(last && (last->GetName()==search->GetCookieName()))
         // Already searched from different branch
         return false;
@@ -341,7 +341,7 @@ bool Functoid::IsOpen(FunctoidSearch* search)
 }
 
 /*
-bool Functoid::NotifyChanged()
+bool Vertex::NotifyChanged()
 {
     // TODO: insert a "Changed" flag under "properties"
     Layer* layer;

@@ -61,14 +61,14 @@ void Theme::Register(Factory* f)
 }
 
 
-bool Theme::Execute(Functoid* request)
+bool Theme::Execute(Vertex* request)
 {
     Map->Produce(request, request->GetType());
     return FillOut(request);
 }
 
 
-bool Theme::FillOut(Functoid* input)
+bool Theme::FillOut(Vertex* input)
 {
     if(!input)
         return false;
@@ -77,8 +77,8 @@ bool Theme::FillOut(Functoid* input)
         return true;
 
     string name;
-    FunctoidIterator _end = layout->end();
-    for(FunctoidIterator curr=layout->begin(); curr!=_end; curr++)
+    VertexIterator _end = layout->end();
+    for(VertexIterator curr=layout->begin(); curr!=_end; curr++)
     {
         name = (*curr)->GetName();
         if((name==CHILDREN) || (name=="Methods"))
@@ -92,10 +92,10 @@ bool Theme::FillOut(Functoid* input)
 }
 
 
-bool Theme::_FillOut(Functoid* input)
+bool Theme::_FillOut(Vertex* input)
 {
-    FunctoidIterator _end = input->end();
-    for(FunctoidIterator curr=input->begin(); curr!=_end; curr++)
+    VertexIterator _end = input->end();
+    for(VertexIterator curr=input->begin(); curr!=_end; curr++)
         Execute((*curr));
 
     return true;
@@ -122,9 +122,9 @@ TTF_Font* Theme::GetFont(int size)
 }
 
 
-void Theme::GetFontHeight(Functoid* layout, uint& max_size)
+void Theme::GetFontHeight(Vertex* layout, uint& max_size)
 {
-    Functoid* pref = layout->Get(DIM_FONT_PREFERRED);
+    Vertex* pref = layout->Get(DIM_FONT_PREFERRED);
     if(pref)
         max_size = ((Data<uint>*)pref)->Get();
     else
@@ -136,7 +136,7 @@ void Theme::GetFontHeight(Functoid* layout, uint& max_size)
 }
 
 
-VirtualSurface* Theme::GetSurface(Functoid* in)
+VirtualSurface* Theme::GetSurface(Vertex* in)
 {
     Layout* layout = dynamic_cast<Layout*>(in);
     if(layout)

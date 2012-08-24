@@ -30,56 +30,56 @@
 
 // Arbitrary search depth (should be big enough to find everything
 // and small enough to return fast from circles)
-#define FUNCTOID "Functoid"
+#define FUNCTOID "Vertex"
 #define MAX_SEARCH_DEPTH 1024
 
 
-class FunctoidSearch;
+class VertexSearch;
 class SearchExpression;
 
-class Functoid : public std::vector<Functoid*>
+class Vertex : public std::vector<Vertex*>
 {
     public:
-        Functoid(std::string name);
-        virtual ~Functoid();
+        Vertex(std::string name);
+        virtual ~Vertex();
 
         // Inserts a sub-item to the current functoid and makes the current
         // functoid the owner of it => 'child' object gets deleted when
         // the current functoid gets deleted; allows multiple objects with
         // the same name
-        virtual bool Add(Functoid* child);
+        virtual bool Add(Vertex* child);
         // Inserts a sub-item to the current functoid without changing
         // the ownership of 'item'; it replaces any object with same name
-        virtual bool Set(Functoid* sub);
+        virtual bool Set(Vertex* sub);
         // Appends a sub-item to the current functoid without changing
         // the ownership of 'item'; allows multiple objects with same name
-        virtual bool Attach(Functoid* sub);
+        virtual bool Attach(Vertex* sub);
 
         // Removes the reference to 'item' but keeps item alive
-        virtual bool Detach(Functoid* item);
+        virtual bool Detach(Vertex* item);
         // Removes the reference to 'item' and deletes the object if it
         // is the owner
-        virtual bool Delete(Functoid* child);
+        virtual bool Delete(Vertex* child);
 
         // Get the first sub-item by name.
         // If the item doesn't exist it returns a new Relation functoid;
         // use Get(ANY, name) to test if a functoid exists
-        virtual Functoid* Get(std::string name);
+        virtual Vertex* Get(std::string name);
         // Get the first sub-item by name and type; if the item is not found
         // it returns NULL; the parameters can be set to ANY e.g.
         // Get(ANY, ANY) returns the first stored item
-        virtual Functoid* Get(std::string name, std::string type);
+        virtual Vertex* Get(std::string name, std::string type);
         // Interface to method defined in a derived class; returns always
         // NULL in this base class
-        virtual Functoid* Get(uint item);
+        virtual Vertex* Get(uint item);
 
         // Simple iterative deepening depth-first search.
         // Omits OWNER from the search but might fail with any other graph
-        // cycles, use the FunctoidSearch engine in case of doubt.
-        virtual Functoid* Find(std::string name, int max_depth = 2);
+        // cycles, use the VertexSearch engine in case of doubt.
+        virtual Vertex* Find(std::string name, int max_depth = 2);
         // Flat search with support for (boost-typed) regular expressions
         // TODO: make it iterative or rename to it "Get()"?
-        virtual Functoid* Find(SearchExpression* expression);
+        virtual Vertex* Find(SearchExpression* expression);
 
         // Set "name" with or without uri scheme
         virtual void SetName(std::string name);
@@ -96,27 +96,27 @@ class Functoid : public std::vector<Functoid*>
 
         // Set object owner (for memory management).
         // Owner is stored under OWNER
-        virtual void SetOwner(Functoid* owner);
+        virtual void SetOwner(Vertex* owner);
         // Returns true if 'caller' is the owner or if no owner is registered
-        virtual bool HasOwner(Functoid* caller);
+        virtual bool HasOwner(Vertex* caller);
 
         // Interface to methods defined in a derived class
-        virtual bool Execute(Functoid* func_param);
+        virtual bool Execute(Vertex* func_param);
         virtual void Reset(){};
 
         // Helper method for the search engine
-        virtual bool IsOpen(FunctoidSearch* search);
+        virtual bool IsOpen(VertexSearch* search);
         // TODO:
 //        virtual string GetAsString() = 0;
 //        virtual bool NotifyChanged();
 
     protected:
-        virtual Functoid* _Find(std::string name, int depth);
+        virtual Vertex* _Find(std::string name, int depth);
 
         std::string Name;
 };
 
-typedef std::vector<Functoid*>::iterator FunctoidIterator;
+typedef std::vector<Vertex*>::iterator VertexIterator;
 
 
 #define FUNCTOIDDATA "FUNCTOIDDATA"
@@ -124,10 +124,10 @@ typedef std::vector<Functoid*>::iterator FunctoidIterator;
 #define DATA_STRING "Ss"
 
 template <typename I>
-class Data : public Functoid
+class Data : public Vertex
 {
     public:
-        Data(std::string name, I val) : Functoid(name)
+        Data(std::string name, I val) : Vertex(name)
         {
             Value = val;
             SetType(std::string(typeid(val).name()));
@@ -156,12 +156,12 @@ typedef Data<std::string> Note;
 
 
 template <class I>
-class Callback : public Functoid
+class Method : public Vertex
 {
-    typedef bool (I::*TFunction)(Functoid*);
+    typedef bool (I::*TFunction)(Vertex*);
 
     public:
-        Callback(std::string name, I* obj, TFunction func) : Functoid(name)
+        Method(std::string name, I* obj, TFunction func) : Vertex(name)
         {
             Object = obj;
             Function = func;
@@ -173,8 +173,8 @@ class Callback : public Functoid
             delete(Object);
         };
 
-        // Execute the Callback
-        bool Execute(Functoid* param)
+        // Execute the Method
+        bool Execute(Vertex* param)
         {
             if(Function)
                 return (Object->*Function)(param);

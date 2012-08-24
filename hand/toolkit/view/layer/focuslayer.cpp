@@ -67,9 +67,9 @@ void FocusLayer::Draw(bool forced)
 }
 
 /*
-void FocusLayer::SetContent(Functoid* data)
+void FocusLayer::SetContent(Vertex* data)
 {
-    Functoid* button;
+    Vertex* button;
     if(Content != NULL)
     {
         for(uint i=0; i<Content->Children.size(); i++)
@@ -105,7 +105,7 @@ void FocusLayer::SetContent(Functoid* data)
 */
 
 
-void FocusLayer::Configure(Functoid* sub_layout)
+void FocusLayer::Configure(Vertex* sub_layout)
 {
     // Never called
 }

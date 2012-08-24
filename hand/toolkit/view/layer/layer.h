@@ -52,8 +52,8 @@ class Layer : public VirtualSurface
         void         SetParentLayer(Layer* parent);
         Layer*       GetParentLayer();
         // Set pointer to a data tree node
-        virtual void SetContent(Functoid*);
-        Functoid*    GetContent();
+        virtual void SetContent(Vertex*);
+        Vertex*    GetContent();
         void         SetCommand(Node* cmd);
         void         ReleaseCommand();
         void         Collapse();
@@ -61,24 +61,24 @@ class Layer : public VirtualSurface
         // Reacting on user input
         virtual void PressGui();
         virtual void ReleaseGui();
-        virtual bool Request(Functoid* request);
+        virtual bool Request(Vertex* request);
 
         virtual uint GetLevel();
         virtual void NotifyChanged();
         virtual void Init(){};
 
-        // Helper Func returning the Layer attached to a Functoid
-        Layer* GetAttachedLayer(Functoid* target);
+        // Helper Func returning the Layer attached to a Vertex
+        Layer* GetAttachedLayer(Vertex* target);
         virtual void SetTheme(Theme* theme);
         // Loads and stores from the layout library the layout for the current layer
-        virtual void SetLayout(Functoid* layouts_lib);
+        virtual void SetLayout(Vertex* layouts_lib);
         virtual void Draw(bool forced);
 
     protected:
         virtual bool Exit();
         // Insert "data" as layer of type layer_type at "position"
-        virtual Layer* Insert(Functoid* data, std::string position);
-        virtual void Configure(Functoid* parent_layout) = 0;
+        virtual Layer* Insert(Vertex* data, std::string position);
+        virtual void Configure(Vertex* parent_layout) = 0;
         virtual void DrawChilds(bool forced);
 
         Layer*         ParentLayer;

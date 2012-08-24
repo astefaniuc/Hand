@@ -32,9 +32,9 @@ class ListLayer : public Layer
         virtual std::string GetFieldName(uint position);
 
         // Set pointer to a data tree node
-        void SetContent(Functoid* focus);
+        void SetContent(Vertex* focus);
     protected:
-        virtual void Configure(Functoid* parent_layout);
+        virtual void Configure(Vertex* parent_layout);
 };
 
 
@@ -42,14 +42,14 @@ class ListLayerFactory : public Factory
 {
     public:
         ListLayerFactory() : Factory(LAYER_TOPOGRAPHY,
-                                     FUNCTOIDLIST,
+                                     LIST,
                                      LISTLAYER, ""){};
         ~ListLayerFactory(){};
 
-        bool IsValidInput(Functoid* input);
+        bool IsValidInput(Vertex* input);
 
-        Functoid* Produce(Functoid* input);
-        void TakeBack(Functoid* product);
+        Vertex* Produce(Vertex* input);
+        void TakeBack(Vertex* product);
 };
 
 #endif /* HAND_LISTLAYER_H */

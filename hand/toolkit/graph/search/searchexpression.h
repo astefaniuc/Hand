@@ -20,13 +20,13 @@
 #ifndef HAND_SEARCHEXPRESSION_H
 #define HAND_SEARCHEXPRESSION_H
 
-#include "graph/functoid.h"
+#include "graph/vertex.h"
 
 
-class SearchExpression : public Functoid
+class SearchExpression : public Vertex
 {
     public:
-        SearchExpression(std::string name) : Functoid(name){};
+        SearchExpression(std::string name) : Vertex(name){};
         virtual ~SearchExpression(){};
         virtual bool Matches(std::string s) = 0;
         virtual std::string GetAsString()

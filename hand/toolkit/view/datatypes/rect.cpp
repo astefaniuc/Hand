@@ -24,14 +24,14 @@
 using namespace std;
 
 
-Rect::Rect(string name, double x_, double y_, double w_, double h_) : Functoid(name)
+Rect::Rect(string name, double x_, double y_, double w_, double h_) : Vertex(name)
 {
     SetType(RECT);
     Init(x_, y_, w_, h_);
 }
 
 
-Rect::Rect() : Functoid("No name")
+Rect::Rect() : Vertex("No name")
 {
     SetType(RECT);
     Init(0.0, 0.0, 1.0, 1.0);
@@ -79,9 +79,9 @@ void Rect::MultiplyTo(SDL_Rect& abs_rect)
 }
 
 
-Rect* GetRect(string name, Functoid* tree)
+Rect* GetRect(string name, Vertex* tree)
 {
-    FunctoidSearch search;
+    VertexSearch search;
     search.SetSearchName(name);
     search.SetSearchType(RECT);
     if(search.Search(tree))

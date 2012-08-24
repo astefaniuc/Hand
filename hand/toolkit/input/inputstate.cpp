@@ -20,7 +20,7 @@
 #include "input/inputstate.h"
 #include "input/statetree.h"
 #include "input/device.h"
-#include "graph/functoid.h"
+#include "graph/vertex.h"
 #include "view/layer/layer.h"
 
 

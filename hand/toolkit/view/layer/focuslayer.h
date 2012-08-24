@@ -23,7 +23,7 @@
 #include "view/layer/listlayer.h"
 
 
-class Functoid;
+class Vertex;
 
 
 class FocusLayer : public ListLayer
@@ -34,15 +34,15 @@ class FocusLayer : public ListLayer
 
         virtual void Draw(bool force);
         // Set pointer to a data tree node
-//        void SetContent(Functoid* focus);
+//        void SetContent(Vertex* focus);
 
     protected:
         void Init();
-        virtual void Configure(Functoid* parent_layout);
+        virtual void Configure(Vertex* parent_layout);
 
     private:
         VirtualSurface* GetControlSurface(uint index);
-        Functoid* KeyList;
+        Vertex* KeyList;
 };
 
 #endif /* HAND_FOCUSLAYER_H */

@@ -45,14 +45,14 @@ Screen::Screen() : HandApp("Screen")
 void Screen::Init()
 {
     // Add a func to toggle fullscreen <-> windowed mode
-    FunctoidList* button = new FunctoidList("ToggleFullscreen");
-    button->Add(new Callback<Screen>("Button", this, &Screen::ToggleFullscreen));
+    List* button = new List("ToggleFullscreen");
+    button->Add(new Method<Screen>("Button", this, &Screen::ToggleFullscreen));
     button->Add(new Note(TAG_DESCRIPTION, "Toggle full screen"));
     Add(button);
 }
 
 
-bool Screen::ToggleFullscreen(Functoid* ignore)
+bool Screen::ToggleFullscreen(Vertex* ignore)
 {
     bool ret = IsFullscreen ? SetWindowed() : SetFullscreen();
     Server()->SetLayerManagerPositions();

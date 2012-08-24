@@ -136,7 +136,7 @@ struct Position
 #define BTN_FIELD_DESCRIPTION "BTN_FIELD_DESCRIPTION"
 
 
-// Reserved tags/names for Functoid elements
+// Reserved tags/names for Vertex elements
 #define OWNER "OWNER"
 #define CHILDREN "CHILDREN"
 #define TYPE "TYPE"
@@ -144,7 +144,7 @@ struct Position
 #define ANY "*"
 #define RUNTIME 0
 
-// Name of the Functoid containing the Theme object and the drawing func
+// Name of the Vertex containing the Theme object and the drawing func
 #define DRAWOBJ_DRAWER "Drawer"
 
 #endif /* HAND_DEFINES_H */

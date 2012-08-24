@@ -45,12 +45,12 @@ class Theme : public HandApp
         Theme(std::string name);
         virtual ~Theme();
 
-        bool Execute(Functoid* request);
+        bool Execute(Vertex* request);
         void Register(Factory* f);
     protected:
         virtual TTF_Font* GetFont(int size);
-        virtual void GetFontHeight(Functoid* layout, uint& max_size);
-        VirtualSurface* GetSurface(Functoid* layout);
+        virtual void GetFontHeight(Vertex* layout, uint& max_size);
+        VirtualSurface* GetSurface(Vertex* layout);
 
         // Drawing interface
         virtual void FillRect(SDL_Surface* sf, SDL_Rect* r, Rgb* c);
@@ -60,8 +60,8 @@ class Theme : public HandApp
         std::map<int, TTF_Font*> Fonts;
 
     private:
-        bool FillOut(Functoid* layout);
-        bool _FillOut(Functoid* layout);
+        bool FillOut(Vertex* layout);
+        bool _FillOut(Vertex* layout);
         // Drawer callbacks  & layout generators
         FactoryMap* Map;
 };

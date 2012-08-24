@@ -24,7 +24,7 @@
 using namespace std;
 
 
-Layout::Layout(string name, string type) : FunctoidList(name)
+Layout::Layout(string name, string type) : List(name)
 {
     SetType(GUI_LAYOUT);
     SetType(type);
@@ -41,9 +41,9 @@ Layout::Layout(string name, string type) : FunctoidList(name)
 }
 
 
-FunctoidList* Layout::AddField(string name, string type)
+List* Layout::AddField(string name, string type)
 {
-    FunctoidList* field = new FunctoidList(name);
+    List* field = new List(name);
     field->SetType(type);
     field->Get("Layout")->Set(this);
     Get("Fields")->Add(field);
@@ -51,16 +51,16 @@ FunctoidList* Layout::AddField(string name, string type)
 }
 
 
-FunctoidList* Layout::GetField(string position)
+List* Layout::GetField(string position)
 {
-    FunctoidList* s = dynamic_cast<FunctoidList*>(
+    List* s = dynamic_cast<List*>(
             Get("Fields")->Get(ANY, position));
     if(s)
         return s;
-    Functoid* childs = Get(RELATION, CHILDREN);
+    Vertex* childs = Get(RELATION, CHILDREN);
     if(childs)
     {
-        Functoid* layout;
+        Vertex* layout;
         uint i = 0;
         while((layout=childs->Get(++i)) != NULL)
         {
@@ -73,7 +73,7 @@ FunctoidList* Layout::GetField(string position)
 }
 
 
-void Layout::AddForUpdate(Functoid* sublayout)
+void Layout::AddForUpdate(Vertex* sublayout)
 {
     Get("Update")->Add(sublayout);
 
@@ -83,19 +83,19 @@ void Layout::AddForUpdate(Functoid* sublayout)
 }
 
 
-bool Layout::Execute(Functoid* vs)
+bool Layout::Execute(Vertex* vs)
 {
     // Set the surface in the layout and use the layout
     // as parameter for the drawer
     Get("Surface")->Set(vs);
-    Functoid* f = Get("Methods")->Get(ANY, "DrawFunc");
+    Vertex* f = Get("Methods")->Get(ANY, "DrawFunc");
     if(f)
         // Execute drawer on current layout
         f->Execute(this);
     f = Get(RELATION, CHILDREN);
     if(f)
     {
-        Functoid* layout;
+        Vertex* layout;
         uint i = 0;
         while((layout=f->Get(++i)) != NULL)
             // Ignored parameter
@@ -107,13 +107,13 @@ bool Layout::Execute(Functoid* vs)
 
 void Layout::Reset()
 {
-    Functoid* sub = Get(RECT, SIZEANDPOSITION);
+    Vertex* sub = Get(RECT, SIZEANDPOSITION);
     if(sub)
         sub->Reset();
-    Functoid* children = Get(RELATION, CHILDREN);
+    Vertex* children = Get(RELATION, CHILDREN);
     if(!children)
         return;
-    Functoid* layout;
+    Vertex* layout;
     uint i = 0;
     while((layout=children->Get(++i)) != NULL)
         layout->Reset();

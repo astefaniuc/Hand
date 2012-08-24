@@ -7,7 +7,7 @@
 using namespace std;
 
 
-extern "C" Functoid* Create()
+extern "C" Vertex* Create()
 {
     // Export interface
     return (new FindTester());
@@ -32,19 +32,19 @@ FindTester::FindTester(void) : HandApp("FindTester")
 void FindTester::TestDelete()
 {
     string type = "TestDelete";
-    Functoid* last_build;
-    Functoid* root_node = new Functoid("RootNode");
+    Vertex* last_build;
+    Vertex* root_node = new Vertex("RootNode");
     last_build = _Build(root_node, 8, 10, type);
     string last_name = last_build->GetName();
     Delete(root_node);
     // Should print an error
-    CheckFound(last_build, TestFind(last_name, FUNCTOIDLIST, false));
+    CheckFound(last_build, TestFind(last_name, LIST, false));
     for(uint i=0; i<10; i++)
     {
         // Memory consumption shouldn't grow during this
-        root_node = new Functoid("RootNode");
+        root_node = new Vertex("RootNode");
         last_build = _Build(root_node, 8, 10, type);
-        CheckFound(last_build, TestFind(last_build->GetName(), FUNCTOIDLIST, false));
+        CheckFound(last_build, TestFind(last_build->GetName(), LIST, false));
         Delete(root_node);
     }
 
@@ -56,10 +56,10 @@ void FindTester::TestFindBigTree()
 {
     string last_name = "";
     string last_type = "";
-    Functoid* found;
+    Vertex* found;
     // Search for the last one (depth 0 is the deepest)
-    Functoid* last_build = Build(this, 8, 10, last_type);
-    found = TestFind(last_build->GetName(), FUNCTOIDLIST, false);
+    Vertex* last_build = Build(this, 8, 10, last_type);
+    found = TestFind(last_build->GetName(), LIST, false);
     CheckFound(last_build, found);
 
     // Only for building purposes
@@ -81,9 +81,9 @@ void FindTester::TestFindBigTree()
 }
 
 
-Functoid* FindTester::Build
+Vertex* FindTester::Build
 (
-        Functoid* entry,
+        Vertex* entry,
         int depth,
         int width,
         string& last_type
@@ -92,7 +92,7 @@ Functoid* FindTester::Build
     ostringstream t;
     t << "width" << width;
     last_type = t.str();
-    Functoid* ret = NULL;
+    Vertex* ret = NULL;
     double start_time = clock();
     cout << "     Build(depth " << depth << ", width " << width << ", type "
             << last_type << ") time: ";
@@ -102,22 +102,22 @@ Functoid* FindTester::Build
 }
 
 
-Functoid* FindTester::_Build
+Vertex* FindTester::_Build
 (
-        Functoid* entry,
+        Vertex* entry,
         int depth,
         int width,
         string type
 )
 {
-    Functoid* f = NULL;
+    Vertex* f = NULL;
     for(int i=1; i<=width; i++)
     {
         {
             ostringstream n;
             n << "depth" << depth << "width" << i;
             string name = n.str();
-            f = new FunctoidList(name);
+            f = new List(name);
         }
         f->SetType(type);
         entry->Get(CHILDREN)->Add(f);
@@ -128,10 +128,10 @@ Functoid* FindTester::_Build
 }
 
 
-Functoid* FindTester::TestFind(string name, string type, bool relation)
+Vertex* FindTester::TestFind(string name, string type, bool relation)
 {
     double start_time = clock();
-    FunctoidSearch search;
+    VertexSearch search;
     search.SetSearchName(name);
     cout << "Find(name " << name;
     if(type != "")
@@ -153,7 +153,7 @@ Functoid* FindTester::TestFind(string name, string type, bool relation)
 }
 
 
-bool FindTester::CheckFound(Functoid* expected, Functoid* found)
+bool FindTester::CheckFound(Vertex* expected, Vertex* found)
 {
     if(found != expected)
     {

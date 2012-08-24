@@ -29,8 +29,8 @@ class Animation : public virtual HandApp
         Animation() : HandApp("Animation"){};
         virtual ~Animation(){};
 //        void SizeAndPosition(SDL_Rect& current_size);
-        // TODO: combine this with the Functoid-Execute()
-        virtual bool Execute(Functoid* tgt) = 0;
+        // TODO: combine this with the Vertex-Execute()
+        virtual bool Execute(Vertex* tgt) = 0;
 
     protected:
         virtual bool GetNextProgress() = 0;

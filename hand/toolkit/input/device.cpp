@@ -46,17 +46,17 @@ bool Device::Init()
 {
     // Two main entries: a keylist and the description
     Add(new Note(TAG_DESCRIPTION, "Press 5 keys on the keyboard"));
-    Functoid* keys_tree = new FunctoidList(DEVICE_KEYLIST);
+    Vertex* keys_tree = new List(DEVICE_KEYLIST);
     Add(keys_tree);
 
     // Load un-initialized keys
-    FunctoidList* key;
-    Callback<Device>* show_key = new Callback<Device>("Show Key", this, &Device::ShowPressedKey);
+    List* key;
+    Method<Device>* show_key = new Method<Device>("Show Key", this, &Device::ShowPressedKey);
     string key_name = "";
     for(int i=0; i < NUMBER_OF_BUTTONS; ++i)
     {
         // Set the callback method
-        key = new FunctoidList(GetKeyName(i));
+        key = new List(GetKeyName(i));
         key->Add(show_key);
         key->Add(new Note("Data", ""));
         keys_tree->Add(key);
@@ -89,7 +89,7 @@ bool Device::Init()
 }
 
 
-bool Device::ShowPressedKey(Functoid* ignore)
+bool Device::ShowPressedKey(Vertex* ignore)
 {
     // Do nothing: this method is added always at first level but
     // initializing the key will inquire functoids at increasing level
@@ -144,9 +144,9 @@ int Device::GetKeyIndex(SDLKey k)
 }
 
 
-FunctoidList* Device::GetKey(uint pos)
+List* Device::GetKey(uint pos)
 {
-    return dynamic_cast<FunctoidList*>(Get(DEVICE_KEYLIST)->Get(GetKeyName(pos)));
+    return dynamic_cast<List*>(Get(DEVICE_KEYLIST)->Get(GetKeyName(pos)));
 }
 
 

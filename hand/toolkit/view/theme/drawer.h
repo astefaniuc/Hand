@@ -36,13 +36,13 @@ class VirtualSurface;
 class DrawerFactory : public Factory
 {
     public:
-        DrawerFactory(Functoid* draw_func);
+        DrawerFactory(Vertex* draw_func);
         ~DrawerFactory();
-        Functoid* Produce(Functoid* ignore);
-        void TakeBack(Functoid* product){};
-        bool IsValidInput(Functoid* input);
+        Vertex* Produce(Vertex* ignore);
+        void TakeBack(Vertex* product){};
+        bool IsValidInput(Vertex* input);
     protected:
-        Functoid* DrawFunction;
+        Vertex* DrawFunction;
 };
 
 #endif /* HAND_LAYOUTS_H */

@@ -27,21 +27,21 @@
 #define NAME_NOT_INIT "Not initialized"
 
 // Class factories for dynamic linking
-typedef FunctoidList* creator();
+typedef List* creator();
 typedef void destroyer(void*);
 
-class FileFunctoid;
+class FileVertex;
 
 class HandAppLoader : public Factory
 {
     public:
-        HandAppLoader(FileFunctoid* path);
+        HandAppLoader(FileVertex* path);
         ~HandAppLoader();
 
-        Functoid* Produce(Functoid* ignore);
-        void TakeBack(Functoid* product);
+        Vertex* Produce(Vertex* ignore);
+        void TakeBack(Vertex* product);
 
-        bool IsValidInput(Functoid* input);
+        bool IsValidInput(Vertex* input);
     private:
         // Shared library handle
         void* LoadedLib;
@@ -62,10 +62,10 @@ class HandAppLoader_Factory : public Factory
         HandAppLoader_Factory();
         ~HandAppLoader_Factory(){};
 
-        virtual Functoid* Produce(Functoid* descriptor);
-        virtual void TakeBack(Functoid* product);
+        virtual Vertex* Produce(Vertex* descriptor);
+        virtual void TakeBack(Vertex* product);
 
-        bool IsValidInput(Functoid* input);
+        bool IsValidInput(Vertex* input);
  };
 
 #endif /* HANDAPPLOADER_H */

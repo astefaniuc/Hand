@@ -17,29 +17,29 @@
  *  License along with Hand. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HAND_FUNCTOIDLIST_H
-#define HAND_FUNCTOIDLIST_H
+#ifndef HAND_LIST_H
+#define HAND_LIST_H
 
-#include "graph/functoid.h"
+#include "graph/vertex.h"
 
 
-#define FUNCTOIDLIST "FunctoidList"
+#define LIST "List"
 
 class Relation;
 class Factory;
 
-class FunctoidList : public Functoid
+class List : public Vertex
 {
     public:
-        FunctoidList(std::string name);
-        virtual ~FunctoidList();
+        List(std::string name);
+        virtual ~List();
 
         // Get the child by name
-        virtual Functoid* Get(std::string child);
-        virtual Functoid* Get(std::string type, std::string name);
+        virtual Vertex* Get(std::string child);
+        virtual Vertex* Get(std::string type, std::string name);
         // Get the child by position, 1-based; Element '0' stores
         // hidden system information e.g. type and layout.
-        virtual Functoid* Get(uint child);
+        virtual Vertex* Get(uint child);
 
         virtual void SetType(std::string type);
         virtual std::string GetType();
@@ -47,8 +47,8 @@ class FunctoidList : public Functoid
         virtual bool IsType(SearchExpression* type);
 
         // Set object owner (for memory management)
-        virtual void SetOwner(Functoid* owner);
-        virtual bool HasOwner(Functoid* caller);
+        virtual void SetOwner(Vertex* owner);
+        virtual bool HasOwner(Vertex* caller);
 
         // Remove all public children
         virtual void Reset();
@@ -61,15 +61,15 @@ class FunctoidList : public Functoid
 // TODO: combine Link and Relation? Or even get rid of both?
 #define DESCRIPTOR "Link"
 
-class Link : public FunctoidList
+class Link : public List
 {
     public:
         Link(std::string name, std::string type, bool is_multi_link=false);
         virtual ~Link(){};
 
-        virtual bool Add(Functoid* val);
-        virtual bool Set(Functoid* val);
-        bool Execute(Functoid* vs);
+        virtual bool Add(Vertex* val);
+        virtual bool Set(Vertex* val);
+        bool Execute(Vertex* vs);
         void MakeMultiLink(bool);
         bool IsMultiLink();
 
@@ -80,7 +80,7 @@ class Link : public FunctoidList
 
 #define RELATION "RELATION"
 
-class Relation : public FunctoidList
+class Relation : public List
 {
     public:
         Relation(std::string name);
@@ -88,9 +88,9 @@ class Relation : public FunctoidList
         // Inserts a sub-item to the current functoid without changing
         // the ownership of 'item'; it replaces *all* objects referenced
         // by the Relation (only public elements)
-        virtual bool Set(Functoid* sub);
+        virtual bool Set(Vertex* sub);
         // Helper method for the search engine
-        bool IsOpen(FunctoidSearch* search);
+        bool IsOpen(VertexSearch* search);
 };
 
-#endif // HAND_FUNCTOIDLIST_H
+#endif // HAND_LIST_H

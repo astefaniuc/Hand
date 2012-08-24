@@ -79,13 +79,13 @@ string Factory::GetSpecifierString(string name)
 // ----------------------------------------------------------------
 
 
-FactoryMap::FactoryMap(string name) : FunctoidList(name)
+FactoryMap::FactoryMap(string name) : List(name)
 {
     SetType(FACTORYMAP);
 }
 
 
-Functoid* FactoryMap::Produce(Functoid* entry, string output_type)
+Vertex* FactoryMap::Produce(Vertex* entry, string output_type)
 {
     if(!entry)
         return NULL;
@@ -102,7 +102,7 @@ Functoid* FactoryMap::Produce(Functoid* entry, string output_type)
     }
 
     // Factory chain "bottom up"
-    Functoid* ret = entry;
+    Vertex* ret = entry;
 
     f = GetFactory(entry);
     if(f)
@@ -128,12 +128,12 @@ Functoid* FactoryMap::Produce(Functoid* entry, string output_type)
 }
 
 
-Factory* FactoryMap::GetFactory(Functoid* target)
+Factory* FactoryMap::GetFactory(Vertex* target)
 {
     Factory* ret = NULL;
     Factory* tmp;
-    FunctoidIterator _end = end();
-    for(FunctoidIterator curr=begin(); curr!=_end; curr++)
+    VertexIterator _end = end();
+    for(VertexIterator curr=begin(); curr!=_end; curr++)
     {
         tmp = dynamic_cast<Factory*>((*curr));
         // Find factory with the biggest relevance, for now it is the last added one
@@ -151,8 +151,8 @@ Factory* FactoryMap::GetFactory(string output_type)
     if(output_type == "")
         return NULL;
     Factory* res;
-    FunctoidIterator _end = end();
-    for(FunctoidIterator curr=begin(); curr!=_end; curr++)
+    VertexIterator _end = end();
+    for(VertexIterator curr=begin(); curr!=_end; curr++)
     {
         res = dynamic_cast<Factory*>((*curr));
         if(res && (res->GetOutputType()==output_type))

@@ -25,21 +25,21 @@
 using namespace std;
 
 
-FunctoidSearch::FunctoidSearch() : FunctoidList("FunctoidSearch")
+VertexSearch::VertexSearch() : List("VertexSearch")
 {
     InitVars();
     CookiePool = new Pool();
 }
 
 
-FunctoidSearch::~FunctoidSearch()
+VertexSearch::~VertexSearch()
 {
     delete(CookiePool);
     ClearFindings();
 }
 
 
-void FunctoidSearch::InitVars()
+void VertexSearch::InitVars()
 {
     SearchName = NULL;
     SearchType = NULL;
@@ -52,14 +52,14 @@ void FunctoidSearch::InitVars()
 }
 
 
-void FunctoidSearch::Reset()
+void VertexSearch::Reset()
 {
     ClearFindings();
     InitVars();
 }
 
 
-void FunctoidSearch::ClearFindings()
+void VertexSearch::ClearFindings()
 {
     if(!Findings) return;
     // Don't call destructor for the findings from container
@@ -70,46 +70,46 @@ void FunctoidSearch::ClearFindings()
 }
 
 
-void FunctoidSearch::SetSearchName(string s, bool make_regex)
+void VertexSearch::SetSearchName(string s, bool make_regex)
 {
     // Add a link to the own interface for the GUI
     SearchName = AddSearchExpression("SearchName", s, make_regex);
 }
 
 
-SearchExpression* FunctoidSearch::GetSearchName()
+SearchExpression* VertexSearch::GetSearchName()
 {
     return SearchName;
 }
 
 
-void FunctoidSearch::SetSearchType(string s, bool make_regex)
+void VertexSearch::SetSearchType(string s, bool make_regex)
 {
     // Add a link to the own interface for the GUI
     SearchType = AddSearchExpression("SearchType", s, make_regex);
 }
 
 
-SearchExpression* FunctoidSearch::GetSearchType()
+SearchExpression* VertexSearch::GetSearchType()
 {
     return SearchType;
 }
 
 
-void FunctoidSearch::SetSearchRelation(string s, bool make_regex)
+void VertexSearch::SetSearchRelation(string s, bool make_regex)
 {
     // Add a link to the own interface for the GUI
     SearchRelation = AddSearchExpression("SearchRelation", s, make_regex);
 }
 
 
-SearchExpression* FunctoidSearch::GetSearchRelation()
+SearchExpression* VertexSearch::GetSearchRelation()
 {
     return SearchRelation;
 }
 
 
-SearchExpression* FunctoidSearch::AddSearchExpression(string relation_name, string s, bool make_regex)
+SearchExpression* VertexSearch::AddSearchExpression(string relation_name, string s, bool make_regex)
 {
     SearchExpression* se;
     if(make_regex)
@@ -123,13 +123,13 @@ SearchExpression* FunctoidSearch::AddSearchExpression(string relation_name, stri
 }
 
 
-void FunctoidSearch::AddFinding(Functoid* finding)
+void VertexSearch::AddFinding(Vertex* finding)
 {
     if(MultipleFinds)
     {
         if(!Findings)
         {
-            Findings = new FunctoidList("Findings");
+            Findings = new List("Findings");
             Add(Findings);
         }
         Findings->Add(finding);
@@ -139,19 +139,19 @@ void FunctoidSearch::AddFinding(Functoid* finding)
 }
 
 
-Functoid* FunctoidSearch::GetFindings()
+Vertex* VertexSearch::GetFindings()
 {
     return Findings;
 }
 
 
-string FunctoidSearch::GetCookieName()
+string VertexSearch::GetCookieName()
 {
     return SEARCHCOOKIE;
 }
 
 
-bool FunctoidSearch::Search(Functoid* target)
+bool VertexSearch::Search(Vertex* target)
 {
     if(!target)
         return false;
@@ -187,7 +187,7 @@ bool FunctoidSearch::Search(Functoid* target)
 }
 
 
-bool FunctoidSearch::Step(SearchCookie* path)
+bool VertexSearch::Step(SearchCookie* path)
 {
     bool found = false;
     if(path->size()>1)
@@ -215,10 +215,10 @@ bool FunctoidSearch::Step(SearchCookie* path)
 }
 
 
-bool FunctoidSearch::SearchAllChilds(SearchCookie* path_end)
+bool VertexSearch::SearchAllChilds(SearchCookie* path_end)
 {
     bool found = false;
-    Functoid* child;
+    Vertex* child;
     uint i = 0;
     while((child=path_end->Target->Get(++i)) != NULL)
     {
@@ -237,21 +237,21 @@ bool FunctoidSearch::SearchAllChilds(SearchCookie* path_end)
 }
 
 
-void FunctoidSearch::ExtendPath(Functoid* tree_node, SearchCookie* path_end)
+void VertexSearch::ExtendPath(Vertex* tree_node, SearchCookie* path_end)
 {
     if(!tree_node)
         return;
 
-    Functoid* path_extension = CookiePool->Get();
+    Vertex* path_extension = CookiePool->Get();
     tree_node->Attach(path_extension);
     ((SearchCookie*)path_extension)->Target = tree_node;
     path_end->Add(path_extension);
 }
 
 
-bool FunctoidSearch::Matches(Functoid* target)
+bool VertexSearch::Matches(Vertex* target)
 {
-    // Ignore relation_type here (it's checked in the "Relation" Functoid)
+    // Ignore relation_type here (it's checked in the "Relation" Vertex)
     if(SearchName && (!SearchName->Matches(target->GetName())))
         return false;
 
@@ -263,13 +263,13 @@ bool FunctoidSearch::Matches(Functoid* target)
 }
 
 
-bool FunctoidSearch::MarkDeathBranch(SearchCookie* branch)
+bool VertexSearch::MarkDeathBranch(SearchCookie* branch)
 {
     if(!branch)
         return false;
 
-    FunctoidIterator b = branch->begin();
-    FunctoidIterator _end = branch->end();
+    VertexIterator b = branch->begin();
+    VertexIterator _end = branch->end();
     if(b != _end)
         b++;
     while(b != _end)
@@ -286,11 +286,11 @@ bool FunctoidSearch::MarkDeathBranch(SearchCookie* branch)
 }
 
 
-void FunctoidSearch::DecomposeDeathBranches(SearchCookie* path)
+void VertexSearch::DecomposeDeathBranches(SearchCookie* path)
 {
     SearchCookie* branch;
-    FunctoidIterator curr = path->begin();
-    FunctoidIterator _end = path->end();
+    VertexIterator curr = path->begin();
+    VertexIterator _end = path->end();
     if(curr != _end)
         curr++;
     while(curr != _end)

@@ -38,10 +38,10 @@ class Factory : public HandApp
                 std::string uri_scheme);
         virtual ~Factory(){};
 
-        virtual Functoid* Produce(Functoid* input) = 0;
-        virtual void TakeBack(Functoid* product) = 0;
+        virtual Vertex* Produce(Vertex* input) = 0;
+        virtual void TakeBack(Vertex* product) = 0;
 
-        virtual bool IsValidInput(Functoid* input) = 0;
+        virtual bool IsValidInput(Vertex* input) = 0;
 
         std::string GetInputType();
         std::string GetOutputType();
@@ -55,15 +55,15 @@ class Factory : public HandApp
 
 #define FACTORYMAP "FACTORYMAP"
 
-class FactoryMap : public FunctoidList
+class FactoryMap : public List
 {
     public:
         FactoryMap(std::string name);
         virtual ~FactoryMap(){};
 
-        virtual Functoid* Produce(Functoid* input, std::string output_type);
+        virtual Vertex* Produce(Vertex* input, std::string output_type);
 
-        Factory* GetFactory(Functoid* input);
+        Factory* GetFactory(Vertex* input);
         Factory* GetFactory(std::string output_type);
 //        virtual void RegisterFactory(Factory* resolver);
 //        virtual void UnregisterFactory(Factory* resolver);

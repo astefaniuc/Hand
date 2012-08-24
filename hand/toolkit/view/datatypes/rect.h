@@ -20,14 +20,14 @@
 #ifndef HAND_RECT_H
 #define HAND_RECT_H
 
-#include "graph/functoid.h"
+#include "graph/vertex.h"
 #include <SDL/SDL.h>
 
 
 #define RECT "RECT"
 
 
-class Rect : public Functoid
+class Rect : public Vertex
 {
     public:
         Rect(std::string name, double x_, double y_, double w_, double h_);
@@ -45,7 +45,7 @@ class Rect : public Functoid
 };
 
 
-// Helper func for extracting a Rect from a Functoid tree
-Rect* GetRect(std::string rect_name, Functoid* from_tree);
+// Helper func for extracting a Rect from a Vertex tree
+Rect* GetRect(std::string rect_name, Vertex* from_tree);
 
 #endif /* HAND_RECT_H */

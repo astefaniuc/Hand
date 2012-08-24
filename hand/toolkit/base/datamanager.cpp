@@ -28,7 +28,7 @@ using namespace std;
 DataManager::DataManager() : FactoryMap("DefaultDataManager")
 {
     Add(new HandAppLoader_Factory());
-    Add(new FileFunctoid_Factory());
+    Add(new FileVertex_Factory());
     Add(new Persistence());
 }
 
@@ -44,11 +44,11 @@ DataManager::~DataManager()
 //----------------------------------------------------------------------------
 
 
-Functoid* Persistence::Produce(Functoid* keys_tree)
+Vertex* Persistence::Produce(Vertex* keys_tree)
 {
     // Change name
     keys_tree->SetName("settings:Keyboard::1");
-    keys_tree = dynamic_cast<FunctoidList*>(keys_tree->Get("Keylist"));
+    keys_tree = dynamic_cast<List*>(keys_tree->Get("Keylist"));
 
     // TEMP:
     string key_ids[] = {"97", "119", "101"," 102", "32"};
@@ -63,13 +63,13 @@ Functoid* Persistence::Produce(Functoid* keys_tree)
 
 
 
-void Persistence::TakeBack(Functoid* product)
+void Persistence::TakeBack(Vertex* product)
 {
     delete(product);
 }
 
 
-bool Persistence::IsValidInput(Functoid* keys_tree)
+bool Persistence::IsValidInput(Vertex* keys_tree)
 {
     // Change name
     if(keys_tree->GetName() == "settings:Keyboard::0")

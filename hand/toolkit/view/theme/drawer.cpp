@@ -27,7 +27,7 @@ using namespace std;
 
 DrawerFactory::DrawerFactory
 (
-        Functoid* draw_func
+        Vertex* draw_func
 ) : Factory(DRAWOBJ_DRAWER, DESCRIPTOR, draw_func->GetName(), "")
 {
     // Basic implementation check
@@ -43,14 +43,14 @@ DrawerFactory::~DrawerFactory()
 }
 
 
-Functoid* DrawerFactory::Produce(Functoid* descr)
+Vertex* DrawerFactory::Produce(Vertex* descr)
 {
     descr->Set(DrawFunction);
     return DrawFunction;
 }
 
 
-bool DrawerFactory::IsValidInput(Functoid* input)
+bool DrawerFactory::IsValidInput(Vertex* input)
 {
     if(dynamic_cast<Link*>(input) && input->IsType(GetOutputType()))
         return true;

@@ -30,7 +30,7 @@
 using namespace std;
 
 
-HandApp::HandApp(string name) : FunctoidList(name)
+HandApp::HandApp(string name) : List(name)
 {
     _LayerManager = NULL;
     SetType(HANDAPP);
@@ -57,7 +57,7 @@ HandServer* HandApp::Server()
 }
 
 
-HandAppLoader::HandAppLoader(FileFunctoid* path_obj) : Factory(NAME_NOT_INIT,
+HandAppLoader::HandAppLoader(FileVertex* path_obj) : Factory(NAME_NOT_INIT,
                                                                FILEFUNCTOID,
                                                                HANDAPP, "")
 {
@@ -89,23 +89,23 @@ HandAppLoader::~HandAppLoader()
 }
 
 
-bool HandAppLoader::IsValidInput(Functoid* entry)
+bool HandAppLoader::IsValidInput(Vertex* entry)
 {
-    FileFunctoid* path_obj = dynamic_cast<FileFunctoid*>(entry);
+    FileVertex* path_obj = dynamic_cast<FileVertex*>(entry);
     if(path_obj && (path_obj->GetFullPath()==LibraryPath))
         return true;
     return false;
 }
 
 
-Functoid* HandAppLoader::Produce(Functoid* ignore)
+Vertex* HandAppLoader::Produce(Vertex* ignore)
 {
 //    path_obj->Add(Create());
     return Create();
 }
 
 
-void HandAppLoader::TakeBack(Functoid* app)
+void HandAppLoader::TakeBack(Vertex* app)
 {
     HandApp* casted = dynamic_cast<HandApp*>(app);
     if(Destroy && casted)
@@ -128,9 +128,9 @@ HandAppLoader_Factory::HandAppLoader_Factory() : Factory("Library Loader",
 
 
 
-bool HandAppLoader_Factory::IsValidInput(Functoid* entry)
+bool HandAppLoader_Factory::IsValidInput(Vertex* entry)
 {
-    FileFunctoid* ff = dynamic_cast<FileFunctoid*>(entry);
+    FileVertex* ff = dynamic_cast<FileVertex*>(entry);
     if(!ff)
         return false;
 
@@ -141,9 +141,9 @@ bool HandAppLoader_Factory::IsValidInput(Functoid* entry)
 }
 
 
-Functoid* HandAppLoader_Factory::Produce(Functoid* input)
+Vertex* HandAppLoader_Factory::Produce(Vertex* input)
 {
-    FileFunctoid* path_obj = dynamic_cast<FileFunctoid*>(input);
+    FileVertex* path_obj = dynamic_cast<FileVertex*>(input);
     if(!path_obj)
         return NULL;
     HandAppLoader* ret = new HandAppLoader(path_obj);
@@ -156,7 +156,7 @@ Functoid* HandAppLoader_Factory::Produce(Functoid* input)
 }
 
 
-void HandAppLoader_Factory::TakeBack(Functoid* product)
+void HandAppLoader_Factory::TakeBack(Vertex* product)
 {
     // TODO: shouldn't delete objects of derived classes
     if(dynamic_cast<HandAppLoader*>(product))

@@ -35,7 +35,7 @@ TextLayer::~TextLayer()
 }
 
 
-void TextLayer::Configure(Functoid* sub_layout)
+void TextLayer::Configure(Vertex* sub_layout)
 {
     // Never called
 }
@@ -46,7 +46,7 @@ void TextLayer::Configure(Functoid* sub_layout)
 // ----------------------------------------------------------------
 
 
-bool TextLayerFactory::IsValidInput(Functoid* input)
+bool TextLayerFactory::IsValidInput(Vertex* input)
 {
     if(input)
         return true;
@@ -54,14 +54,14 @@ bool TextLayerFactory::IsValidInput(Functoid* input)
 }
 
 
-Functoid* TextLayerFactory::Produce(Functoid* descriptor)
+Vertex* TextLayerFactory::Produce(Vertex* descriptor)
 {
     Layer* ret = new TextLayer();
     return ret;
 }
 
 
-void TextLayerFactory::TakeBack(Functoid* product)
+void TextLayerFactory::TakeBack(Vertex* product)
 {
     // TODO: shouldn't delete objects of derived classes
     if(dynamic_cast<TextLayer*>(product))

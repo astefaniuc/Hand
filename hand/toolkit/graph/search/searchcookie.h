@@ -20,35 +20,35 @@
 #ifndef HAND_SEARCHCOOKIE_H
 #define HAND_SEARCHCOOKIE_H
 
-#include "graph/functoidlist.h"
+#include "graph/list.h"
 
 
 #define SEARCHCOOKIE "SearchCookie"
 
-class FunctoidSearch;
+class VertexSearch;
 
-class SearchCookie : public FunctoidList
+class SearchCookie : public List
 {
     public:
         SearchCookie();
         virtual ~SearchCookie();
-        virtual bool IsOpen(FunctoidSearch* search);
-        virtual bool Add(Functoid* child);
+        virtual bool IsOpen(VertexSearch* search);
+        virtual bool Add(Vertex* child);
         // Detaches cookie from Target
-        virtual bool Detach(Functoid* ignore);
-        Functoid* Target;
+        virtual bool Detach(Vertex* ignore);
+        Vertex* Target;
         SearchCookie* Parent;
         bool IsDeadBranch;
 };
 
 
-class Pool : public FunctoidList
+class Pool : public List
 {
     public:
-        Pool() : FunctoidList("SearchCookiePool"){};
+        Pool() : List("SearchCookiePool"){};
         virtual ~Pool(){};
-        Functoid* Get();
-        void Take(Functoid* cookie);
+        Vertex* Get();
+        void Take(Vertex* cookie);
 };
 
 #endif /* HAND_SEARCHCOOKIE_H */

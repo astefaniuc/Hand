@@ -14,16 +14,16 @@ class FindTester : public HandApp
         void TestDelete();
         void TestFindBigTree();
     private:
-        Functoid* Build(Functoid* entry,
+        Vertex* Build(Vertex* entry,
                    int depth,
                    int width,
                    string& last_type);
-        Functoid* _Build(Functoid* entry,
+        Vertex* _Build(Vertex* entry,
                     int depth,
                     int width,
                     string type);
-        Functoid* TestFind(string name, string type, bool relation);
-        bool CheckFound(Functoid* expected, Functoid* found);
+        Vertex* TestFind(string name, string type, bool relation);
+        bool CheckFound(Vertex* expected, Vertex* found);
 };
 
 #endif /* HANDAPP_TEST2_H */

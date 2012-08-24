@@ -26,7 +26,7 @@
 
 #define URISCHEME_FILE "file://"
 #define RELATION_PARENT_PATH "RELATION_PARENT_PATH"
-#define FILEFUNCTOID "FileFunctoid"
+#define FILEFUNCTOID "FileVertex"
 
 
 class DirectoryLoader : public Factory
@@ -38,37 +38,37 @@ class DirectoryLoader : public Factory
                                     URISCHEME_FILE){};
         ~DirectoryLoader();
 
-        virtual Functoid* Produce(Functoid* descriptor);
-        virtual void TakeBack(Functoid* product);
+        virtual Vertex* Produce(Vertex* descriptor);
+        virtual void TakeBack(Vertex* product);
 
-        bool IsValidInput(Functoid* input);
+        bool IsValidInput(Vertex* input);
 };
 
 
-class FileFunctoid : public FunctoidList
+class FileVertex : public List
 {
     public:
-        FileFunctoid(std::string file);
-        virtual ~FileFunctoid(){};
+        FileVertex(std::string file);
+        virtual ~FileVertex(){};
 
         std::string GetFullPath();
         boost::filesystem::path GetPath();
 };
 
 
-class FileFunctoid_Factory : public Factory
+class FileVertex_Factory : public Factory
 {
     public:
-        FileFunctoid_Factory() : Factory("FileFunctoid_Factory",
+        FileVertex_Factory() : Factory("FileVertex_Factory",
                                  DATA_STRING,
                                  FILEFUNCTOID,
                                  URISCHEME_FILE){};
-        virtual ~FileFunctoid_Factory(){};
+        virtual ~FileVertex_Factory(){};
 
-        Functoid* Produce(Functoid* input);
-        void TakeBack(Functoid* product);
+        Vertex* Produce(Vertex* input);
+        void TakeBack(Vertex* product);
 
-        bool IsValidInput(Functoid* input);
+        bool IsValidInput(Vertex* input);
 };
 
 #endif /* HAND_FILESYSTEM_H */

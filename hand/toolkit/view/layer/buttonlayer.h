@@ -28,19 +28,19 @@ class ButtonLayer : public Layer
     public:
         ButtonLayer();
         ~ButtonLayer(void);
-        void SetContent(Functoid*);
+        void SetContent(Vertex*);
         // Reacting on user input
         void PressGui(void);
         void ReleaseGui(void);
     protected:
-        virtual void Configure(Functoid* parent_layout);
+        virtual void Configure(Vertex* parent_layout);
 
     private:
         void SetExpandable(void);
-        bool ExpandList(Functoid* ignore);
+        bool ExpandList(Vertex* ignore);
 
         uint VisibleItems;
-        Functoid* FunctionBox;
+        Vertex* FunctionBox;
 };
 
 
@@ -52,10 +52,10 @@ class ButtonLayerFactory : public Factory
                                        BUTTONLAYER, ""){};
         ~ButtonLayerFactory(){};
 
-        bool IsValidInput(Functoid* input);
+        bool IsValidInput(Vertex* input);
 
-        Functoid* Produce(Functoid* input);
-        void TakeBack(Functoid* product);
+        Vertex* Produce(Vertex* input);
+        void TakeBack(Vertex* product);
 };
 
 #endif /* HAND_BUTTONLAYER_H */

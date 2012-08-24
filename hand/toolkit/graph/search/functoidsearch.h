@@ -21,18 +21,18 @@
 #ifndef HAND_FUNCTOIDSEARCH_H
 #define HAND_FUNCTOIDSEARCH_H
 
-#include "graph/functoidlist.h"
+#include "graph/list.h"
 #include "graph/search/searchexpression.h"
 
 
 class SearchCookie;
 class Pool;
 
-class FunctoidSearch : public FunctoidList
+class VertexSearch : public List
 {
     public:
-        FunctoidSearch();
-        virtual ~FunctoidSearch();
+        VertexSearch();
+        virtual ~VertexSearch();
     protected:
         virtual void InitVars();
     public:
@@ -48,12 +48,12 @@ class FunctoidSearch : public FunctoidList
         void SetSearchRelation(std::string s, bool make_regex=false);
         SearchExpression* GetSearchRelation();
         virtual std::string GetCookieName();
-        virtual bool Search(Functoid* target);
+        virtual bool Search(Vertex* target);
     protected:
-        virtual bool Matches(Functoid* target);
+        virtual bool Matches(Vertex* target);
         bool Step(SearchCookie* path);
         bool SearchAllChilds(SearchCookie* trail_end);
-        void ExtendPath(Functoid* tree_node, SearchCookie* path_end);
+        void ExtendPath(Vertex* tree_node, SearchCookie* path_end);
         bool MarkDeathBranch(SearchCookie* branch);
         void DecomposeDeathBranches(SearchCookie* branch);
         SearchExpression* AddSearchExpression(std::string name,
@@ -61,8 +61,8 @@ class FunctoidSearch : public FunctoidList
                                               bool make_regex);
     public:
         // Result setter and getter
-        void AddFinding(Functoid* finding);
-        Functoid* GetFindings();
+        void AddFinding(Vertex* finding);
+        Vertex* GetFindings();
     protected:
         // Quick links
         SearchExpression* SearchName;
@@ -70,7 +70,7 @@ class FunctoidSearch : public FunctoidList
         SearchExpression* SearchRelation;
         Pool* CookiePool;
     protected:
-        Functoid* Findings;
+        Vertex* Findings;
     public:
         // TODO: GUI display?
         uint MaxDepth;

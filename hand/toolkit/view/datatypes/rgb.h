@@ -20,14 +20,14 @@
 #ifndef HAND_RGB_H
 #define HAND_RGB_H
 
-#include "graph/functoidlist.h"
+#include "graph/list.h"
 #include <SDL/SDL.h>
 
 
 #define RGB "RGB"
 
 
-class Rgb : public Functoid
+class Rgb : public Vertex
 {
     public:
         Rgb(std::string name, Uint8 r_, Uint8 g_, Uint8 b_);
@@ -40,8 +40,8 @@ class Rgb : public Functoid
 };
 
 
-// Helper func for extracting a Rgb from a Functoid tree
-Rgb* GetRgb(std::string rgb_name, Functoid* from_tree);
+// Helper func for extracting a Rgb from a Vertex tree
+Rgb* GetRgb(std::string rgb_name, Vertex* from_tree);
 
 
 #endif /* HAND_RGB_H */

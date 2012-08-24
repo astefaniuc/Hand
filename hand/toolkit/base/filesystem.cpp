@@ -28,7 +28,7 @@ using namespace std;
 using namespace boost::filesystem;
 
 
-bool FileFunctoid_Factory::IsValidInput(Functoid* input)
+bool FileVertex_Factory::IsValidInput(Vertex* input)
 {
     // Very basic check here
     Note* d_path = dynamic_cast<Note*>(input);
@@ -41,18 +41,18 @@ bool FileFunctoid_Factory::IsValidInput(Functoid* input)
 }
 
 
-Functoid* FileFunctoid_Factory::Produce(Functoid* descriptor)
+Vertex* FileVertex_Factory::Produce(Vertex* descriptor)
 {
     Note* d_path = dynamic_cast<Note*>(descriptor);
     if(!d_path)
         return NULL;
-    return new FileFunctoid(d_path->Get());
+    return new FileVertex(d_path->Get());
 }
 
 
-void FileFunctoid_Factory::TakeBack(Functoid* product)
+void FileVertex_Factory::TakeBack(Vertex* product)
 {
-    if(dynamic_cast<FileFunctoid*>(product))
+    if(dynamic_cast<FileVertex*>(product))
         delete(product);
 }
 
@@ -62,7 +62,7 @@ void FileFunctoid_Factory::TakeBack(Functoid* product)
 // ----------------------------------------------------------------
 
 
-FileFunctoid::FileFunctoid(string file_name) : FunctoidList(file_name)
+FileVertex::FileVertex(string file_name) : List(file_name)
 {
     SetType(FILEFUNCTOID);
     if(file_name.find(URISCHEME_FILE) == 0)
@@ -73,7 +73,7 @@ FileFunctoid::FileFunctoid(string file_name) : FunctoidList(file_name)
     if(is_regular_file(file_path))
     {
         if(file_path.has_parent_path())
-            Get(RELATION_PARENT_PATH)->Set(new FileFunctoid(file_path.parent_path().string()));
+            Get(RELATION_PARENT_PATH)->Set(new FileVertex(file_path.parent_path().string()));
 
         SetName(file_path.filename().string());
     }
@@ -82,20 +82,20 @@ FileFunctoid::FileFunctoid(string file_name) : FunctoidList(file_name)
 }
 
 
-string FileFunctoid::GetFullPath()
+string FileVertex::GetFullPath()
 {
     return GetPath().string();
 }
 
 
-path FileFunctoid::GetPath()
+path FileVertex::GetPath()
 {
     path _path;
     // Get directory information from parent path
-    Functoid* dir_rel = Get(RELATION_PARENT_PATH);
+    Vertex* dir_rel = Get(RELATION_PARENT_PATH);
     if(dir_rel)
     {
-        FileFunctoid* parent_path = dynamic_cast<FileFunctoid*>(dir_rel->Get(1));
+        FileVertex* parent_path = dynamic_cast<FileVertex*>(dir_rel->Get(1));
         if(parent_path)
             _path = parent_path->GetPath();
     }
@@ -119,19 +119,19 @@ DirectoryLoader::~DirectoryLoader()
 }
 
 
-bool  DirectoryLoader::IsValidInput(Functoid* entry)
+bool  DirectoryLoader::IsValidInput(Vertex* entry)
 {
-    FileFunctoid* ff = dynamic_cast<FileFunctoid*>(entry);
+    FileVertex* ff = dynamic_cast<FileVertex*>(entry);
     if(ff && is_directory(ff->GetPath()))
         return true;
     return false;
 }
 
 
-Functoid*  DirectoryLoader::Produce(Functoid* dir_obj)
+Vertex*  DirectoryLoader::Produce(Vertex* dir_obj)
 {
-    Functoid* ret = NULL;
-    FileFunctoid* ff_dir = dynamic_cast<FileFunctoid*>(dir_obj);
+    Vertex* ret = NULL;
+    FileVertex* ff_dir = dynamic_cast<FileVertex*>(dir_obj);
     if(!ff_dir)
         return ret;
     path dir_path = ff_dir->GetPath();
@@ -141,14 +141,14 @@ Functoid*  DirectoryLoader::Produce(Functoid* dir_obj)
     directory_iterator end;
     // (Re-)read the themes in
     ff_dir->Reset();
-    FileFunctoid* file;
+    FileVertex* file;
     for(directory_iterator dir_it(dir_path); dir_it!=end; dir_it++)
     {
         if(is_regular_file(dir_it->status()))
         {
             if(dir_it->path().extension() == LIBRARY_FILE_EXTENSION)
             {
-                file = new FileFunctoid(dir_it->path().filename().string());
+                file = new FileVertex(dir_it->path().filename().string());
                 file->Get(RELATION_PARENT_PATH)->Set(ff_dir);
                 ff_dir->Add(file);
                 // Set return value != NULL
@@ -164,9 +164,9 @@ Functoid*  DirectoryLoader::Produce(Functoid* dir_obj)
 }
 
 
-void DirectoryLoader::TakeBack(Functoid* dir_obj)
+void DirectoryLoader::TakeBack(Vertex* dir_obj)
 {
-    FileFunctoid* ff_dir = dynamic_cast<FileFunctoid*>(dir_obj);
+    FileVertex* ff_dir = dynamic_cast<FileVertex*>(dir_obj);
     if(ff_dir && is_directory(ff_dir->GetPath()))
         ff_dir->Reset();
 }

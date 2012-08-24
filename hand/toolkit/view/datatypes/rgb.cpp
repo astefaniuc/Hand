@@ -24,7 +24,7 @@
 using namespace std;
 
 
-Rgb::Rgb(string name, Uint8 r_, Uint8 g_, Uint8 b_) : Functoid(name)
+Rgb::Rgb(string name, Uint8 r_, Uint8 g_, Uint8 b_) : Vertex(name)
 {
     SetType(RGB);
     // For now add plain data directly
@@ -45,9 +45,9 @@ void Rgb::Reset()
 }
 
 
-Rgb* GetRgb(string name, Functoid* tree)
+Rgb* GetRgb(string name, Vertex* tree)
 {
-    FunctoidSearch search;
+    VertexSearch search;
     search.SetSearchName(name);
     search.SetSearchType(RGB);
     if(search.Search(tree))

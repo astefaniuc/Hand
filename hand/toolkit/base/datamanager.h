@@ -35,15 +35,15 @@ class Persistence : public Factory
 {
     public:
         Persistence() : Factory("Persistence",
-                                FUNCTOIDLIST,
-                                FUNCTOIDLIST,
+                                LIST,
+                                LIST,
                                 URI_SETTINGS){};
         virtual ~Persistence(){};
 
-        Functoid* Produce(Functoid* descriptor);
-        void TakeBack(Functoid* product);
+        Vertex* Produce(Vertex* descriptor);
+        void TakeBack(Vertex* product);
 
-        bool IsValidInput(Functoid* input);
+        bool IsValidInput(Vertex* input);
 };
 
 #endif /* HAND_DATAMANAGER_H */

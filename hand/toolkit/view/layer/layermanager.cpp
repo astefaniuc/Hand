@@ -66,15 +66,15 @@ void LayerManager::Init()
     SetName("System");
 
     // Theme menu
-    FunctoidList* theme_menu = new FunctoidList(THEMES_MENU);
+    List* theme_menu = new List(THEMES_MENU);
     Add(theme_menu);
     // The path to the theme files
-    FunctoidList* theme_dir = new FileFunctoid(THEMES_DIRECTORY);
+    List* theme_dir = new FileVertex(THEMES_DIRECTORY);
     theme_menu->Add(theme_dir);
     // Add a method to create a menu with the themes one HD
-    theme_menu->Add(new Callback<LayerManager>(THEMES_MENU, this, &LayerManager::GetAllThemes));
+    theme_menu->Add(new Method<LayerManager>(THEMES_MENU, this, &LayerManager::GetAllThemes));
     // The default theme (to be loaded) (TODO: get this from persistent object)
-    FunctoidList* curr_theme = new FileFunctoid(DEFAULT_THEME);
+    List* curr_theme = new FileVertex(DEFAULT_THEME);
     // Add the default theme to the theme folder (without scanning if it really is there)
     theme_dir->Add(curr_theme);
     curr_theme->Get(RELATION_PARENT_PATH)->Set(theme_dir);
@@ -83,7 +83,7 @@ void LayerManager::Init()
 
 
     // Add the exit function to the tree of available funcs
-    Add(new Callback<LayerManager>("Exit", this, &LayerManager::Exit));
+    Add(new Method<LayerManager>("Exit", this, &LayerManager::Exit));
 
     // Request command at highest level
     GetCommand(Get("Exit"), _InputState->GetNumberOfKeys());
@@ -94,19 +94,19 @@ void LayerManager::Init()
 }
 
 
-void LayerManager::LoadAppInterface(Functoid* tree, bool make_default)
+void LayerManager::LoadAppInterface(Vertex* tree, bool make_default)
 {
     if(tree == NULL)
         return;
 
-    // Insert to the local Functoid tree
+    // Insert to the local Vertex tree
     Add(tree); // or Attach()?
     if(make_default)
         Layer::SetContent(tree);
 }
 
 
-bool LayerManager::UnloadAppInterface(Functoid* functoid)
+bool LayerManager::UnloadAppInterface(Vertex* functoid)
 {
     delete(functoid);
     return true;
@@ -122,12 +122,12 @@ bool LayerManager::Update(bool forced)
 }
 
 
-Functoid* LayerManager::GetCommandList(Functoid* menu)
+Vertex* LayerManager::GetCommandList(Vertex* menu)
 {
-    FunctoidList* menu_list = dynamic_cast<FunctoidList*>(menu);
+    List* menu_list = dynamic_cast<List*>(menu);
     if(!menu_list)
         return NULL;
-    Functoid* child;
+    Vertex* child;
     for(uint i=0; i<menu_list->size(); i++)
     {
         child = menu_list->at(i);
@@ -147,7 +147,7 @@ void LayerManager::SetScreen(SDL_Surface* screen)
 }
 
 
-bool LayerManager::GetCommand(Functoid* f, int level)
+bool LayerManager::GetCommand(Vertex* f, int level)
 {
     Layer* l = CreateLayer(f, BUTTONLAYER);
     return GetCommand(l, level);
@@ -162,7 +162,7 @@ bool LayerManager::GetCommand(Layer* l, int level)
 }
 
 
-bool LayerManager::Exit(Functoid* content)
+bool LayerManager::Exit(Vertex* content)
 {
     content = GetContent();
     // Check if the default location is currently active
@@ -199,7 +199,7 @@ void LayerManager::SetDevice(Device* device)
 }
 
 
-bool LayerManager::Request(Functoid* request)
+bool LayerManager::Request(Vertex* request)
 {
     NextRequest = request;
 
@@ -209,7 +209,7 @@ bool LayerManager::Request(Functoid* request)
 }
 
 
-bool LayerManager::LoadTheme(Functoid* f)
+bool LayerManager::LoadTheme(Vertex* f)
 {
 /* This would be the proper solution but gives link error:
  * undefined reference to `typeinfo for Theme'
@@ -226,19 +226,19 @@ bool LayerManager::LoadTheme(Functoid* f)
 }
 
 
-bool LayerManager::GetAllThemes(Functoid* themes_dir)
+bool LayerManager::GetAllThemes(Vertex* themes_dir)
 {
     // (Re-)read the list of available themes
-    FunctoidList* themes_list = dynamic_cast<FunctoidList*>(Server()->Produce(themes_dir, FILEFUNCTOID));
+    List* themes_list = dynamic_cast<List*>(Server()->Produce(themes_dir, FILEFUNCTOID));
     if(!themes_list)
         return false;
 
     // Set switching theme callback to all found themes
-    Functoid* loader = new Callback<LayerManager>(THEMES_MENU, this, &LayerManager::LoadTheme);
-    FileFunctoid* file;
+    Vertex* loader = new Method<LayerManager>(THEMES_MENU, this, &LayerManager::LoadTheme);
+    FileVertex* file;
     for (uint i=0; i<themes_list->size(); i++)
     {
-        file = dynamic_cast<FileFunctoid*>(themes_list->at(i));
+        file = dynamic_cast<FileVertex*>(themes_list->at(i));
         if(file)
             file->Add(loader);
     }
@@ -247,7 +247,7 @@ bool LayerManager::GetAllThemes(Functoid* themes_dir)
 }
 
 
-bool LayerManager::Expand(Functoid* to_expand)
+bool LayerManager::Expand(Vertex* to_expand)
 {
     /*// Does it have a Layer attached?
     Layer* new_view = GetAttachedLayer(to_expand);
@@ -306,7 +306,7 @@ void LayerManager::RegisterLayerFactory(Factory* target)
 }
 
 
-string LayerManager::GetContentType(Functoid* target)
+string LayerManager::GetContentType(Vertex* target)
 {
     Factory* f = LayerTopos->GetFactory(target);
     if(f)
@@ -315,14 +315,14 @@ string LayerManager::GetContentType(Functoid* target)
 }
 
 
-Layer* LayerManager::CreateLayer(Functoid* content, string layer_type)
+Layer* LayerManager::CreateLayer(Vertex* content, string layer_type)
 {
     if(layer_type.empty())
         return NULL;
 
     if(layer_type == "Any")
     {
-        Functoid* attached_layout = content->Get(RELATION, "Layout");
+        Vertex* attached_layout = content->Get(RELATION, "Layout");
         if(attached_layout)
             layer_type = attached_layout->Get(1)->GetType();
         else

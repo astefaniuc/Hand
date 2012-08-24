@@ -30,7 +30,7 @@ class TextLayer : public virtual Layer
         ~TextLayer();
 //        void SetLayout(string type, uint position);
     protected:
-        virtual void Configure(Functoid* parent_layout);
+        virtual void Configure(Vertex* parent_layout);
 };
 
 
@@ -42,10 +42,10 @@ class TextLayerFactory : public Factory
                                      TEXTLAYER, ""){};
         ~TextLayerFactory(){};
 
-        bool IsValidInput(Functoid* input);
+        bool IsValidInput(Vertex* input);
 
-        Functoid* Produce(Functoid* input);
-        void TakeBack(Functoid* product);
+        Vertex* Produce(Vertex* input);
+        void TakeBack(Vertex* product);
 };
 
 #endif /* HAND_TEXTLAYER_H */

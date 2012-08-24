@@ -33,17 +33,17 @@ enum alignment
 class Rgb;
 class Rect;
 
-class Layout : public FunctoidList
+class Layout : public List
 {
     public:
         Layout(std::string name, std::string type);
         virtual ~Layout(){};
 //        void Reset();
 
-        FunctoidList* GetField(std::string position);
-        FunctoidList* AddField(std::string name, std::string type);
-        void AddForUpdate(Functoid* sublayout);
-        bool Execute(Functoid* surface);
+        List* GetField(std::string position);
+        List* AddField(std::string name, std::string type);
+        void AddForUpdate(Vertex* sublayout);
+        bool Execute(Vertex* surface);
         void Reset();
 };
 
@@ -51,7 +51,7 @@ class Layout : public FunctoidList
 template <class I>
 class LayoutFactory : public Factory
 {
-    typedef bool (I::*Method)(Functoid*);
+    typedef bool (I::*Method)(Vertex*);
 
     public:
         LayoutFactory(std::string output_type, I* theme, Method func) :
@@ -62,7 +62,7 @@ class LayoutFactory : public Factory
         };
         virtual ~LayoutFactory(){};
 
-        Functoid* Produce(Functoid* in_out)
+        Vertex* Produce(Vertex* in_out)
         {
             Layout* descr = dynamic_cast<Layout*>(in_out);
             if(!descr || !descr->IsType(GetInputType()))
@@ -72,12 +72,12 @@ class LayoutFactory : public Factory
             return in_out;
         };
 
-        void TakeBack(Functoid* product)
+        void TakeBack(Vertex* product)
         {
             delete(product);
         };
 
-        bool IsValidInput(Functoid* input)
+        bool IsValidInput(Vertex* input)
         {
             Layout* descr = dynamic_cast<Layout*>(input);
             if(!descr)
@@ -88,14 +88,14 @@ class LayoutFactory : public Factory
     private:
         Method Function;
         I* Producer;
-        Data<Functoid*>* Container;
+        Data<Vertex*>* Container;
 };
 
 
 template <class I>
 class PropertyFactory : public Factory
 {
-    typedef bool (I::*Method)(Functoid*);
+    typedef bool (I::*Method)(Vertex*);
 
     public:
     PropertyFactory(std::string output_type, I* theme, Method func) :
@@ -103,16 +103,16 @@ class PropertyFactory : public Factory
         {
             Producer = theme;
             Function = func;
-            Container = new Data<Functoid*>("Container", NULL);
+            Container = new Data<Vertex*>("Container", NULL);
         };
         virtual ~PropertyFactory(){};
 
-        Functoid* Produce(Functoid* in_out)
+        Vertex* Produce(Vertex* in_out)
         {
             Link* descr = dynamic_cast<Link*>(in_out);
             if(!descr || !descr->IsType(GetInputType()))
                 return NULL;
-            Functoid* layout = descr->Get(1);
+            Vertex* layout = descr->Get(1);
             // Already initialized?
             if(layout)
                 return layout;
@@ -122,12 +122,12 @@ class PropertyFactory : public Factory
             return layout;
         };
 
-        void TakeBack(Functoid* product)
+        void TakeBack(Vertex* product)
         {
             delete(product);
         };
 
-        bool IsValidInput(Functoid* input)
+        bool IsValidInput(Vertex* input)
         {
             Link* descr = dynamic_cast<Link*>(input);
             if(!descr)
@@ -138,7 +138,7 @@ class PropertyFactory : public Factory
     private:
         Method Function;
         I* Producer;
-        Data<Functoid*>* Container;
+        Data<Vertex*>* Container;
 };
 
 #endif /* HAND_LAYOUT_H */
