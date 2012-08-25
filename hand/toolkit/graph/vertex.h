@@ -54,10 +54,10 @@ class Vertex : public std::vector<Vertex*>
         virtual bool Attach(Vertex* sub);
 
         // Removes the reference to 'item' but keeps item alive
-        virtual bool Detach(Vertex* item);
+        bool Detach(Vertex* item);
         // Removes the reference to 'item' and deletes the object if it
         // is the owner
-        virtual bool Delete(Vertex* child);
+        bool Delete(Vertex* child);
 
         // Get the first sub-item by name.
         // If the item doesn't exist it returns a new Relation vertex;
@@ -67,8 +67,7 @@ class Vertex : public std::vector<Vertex*>
         // it returns NULL; the parameters can be set to ANY e.g.
         // Get(ANY, ANY) returns the first stored item
         virtual Vertex* Get(std::string name, std::string type);
-        // Interface to method defined in a derived class; returns always
-        // NULL in this base class
+        // Get the child by position, 1-based
         virtual Vertex* Get(uint item);
 
         // Simple iterative deepening depth-first search.
@@ -80,23 +79,23 @@ class Vertex : public std::vector<Vertex*>
         virtual Vertex* Find(RegularExpression* expression);
 
         // Set "name" with or without uri scheme
-        virtual void SetName(std::string name);
+        void SetName(std::string name);
         // Get the name without uri scheme
-        virtual std::string& GetName();
+        std::string& GetName();
         // Get the name with uri scheme
         virtual std::string GetUriString();
 
-        virtual void SetType(std::string type);
+        void SetType(std::string type);
         // Returns the last set type
-        virtual std::string GetType();
-        virtual bool IsType(std::string type);
-        virtual bool IsType(RegularExpression* type);
+        std::string GetType();
+        bool IsType(std::string type);
+        bool IsType(RegularExpression* type);
 
         // Set object owner (for memory management).
         // Owner is stored under OWNER
-        virtual void SetOwner(Vertex* owner);
+        void SetOwner(Vertex* owner);
         // Returns true if 'caller' is the owner or if no owner is registered
-        virtual bool HasOwner(Vertex* caller);
+        bool HasOwner(Vertex* caller);
 
         // Detach all objects not owned
         virtual void Reset();

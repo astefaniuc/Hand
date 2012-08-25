@@ -24,29 +24,9 @@
 using namespace std;
 
 
-Link::Link(string name, string type, bool is_multi) : List(name)
+Link::Link(string name, string type) : List(name)
 {
-    IsMulti = is_multi;
     SetType(type);
-}
-
-
-bool Link::Set(Vertex* val)
-{
-    if(!IsMulti && (size()>1))
-        // TODO: delete or don't the linked element?
-        pop_back();
-    return Vertex::Set(val);
-}
-
-
-bool Link::Add(Vertex* val)
-{
-    if(IsMulti)
-        return Add(val);
-    if(size() > 1)
-        return false;
-    return Vertex::Add(val);
 }
 
 
@@ -61,25 +41,6 @@ bool Link::Execute(Vertex* vs)
 }
 
 
-void Link::MakeMultiLink(bool cond)
-{
-    if(IsMulti == cond)
-        return;
-    if(IsMulti)
-        while(size() > 2)
-            // TODO: delete or don't the linked elements?
-            pop_back();
-
-    IsMulti = cond;
-}
-
-
-bool Link::IsMultiLink()
-{
-    return IsMulti;
-}
-
-
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
@@ -91,10 +52,10 @@ Relation::Relation(string name) : List(name)
 }
 
 
-bool Relation::Set(Vertex* item)
+bool Relation::Set(Vertex* target)
 {
-    Reset();
-    push_back(item);
+    List::Reset();
+    return List::Set(target);
     return true;
 }
 

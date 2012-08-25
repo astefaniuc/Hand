@@ -23,29 +23,26 @@
 #include "graph/vertex.h"
 
 
+// Keeps a list of "public" elements in a clean(*) child vertex
+// under PUBLICLIST.
+//
+// (*) no type or runtime info
+//
 class List : public Vertex
 {
     public:
         List(std::string name);
-        virtual ~List();
+        virtual ~List(){};
 
-        // Get the child by name
+        // Overloads of the public interface of the Vertex class
+        // to operate on the list elements
+        virtual bool Add(Vertex* child);
+        virtual bool Set(Vertex* sub);
+        virtual bool Attach(Vertex* sub);
         virtual Vertex* Get(std::string child);
         virtual Vertex* Get(std::string type, std::string name);
-        // Get the child by position, 1-based; Element '0' stores
-        // hidden system information e.g. type and layout.
         virtual Vertex* Get(uint child);
-
-        virtual void SetType(std::string type);
-        virtual std::string GetType();
-        virtual bool IsType(std::string type);
-        virtual bool IsType(RegularExpression* type);
-
-        // Set object owner (for memory management)
-        virtual void SetOwner(Vertex* owner);
-        virtual bool HasOwner(Vertex* caller);
-
-        // Remove all public children
+        // Removes the complete PUBLICLIST vertex
         virtual void Reset();
 };
 

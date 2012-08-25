@@ -34,12 +34,14 @@
 #define NOTE "Ss"
 
 
-// Reserved tags/names for Vertex elements
+// Names of "runtime" Vertex elements
 #define OWNER "OWNER"
 #define TYPE "TYPE"
-#define ANY "*"
-#define RUNTIME 0
+#define PUBLICLIST "PublicList"
 
+
+// Wildcard for Get(type, name)
+#define ANY "*"
 // Arbitrary search depth (should be big enough to find everything
 // and small enough to return fast from circles)
 #define MAX_SEARCH_DEPTH 1024

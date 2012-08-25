@@ -18,9 +18,6 @@
  */
 
 #include "graph/list.h"
-#include "graph/link.h"
-#include "graph/search/regularexpression.h"
-//#include "factory.h"
 
 
 using namespace std;
@@ -28,116 +25,71 @@ using namespace std;
 
 List::List(string name) : Vertex(name)
 {
-    // Reserve the first list entry for runtime information
-    Attach(new Vertex("Runtime"));
+    /*
+       Delayed initialization of the public list,
+       allows initialization with a customized list
+    */
+
     SetType(LIST);
 }
 
 
-List::~List()
+bool List::Add(Vertex* child)
 {
-    // Don't delete the parent(s); same source code as in ~Vertex()
-    // because that destructor doesn't calls the overloaded method
-    Vertex* p = Get(RELATION, OWNER);
-    // Reset() doesn't work here
-    if(p && (p->size()== 2))
-        p->pop_back();
+    return List::Get(PUBLICLIST)->Add(child);
+}
+
+
+bool List::Set(Vertex* child)
+{
+    return List::Get(PUBLICLIST)->Set(child);
+}
+
+
+bool List::Attach(Vertex* child)
+{
+    return List::Get(PUBLICLIST)->Attach(child);
 }
 
 
 Vertex* List::Get(string s)
 {
-    // Search public elements
-    Vertex* ret = Vertex::Get(ANY, s);
-    if(ret)
-        return ret;
-    // Search hidden elements
-    ret = Get(RUNTIME)->Get(ANY, s);
-    if(ret)
-        return ret;
-    // Return a new public relation
-    ret = new Relation(s);
-    Add(ret);
-    return ret;
+    if(s == PUBLICLIST)
+    {
+        VertexIterator curr;
+        VertexIterator _end = end();
+        for(curr=begin(); curr!=_end; curr++)
+            if((*curr)->GetName() == s)
+                return (*curr);
+
+        // Avoid endless recursion: Vertex + Attach
+        Vertex* r = new Vertex(s);
+        Vertex::Attach(r);
+        return r;
+    }
+
+    return List::Get(PUBLICLIST)->Get(s);
 }
 
 
 Vertex* List::Get(uint i)
 {
-    if(i < size())
-        return at(i);
-    return NULL;
+    return List::Get(PUBLICLIST)->Get(i);
 }
 
 
 Vertex* List::Get(string type, string name)
 {
-    Vertex* ret = Vertex::Get(type, name);
-    if(!ret)
-        return Get(RUNTIME)->Vertex::Get(type, name);
-    return ret;
-}
-
-
-void List::SetType(string type)
-{
-    if(type != "")
-        Get(RUNTIME)->SetType(type);
-}
-
-
-string List::GetType()
-{
-    return Get(RUNTIME)->GetType();
-}
-
-
-bool List::IsType(string type)
-{
-    return Get(RUNTIME)->IsType(type);
-}
-
-
-bool List::IsType(RegularExpression* se)
-{
-    return Get(RUNTIME)->IsType(se);
-}
-
-
-void List::SetOwner(Vertex* owner)
-{
-    Get(RUNTIME)->SetOwner(owner);
-}
-
-
-bool List::HasOwner(Vertex* caller)
-{
-    return Get(RUNTIME)->HasOwner(caller);
+    return List::Get(PUBLICLIST)->Get(type, name);
 }
 
 
 void List::Reset()
 {
-    VertexIterator curr = begin();
-    // Don't delete the runtime info
-    curr++;
-    while(curr!=end())
+    Vertex* pl = List::Get(ANY, PUBLICLIST);
+    if(pl)
     {
-        if((*curr)->HasOwner(this))
-            delete((*curr));
-        erase(curr);
+        Detach(pl);
+        delete(pl);
     }
 }
-
-/*
-Factory* List::GetFactory()
-{
-    Search search;
-    search.MaxDepth = 2;
-    search.SetSearchRelation(RELATION_PRODUCER);
-    search.SetSearchType(FACTORY);
-    if(search.Search(this))
-        return dynamic_cast<Factory*>(search.GetFindings());
-    return NULL;
-}
-*/

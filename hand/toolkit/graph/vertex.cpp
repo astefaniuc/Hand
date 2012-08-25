@@ -113,7 +113,7 @@ Vertex* Vertex::Get(string s)
             return (*curr);
 
     Relation* r = new Relation(s);
-    Add(r);
+    Vertex::Add(r);
     return r;
 }
 
@@ -147,16 +147,22 @@ Vertex* Vertex::Get(string type, string name)
 }
 
 
-Vertex* Vertex::Get(uint child)
+Vertex* Vertex::Get(uint i)
 {
-    // Reserved for the List class
+    // 1-based
+    if(i == 0)
+        //return NULL;
+        exit(666);
+    --i;
+    if(i < size())
+        return at(i);
     return NULL;
 }
 
 
 bool Vertex::Delete(Vertex* child)
 {
-    Detach(child);
+    Vertex::Detach(child);
     if(child->HasOwner(this))
     {
         delete(child);
@@ -189,6 +195,7 @@ Vertex* Vertex::Find(string name, int max_depth)
     Vertex* result = NULL;
     while(depth <= max_depth)
     {
+        // Allow call of overloaded _Find
         result = _Find(name, depth);
 
         if(result)
@@ -218,7 +225,7 @@ Vertex* Vertex::_Find(string name, int depth)
     --depth;
     for(uint i=0; i<s; i++)
     {
-        ret = at(i)->_Find(name, depth);
+        ret = at(i)->Vertex::_Find(name, depth);
         if(ret != NULL)
             break;
     }
@@ -255,7 +262,6 @@ string& Vertex::GetName()
 
 string Vertex::GetUriString()
 {
-    // TODO: needs context sensitive type
     return (GetType() + Name);
 }
 
@@ -264,28 +270,30 @@ void Vertex::SetType(string type)
 {
     if(type.empty())
         return;
-    Vertex* types = Get(ANY, TYPE);
+    Vertex* types = Vertex::Get(ANY, TYPE);
     if(!types)
     {
         types = new Vertex(TYPE);
-        Set(types);
+        Vertex::Set(types);
     }
-    types->Set(new Vertex(type));
+    types->Vertex::Set(new Vertex(type));
 }
 
 
 string Vertex::GetType()
 {
-    Vertex* types = Get(TYPE);
+    // TODO: needs context sensitive type
+    Vertex* types = Vertex::Get(TYPE);
     if(types)
         return types->back()->GetName();
-    return "Vertex";
+
+    return VERTEX;
 }
 
 
 bool Vertex::IsType(string type)
 {
-    Vertex* types = Get(TYPE);
+    Vertex* types = Vertex::Get(TYPE);
     VertexIterator _end = types->end();
     for(VertexIterator curr=types->begin(); curr!=_end; curr++)
         if((*curr)->GetName() == type)
@@ -299,7 +307,8 @@ bool Vertex::IsType(RegularExpression* se)
 {
     if(!se)
         return false;
-    Vertex* types = Get(TYPE);
+
+    Vertex* types = Vertex::Get(TYPE);
     VertexIterator _end = types->end();
     for(VertexIterator curr=types->begin(); curr!=_end; curr++)
         if(se->Matches((*curr)->GetName()))
@@ -312,14 +321,14 @@ bool Vertex::IsType(RegularExpression* se)
 void Vertex::SetOwner(Vertex* owner)
 {
     Relation* r = new Relation(OWNER);
-    Attach(r);
+    Vertex::Attach(r);
     r->Set(owner);
 }
 
 
 bool Vertex::HasOwner(Vertex* caller)
 {
-    Vertex* rel_p = Get(RELATION, OWNER);
+    Vertex* rel_p = Vertex::Get(RELATION, OWNER);
     if(!rel_p)
         return true;
     uint ps = rel_p->size();
@@ -337,7 +346,7 @@ void Vertex::Reset()
         // TODO: deleted also attached objects, needs fix in List
         if((*curr)->HasOwner(this))
         {
-            (*curr)->Reset();
+            (*curr)->Vertex::Reset();
             curr++;
         }
         else

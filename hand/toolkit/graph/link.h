@@ -27,17 +27,10 @@
 class Link : public List
 {
     public:
-        Link(std::string name, std::string type, bool is_multi_link=false);
+        Link(std::string name, std::string type);
         virtual ~Link(){};
 
-        virtual bool Add(Vertex* val);
-        virtual bool Set(Vertex* val);
         bool Execute(Vertex* vs);
-        void MakeMultiLink(bool);
-        bool IsMultiLink();
-
-   protected:
-        bool IsMulti;
 };
 
 
@@ -48,9 +41,9 @@ class Relation : public List
         virtual ~Relation(){};
 
         // Inserts a sub-item to the current vertex without changing
-        // the ownership of 'item'; it replaces *all* objects referenced
-        // by the Relation (only public elements)
-        virtual bool Set(Vertex* sub);
+        // the ownership of 'item'; it replaces *all* (public) objects
+        // referenced by the Relation
+        virtual bool Set(Vertex* target);
         // Helper method for the search engine
         bool IsOpen(Search* search);
 };
