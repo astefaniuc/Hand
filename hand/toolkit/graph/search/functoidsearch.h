@@ -18,8 +18,8 @@
  */
 
 
-#ifndef HAND_VERTEXSEARCH_H
-#define HAND_VERTEXSEARCH_H
+#ifndef GRAPH_SEARCH_H
+#define GRAPH_SEARCH_H
 
 #include "graph/list.h"
 #include "graph/search/searchexpression.h"
@@ -28,11 +28,11 @@
 class SearchCookie;
 class Pool;
 
-class VertexSearch : public List
+class Search : public List
 {
     public:
-        VertexSearch();
-        virtual ~VertexSearch();
+        Search();
+        virtual ~Search();
     protected:
         virtual void InitVars();
     public:
@@ -48,7 +48,7 @@ class VertexSearch : public List
         void SetSearchRelation(std::string s, bool make_regex=false);
         SearchExpression* GetSearchRelation();
         virtual std::string GetCookieName();
-        virtual bool Search(Vertex* target);
+        virtual bool Execute(Vertex* target);
     protected:
         virtual bool Matches(Vertex* target);
         bool Step(SearchCookie* path);
@@ -78,4 +78,4 @@ class VertexSearch : public List
         bool RemoveDeadBranch;
 };
 
-#endif // HAND_VERTEXSEARCH_H
+#endif // GRAPH_SEARCH_H

@@ -33,7 +33,7 @@
 #define MAX_SEARCH_DEPTH 1024
 
 
-class VertexSearch;
+class Search;
 class SearchExpression;
 
 class Vertex : public std::vector<Vertex*>
@@ -43,9 +43,8 @@ class Vertex : public std::vector<Vertex*>
         virtual ~Vertex();
 
         // Inserts a sub-item to the current functoid and makes the current
-        // functoid the owner of it => 'child' object gets deleted when
-        // the current functoid gets deleted; allows multiple objects with
-        // the same name
+        // functoid the owner of it if it is unowned; allows multiple objects
+        // with the same name
         virtual bool Add(Vertex* child);
         // Inserts a sub-item to the current functoid without changing
         // the ownership of 'item'; it replaces any object with same name
@@ -74,7 +73,7 @@ class Vertex : public std::vector<Vertex*>
 
         // Simple iterative deepening depth-first search.
         // Omits OWNER from the search but might fail with any other graph
-        // cycles, use the VertexSearch engine in case of doubt.
+        // cycles, use the Search engine in case of doubt.
         virtual Vertex* Find(std::string name, int max_depth = 2);
         // Flat search with support for (boost-typed) regular expressions
         // TODO: make it iterative or rename to it "Get()"?
@@ -99,12 +98,14 @@ class Vertex : public std::vector<Vertex*>
         // Returns true if 'caller' is the owner or if no owner is registered
         virtual bool HasOwner(Vertex* caller);
 
+        // Detach all objects not owned
+        virtual void Reset();
+
         // Interface to methods defined in a derived class
         virtual bool Execute(Vertex* func_param);
-        virtual void Reset(){};
 
         // Helper method for the search engine
-        virtual bool IsOpen(VertexSearch* search);
+        virtual bool IsOpen(Search* search);
         // TODO:
 //        virtual string GetAsString() = 0;
 //        virtual bool NotifyChanged();

@@ -52,7 +52,7 @@ class Relation : public List
         // by the Relation (only public elements)
         virtual bool Set(Vertex* sub);
         // Helper method for the search engine
-        bool IsOpen(VertexSearch* search);
+        bool IsOpen(Search* search);
 };
 
 #endif /* TOOLKIT_GRAPH_LINK_H */

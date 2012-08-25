@@ -25,21 +25,21 @@
 using namespace std;
 
 
-VertexSearch::VertexSearch() : List("VertexSearch")
+Search::Search() : List("Search")
 {
     InitVars();
     CookiePool = new Pool();
 }
 
 
-VertexSearch::~VertexSearch()
+Search::~Search()
 {
     delete(CookiePool);
     ClearFindings();
 }
 
 
-void VertexSearch::InitVars()
+void Search::InitVars()
 {
     SearchName = NULL;
     SearchType = NULL;
@@ -52,14 +52,14 @@ void VertexSearch::InitVars()
 }
 
 
-void VertexSearch::Reset()
+void Search::Reset()
 {
     ClearFindings();
     InitVars();
 }
 
 
-void VertexSearch::ClearFindings()
+void Search::ClearFindings()
 {
     if(!Findings) return;
     // Don't call destructor for the findings from container
@@ -70,46 +70,46 @@ void VertexSearch::ClearFindings()
 }
 
 
-void VertexSearch::SetSearchName(string s, bool make_regex)
+void Search::SetSearchName(string s, bool make_regex)
 {
     // Add a link to the own interface for the GUI
     SearchName = AddSearchExpression("SearchName", s, make_regex);
 }
 
 
-SearchExpression* VertexSearch::GetSearchName()
+SearchExpression* Search::GetSearchName()
 {
     return SearchName;
 }
 
 
-void VertexSearch::SetSearchType(string s, bool make_regex)
+void Search::SetSearchType(string s, bool make_regex)
 {
     // Add a link to the own interface for the GUI
     SearchType = AddSearchExpression("SearchType", s, make_regex);
 }
 
 
-SearchExpression* VertexSearch::GetSearchType()
+SearchExpression* Search::GetSearchType()
 {
     return SearchType;
 }
 
 
-void VertexSearch::SetSearchRelation(string s, bool make_regex)
+void Search::SetSearchRelation(string s, bool make_regex)
 {
     // Add a link to the own interface for the GUI
     SearchRelation = AddSearchExpression("SearchRelation", s, make_regex);
 }
 
 
-SearchExpression* VertexSearch::GetSearchRelation()
+SearchExpression* Search::GetSearchRelation()
 {
     return SearchRelation;
 }
 
 
-SearchExpression* VertexSearch::AddSearchExpression(string relation_name, string s, bool make_regex)
+SearchExpression* Search::AddSearchExpression(string relation_name, string s, bool make_regex)
 {
     SearchExpression* se;
     if(make_regex)
@@ -123,7 +123,7 @@ SearchExpression* VertexSearch::AddSearchExpression(string relation_name, string
 }
 
 
-void VertexSearch::AddFinding(Vertex* finding)
+void Search::AddFinding(Vertex* finding)
 {
     if(MultipleFinds)
     {
@@ -139,19 +139,19 @@ void VertexSearch::AddFinding(Vertex* finding)
 }
 
 
-Vertex* VertexSearch::GetFindings()
+Vertex* Search::GetFindings()
 {
     return Findings;
 }
 
 
-string VertexSearch::GetCookieName()
+string Search::GetCookieName()
 {
     return SEARCHCOOKIE;
 }
 
 
-bool VertexSearch::Search(Vertex* target)
+bool Search::Execute(Vertex* target)
 {
     if(!target)
         return false;
@@ -187,7 +187,7 @@ bool VertexSearch::Search(Vertex* target)
 }
 
 
-bool VertexSearch::Step(SearchCookie* path)
+bool Search::Step(SearchCookie* path)
 {
     bool found = false;
     if(path->size()>1)
@@ -215,7 +215,7 @@ bool VertexSearch::Step(SearchCookie* path)
 }
 
 
-bool VertexSearch::SearchAllChilds(SearchCookie* path_end)
+bool Search::SearchAllChilds(SearchCookie* path_end)
 {
     bool found = false;
     Vertex* child;
@@ -237,7 +237,7 @@ bool VertexSearch::SearchAllChilds(SearchCookie* path_end)
 }
 
 
-void VertexSearch::ExtendPath(Vertex* tree_node, SearchCookie* path_end)
+void Search::ExtendPath(Vertex* tree_node, SearchCookie* path_end)
 {
     if(!tree_node)
         return;
@@ -249,7 +249,7 @@ void VertexSearch::ExtendPath(Vertex* tree_node, SearchCookie* path_end)
 }
 
 
-bool VertexSearch::Matches(Vertex* target)
+bool Search::Matches(Vertex* target)
 {
     // Ignore relation_type here (it's checked in the "Relation" Vertex)
     if(SearchName && (!SearchName->Matches(target->GetName())))
@@ -263,7 +263,7 @@ bool VertexSearch::Matches(Vertex* target)
 }
 
 
-bool VertexSearch::MarkDeathBranch(SearchCookie* branch)
+bool Search::MarkDeathBranch(SearchCookie* branch)
 {
     if(!branch)
         return false;
@@ -286,7 +286,7 @@ bool VertexSearch::MarkDeathBranch(SearchCookie* branch)
 }
 
 
-void VertexSearch::DecomposeDeathBranches(SearchCookie* path)
+void Search::DecomposeDeathBranches(SearchCookie* path)
 {
     SearchCookie* branch;
     VertexIterator curr = path->begin();

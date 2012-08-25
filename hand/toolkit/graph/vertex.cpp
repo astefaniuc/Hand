@@ -63,7 +63,10 @@ bool Vertex::Add(Vertex* child)
     if(!child)
         return false;
     push_back(child);
-    child->SetOwner(this);
+    // Take ownership only for unowned objects
+    if(child->HasOwner(this))
+        child->SetOwner(this);
+
     return true;
 }
 
@@ -325,13 +328,31 @@ bool Vertex::HasOwner(Vertex* caller)
 }
 
 
+void Vertex::Reset()
+{
+    VertexIterator curr = begin();
+    VertexIterator _end = end();
+    while(curr != _end)
+    {
+        // TODO: deleted also attached objects, needs fix in List
+        if((*curr)->HasOwner(this))
+        {
+            (*curr)->Reset();
+            curr++;
+        }
+        else
+            erase(curr);
+    }
+}
+
+
 bool Vertex::Execute(Vertex* func_param)
 {
     return false;
 }
 
 
-bool Vertex::IsOpen(VertexSearch* search)
+bool Vertex::IsOpen(Search* search)
 {
     // The search cookie should be the last element
     Vertex* last = back();

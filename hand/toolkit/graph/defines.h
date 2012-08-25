@@ -22,14 +22,17 @@
 
 
 // Class type IDs
-#define VERTEX "Vertex"
-#define LIST   "List"
-#define METHOD "Method"
+#define VERTEX   "Vertex"
+#define LIST     "List"
+#define METHOD   "Method"
 #define RELATION "Relation"
 #define DESCRIPTOR "Link"
-#define DATA   "Data"
-// TODO: This string varies on different platforms
-#define DATA_STRING "Ss"
+#define DATA     "Data"
+#define SEARCH   "Search"
+// TODO: The string returned by typeid() for 'string' varies
+// on different platforms
+#define NOTE "Ss"
+
 
 // Reserved tags/names for Vertex elements
 #define OWNER "OWNER"
@@ -40,5 +43,6 @@
 // Arbitrary search depth (should be big enough to find everything
 // and small enough to return fast from circles)
 #define MAX_SEARCH_DEPTH 1024
+
 
 #endif /* GRAPH_DEFINES_H */

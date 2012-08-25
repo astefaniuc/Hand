@@ -59,7 +59,7 @@ class FileVertex_Factory : public Factory
 {
     public:
         FileVertex_Factory() : Factory("FileVertex_Factory",
-                                       DATA_STRING,
+                                       NOTE,
                                        FILEVERTEX,
                                        URI_FILE){};
         virtual ~FileVertex_Factory(){};

@@ -132,7 +132,7 @@ void List::Reset()
 /*
 Factory* List::GetFactory()
 {
-    VertexSearch search;
+    Search search;
     search.MaxDepth = 2;
     search.SetSearchRelation(RELATION_PRODUCER);
     search.SetSearchType(FACTORY);

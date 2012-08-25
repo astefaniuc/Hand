@@ -39,7 +39,7 @@ SearchCookie::~SearchCookie()
 }
 
 
-bool SearchCookie::IsOpen(VertexSearch* search)
+bool SearchCookie::IsOpen(Search* search)
 {
     return false;
 }

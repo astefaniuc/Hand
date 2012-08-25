@@ -17,8 +17,8 @@
  *  License along with Hand. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HAND_SEARCHEXPRESSION_H
-#define HAND_SEARCHEXPRESSION_H
+#ifndef GRAPH_SEARCH_EXPRESSION_H
+#define GRAPH_SEARCH_EXPRESSION_H
 
 #include "graph/vertex.h"
 
@@ -36,4 +36,4 @@ class SearchExpression : public Vertex
 };
 
 
-#endif /* HAND_SEARCHEXPRESSION_H */
+#endif /* GRAPH_SEARCH_EXPRESSION_H */

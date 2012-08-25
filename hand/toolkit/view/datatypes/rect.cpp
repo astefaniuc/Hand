@@ -82,10 +82,10 @@ void Rect::MultiplyTo(SDL_Rect& abs_rect)
 
 Rect* GetRect(string name, Vertex* tree)
 {
-    VertexSearch search;
+    Search search;
     search.SetSearchName(name);
     search.SetSearchType(RECT);
-    if(search.Search(tree))
+    if(search.Execute(tree))
         return dynamic_cast<Rect*>(search.GetFindings());
 
     return NULL;

@@ -214,11 +214,11 @@ Layer* Layer::Insert(Vertex* data, string position)
 
 Layer* Layer::GetAttachedLayer(Vertex* target)
 {
-    VertexSearch search;
+    Search search;
     search.MaxDepth = 2;
     search.SetSearchType(LAYER);
     search.SetSearchRelation(LAYER);
-    if(search.Search(target))
+    if(search.Execute(target))
         return dynamic_cast<Layer*>(search.GetFindings());
     return NULL;
 }
@@ -245,7 +245,7 @@ void Layer::SetTheme(Theme* theme)
 }
 
 
-void Layer::SetLayout(Vertex* drawer_lib) // string type, uint position
+void Layer::SetLayout(Vertex* drawer_lib)
 {
     // Delete from the layout items owned by the previous theme
     Vertex* layout = Get("Layout")->Get(1);
@@ -254,16 +254,7 @@ void Layer::SetLayout(Vertex* drawer_lib) // string type, uint position
         layout = new Layout("Layout", GetType()+"_Layout");
         Get("Layout")->Set(layout);
     }
-//        _Theme->TakeBack(layout);
-    if(!drawer_lib->Execute(layout))
-    {
-        VertexSearch search;
-        search.SetSearchName(GetType());
-        search.SetSearchType(DRAWOBJ_DRAWER);
-        search.MaxDepth = 4;
-        if(search.Search(drawer_lib))
-            layout->Set(search.GetFindings());
-    }
+    drawer_lib->Execute(layout);
 }
 
 

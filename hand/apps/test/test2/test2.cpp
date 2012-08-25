@@ -131,7 +131,7 @@ Vertex* FindTester::_Build
 Vertex* FindTester::TestFind(string name, string type, bool relation)
 {
     double start_time = clock();
-    VertexSearch search;
+    Search search;
     search.SetSearchName(name);
     cout << "Find(name " << name;
     if(type != "")
@@ -146,10 +146,12 @@ Vertex* FindTester::TestFind(string name, string type, bool relation)
     }
     cout << ") time: ";
     search.RemoveDeadBranch = true;
-    search.Search(this);
+    bool found = search.Execute(this);
     cout << (clock()-start_time)/CLOCKS_PER_SEC << endl;
 
-    return search.GetFindings();
+    if(found)
+        return search.GetFindings();
+    return NULL;
 }
 
 
