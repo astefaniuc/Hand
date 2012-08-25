@@ -131,7 +131,7 @@ Vertex* FindTester::_Build
 Vertex* FindTester::TestFind(string name, string type, bool relation)
 {
     double start_time = clock();
-    Search search;
+    Search search("Test search");
     search.SetSearchName(name);
     cout << "Find(name " << name;
     if(type != "")
@@ -150,7 +150,7 @@ Vertex* FindTester::TestFind(string name, string type, bool relation)
     cout << (clock()-start_time)/CLOCKS_PER_SEC << endl;
 
     if(found)
-        return search.GetFindings();
+        return search.Get("Findings")->Get(1);
     return NULL;
 }
 

@@ -132,11 +132,12 @@ Vertex* FactoryMap::Produce(Vertex* entry, string output_type)
 Factory* FactoryMap::GetFactory(Vertex* target)
 {
     Factory* ret = NULL;
-    Factory* tmp;
-    VertexIterator _end = end();
-    for(VertexIterator curr=begin(); curr!=_end; curr++)
+    Factory* tmp = NULL;
+    uint i = 0;
+    Vertex* child;
+    while((child=Get(++i)) != NULL)
     {
-        tmp = dynamic_cast<Factory*>((*curr));
+        tmp = dynamic_cast<Factory*>(child);
         // Find factory with the biggest relevance, for now it is the last added one
         // TODO: better
         if(tmp && tmp->IsValidInput(target))
@@ -151,13 +152,15 @@ Factory* FactoryMap::GetFactory(string output_type)
 {
     if(output_type == "")
         return NULL;
-    Factory* res;
-    VertexIterator _end = end();
-    for(VertexIterator curr=begin(); curr!=_end; curr++)
+
+    Factory* ret;
+    uint i = 0;
+    Vertex* child;
+    while((child=Get(++i)) != NULL)
     {
-        res = dynamic_cast<Factory*>((*curr));
-        if(res && (res->GetOutputType()==output_type))
-            return res;
+        ret = dynamic_cast<Factory*>(child);
+        if(ret && (ret->GetOutputType()==output_type))
+            return ret;
     }
 
     return NULL;

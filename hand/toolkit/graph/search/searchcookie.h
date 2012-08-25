@@ -33,12 +33,10 @@ class SearchCookie : public List
         SearchCookie();
         virtual ~SearchCookie();
         virtual bool IsOpen(Search* search);
-        virtual bool Add(Vertex* child);
         // Detaches cookie from Target
         virtual bool Detach(Vertex* ignore);
         Vertex* Target;
-        SearchCookie* Parent;
-        bool IsDeadBranch;
+         bool IsDeadBranch;
 };
 
 

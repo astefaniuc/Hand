@@ -216,7 +216,7 @@ void VirtualSurface::SetSize(SDL_Rect size)
 }
 
 
-SDL_Rect VirtualSurface::GetSize()
+SDL_Rect VirtualSurface::_GetSize()
 {
     return SizeAndPositionOnBuffer;
 }

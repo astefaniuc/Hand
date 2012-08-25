@@ -21,23 +21,20 @@
 #ifndef GRAPH_SEARCH_H
 #define GRAPH_SEARCH_H
 
-#include "graph/list.h"
+#include "graph/vertex.h"
 #include "graph/search/regularexpression.h"
 
 
 class SearchCookie;
 class Pool;
 
-class Search : public List
+class Search : public Vertex
 {
     public:
-        Search();
+        Search(std::string name);
         virtual ~Search();
-    protected:
-        virtual void InitVars();
     public:
         void Reset();
-        void ClearFindings();
         // Search setters and getters
         // The setters are called from "outside", from the application code
         void SetSearchName(std::string s, bool make_regex=false);
@@ -54,22 +51,17 @@ class Search : public List
         bool Step(SearchCookie* path);
         bool SearchAllChilds(SearchCookie* trail_end);
         void ExtendPath(Vertex* tree_node, SearchCookie* path_end);
-        bool MarkDeathBranch(SearchCookie* branch);
+        bool MarkDeathBranch(Vertex* branch);
         void DecomposeDeathBranches(SearchCookie* branch);
         RegularExpression* AddSearchRegex(std::string name,
                                           std::string s,
                                           bool make_regex);
-    public:
-        // Result setter and getter
-        void AddFinding(Vertex* finding);
-        Vertex* GetFindings();
-    protected:
+    private:
         // Quick links
         RegularExpression* SearchName;
         RegularExpression* SearchType;
         RegularExpression* SearchRelation;
         Pool* CookiePool;
-    protected:
         Vertex* Findings;
     public:
         // TODO: GUI display?
@@ -78,4 +70,4 @@ class Search : public List
         bool RemoveDeadBranch;
 };
 
-#endif // GRAPH_SEARCH_H
+#endif /* GRAPH_SEARCH_H */

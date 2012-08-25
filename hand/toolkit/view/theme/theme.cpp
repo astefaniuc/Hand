@@ -77,16 +77,17 @@ bool Theme::FillOut(Vertex* input)
         return true;
 
     string name;
-    VertexIterator _end = layout->end();
-    for(VertexIterator curr=layout->begin(); curr!=_end; curr++)
+    Vertex* child;
+    uint i = 0;
+    while((child=layout->Get(++i)) != NULL)
     {
-        name = (*curr)->GetName();
+        name = child->GetName();
         if((name==CHILDREN) || (name=="Methods"))
-            _FillOut((*curr));
+            _FillOut(child);
         else if((name=="Fields") || (name=="Components"))
             continue;
         else
-            Execute((*curr));
+            Execute(child);
     }
     return true;
 }
@@ -94,9 +95,10 @@ bool Theme::FillOut(Vertex* input)
 
 bool Theme::_FillOut(Vertex* input)
 {
-    VertexIterator _end = input->end();
-    for(VertexIterator curr=input->begin(); curr!=_end; curr++)
-        Execute((*curr));
+    Vertex* child;
+    uint i = 0;
+    while((child=input->Get(++i)) != NULL)
+        Execute(child);
 
     return true;
 }

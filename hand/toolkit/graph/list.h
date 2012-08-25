@@ -42,8 +42,11 @@ class List : public Vertex
         virtual Vertex* Get(std::string child);
         virtual Vertex* Get(std::string type, std::string name);
         virtual Vertex* Get(uint child);
+        virtual uint GetSize();
         // Removes the complete PUBLICLIST vertex
         virtual void Reset();
+        virtual bool Detach(Vertex* item);
+        virtual bool Delete(Vertex* child);
 };
 
 #endif /* TOOLKIT_GRAPH_LIST_H */

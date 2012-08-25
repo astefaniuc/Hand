@@ -71,7 +71,7 @@ class VirtualSurface : public HandApp
                           Rect* rect_relative_to_parent);
         // Set coordinates and size relative to the parent layer
         virtual void SetSize(SDL_Rect size);
-        virtual SDL_Rect GetSize();
+        virtual SDL_Rect _GetSize();
         virtual void SetBufferType(buffer_type bt);
         virtual SDL_Surface*& GetBuffer();
         virtual void SetBuffer(SDL_Surface* buffer);

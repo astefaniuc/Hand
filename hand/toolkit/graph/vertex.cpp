@@ -28,6 +28,9 @@
 using namespace std;
 
 
+typedef vector<Vertex*>::iterator VertexIterator;
+
+
 Vertex::Vertex(string name)
 {
     SetName(name);
@@ -39,13 +42,13 @@ Vertex::~Vertex()
     // Don't delete the parent(s)
     Vertex* curr = Get(RELATION, OWNER);
     // Reset() doesn't work here
-    if(curr && (curr->size()== 2))
-        curr->pop_back();
+    if(curr && (curr->Body.size()== 2))
+        curr->Body.pop_back();
 
-    uint s = size();
+    uint s = Body.size();
     for(uint i=0; i<s; i++)
     {
-        curr = at(i);
+        curr = Body.at(i);
 
         if(curr->HasOwner(this))
         {
@@ -54,7 +57,7 @@ Vertex::~Vertex()
         }
     }
     if(s != 0)
-        clear();
+        Body.clear();
 }
 
 
@@ -62,7 +65,7 @@ bool Vertex::Add(Vertex* child)
 {
     if(!child)
         return false;
-    push_back(child);
+    Body.push_back(child);
     // Take ownership only for unowned objects
     if(child->HasOwner(this))
         child->SetOwner(this);
@@ -77,20 +80,20 @@ bool Vertex::Set(Vertex* child)
         return false;
 
     string s = child->GetName();
-    VertexIterator curr = begin();
-    while(curr!=end())
+    VertexIterator curr = Body.begin();
+    while(curr != Body.end())
     {
         // TODO: is Type relevant?
         if((*curr)->GetName() == s)
         {
             if((*curr)->HasOwner(this))
                 delete((*curr));
-            erase(curr);
+            Body.erase(curr);
         }
         else
             curr++;
     }
-    push_back(child);
+    Body.push_back(child);
     return true;
 }
 
@@ -99,7 +102,7 @@ bool Vertex::Attach(Vertex* child)
 {
     if(!child)
         return false;
-    push_back(child);
+    Body.push_back(child);
     return true;
 }
 
@@ -107,8 +110,8 @@ bool Vertex::Attach(Vertex* child)
 Vertex* Vertex::Get(string s)
 {
     VertexIterator curr;
-    VertexIterator _end = end();
-    for(curr=begin(); curr!=_end; curr++)
+    VertexIterator _end = Body.end();
+    for(curr=Body.begin(); curr!=_end; curr++)
         if((*curr)->GetName() == s)
             return (*curr);
 
@@ -120,8 +123,8 @@ Vertex* Vertex::Get(string s)
 
 Vertex* Vertex::Get(string type, string name)
 {
-    VertexIterator curr = begin();
-    VertexIterator _end = end();
+    VertexIterator curr = Body.begin();
+    VertexIterator _end = Body.end();
 
     if(name == ANY)
     {
@@ -154,8 +157,8 @@ Vertex* Vertex::Get(uint i)
         //return NULL;
         exit(666);
     --i;
-    if(i < size())
-        return at(i);
+    if(i < Body.size())
+        return Body.at(i);
     return NULL;
 }
 
@@ -177,15 +180,21 @@ bool Vertex::Detach(Vertex* child)
     if(!child) return false;
 
     VertexIterator curr;
-    for(curr=begin(); curr!=end(); curr++)
+    for(curr=Body.begin(); curr!=Body.end(); curr++)
     {
         if((*curr) == child)
         {
-            erase(curr);
+            Body.erase(curr);
             return true;
         }
     }
     return false;
+}
+
+
+uint Vertex::GetSize()
+{
+    return Body.size();
 }
 
 
@@ -221,11 +230,11 @@ Vertex* Vertex::_Find(string name, int depth)
         return NULL;
 
     Vertex* ret = NULL;
-    uint s = size();
+    uint s = Body.size();
     --depth;
     for(uint i=0; i<s; i++)
     {
-        ret = at(i)->Vertex::_Find(name, depth);
+        ret = Body.at(i)->Vertex::_Find(name, depth);
         if(ret != NULL)
             break;
     }
@@ -236,11 +245,11 @@ Vertex* Vertex::_Find(string name, int depth)
 Vertex* Vertex::Find(RegularExpression* expression)
 {
     // "Plain" find, don't descend
-    uint s = size();
+    uint s = Body.size();
     Vertex* ret;
     for(uint i=0; i<s; i++)
     {
-        ret = at(i);
+        ret = Body.at(i);
         if(expression->Matches(ret->GetName()))
             return ret;
     }
@@ -283,9 +292,9 @@ void Vertex::SetType(string type)
 string Vertex::GetType()
 {
     // TODO: needs context sensitive type
-    Vertex* types = Vertex::Get(TYPE);
+    Vertex* types = Vertex::Get(ANY, TYPE);
     if(types)
-        return types->back()->GetName();
+        return types->Body.back()->GetName();
 
     return VERTEX;
 }
@@ -293,9 +302,12 @@ string Vertex::GetType()
 
 bool Vertex::IsType(string type)
 {
-    Vertex* types = Vertex::Get(TYPE);
-    VertexIterator _end = types->end();
-    for(VertexIterator curr=types->begin(); curr!=_end; curr++)
+    Vertex* types = Vertex::Get(ANY, TYPE);
+    if(!types)
+        return (type == VERTEX);
+
+    VertexIterator _end = types->Body.end();
+    for(VertexIterator curr=types->Body.begin(); curr!=_end; curr++)
         if((*curr)->GetName() == type)
             return true;
 
@@ -308,9 +320,12 @@ bool Vertex::IsType(RegularExpression* se)
     if(!se)
         return false;
 
-    Vertex* types = Vertex::Get(TYPE);
-    VertexIterator _end = types->end();
-    for(VertexIterator curr=types->begin(); curr!=_end; curr++)
+    Vertex* types = Vertex::Get(ANY, TYPE);
+    if(!types)
+        return se->Matches(VERTEX);
+
+    VertexIterator _end = types->Body.end();
+    for(VertexIterator curr=types->Body.begin(); curr!=_end; curr++)
         if(se->Matches((*curr)->GetName()))
             return true;
 
@@ -331,16 +346,16 @@ bool Vertex::HasOwner(Vertex* caller)
     Vertex* rel_p = Vertex::Get(RELATION, OWNER);
     if(!rel_p)
         return true;
-    uint ps = rel_p->size();
+    uint ps = rel_p->Body.size();
     // Check if this node has only the caller as parent
-    return ((ps < 2) || ((ps == 2) && (rel_p->at(1) == caller)));
+    return ((ps < 2) || ((ps == 2) && (rel_p->Body.at(1) == caller)));
 }
 
 
 void Vertex::Reset()
 {
-    VertexIterator curr = begin();
-    VertexIterator _end = end();
+    VertexIterator curr = Body.begin();
+    VertexIterator _end = Body.end();
     while(curr != _end)
     {
         // TODO: deleted also attached objects, needs fix in List
@@ -350,7 +365,7 @@ void Vertex::Reset()
             curr++;
         }
         else
-            erase(curr);
+            Body.erase(curr);
     }
 }
 
@@ -370,7 +385,7 @@ bool Vertex::Execute(Vertex* func_param)
 bool Vertex::IsOpen(Search* search)
 {
     // The search cookie should be the last element
-    Vertex* last = back();
+    Vertex* last = Body.back();
     if(last && (last->GetName()==search->GetCookieName()))
         // Already searched from different branch
         return false;

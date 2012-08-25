@@ -27,16 +27,10 @@
 #include <vector>
 
 
-// Arbitrary search depth (should be big enough to find everything
-// and small enough to return fast from circles)
-#define VERTEX "Vertex"
-#define MAX_SEARCH_DEPTH 1024
-
-
 class Search;
 class RegularExpression;
 
-class Vertex : public std::vector<Vertex*>
+class Vertex
 {
     public:
         Vertex(std::string name);
@@ -53,12 +47,6 @@ class Vertex : public std::vector<Vertex*>
         // the ownership of 'item'; allows multiple objects with same name
         virtual bool Attach(Vertex* sub);
 
-        // Removes the reference to 'item' but keeps item alive
-        bool Detach(Vertex* item);
-        // Removes the reference to 'item' and deletes the object if it
-        // is the owner
-        bool Delete(Vertex* child);
-
         // Get the first sub-item by name.
         // If the item doesn't exist it returns a new Relation vertex;
         // use Get(ANY, name) to test if a vertex exists
@@ -69,6 +57,9 @@ class Vertex : public std::vector<Vertex*>
         virtual Vertex* Get(std::string name, std::string type);
         // Get the child by position, 1-based
         virtual Vertex* Get(uint item);
+
+        // Get the number of elements
+        virtual uint GetSize();
 
         // Simple iterative deepening depth-first search.
         // Omits OWNER from the search but might fail with any other graph
@@ -97,8 +88,13 @@ class Vertex : public std::vector<Vertex*>
         // Returns true if 'caller' is the owner or if no owner is registered
         bool HasOwner(Vertex* caller);
 
-        // Detach all objects not owned
+        // Removes all objects not owned
         virtual void Reset();
+        // Removes the reference to 'item' but keeps item alive
+        virtual bool Detach(Vertex* item);
+        // Removes the reference to 'item' and deletes the object if it
+        // is the owner
+        virtual bool Delete(Vertex* child);
 
         // Returns the string to be visualized, here: the name
         virtual std::string GetAsString();
@@ -117,8 +113,7 @@ class Vertex : public std::vector<Vertex*>
 
     private:
         std::string Name;
+        std::vector<Vertex*> Body;
 };
-
-typedef std::vector<Vertex*>::iterator VertexIterator;
 
 #endif /* HAND_VERTEX_H */

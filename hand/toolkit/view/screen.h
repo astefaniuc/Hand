@@ -43,7 +43,7 @@ class Screen : public virtual HandApp
         void Init(void);
         // GetResolution()
         void SetSize(Size*);
-        // GetSize()/ GetPosition()
+        // _GetSize()/ GetPosition()
         SDL_Rect GetResolution(void);
         // GetBuffer()
         SDL_Surface* GetSurface(void);

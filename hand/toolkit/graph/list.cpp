@@ -56,11 +56,11 @@ Vertex* List::Get(string s)
 {
     if(s == PUBLICLIST)
     {
-        VertexIterator curr;
-        VertexIterator _end = end();
-        for(curr=begin(); curr!=_end; curr++)
-            if((*curr)->GetName() == s)
-                return (*curr);
+        Vertex* child;
+        uint i = 0;
+        while((child=Vertex::Get(++i)) != NULL)
+            if(child->GetName() == s)
+                return child;
 
         // Avoid endless recursion: Vertex + Attach
         Vertex* r = new Vertex(s);
@@ -84,6 +84,12 @@ Vertex* List::Get(string type, string name)
 }
 
 
+uint List::GetSize()
+{
+    return List::Get(PUBLICLIST)->GetSize();
+}
+
+
 void List::Reset()
 {
     Vertex* pl = List::Get(ANY, PUBLICLIST);
@@ -92,4 +98,16 @@ void List::Reset()
         Detach(pl);
         delete(pl);
     }
+}
+
+
+bool List::Delete(Vertex* child)
+{
+    return List::Get(PUBLICLIST)->Delete(child);
+}
+
+
+bool List::Detach(Vertex* child)
+{
+    return List::Get(PUBLICLIST)->Detach(child);
 }

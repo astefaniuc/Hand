@@ -125,13 +125,10 @@ bool LayerManager::Update(bool forced)
 
 Vertex* LayerManager::GetCommandList(Vertex* menu)
 {
-    List* menu_list = dynamic_cast<List*>(menu);
-    if(!menu_list)
-        return NULL;
     Vertex* child;
-    for(uint i=0; i<menu_list->size(); i++)
+    uint i = 0;
+    while((child=menu->Get(++i)) != NULL)
     {
-        child = menu_list->at(i);
         if(child->IsType(METHOD))
             return menu;
 
@@ -237,9 +234,11 @@ bool LayerManager::GetAllThemes(Vertex* themes_dir)
     // Set switching theme callback to all found themes
     Vertex* loader = new Method<LayerManager>(THEMES_MENU, this, &LayerManager::LoadTheme);
     FileVertex* file;
-    for (uint i=0; i<themes_list->size(); i++)
+    Vertex* elem;
+    uint i = 0;
+    while((elem=themes_list->Get(++i)) != NULL)
     {
-        file = dynamic_cast<FileVertex*>(themes_list->at(i));
+        file = dynamic_cast<FileVertex*>(elem);
         if(file)
             file->Add(loader);
     }
@@ -267,7 +266,7 @@ bool LayerManager::Expand(Vertex* to_expand)
         if(!new_view)
             return false;
     }
-    new_view->SetSize(GetSize());
+    new_view->SetSize(_GetSize());
 
     if(MasterView)
     {

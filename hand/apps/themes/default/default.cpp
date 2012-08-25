@@ -243,7 +243,7 @@ bool Default::DrawFrame(Vertex* layout)
     if(!vs)
         return false;
 
-    SDL_Rect total_size = vs->GetSize();
+    SDL_Rect total_size = vs->_GetSize();
     SDL_Rect content_size = total_size;
     Rect* sap = GetRect(SIZEANDPOSITION, layout);
     sap->MultiplyTo(content_size);
@@ -327,7 +327,7 @@ bool Default::DrawText(Vertex* layout)
     if(text.empty())
         return false;
 
-    SDL_Rect size = vs->GetSize();
+    SDL_Rect size = vs->_GetSize();
     // Starting SDL font rendering:
     uint font_height = size.h;
     // Render the font once to check the size
@@ -355,7 +355,7 @@ bool Default::DrawList(Vertex* layout)
     if(!children)
         return false;
     // Ignore the "runtime" child
-    uint child_cnt = children->size() - 1;
+    uint child_cnt = children->GetSize();
     if(child_cnt < 1)
         return true;
 
@@ -398,7 +398,7 @@ bool Default::ColorSurface(Vertex* layout)
         return false;
 
     SDL_Surface* sf = vs->GetBuffer();
-    SDL_Rect size = vs->GetSize();
+    SDL_Rect size = vs->_GetSize();
     Rect* csap = GetRect(SIZEANDPOSITION, layout);
     csap->MultiplyTo(size);
     SDL_SetClipRect(sf, &size);

@@ -25,9 +25,19 @@
 using namespace std;
 
 
-Search::Search() : List("Search")
+Search::Search(string name) : Vertex(name)
 {
-    InitVars();
+    SetType(METHOD);
+    SetType(SEARCH);
+
+    Findings = Get("Findings");
+    SearchName = NULL;
+    SearchType = NULL;
+    SearchRelation = NULL;
+    MaxDepth = MAX_SEARCH_DEPTH;
+    RemoveDeadBranch = true;
+    MultipleFinds = false;
+
     CookiePool = new Pool();
 }
 
@@ -35,38 +45,12 @@ Search::Search() : List("Search")
 Search::~Search()
 {
     delete(CookiePool);
-    ClearFindings();
-}
-
-
-void Search::InitVars()
-{
-    SearchName = NULL;
-    SearchType = NULL;
-    SearchRelation = NULL;
-    Findings = NULL;
-    MaxDepth = MAX_SEARCH_DEPTH;
-    RemoveDeadBranch = true;
-    // Todo:
-    MultipleFinds = false;
 }
 
 
 void Search::Reset()
 {
-    ClearFindings();
-    InitVars();
-}
-
-
-void Search::ClearFindings()
-{
-    if(!Findings) return;
-    // Don't call destructor for the findings from container
-    if(MultipleFinds)
-        Findings->clear();
-    else
-        Detach(Findings);
+    Findings->Reset();
 }
 
 
@@ -123,28 +107,6 @@ RegularExpression* Search::AddSearchRegex(string relation_name, string s, bool m
 }
 
 
-void Search::AddFinding(Vertex* finding)
-{
-    if(MultipleFinds)
-    {
-        if(!Findings)
-        {
-            Findings = new List("Findings");
-            Add(Findings);
-        }
-        Findings->Add(finding);
-    }
-    else
-        Findings = finding;
-}
-
-
-Vertex* Search::GetFindings()
-{
-    return Findings;
-}
-
-
 string Search::GetCookieName()
 {
     return SEARCHCOOKIE;
@@ -190,7 +152,7 @@ bool Search::Execute(Vertex* target)
 bool Search::Step(SearchCookie* path)
 {
     bool found = false;
-    if(path->size()>1)
+    if(path->Get(1))
     {
         SearchCookie* branch;
         uint i = 0;
@@ -258,29 +220,25 @@ bool Search::Matches(Vertex* target)
     if(SearchType && (!target->IsType(SearchType)))
         return false;
 
-    AddFinding(target);
+    Findings->Attach(target);
     return true;
 }
 
 
-bool Search::MarkDeathBranch(SearchCookie* branch)
+bool Search::MarkDeathBranch(Vertex* branch)
 {
     if(!branch)
         return false;
 
-    VertexIterator b = branch->begin();
-    VertexIterator _end = branch->end();
-    if(b != _end)
-        b++;
-    while(b != _end)
-    {
-        if(!((SearchCookie*)(*b))->IsDeadBranch)
+    SearchCookie* c;
+    uint i = 0;
+    while((c=(SearchCookie*)branch->Get(++i)) != NULL)
+        if(!c->IsDeadBranch)
             return false;
-        b++;
-    }
-    branch->IsDeadBranch = true;
 
-    MarkDeathBranch(branch->Parent);
+    ((SearchCookie*)branch)->IsDeadBranch = true;
+
+    MarkDeathBranch(branch->Get(OWNER)->Get(1));
 
     return true;
 }
@@ -289,22 +247,18 @@ bool Search::MarkDeathBranch(SearchCookie* branch)
 void Search::DecomposeDeathBranches(SearchCookie* path)
 {
     SearchCookie* branch;
-    VertexIterator curr = path->begin();
-    VertexIterator _end = path->end();
-    if(curr != _end)
-        curr++;
-    while(curr != _end)
+    uint i = 1;
+    while((branch=(SearchCookie*)path->Get(i)) != NULL)
     {
-        branch = (SearchCookie*)(*curr);
         if(branch->IsDeadBranch)
         {
             CookiePool->Take(branch);
-            path->erase(curr);
+            path->Detach(branch);
         }
         else
         {
             DecomposeDeathBranches(branch);
-            curr++;
+            i++;
         }
     }
 }

@@ -27,7 +27,6 @@ using namespace std;
 SearchCookie::SearchCookie() : List(SEARCHCOOKIE)
 {
     Target = NULL;
-    Parent = NULL;
     IsDeadBranch = false;
 }
 
@@ -42,14 +41,6 @@ SearchCookie::~SearchCookie()
 bool SearchCookie::IsOpen(Search* search)
 {
     return false;
-}
-
-
-bool SearchCookie::Add(Vertex* child)
-{
-    push_back(child);
-    ((SearchCookie*)child)->Parent = this;
-    return true;
 }
 
 
@@ -71,11 +62,11 @@ bool SearchCookie::Detach(Vertex* ignore)
 
 Vertex* Pool::Get()
 {
-    if(size()>1)
+    Vertex* ret = List::Get(1);
+    if(ret)
     {
-        Vertex* cookie = back();
-        pop_back();
-        return cookie;
+        Detach(ret);
+        return ret;
     }
     return new SearchCookie();
 }
@@ -89,14 +80,15 @@ void Pool::Take(Vertex* cookie)
     // Detach the Target vertex
     sc->Detach(NULL);
 
-    sc->Parent = NULL;
     // Add to the pool
-    push_back(sc);
+    Add(sc);
     sc->IsDeadBranch = false;
-    uint i = sc->size();
-    while(i > 1)
+
+    Vertex* child;
+    uint i = 0;
+    while((child=sc->Get(++i)) != NULL)
     {
-        Take(sc->Get(--i));
-        sc->pop_back();
+        Take(child);
+        sc->List::Detach(child);
     }
 }

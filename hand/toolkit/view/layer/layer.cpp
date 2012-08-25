@@ -214,12 +214,12 @@ Layer* Layer::Insert(Vertex* data, string position)
 
 Layer* Layer::GetAttachedLayer(Vertex* target)
 {
-    Search search;
+    Search search("Layer search");
     search.MaxDepth = 2;
     search.SetSearchType(LAYER);
     search.SetSearchRelation(LAYER);
     if(search.Execute(target))
-        return dynamic_cast<Layer*>(search.GetFindings());
+        return dynamic_cast<Layer*>(search.Get("Findings")->Get(1));
     return NULL;
 }
 
@@ -311,7 +311,7 @@ void Layer::DrawChilds(bool forced)
         layer = dynamic_cast<Layer*>(child);
         if(!layer)
             continue;
-        layer->SetSize(GetSize());
+        layer->SetSize(_GetSize());
         layer->Update(forced);
     }
 }

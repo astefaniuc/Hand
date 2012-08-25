@@ -28,7 +28,7 @@ class InputState;
 
 class Device : public virtual HandApp
 {
-    typedef vector<SDLKey*> keygroup;
+    typedef std::vector<SDLKey*> keygroup;
 
     public:
                Device();
