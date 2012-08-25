@@ -39,7 +39,7 @@ class List : public Vertex
         virtual void SetType(std::string type);
         virtual std::string GetType();
         virtual bool IsType(std::string type);
-        virtual bool IsType(SearchExpression* type);
+        virtual bool IsType(RegularExpression* type);
 
         // Set object owner (for memory management)
         virtual void SetOwner(Vertex* owner);

@@ -98,7 +98,7 @@ bool List::IsType(string type)
 }
 
 
-bool List::IsType(SearchExpression* se)
+bool List::IsType(RegularExpression* se)
 {
     return Get(RUNTIME)->IsType(se);
 }

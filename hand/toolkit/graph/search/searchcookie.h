@@ -17,8 +17,8 @@
  *  License along with Hand. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GRAPH_SEARCH_COOKIE_H
-#define GRAPH_SEARCH_COOKIE_H
+#ifndef GRAPH_SEARCH_SEARCHCOOKIE_H
+#define GRAPH_SEARCH_SEARCHCOOKIE_H
 
 #include "graph/list.h"
 
@@ -51,4 +51,4 @@ class Pool : public List
         void Take(Vertex* cookie);
 };
 
-#endif /* GRAPH_SEARCH_COOKIE_H */
+#endif /* GRAPH_SEARCH_SEARCHCOOKIE_H */

@@ -17,24 +17,24 @@
  *  License along with Hand. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HAND_SEARCHSTRING_H
-#define HAND_SEARCHSTRING_H
+#ifndef GRAPH_SEARCH_SEARCHSTRING_H
+#define GRAPH_SEARCH_SEARCHSTRING_H
 
 #include "graph/search/searchexpression.h"
 
 #include <regex>
 
 
-class SearchString : public SearchExpression
+class SearchString : public RegularExpression
 {
     public:
-        SearchString(std::string name) : SearchExpression(name){};
+        SearchString(std::string name) : RegularExpression(name){};
         virtual ~SearchString(){};
         virtual bool Matches(std::string s);
  };
 
 
-class SearchRegex : public SearchExpression
+class SearchRegex : public RegularExpression
 {
     public:
         SearchRegex(std::string name);
@@ -45,4 +45,4 @@ class SearchRegex : public SearchExpression
 };
 
 
-#endif /* HAND_SEARCHSTRING_H */
+#endif /* GRAPH_SEARCH_SEARCHSTRING_H */

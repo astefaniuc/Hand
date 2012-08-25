@@ -226,7 +226,7 @@ Vertex* Vertex::_Find(string name, int depth)
 }
 
 
-Vertex* Vertex::Find(SearchExpression* expression)
+Vertex* Vertex::Find(RegularExpression* expression)
 {
     // "Plain" find, don't descend
     uint s = size();
@@ -295,7 +295,7 @@ bool Vertex::IsType(string type)
 }
 
 
-bool Vertex::IsType(SearchExpression* se)
+bool Vertex::IsType(RegularExpression* se)
 {
     if(!se)
         return false;

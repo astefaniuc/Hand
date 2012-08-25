@@ -102,7 +102,7 @@ bool Relation::Set(Vertex* item)
 bool Relation::IsOpen(Search* search)
 {
     // Does it match in its role as relation
-    SearchExpression* se = search->GetSearchRelation();
+    RegularExpression* se = search->GetSearchRelation();
     if(se && !se->Matches(Name))
         // Don't look further if it's not the right relation
         return false;

@@ -17,17 +17,17 @@
  *  License along with Hand. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GRAPH_SEARCH_EXPRESSION_H
-#define GRAPH_SEARCH_EXPRESSION_H
+#ifndef GRAPH_SEARCH_REGULAREXPRESSION_H
+#define GRAPH_SEARCH_REGULAREXPRESSION_H
 
 #include "graph/vertex.h"
 
 
-class SearchExpression : public Vertex
+class RegularExpression : public Vertex
 {
     public:
-        SearchExpression(std::string name) : Vertex(name){};
-        virtual ~SearchExpression(){};
+        RegularExpression(std::string name) : Vertex(name){};
+        virtual ~RegularExpression(){};
         virtual bool Matches(std::string s) = 0;
         virtual std::string GetAsString()
         {
@@ -36,4 +36,4 @@ class SearchExpression : public Vertex
 };
 
 
-#endif /* GRAPH_SEARCH_EXPRESSION_H */
+#endif /* GRAPH_SEARCH_REGULAREXPRESSION_H */

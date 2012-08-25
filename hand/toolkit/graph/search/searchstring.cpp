@@ -31,7 +31,7 @@ bool SearchString::Matches(string s)
 }
 
 
-SearchRegex::SearchRegex(string name) : SearchExpression(name)
+SearchRegex::SearchRegex(string name) : RegularExpression(name)
 {
     RegEx = new regex(name);
 }

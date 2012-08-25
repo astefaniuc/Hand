@@ -34,7 +34,7 @@
 
 
 class Search;
-class SearchExpression;
+class RegularExpression;
 
 class Vertex : public std::vector<Vertex*>
 {
@@ -77,7 +77,7 @@ class Vertex : public std::vector<Vertex*>
         virtual Vertex* Find(std::string name, int max_depth = 2);
         // Flat search with support for (boost-typed) regular expressions
         // TODO: make it iterative or rename to it "Get()"?
-        virtual Vertex* Find(SearchExpression* expression);
+        virtual Vertex* Find(RegularExpression* expression);
 
         // Set "name" with or without uri scheme
         virtual void SetName(std::string name);
@@ -90,7 +90,7 @@ class Vertex : public std::vector<Vertex*>
         // Returns the last set type
         virtual std::string GetType();
         virtual bool IsType(std::string type);
-        virtual bool IsType(SearchExpression* type);
+        virtual bool IsType(RegularExpression* type);
 
         // Set object owner (for memory management).
         // Owner is stored under OWNER

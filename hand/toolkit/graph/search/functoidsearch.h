@@ -42,11 +42,11 @@ class Search : public List
         // The setters are called from "outside", from the application code
         void SetSearchName(std::string s, bool make_regex=false);
         // The getters are called from inside, the Find methods
-        SearchExpression* GetSearchName();
+        RegularExpression* GetSearchName();
         void SetSearchType(std::string s, bool make_regex=false);
-        SearchExpression* GetSearchType();
+        RegularExpression* GetSearchType();
         void SetSearchRelation(std::string s, bool make_regex=false);
-        SearchExpression* GetSearchRelation();
+        RegularExpression* GetSearchRelation();
         virtual std::string GetCookieName();
         virtual bool Execute(Vertex* target);
     protected:
@@ -56,18 +56,18 @@ class Search : public List
         void ExtendPath(Vertex* tree_node, SearchCookie* path_end);
         bool MarkDeathBranch(SearchCookie* branch);
         void DecomposeDeathBranches(SearchCookie* branch);
-        SearchExpression* AddSearchExpression(std::string name,
-                                              std::string s,
-                                              bool make_regex);
+        RegularExpression* AddSearchRegex(std::string name,
+                                          std::string s,
+                                          bool make_regex);
     public:
         // Result setter and getter
         void AddFinding(Vertex* finding);
         Vertex* GetFindings();
     protected:
         // Quick links
-        SearchExpression* SearchName;
-        SearchExpression* SearchType;
-        SearchExpression* SearchRelation;
+        RegularExpression* SearchName;
+        RegularExpression* SearchType;
+        RegularExpression* SearchRelation;
         Pool* CookiePool;
     protected:
         Vertex* Findings;

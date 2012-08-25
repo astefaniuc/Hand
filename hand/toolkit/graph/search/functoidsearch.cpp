@@ -73,11 +73,11 @@ void Search::ClearFindings()
 void Search::SetSearchName(string s, bool make_regex)
 {
     // Add a link to the own interface for the GUI
-    SearchName = AddSearchExpression("SearchName", s, make_regex);
+    SearchName = AddSearchRegex("SearchName", s, make_regex);
 }
 
 
-SearchExpression* Search::GetSearchName()
+RegularExpression* Search::GetSearchName()
 {
     return SearchName;
 }
@@ -86,11 +86,11 @@ SearchExpression* Search::GetSearchName()
 void Search::SetSearchType(string s, bool make_regex)
 {
     // Add a link to the own interface for the GUI
-    SearchType = AddSearchExpression("SearchType", s, make_regex);
+    SearchType = AddSearchRegex("SearchType", s, make_regex);
 }
 
 
-SearchExpression* Search::GetSearchType()
+RegularExpression* Search::GetSearchType()
 {
     return SearchType;
 }
@@ -99,19 +99,19 @@ SearchExpression* Search::GetSearchType()
 void Search::SetSearchRelation(string s, bool make_regex)
 {
     // Add a link to the own interface for the GUI
-    SearchRelation = AddSearchExpression("SearchRelation", s, make_regex);
+    SearchRelation = AddSearchRegex("SearchRelation", s, make_regex);
 }
 
 
-SearchExpression* Search::GetSearchRelation()
+RegularExpression* Search::GetSearchRelation()
 {
     return SearchRelation;
 }
 
 
-SearchExpression* Search::AddSearchExpression(string relation_name, string s, bool make_regex)
+RegularExpression* Search::AddSearchRegex(string relation_name, string s, bool make_regex)
 {
-    SearchExpression* se;
+    RegularExpression* se;
     if(make_regex)
         se = new SearchRegex(s);
     else
