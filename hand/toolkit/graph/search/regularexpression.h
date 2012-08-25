@@ -29,10 +29,6 @@ class RegularExpression : public Vertex
         RegularExpression(std::string name) : Vertex(name){};
         virtual ~RegularExpression(){};
         virtual bool Matches(std::string s) = 0;
-        virtual std::string GetAsString()
-        {
-            return Name;
-        };
 };
 
 

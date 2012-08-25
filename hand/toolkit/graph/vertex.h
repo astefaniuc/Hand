@@ -100,18 +100,22 @@ class Vertex : public std::vector<Vertex*>
         // Detach all objects not owned
         virtual void Reset();
 
+        // Returns the string to be visualized, here: the name
+        virtual std::string GetAsString();
+
         // Interface to methods defined in a derived class
         virtual bool Execute(Vertex* func_param);
 
         // Helper method for the search engine
         virtual bool IsOpen(Search* search);
+
         // TODO:
-//        virtual string GetAsString() = 0;
 //        virtual bool NotifyChanged();
 
     protected:
         virtual Vertex* _Find(std::string name, int depth);
 
+    private:
         std::string Name;
 };
 

@@ -355,6 +355,12 @@ void Vertex::Reset()
 }
 
 
+string Vertex::GetAsString()
+{
+    return Name;
+}
+
+
 bool Vertex::Execute(Vertex* func_param)
 {
     return false;

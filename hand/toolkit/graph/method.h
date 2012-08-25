@@ -59,11 +59,6 @@ class Method : public Vertex
             return Object;
         };
 
-        std::string GetAsString()
-        {
-            // TODO: what kind of a string to create: for the GUI? for persistent storage? for both?
-            return "";
-        };
     private:
         TFunction Function;
         I* Object;

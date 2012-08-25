@@ -64,7 +64,7 @@ bool Relation::IsOpen(Search* search)
 {
     // Does it match in its role as relation
     RegularExpression* se = search->GetSearchRelation();
-    if(se && !se->Matches(Name))
+    if(se && !se->Matches(GetName()))
         // Don't look further if it's not the right relation
         return false;
     return true;
