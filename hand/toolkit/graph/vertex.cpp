@@ -384,6 +384,8 @@ bool Vertex::Execute(Vertex* func_param)
 
 bool Vertex::IsOpen(Search* search)
 {
+    if(Body.size() == 0)
+        return true;
     // The search cookie should be the last element
     Vertex* last = Body.back();
     if(last && (last->GetName()==search->GetCookieName()))
