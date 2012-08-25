@@ -94,7 +94,7 @@ bool Device::Init()
 bool Device::ShowPressedKey(Vertex* ignore)
 {
     // Do nothing: this method is added always at first level but
-    // initializing the key will inquire functoids at increasing level
+    // initializing the key will inquire vertices at increasing level
     return true;
 }
 

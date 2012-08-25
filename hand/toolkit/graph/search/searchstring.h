@@ -20,7 +20,7 @@
 #ifndef GRAPH_SEARCH_SEARCHSTRING_H
 #define GRAPH_SEARCH_SEARCHSTRING_H
 
-#include "graph/search/searchexpression.h"
+#include "graph/search/regularexpression.h"
 
 #include <regex>
 

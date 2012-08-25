@@ -18,7 +18,7 @@
  */
 
 #include "view/datatypes/rgb.h"
-#include "graph/search/functoidsearch.h"
+#include "graph/search/search.h"
 #include "graph/data.h"
 
 

@@ -17,7 +17,7 @@
  *  License along with Hand. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "graph/search/functoidsearch.h"
+#include "graph/search/search.h"
 #include "graph/search/searchcookie.h"
 #include "graph/search/searchstring.h"
 

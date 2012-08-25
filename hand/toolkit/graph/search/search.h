@@ -22,7 +22,7 @@
 #define GRAPH_SEARCH_H
 
 #include "graph/list.h"
-#include "graph/search/searchexpression.h"
+#include "graph/search/regularexpression.h"
 
 
 class SearchCookie;

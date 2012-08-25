@@ -47,7 +47,7 @@ class Relation : public List
         Relation(std::string name);
         virtual ~Relation(){};
 
-        // Inserts a sub-item to the current functoid without changing
+        // Inserts a sub-item to the current vertex without changing
         // the ownership of 'item'; it replaces *all* objects referenced
         // by the Relation (only public elements)
         virtual bool Set(Vertex* sub);

@@ -18,7 +18,7 @@
  */
 
 #include "graph/search/searchcookie.h"
-#include "graph/search/functoidsearch.h"
+#include "graph/search/search.h"
 
 
 using namespace std;
@@ -86,7 +86,7 @@ void Pool::Take(Vertex* cookie)
     SearchCookie* sc = dynamic_cast<SearchCookie*>(cookie);
     if(!sc)
         return;
-    // Detach the Target functoid
+    // Detach the Target vertex
     sc->Detach(NULL);
 
     sc->Parent = NULL;

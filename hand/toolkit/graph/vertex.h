@@ -42,14 +42,14 @@ class Vertex : public std::vector<Vertex*>
         Vertex(std::string name);
         virtual ~Vertex();
 
-        // Inserts a sub-item to the current functoid and makes the current
-        // functoid the owner of it if it is unowned; allows multiple objects
+        // Inserts a sub-item to the current vertex and makes the current
+        // vertex the owner of it if it is unowned; allows multiple objects
         // with the same name
         virtual bool Add(Vertex* child);
-        // Inserts a sub-item to the current functoid without changing
+        // Inserts a sub-item to the current vertex without changing
         // the ownership of 'item'; it replaces any object with same name
         virtual bool Set(Vertex* sub);
-        // Appends a sub-item to the current functoid without changing
+        // Appends a sub-item to the current vertex without changing
         // the ownership of 'item'; allows multiple objects with same name
         virtual bool Attach(Vertex* sub);
 
@@ -60,8 +60,8 @@ class Vertex : public std::vector<Vertex*>
         virtual bool Delete(Vertex* child);
 
         // Get the first sub-item by name.
-        // If the item doesn't exist it returns a new Relation functoid;
-        // use Get(ANY, name) to test if a functoid exists
+        // If the item doesn't exist it returns a new Relation vertex;
+        // use Get(ANY, name) to test if a vertex exists
         virtual Vertex* Get(std::string name);
         // Get the first sub-item by name and type; if the item is not found
         // it returns NULL; the parameters can be set to ANY e.g.

@@ -19,7 +19,7 @@
 
 #include "graph/list.h"
 #include "graph/link.h"
-#include "graph/search/searchexpression.h"
+#include "graph/search/regularexpression.h"
 //#include "factory.h"
 
 

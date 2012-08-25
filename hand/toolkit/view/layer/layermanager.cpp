@@ -107,9 +107,9 @@ void LayerManager::LoadAppInterface(Vertex* tree, bool make_default)
 }
 
 
-bool LayerManager::UnloadAppInterface(Vertex* functoid)
+bool LayerManager::UnloadAppInterface(Vertex* vertex)
 {
-    delete(functoid);
+    delete(vertex);
     return true;
 }
 

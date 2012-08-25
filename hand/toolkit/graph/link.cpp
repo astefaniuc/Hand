@@ -18,7 +18,7 @@
  */
 
 #include "graph/link.h"
-#include "graph/search/functoidsearch.h"
+#include "graph/search/search.h"
 
 
 using namespace std;
