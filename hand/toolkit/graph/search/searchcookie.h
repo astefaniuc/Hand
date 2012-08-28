@@ -32,6 +32,8 @@ class SearchCookie : public List
     public:
         SearchCookie();
         virtual ~SearchCookie();
+
+        bool MarkDeathBranch();
         bool IsOpen(Search* search);
         // Detaches cookie from Target
         void Reset();

@@ -52,6 +52,27 @@ void SearchCookie::Reset()
     IsDeadBranch = false;
 }
 
+
+bool SearchCookie::MarkDeathBranch()
+{
+    SearchCookie* c;
+    uint i = 0;
+    while((c=(SearchCookie*)Get(++i)) != NULL)
+        if(!c->IsDeadBranch)
+            return false;
+
+    IsDeadBranch = true;
+
+    Vertex* p_rel = Vertex::Get(ANY, OWNER);
+    if(p_rel)
+    {
+        SearchCookie* parent = dynamic_cast<SearchCookie*>(p_rel->Get(1));
+        if(parent)
+            return parent->MarkDeathBranch();
+    }
+    return false;
+}
+
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------

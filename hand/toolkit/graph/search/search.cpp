@@ -35,7 +35,7 @@ Search::Search(string name) : Vertex(name)
     SearchType = NULL;
     SearchRelation = NULL;
     MaxDepth = MAX_SEARCH_DEPTH;
-    RemoveDeadBranch = true;
+    RemoveDeadBranch = false;
     MultipleFinds = false;
 
     CookiePool = new Pool();
@@ -117,7 +117,7 @@ bool Search::Step(SearchCookie* path)
             return true;
 
         // Is this branch dead?
-        MarkDeathBranch(path);
+        path->MarkDeathBranch();
     }
     return found;
 }
@@ -169,26 +169,6 @@ bool Search::Matches(Vertex* target)
 
     Findings->Attach(target);
     return true;
-}
-
-
-bool Search::MarkDeathBranch(Vertex* branch)
-{
-    if(!branch)
-        return false;
-
-    SearchCookie* c;
-    uint i = 0;
-    while((c=(SearchCookie*)branch->Get(++i)) != NULL)
-        if(!c->IsDeadBranch)
-            return false;
-
-    ((SearchCookie*)branch)->IsDeadBranch = true;
-
-    Vertex* parent = branch->Vertex::Get(ANY, OWNER);
-    if(parent)
-        return MarkDeathBranch(parent->Get(1));
-    return false;
 }
 
 

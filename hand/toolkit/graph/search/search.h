@@ -51,7 +51,6 @@ class Search : public Vertex
         bool Step(SearchCookie* path);
         bool SearchAllChilds(SearchCookie* trail_end);
         Vertex* BuildPath(Vertex* target);
-        bool MarkDeathBranch(Vertex* branch);
         void DecomposeDeathBranches(SearchCookie* branch);
         RegularExpression* AddSearchRegex(std::string name,
                                           std::string s,
