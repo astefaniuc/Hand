@@ -63,9 +63,9 @@ Vertex* List::Get(string s)
                 return child;
 
         // Avoid endless recursion: Vertex + Attach
-        Vertex* r = new Vertex(s);
-        Vertex::Attach(r);
-        return r;
+        child = new Vertex(s);
+        Vertex::Attach(child);
+        return child;
     }
 
     return List::Get(PUBLICLIST)->Get(s);
@@ -92,10 +92,10 @@ uint List::GetSize()
 
 void List::Reset()
 {
-    Vertex* pl = List::Get(ANY, PUBLICLIST);
+    Vertex* pl = Vertex::Get(ANY, PUBLICLIST);
     if(pl)
     {
-        Detach(pl);
+        Vertex::Detach(pl);
         delete(pl);
     }
 }

@@ -34,7 +34,7 @@ SearchCookie::SearchCookie() : List(SEARCHCOOKIE)
 SearchCookie::~SearchCookie()
 {
     if(Target)
-        Target->Detach(this);
+        Target->Vertex::Detach(this);
 }
 
 
@@ -44,15 +44,12 @@ bool SearchCookie::IsOpen(Search* search)
 }
 
 
-bool SearchCookie::Detach(Vertex* ignore)
+void SearchCookie::Reset()
 {
-    bool ret = false;
     if(Target)
-    {
-        ret = Target->Detach(this);
-        Target = NULL;
-    }
-    return ret;
+        Target->Vertex::Detach(this);
+    Target = NULL;
+    IsDeadBranch = false;
 }
 
 // ----------------------------------------------------------------
@@ -74,21 +71,18 @@ Vertex* Pool::Get()
 
 void Pool::Take(Vertex* cookie)
 {
-    SearchCookie* sc = dynamic_cast<SearchCookie*>(cookie);
-    if(!sc)
-        return;
-    // Detach the Target vertex
-    sc->Detach(NULL);
-
+    cookie->Reset();
     // Add to the pool
-    Add(sc);
-    sc->IsDeadBranch = false;
+    Attach(cookie);
 
     Vertex* child;
     uint i = 0;
-    while((child=sc->Get(++i)) != NULL)
+    while((child=cookie->Get(++i)) != NULL)
     {
-        Take(child);
-        sc->List::Detach(child);
+        if(dynamic_cast<SearchCookie*>(child))
+        {
+            cookie->Detach(child);
+            Take(child);
+        }
     }
 }

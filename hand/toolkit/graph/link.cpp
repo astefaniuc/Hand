@@ -62,6 +62,8 @@ bool Relation::Set(Vertex* target)
 
 bool Relation::IsOpen(Search* search)
 {
+    if(!Vertex::IsOpen(search))
+        return false;
     // Does it match in its role as relation
     RegularExpression* se = search->GetSearchRelation();
     if(se && !se->Matches(GetName()))

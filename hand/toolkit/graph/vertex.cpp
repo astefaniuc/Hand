@@ -22,13 +22,11 @@
 #include "graph/search/regularexpression.h"
 #include "graph/search/search.h"
 
-#include <typeinfo>
-
 
 using namespace std;
 
 
-typedef vector<Vertex*>::iterator VertexIterator;
+typedef vector<Vertex*>::iterator VIterator;
 
 
 Vertex::Vertex(string name)
@@ -40,17 +38,16 @@ Vertex::Vertex(string name)
 Vertex::~Vertex()
 {
     // Don't delete the parent(s)
-    Vertex* curr = Get(RELATION, OWNER);
-    // Reset() doesn't work here
-    if(curr && (curr->Body.size()== 2))
-        curr->Body.pop_back();
+    Vertex* curr = Get(ANY, OWNER);
+    if(curr)
+        curr->Body.clear();
 
     uint s = Body.size();
     for(uint i=0; i<s; i++)
     {
         curr = Body.at(i);
 
-        if(curr->HasOwner(this))
+        if(curr->IsOwner(this))
         {
             // Recursively delete all children
             delete curr;
@@ -66,8 +63,9 @@ bool Vertex::Add(Vertex* child)
     if(!child)
         return false;
     Body.push_back(child);
+
     // Take ownership only for unowned objects
-    if(child->HasOwner(this))
+    if(child->IsOwner(this))
         child->SetOwner(this);
 
     return true;
@@ -80,13 +78,13 @@ bool Vertex::Set(Vertex* child)
         return false;
 
     string s = child->GetName();
-    VertexIterator curr = Body.begin();
+    VIterator curr = Body.begin();
     while(curr != Body.end())
     {
-        // TODO: is Type relevant?
+        // TODO: is the Type relevant?
         if((*curr)->GetName() == s)
         {
-            if((*curr)->HasOwner(this))
+            if((*curr)->IsOwner(this))
                 delete((*curr));
             Body.erase(curr);
         }
@@ -109,8 +107,8 @@ bool Vertex::Attach(Vertex* child)
 
 Vertex* Vertex::Get(string s)
 {
-    VertexIterator curr;
-    VertexIterator _end = Body.end();
+    VIterator curr;
+    VIterator _end = Body.end();
     for(curr=Body.begin(); curr!=_end; curr++)
         if((*curr)->GetName() == s)
             return (*curr);
@@ -123,8 +121,8 @@ Vertex* Vertex::Get(string s)
 
 Vertex* Vertex::Get(string type, string name)
 {
-    VertexIterator curr = Body.begin();
-    VertexIterator _end = Body.end();
+    VIterator curr = Body.begin();
+    VIterator _end = Body.end();
 
     if(name == ANY)
     {
@@ -152,13 +150,17 @@ Vertex* Vertex::Get(string type, string name)
 
 Vertex* Vertex::Get(uint i)
 {
-    // 1-based
     if(i == 0)
-        //return NULL;
-        exit(666);
+        return NULL;
+
+    // 1-based
     --i;
+
     if(i < Body.size())
-        return Body.at(i);
+    {
+        Vertex* test = Body.at(i);
+        return test;
+    }
     return NULL;
 }
 
@@ -166,7 +168,7 @@ Vertex* Vertex::Get(uint i)
 bool Vertex::Delete(Vertex* child)
 {
     Vertex::Detach(child);
-    if(child->HasOwner(this))
+    if(child->IsOwner(this))
     {
         delete(child);
         return true;
@@ -177,14 +179,17 @@ bool Vertex::Delete(Vertex* child)
 
 bool Vertex::Detach(Vertex* child)
 {
-    if(!child) return false;
+    if(!child)
+        return false;
 
-    VertexIterator curr;
+    VIterator curr;
     for(curr=Body.begin(); curr!=Body.end(); curr++)
     {
         if((*curr) == child)
         {
             Body.erase(curr);
+            if(child->IsOwner(this))
+                child->SetOwner(NULL);
             return true;
         }
     }
@@ -269,16 +274,11 @@ string& Vertex::GetName()
 }
 
 
-string Vertex::GetUriString()
-{
-    return (GetType() + Name);
-}
-
-
 void Vertex::SetType(string type)
 {
     if(type.empty())
         return;
+
     Vertex* types = Vertex::Get(ANY, TYPE);
     if(!types)
     {
@@ -306,8 +306,8 @@ bool Vertex::IsType(string type)
     if(!types)
         return (type == VERTEX);
 
-    VertexIterator _end = types->Body.end();
-    for(VertexIterator curr=types->Body.begin(); curr!=_end; curr++)
+    VIterator _end = types->Body.end();
+    for(VIterator curr=types->Body.begin(); curr!=_end; curr++)
         if((*curr)->GetName() == type)
             return true;
 
@@ -324,8 +324,8 @@ bool Vertex::IsType(RegularExpression* se)
     if(!types)
         return se->Matches(VERTEX);
 
-    VertexIterator _end = types->Body.end();
-    for(VertexIterator curr=types->Body.begin(); curr!=_end; curr++)
+    VIterator _end = types->Body.end();
+    for(VIterator curr=types->Body.begin(); curr!=_end; curr++)
         if(se->Matches((*curr)->GetName()))
             return true;
 
@@ -335,31 +335,40 @@ bool Vertex::IsType(RegularExpression* se)
 
 void Vertex::SetOwner(Vertex* owner)
 {
-    Relation* r = new Relation(OWNER);
-    Vertex::Attach(r);
-    r->Set(owner);
+    Vertex* ao = Get(ANY, OWNER);
+    // Allow only one owner
+    if(ao)
+        ao->Body.clear();
+    else
+    {
+        ao = new Vertex(OWNER);
+        Body.push_back(ao);
+    }
+
+    if(owner)
+        ao->Body.push_back(owner);
 }
 
 
-bool Vertex::HasOwner(Vertex* caller)
+bool Vertex::IsOwner(Vertex* owner)
 {
-    Vertex* rel_p = Vertex::Get(RELATION, OWNER);
+    Vertex* rel_p = Vertex::Get(ANY, OWNER);
     if(!rel_p)
         return true;
     uint ps = rel_p->Body.size();
     // Check if this node has only the caller as parent
-    return ((ps < 2) || ((ps == 2) && (rel_p->Body.at(1) == caller)));
+    return ((ps == 0) || ((ps == 1) && (rel_p->Body.at(0) == owner)));
 }
 
 
 void Vertex::Reset()
 {
-    VertexIterator curr = Body.begin();
-    VertexIterator _end = Body.end();
+    VIterator curr = Body.begin();
+    VIterator _end = Body.end();
     while(curr != _end)
     {
-        // TODO: deleted also attached objects, needs fix in List
-        if((*curr)->HasOwner(this))
+        // TODO: delete also attached objects, but not the owner
+        if((*curr)->IsOwner(this))
         {
             (*curr)->Vertex::Reset();
             curr++;

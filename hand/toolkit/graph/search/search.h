@@ -44,13 +44,13 @@ class Search : public Vertex
         RegularExpression* GetSearchType();
         void SetSearchRelation(std::string s, bool make_regex=false);
         RegularExpression* GetSearchRelation();
-        virtual std::string GetCookieName();
-        virtual bool Execute(Vertex* target);
+        std::string GetCookieName();
+        bool Execute(Vertex* target);
     protected:
-        virtual bool Matches(Vertex* target);
+        bool Matches(Vertex* target);
         bool Step(SearchCookie* path);
         bool SearchAllChilds(SearchCookie* trail_end);
-        void ExtendPath(Vertex* tree_node, SearchCookie* path_end);
+        Vertex* BuildPath(Vertex* target);
         bool MarkDeathBranch(Vertex* branch);
         void DecomposeDeathBranches(SearchCookie* branch);
         RegularExpression* AddSearchRegex(std::string name,

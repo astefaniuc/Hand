@@ -399,6 +399,7 @@ bool Default::ColorSurface(Vertex* layout)
 
     SDL_Surface* sf = vs->GetBuffer();
     SDL_Rect size = vs->_GetSize();
+
     Rect* csap = GetRect(SIZEANDPOSITION, layout);
     csap->MultiplyTo(size);
     SDL_SetClipRect(sf, &size);

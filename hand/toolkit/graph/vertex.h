@@ -69,12 +69,10 @@ class Vertex
         // TODO: make it iterative or rename to it "Get()"?
         virtual Vertex* Find(RegularExpression* expression);
 
-        // Set "name" with or without uri scheme
+        // Set Vertex name
         void SetName(std::string name);
-        // Get the name without uri scheme
+        // Get the Vertex name
         std::string& GetName();
-        // Get the name with uri scheme
-        virtual std::string GetUriString();
 
         void SetType(std::string type);
         // Returns the last set type
@@ -86,12 +84,13 @@ class Vertex
         // Owner is stored under OWNER
         void SetOwner(Vertex* owner);
         // Returns true if 'caller' is the owner or if no owner is registered
-        bool HasOwner(Vertex* caller);
+        bool IsOwner(Vertex* owner);
 
         // Removes all objects not owned
         virtual void Reset();
-        // Removes the reference to 'item' but keeps item alive
-        virtual bool Detach(Vertex* item);
+        // Removes child from Vertex. If Vertex is the owner of child it also
+        // resets the ownership
+        virtual bool Detach(Vertex* child);
         // Removes the reference to 'item' and deletes the object if it
         // is the owner
         virtual bool Delete(Vertex* child);

@@ -22,7 +22,7 @@ extern "C" void Destroy(HandApp* app)
 
 FindTester::FindTester(void) : HandApp("FindTester")
 {
-    TestDelete();
+//    TestDelete();
     TestFindBigTree();
     // For setting the breakpoint
     return;
@@ -36,7 +36,7 @@ void FindTester::TestDelete()
     Vertex* root_node = new Vertex("RootNode");
     last_build = _Build(root_node, 8, 10, type);
     string last_name = last_build->GetName();
-    Delete(root_node);
+    delete(root_node);
     // Should print an error
     CheckFound(last_build, TestFind(last_name, LIST, false));
     for(uint i=0; i<10; i++)
@@ -45,7 +45,7 @@ void FindTester::TestDelete()
         root_node = new Vertex("RootNode");
         last_build = _Build(root_node, 8, 10, type);
         CheckFound(last_build, TestFind(last_build->GetName(), LIST, false));
-        Delete(root_node);
+        delete(root_node);
     }
 
     return;
@@ -54,7 +54,6 @@ void FindTester::TestDelete()
 
 void FindTester::TestFindBigTree()
 {
-    string last_name = "";
     string last_type = "";
     Vertex* found;
     // Search for the last one (depth 0 is the deepest)
