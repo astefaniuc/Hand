@@ -84,8 +84,6 @@ bool Search::Execute(Vertex* target)
         }
         if(path->IsDeadBranch)
             break;
-        if(RemoveDeadBranch)
-            DecomposeDeathBranches(path);
     }
     CookiePool->Take(path);
     return found;
@@ -101,7 +99,12 @@ bool Search::Step(SearchCookie* path)
         uint i = 0;
         while((branch=(SearchCookie*)path->Get(++i)) != NULL)
         {
-            if((!branch->IsDeadBranch) && Step(branch))
+            if(branch->IsDeadBranch && RemoveDeadBranch)
+            {
+                path->Detach(branch);
+                CookiePool->Take(branch);
+            }
+            else if(Step(branch))
             {
                 found = true;
                 if(!MultipleFinds)
@@ -123,12 +126,12 @@ bool Search::Step(SearchCookie* path)
 }
 
 
-bool Search::SearchAllChilds(SearchCookie* path_end)
+bool Search::SearchAllChilds(SearchCookie* path)
 {
     bool found = false;
     Vertex* child;
     uint i = 0;
-    while((child=path_end->Target->Get(++i)) != NULL)
+    while((child=path->Target->Get(++i)) != NULL)
     {
         if(!child->IsOpen(this))
             continue;
@@ -138,7 +141,7 @@ bool Search::SearchAllChilds(SearchCookie* path_end)
                 return true;
             found = true;
         }
-        path_end->Add(BuildPath(child));
+        path->Add(BuildPath(child));
     }
 
     return found;
@@ -169,30 +172,6 @@ bool Search::Matches(Vertex* target)
 
     Findings->Attach(target);
     return true;
-}
-
-
-void Search::DecomposeDeathBranches(SearchCookie* path)
-{
-    SearchCookie* branch;
-    Vertex* child;
-    uint i = 1;
-    while((child=path->Get(i)) != NULL)
-    {
-        branch = dynamic_cast<SearchCookie*>(child);
-        if(!branch)
-            i++;
-        else if(branch->IsDeadBranch)
-        {
-            path->Detach(branch);
-            CookiePool->Take(branch);
-        }
-        else
-        {
-            DecomposeDeathBranches(branch);
-            i++;
-        }
-    }
 }
 
 
