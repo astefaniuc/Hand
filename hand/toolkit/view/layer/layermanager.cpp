@@ -266,7 +266,7 @@ bool LayerManager::Expand(Vertex* to_expand)
         if(!new_view)
             return false;
     }
-    new_view->SetSize(_GetSize());
+    new_view->SetSize(GetSize());
 
     if(MasterView)
     {

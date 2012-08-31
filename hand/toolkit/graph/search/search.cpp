@@ -80,7 +80,7 @@ bool Search::Execute(Vertex* target)
                 break;
         }
 
-        if(path->GetSize() == 0)
+        if(path->Size() == 0)
             break;
     }
 
@@ -92,7 +92,14 @@ bool Search::Execute(Vertex* target)
 bool Search::Step(Vertex* path)
 {
     bool found = false;
-    if(path->GetSize() > 0)
+    if(path->Size() == 0)
+    {
+        // Head of path
+        found = SearchAllChilds(path);
+        if(found && !MultipleFinds)
+            return true;
+    }
+    else
     {
         Vertex* branch;
         uint i = 0;
@@ -105,13 +112,6 @@ bool Search::Step(Vertex* path)
                     break;
             }
         }
-    }
-    else
-    {
-        // Head of path
-        found = SearchAllChilds(path);
-        if(found && !MultipleFinds)
-            return true;
     }
     return found;
 }

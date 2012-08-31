@@ -42,7 +42,7 @@ class List : public Vertex
         virtual Vertex* Get(std::string child);
         virtual Vertex* Get(std::string type, std::string name);
         virtual Vertex* Get(uint child);
-        virtual uint GetSize();
+        virtual uint Size();
         // Removes the complete PUBLICLIST vertex
         virtual void Reset();
         virtual bool Detach(Vertex* item);

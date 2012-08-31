@@ -24,13 +24,6 @@
 #include <SDL/SDL.h>
 
 
-struct Size
-{
-    int w;
-    int h;
-};
-
-
 class Screen : public virtual HandApp
 {
     public:
@@ -42,8 +35,7 @@ class Screen : public virtual HandApp
         bool SetWindowed(void);
         void Init(void);
         // GetResolution()
-        void SetSize(Size*);
-        // _GetSize()/ GetPosition()
+        // GetSize()/ GetPosition()
         SDL_Rect GetResolution(void);
         // GetBuffer()
         SDL_Surface* GetSurface(void);
@@ -55,8 +47,6 @@ class Screen : public virtual HandApp
         SDL_Surface* Surface;
         // TODO: we need only one "Size" member and the "IsFullscreen" to store
         // all sizes we need ("Surface" stores the second size)
-        Size WndSize;
-        Size FullSize;
         bool IsFullscreen;
 };
 

@@ -90,9 +90,9 @@ Vertex* List::Get(string type, string name)
 }
 
 
-uint List::GetSize()
+uint List::Size()
 {
-    return List::Get(PUBLICLIST)->GetSize();
+    return List::Get(PUBLICLIST)->Size();
 }
 
 

@@ -198,7 +198,7 @@ bool Vertex::Detach(Vertex* child)
 }
 
 
-uint Vertex::GetSize()
+uint Vertex::Size()
 {
     return Body.size();
 }

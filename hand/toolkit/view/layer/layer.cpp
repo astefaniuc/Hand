@@ -311,7 +311,7 @@ void Layer::DrawChilds(bool forced)
         layer = dynamic_cast<Layer*>(child);
         if(!layer)
             continue;
-        layer->SetSize(_GetSize());
+        layer->SetSize(GetSize());
         layer->Update(forced);
     }
 }

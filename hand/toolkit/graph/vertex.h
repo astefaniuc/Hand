@@ -61,7 +61,7 @@ class Vertex
         virtual Vertex* Get(uint item);
 
         // Get the number of elements
-        virtual uint GetSize();
+        virtual uint Size();
 
         // Simple iterative deepening depth-first search.
         // Omits OWNER from the search but might fail with any other graph

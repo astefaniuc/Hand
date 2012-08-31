@@ -40,7 +40,7 @@ SearchCookie::~SearchCookie()
 
 bool SearchCookie::Attach(Vertex* target)
 {
-    if(target->GetSize() == 0)
+    if(target->Size() == 0)
     {
         IsDeadBranch = true;
         return false;

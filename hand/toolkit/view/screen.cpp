@@ -33,13 +33,6 @@ Screen::Screen() : HandApp("Screen")
     IsFullscreen = false;
     // Start SDL as the default drawing engine:
     InitSDL();
-    // This is the only chance to get the HW screen resolution
-    const SDL_VideoInfo* info = SDL_GetVideoInfo();
-    FullSize.w = info->current_w;
-    FullSize.h = info->current_h;
-    // Set the default resolution
-    WndSize.w = 800;
-    WndSize.h = 600;
     SetWindowed();
 }
 
@@ -74,19 +67,11 @@ void Screen::InitSDL(void)
 }
 
 
-void Screen::SetSize(Size* res)
-{
-    WndSize.h = res->h;
-    WndSize.w = res->w;
-    // Minimal size
-    if(WndSize.h <= 200) WndSize.h = 200;
-    if(WndSize.w <= 200) WndSize.w = 200;
-}
-
-
 bool Screen::SetFullscreen()
 {
-    Surface = SDL_SetVideoMode(FullSize.w, FullSize.h, 32,
+    // This is the only chance to get the HW screen resolution
+    const SDL_VideoInfo* info = SDL_GetVideoInfo();
+    Surface = SDL_SetVideoMode(info->current_w, info->current_h, 32,
                                SDL_DOUBLEBUF|SDL_HWSURFACE|SDL_FULLSCREEN);
     if(Surface == NULL)
     {
@@ -99,7 +84,7 @@ bool Screen::SetFullscreen()
 
 bool Screen::SetWindowed()
 {
-    Surface = SDL_SetVideoMode(WndSize.w, WndSize.h, 32,
+    Surface = SDL_SetVideoMode(800, 600, 32,
                                SDL_DOUBLEBUF|SDL_HWSURFACE);
     if(!Surface)
     {
