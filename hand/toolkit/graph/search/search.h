@@ -49,7 +49,7 @@ class Search : public Vertex
     protected:
         bool Matches(Vertex* target);
         bool Step(Vertex* path);
-        bool SearchAllChilds(SearchCookie* path_end);
+        bool SearchAllChilds(Vertex* path_end);
         RegularExpression* AddSearchRegex(std::string name,
                                           std::string s,
                                           bool make_regex);

@@ -33,13 +33,18 @@ class SearchCookie : public List
         SearchCookie();
         virtual ~SearchCookie();
 
-        virtual bool Attach(Vertex* target);
+        // Sets Target
+        bool Attach(Vertex* target);
+        // Returns open sub-paths
         Vertex* Get(uint item);
-
+        // Returns always 'false'
         bool IsOpen(Search* search);
-        Vertex* Target;
+    protected:
+        // Overloaded to return the Target
+        Vertex* _Get();
     private:
         bool IsDeadBranch;
+        Vertex* Target;
 };
 
 #endif /* GRAPH_SEARCH_SEARCHCOOKIE_H */

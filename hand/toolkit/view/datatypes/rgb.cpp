@@ -52,7 +52,7 @@ Rgb* GetRgb(string name, Vertex* tree)
     search.SetSearchName(name);
     search.SetSearchType(RGB);
     if(search.Execute(tree))
-        return dynamic_cast<Rgb*>(search.Get("Findings")->Get(1));
+        return dynamic_cast<Rgb*>(search.Get("Findings")->Get());
 
     return NULL;
 }

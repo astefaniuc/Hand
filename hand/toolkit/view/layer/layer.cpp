@@ -94,7 +94,7 @@ void Layer::SetContent(Vertex* data)
 
 Vertex* Layer::GetContent()
 {
-    return Get("Content")->Get(1);
+    return Get("Content")->Get();
 }
 
 
@@ -186,7 +186,7 @@ Layer* Layer::Insert(Vertex* data, string position)
     // TODO: check if there is already a Layer at searched
     // position and if it has the right type
     // TODO: delete / (re)create layer if needed
-    Layout* layout = dynamic_cast<Layout*>(Get("Layout")->Get(1));
+    Layout* layout = dynamic_cast<Layout*>(Get("Layout")->Get());
     // Is the layer type restricted by the current layout?
     if(!layout)
         return NULL;
@@ -204,9 +204,9 @@ Layer* Layer::Insert(Vertex* data, string position)
     Get(CHILDREN)->Add(sub_layer);
     sub_layer->SetParent(this);
     // on Layout level
-    Layout* field_layout = dynamic_cast<Layout*>(field->Get("Layout")->Get(1));
+    Layout* field_layout = dynamic_cast<Layout*>(field->Get("Layout")->Get());
     if(field_layout)
-        field_layout->AddForUpdate(sub_layer->Get("Layout")->Get(1));
+        field_layout->AddForUpdate(sub_layer->Get("Layout")->Get());
 
     return sub_layer;
 }
@@ -219,7 +219,7 @@ Layer* Layer::GetAttachedLayer(Vertex* target)
     search.SetSearchType(LAYER);
     search.SetSearchRelation(LAYER);
     if(search.Execute(target))
-        return dynamic_cast<Layer*>(search.Get("Findings")->Get(1));
+        return dynamic_cast<Layer*>(search.Get("Findings")->Get());
     return NULL;
 }
 
@@ -248,7 +248,7 @@ void Layer::SetTheme(Theme* theme)
 void Layer::SetLayout(Vertex* drawer_lib)
 {
     // Delete from the layout items owned by the previous theme
-    Vertex* layout = Get("Layout")->Get(1);
+    Vertex* layout = Get("Layout")->Get();
     if(!layout)
     {
         layout = new Layout("Layout", GetType()+"_Layout");
@@ -269,7 +269,7 @@ void Layer::Draw(bool forced)
         Updated = true; // ?
     }*/
     // Call the Theme function for drawing with the current settings
-    Layout* layout = dynamic_cast<Layout*>(Get("Layout")->Get(1));
+    Layout* layout = dynamic_cast<Layout*>(Get("Layout")->Get());
     if(!layout)
         return;
 

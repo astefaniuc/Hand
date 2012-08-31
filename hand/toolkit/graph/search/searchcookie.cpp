@@ -65,6 +65,12 @@ Vertex* SearchCookie::Get(uint i)
 }
 
 
+Vertex* SearchCookie::_Get()
+{
+    return Target;
+}
+
+
 bool SearchCookie::IsOpen(Search* search)
 {
     return false;

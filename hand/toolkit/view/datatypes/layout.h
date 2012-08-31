@@ -113,7 +113,7 @@ class PropertyFactory : public Factory
             Link* descr = dynamic_cast<Link*>(in_out);
             if(!descr || !descr->IsType(GetInputType()))
                 return NULL;
-            Vertex* layout = descr->Get(1);
+            Vertex* layout = descr->Vertex::Get();
             // Already initialized?
             if(layout)
                 return layout;

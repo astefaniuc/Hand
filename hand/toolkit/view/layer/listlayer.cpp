@@ -43,7 +43,7 @@ void ListLayer::SetContent(Vertex* data)
 
     uint nr_of_childs = data->GetSize();
     nr_of_childs--;
-    Data<uint>* max_c = dynamic_cast<Data<uint>*>(Get("Layout")->Get(1)->Get("MaxSize"));
+    Data<uint>* max_c = dynamic_cast<Data<uint>*>(Get("Layout")->Get()->Get("MaxSize"));
     if(max_c)
     {
         uint max_size = max_c->Get();

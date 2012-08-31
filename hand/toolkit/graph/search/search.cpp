@@ -109,7 +109,7 @@ bool Search::Step(Vertex* path)
     else
     {
         // Head of path
-        found = SearchAllChilds((SearchCookie*)path);
+        found = SearchAllChilds(path);
         if(found && !MultipleFinds)
             return true;
     }
@@ -117,13 +117,13 @@ bool Search::Step(Vertex* path)
 }
 
 
-bool Search::SearchAllChilds(SearchCookie* path)
+bool Search::SearchAllChilds(Vertex* path)
 {
     bool found = false;
     Vertex* child;
     Vertex* path_extension;
     uint i = 0;
-    while((child=path->Target->Get(++i)) != NULL)
+    while((child=path->Get()->Get(++i)) != NULL)
     {
         if(!child->IsOpen(this))
             continue;

@@ -411,7 +411,7 @@ bool Default::ColorSurface(Vertex* layout)
 
 string Default::GetString(Vertex* vs)
 {
-    Vertex* content = vs->Get("Content")->Get(1);
+    Vertex* content = vs->Get("Content")->Get();
     if(content)
         return content->Name();
     return "";

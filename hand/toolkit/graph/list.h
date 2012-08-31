@@ -47,6 +47,8 @@ class List : public Vertex
         virtual void Reset();
         virtual bool Detach(Vertex* item);
         virtual bool Delete(Vertex* child);
+    protected:
+        virtual Vertex* _Get();
 };
 
 #endif /* TOOLKIT_GRAPH_LIST_H */

@@ -202,7 +202,7 @@ void VirtualSurface::BlitSurface
 void VirtualSurface::SetSize(SDL_Rect size)
 {
     // Store only the size, position from layout
-    Rect* sap = GetRect(SIZEANDPOSITION, Get("Layout")->Get(1));
+    Rect* sap = GetRect(SIZEANDPOSITION, Get("Layout")->Get());
     if(sap)
         sap->MultiplyTo(size);
     if((size.w!=SizeAndPositionOnBuffer.w) || (size.h!=SizeAndPositionOnBuffer.h))

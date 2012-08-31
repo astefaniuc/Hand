@@ -52,6 +52,12 @@ bool List::Attach(Vertex* child)
 }
 
 
+Vertex* List::_Get()
+{
+    return List::Get(1);
+}
+
+
 Vertex* List::Get(string s)
 {
     if(s == PUBLICLIST)

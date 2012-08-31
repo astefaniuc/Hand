@@ -47,6 +47,8 @@ class Vertex
         // the ownership of 'item'; allows multiple objects with same name
         virtual bool Attach(Vertex* sub);
 
+        // Return the default child/value which is NULL for a plain vertex
+        Vertex* Get();
         // Get the first sub-item by name.
         // If the item doesn't exist it returns a new Relation vertex;
         // use Get(ANY, name) to test if a vertex exists
@@ -81,9 +83,8 @@ class Vertex
         bool IsType(RegularExpression* type);
 
         // Set object owner (for memory management).
-        // Owner is stored under OWNER
         void Owner(Vertex* owner);
-        // Returns true if 'caller' is the owner or if no owner is registered
+        // Returns the pointer to the owner vertex
         Vertex* Owner();
 
         // Removes all objects not owned
@@ -108,6 +109,9 @@ class Vertex
 //        virtual bool NotifyChanged();
 
     protected:
+        // Helper method allowing to virtualize the return value of Get(void);
+        // overload this if you want to return a different default value
+        virtual Vertex* _Get();
         virtual Vertex* _Find(std::string name, int depth);
 
     private:

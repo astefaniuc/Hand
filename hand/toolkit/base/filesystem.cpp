@@ -96,7 +96,7 @@ path FileVertex::GetPath()
     Vertex* dir_rel = Get(RELATION_PARENT_PATH);
     if(dir_rel)
     {
-        FileVertex* parent_path = dynamic_cast<FileVertex*>(dir_rel->Get(1));
+        FileVertex* parent_path = dynamic_cast<FileVertex*>(dir_rel->Get());
         if(parent_path)
             _path = parent_path->GetPath();
     }

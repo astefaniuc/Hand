@@ -148,7 +148,7 @@ Vertex* FindTester::TestFind(string name, string type, bool relation)
     cout << (clock()-start_time)/CLOCKS_PER_SEC << endl;
 
     if(found)
-        return search.Get("Findings")->Get(1);
+        return search.Get("Findings")->Get();
     return NULL;
 }
 

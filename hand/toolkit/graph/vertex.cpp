@@ -96,6 +96,18 @@ bool Vertex::Attach(Vertex* child)
 }
 
 
+Vertex* Vertex::Get()
+{
+    return _Get();
+}
+
+
+Vertex* Vertex::_Get()
+{
+    return NULL;
+}
+
+
 Vertex* Vertex::Get(string s)
 {
     VIterator curr;
