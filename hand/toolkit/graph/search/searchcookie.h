@@ -44,15 +44,4 @@ class SearchCookie : public List
         bool IsDeadBranch;
 };
 
-
-class Pool : public List
-{
-    public:
-        Pool() : List("SearchCookiePool"){};
-        virtual ~Pool(){};
-        Vertex* Get();
-        void Take(Vertex* cookie);
-        void Reset();
-};
-
 #endif /* GRAPH_SEARCH_SEARCHCOOKIE_H */

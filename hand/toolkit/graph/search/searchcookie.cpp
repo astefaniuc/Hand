@@ -24,9 +24,6 @@
 using namespace std;
 
 
-extern Pool* CookiePool;
-
-
 SearchCookie::SearchCookie() : List(SEARCHCOOKIE)
 {
     Target = NULL;
@@ -58,8 +55,7 @@ Vertex* SearchCookie::Get(uint i)
     SearchCookie* branch = (SearchCookie*)List::Get(i);
     if(branch && branch->IsDeadBranch)
     {
-        Detach(branch);
-        CookiePool->Take(branch);
+        Delete(branch);
 
         branch = (SearchCookie*)SearchCookie::Get(i);
         if(!branch && (i==1))
@@ -82,50 +78,3 @@ void SearchCookie::Reset()
     Target = NULL;
     IsDeadBranch = false;
 }
-
-// ----------------------------------------------------------------
-// ----------------------------------------------------------------
-// ----------------------------------------------------------------
-
-
-Vertex* Pool::Get()
-{
-    Vertex* cookie = List::Get(1);
-    if(cookie)
-    {
-        Detach(cookie);
-        cookie->Reset();
-        return cookie;
-    }
-    return new SearchCookie();
-}
-
-
-void Pool::Take(Vertex* cookie)
-{
-    if(GetSize() >= MAX_POOL_SIZE)
-    {
-        delete(cookie);
-        return;
-    }
-
-    // Add to the pool
-    Attach(cookie);
-
-    Vertex* child;
-    while((child=cookie->Get(1)) != NULL)
-    {
-        cookie->Detach(child);
-        Take(child);
-    }
-}
-
-
-void Pool::Reset()
-{
-    Vertex* child;
-    uint i = 0;
-    while((child=List::Get(++i)) != NULL)
-        child->Reset();
-}
-

@@ -25,8 +25,6 @@
 using namespace std;
 
 
-Pool* CookiePool = new Pool();
-
 Search::Search(string name) : Vertex(name)
 {
     SetType(METHOD);
@@ -69,7 +67,7 @@ bool Search::Execute(Vertex* target)
         found = true;
     }
 
-    Vertex* path = CookiePool->Get();
+    Vertex* path = new SearchCookie();
     path->Attach(target);
 
     uint depth;
@@ -86,8 +84,7 @@ bool Search::Execute(Vertex* target)
             break;
     }
 
-    CookiePool->Take(path);
-    CookiePool->Reset();
+    delete(path);
     return found;
 }
 
@@ -136,7 +133,7 @@ bool Search::SearchAllChilds(SearchCookie* path)
                 return true;
             found = true;
         }
-        path_extension = CookiePool->Get();
+        path_extension = new SearchCookie();
         path_extension->Attach(child);
         path->Add(path_extension);
     }
