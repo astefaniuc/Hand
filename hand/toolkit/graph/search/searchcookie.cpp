@@ -69,12 +69,3 @@ bool SearchCookie::IsOpen(Search* search)
 {
     return false;
 }
-
-
-void SearchCookie::Reset()
-{
-    if(Target)
-        Target->Vertex::Detach(this);
-    Target = NULL;
-    IsDeadBranch = false;
-}

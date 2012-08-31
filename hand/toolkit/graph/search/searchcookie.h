@@ -36,8 +36,6 @@ class SearchCookie : public List
         virtual bool Attach(Vertex* target);
         Vertex* Get(uint item);
 
-        // Detaches cookie from Target
-        void Reset();
         bool IsOpen(Search* search);
         Vertex* Target;
     private:
