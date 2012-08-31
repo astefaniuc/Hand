@@ -70,9 +70,9 @@ class Vertex
         virtual Vertex* Find(RegularExpression* expression);
 
         // Set Vertex name
-        void SetName(std::string name);
+        void Name(std::string name);
         // Get the Vertex name
-        std::string& GetName();
+        std::string& Name();
 
         void SetType(std::string type);
         // Returns the last set type
@@ -82,9 +82,9 @@ class Vertex
 
         // Set object owner (for memory management).
         // Owner is stored under OWNER
-        void SetOwner(Vertex* owner);
+        void Owner(Vertex* owner);
         // Returns true if 'caller' is the owner or if no owner is registered
-        bool IsOwner(Vertex* owner);
+        Vertex* Owner();
 
         // Removes all objects not owned
         virtual void Reset();
@@ -111,8 +111,9 @@ class Vertex
         virtual Vertex* _Find(std::string name, int depth);
 
     private:
-        std::string Name;
+        std::string _Name;
         std::vector<Vertex*> Body;
+        Vertex* _Owner;
 };
 
 #endif /* HAND_VERTEX_H */

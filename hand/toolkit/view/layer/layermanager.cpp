@@ -64,7 +64,7 @@ LayerManager::~LayerManager()
 
 void LayerManager::Init()
 {
-    SetName("System");
+    Name("System");
 
     // Theme menu
     List* theme_menu = new List(THEMES_MENU);

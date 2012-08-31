@@ -35,7 +35,7 @@ void FindTester::TestDelete()
     Vertex* last_build;
     Vertex* root_node = new Vertex("RootNode");
     last_build = _Build(root_node, 8, 10, type);
-    string last_name = last_build->GetName();
+    string last_name = last_build->Name();
     delete(root_node);
     // Should print an error
     CheckFound(last_build, TestFind(last_name, LIST, false));
@@ -44,7 +44,7 @@ void FindTester::TestDelete()
         // Memory consumption shouldn't grow during this
         root_node = new Vertex("RootNode");
         last_build = _Build(root_node, 8, 10, type);
-        CheckFound(last_build, TestFind(last_build->GetName(), LIST, false));
+        CheckFound(last_build, TestFind(last_build->Name(), LIST, false));
         delete(root_node);
     }
 
@@ -58,7 +58,7 @@ void FindTester::TestFindBigTree()
     Vertex* found;
     // Search for the last one (depth 0 is the deepest)
     Vertex* last_build = Build(this, 8, 10, last_type);
-    found = TestFind(last_build->GetName(), LIST, false);
+    found = TestFind(last_build->Name(), LIST, false);
     CheckFound(last_build, found);
 
     // Only for building purposes
@@ -67,15 +67,15 @@ void FindTester::TestFindBigTree()
 
     // The second deep branch from the last element of last level
     last_build = Build(last_build, 490, 1, last_type);
-    found = TestFind(last_build->GetName(), last_type, false);
+    found = TestFind(last_build->Name(), last_type, false);
     CheckFound(last_build, found);
 
     last_build = Build(last_build, 2, 1000, last_type);
-    found = TestFind(last_build->GetName(), "", false);
+    found = TestFind(last_build->Name(), "", false);
     CheckFound(last_build, found);
-    found = TestFind(last_build->GetName(), last_type, false);
+    found = TestFind(last_build->Name(), last_type, false);
     CheckFound(last_build, found);
-    found = TestFind(last_build->GetName(), last_type, true);
+    found = TestFind(last_build->Name(), last_type, true);
     CheckFound(last_build, found);
 }
 

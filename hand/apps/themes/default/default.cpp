@@ -182,7 +182,7 @@ bool Default::GetFrameLayout(Vertex* out)
 bool Default::GetBackgroundLayout(Vertex* out)
 {
     Layout* layout = dynamic_cast<Layout*>(out);
-    layout->SetName("Background Layout");
+    layout->Name("Background Layout");
 
     layout->Get("Methods")->Add(new Link("DrawFunc", GUI_DRAWER_BACKGROUND));
     layout->Set(new Link("Color", GUI_COLOR_BACKGR_LIST));
@@ -193,7 +193,7 @@ bool Default::GetBackgroundLayout(Vertex* out)
 bool Default::GetTextLayout(Vertex* out)
 {
     Layout* layout = dynamic_cast<Layout*>(out);
-    layout->SetName("Text Layout");
+    layout->Name("Text Layout");
 
     layout->Set(new Rect(SIZEANDPOSITION, 0.1, 0.1, 0.8, 0.8));
     layout->Get("Methods")->Add(new Link("DrawFunc", GUI_DRAWER_TEXT));
@@ -413,7 +413,7 @@ string Default::GetString(Vertex* vs)
 {
     Vertex* content = vs->Get("Content")->Get(1);
     if(content)
-        return content->GetName();
+        return content->Name();
     return "";
 }
 

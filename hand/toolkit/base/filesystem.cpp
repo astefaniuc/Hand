@@ -76,10 +76,10 @@ FileVertex::FileVertex(string file_name) : List(file_name)
         if(file_path.has_parent_path())
             Get(RELATION_PARENT_PATH)->Set(new FileVertex(file_path.parent_path().string()));
 
-        SetName(file_path.filename().string());
+        Name(file_path.filename().string());
     }
     else // is directory
-        SetName(file_name);
+        Name(file_name);
 }
 
 
@@ -101,7 +101,7 @@ path FileVertex::GetPath()
             _path = parent_path->GetPath();
     }
     // Check if it's still a relative path
-    _path /= GetName();
+    _path /= Name();
     if(_path.is_relative())
         system_complete(_path);
 

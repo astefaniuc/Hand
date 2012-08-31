@@ -81,7 +81,7 @@ bool Theme::FillOut(Vertex* input)
     uint i = 0;
     while((child=layout->Get(++i)) != NULL)
     {
-        name = child->GetName();
+        name = child->Name();
         if((name==CHILDREN) || (name=="Methods"))
             _FillOut(child);
         else if((name=="Fields") || (name=="Components"))

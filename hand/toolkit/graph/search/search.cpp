@@ -148,7 +148,7 @@ bool Search::SearchAllChilds(SearchCookie* path)
 bool Search::Matches(Vertex* target)
 {
     // Ignore relation_type here (it's checked in the "Relation" Vertex)
-    if(SearchName && (!SearchName->Matches(target->GetName())))
+    if(SearchName && (!SearchName->Matches(target->Name())))
         return false;
 
     if(SearchType && (!target->IsType(SearchType)))

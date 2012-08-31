@@ -77,7 +77,7 @@ void Layout::AddForUpdate(Vertex* sublayout)
 {
     Get("Update")->Add(sublayout);
 
-    Layout* parent = dynamic_cast<Layout*>(Get(OWNER)->Get(1));
+    Layout* parent = dynamic_cast<Layout*>(Owner());
     if(parent)
         parent->AddForUpdate(this);
 }

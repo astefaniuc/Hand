@@ -41,7 +41,7 @@ FocusLayer::~FocusLayer()
 
 void FocusLayer::Init()
 {
-    SetName("FocusLayer");
+    Name("FocusLayer");
 
     KeyList = _LayerManager->Find(DEVICE_KEYLIST);
 }

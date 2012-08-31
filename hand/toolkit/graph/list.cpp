@@ -59,7 +59,7 @@ Vertex* List::Get(string s)
         Vertex* child;
         uint i = 0;
         while((child=Vertex::Get(++i)) != NULL)
-            if(child->GetName() == s)
+            if(child->Name() == s)
                 return child;
 
         // Avoid endless recursion: Vertex + Attach

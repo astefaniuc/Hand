@@ -25,7 +25,7 @@ using namespace std;
 
 bool SearchString::Matches(string s)
 {
-    if (GetName() == s)
+    if (Name() == s)
         return true;
     return false;
 }

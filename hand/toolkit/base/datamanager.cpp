@@ -47,7 +47,7 @@ DataManager::~DataManager()
 Vertex* Persistence::Produce(Vertex* keys_tree)
 {
     // Change name
-    keys_tree->SetName("settings:Keyboard::1");
+    keys_tree->Name("settings:Keyboard::1");
     keys_tree = dynamic_cast<List*>(keys_tree->Get("Keylist"));
 
     // TEMP:
@@ -72,7 +72,7 @@ void Persistence::TakeBack(Vertex* product)
 bool Persistence::IsValidInput(Vertex* keys_tree)
 {
     // Change name
-    if(keys_tree->GetName() == "settings:Keyboard::0")
+    if(keys_tree->Name() == "settings:Keyboard::0")
         return true;
     return false;
 }

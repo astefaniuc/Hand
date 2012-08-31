@@ -31,22 +31,18 @@ typedef vector<Vertex*>::iterator VIterator;
 
 Vertex::Vertex(string name)
 {
-    SetName(name);
+    _Owner = NULL;
+    Name(name);
 }
 
 
 Vertex::~Vertex()
 {
-    // Don't delete the parent(s)
-    Vertex* o = Get(ANY, OWNER);
-    if(o)
-        o->Body.clear();
-
     VIterator curr = Body.begin();
     while(curr != Body.end())
     {
         // Recursively delete all children
-        if((*curr)->IsOwner(this))
+        if(!(*curr)->Owner() || ((*curr)->Owner()==this))
             delete(*curr);
         Body.erase(curr);
     }
@@ -60,8 +56,8 @@ bool Vertex::Add(Vertex* child)
     Body.push_back(child);
 
     // Take ownership only for unowned objects
-    if(child->IsOwner(this))
-        child->SetOwner(this);
+    if(!child->Owner())
+        child->Owner(this);
 
     return true;
 }
@@ -72,14 +68,14 @@ bool Vertex::Set(Vertex* child)
     if(!child)
         return false;
 
-    string s = child->GetName();
+    string s = child->Name();
     VIterator curr = Body.begin();
     while(curr != Body.end())
     {
         // TODO: is the Type relevant?
-        if((*curr)->GetName() == s)
+        if((*curr)->Name() == s)
         {
-            if((*curr)->IsOwner(this))
+            if(!(*curr)->Owner() || ((*curr)->Owner()==this))
                 delete(*curr);
             Body.erase(curr);
         }
@@ -105,7 +101,7 @@ Vertex* Vertex::Get(string s)
     VIterator curr;
     VIterator _end = Body.end();
     for(curr=Body.begin(); curr!=_end; curr++)
-        if((*curr)->GetName() == s)
+        if((*curr)->Name() == s)
             return (*curr);
 
     Relation* r = new Relation(s);
@@ -131,12 +127,12 @@ Vertex* Vertex::Get(string type, string name)
     else if(type == ANY)
     {
         for(; curr!=_end; curr++)
-            if((*curr)->GetName()==name)
+            if((*curr)->Name() == name)
                 return (*curr);
     }
     else
         for(; curr!=_end; curr++)
-            if(((*curr)->GetName()==name) && (*curr)->IsType(type))
+            if(((*curr)->Name()==name) && (*curr)->IsType(type))
                 return (*curr);
 
     return NULL;
@@ -161,7 +157,7 @@ Vertex* Vertex::Get(uint i)
 bool Vertex::Delete(Vertex* child)
 {
     Vertex::Detach(child);
-    if(child->IsOwner(this))
+    if(!child->Owner() || (child->Owner()==this))
     {
         delete(child);
         return true;
@@ -181,8 +177,8 @@ bool Vertex::Detach(Vertex* child)
         if((*curr) == child)
         {
             Body.erase(curr);
-            if(child->IsOwner(this))
-                child->SetOwner(NULL);
+            if(child->Owner() == this)
+                child->Owner(NULL);
             return true;
         }
     }
@@ -219,13 +215,10 @@ Vertex* Vertex::_Find(string name, int depth)
         return NULL;
     if(depth == 0)
     {
-        if(Name == name)
+        if(_Name == name)
             return this;
         return NULL;
     }
-    // Don't search parent/owner to avoid a sure graph cycle
-    if(Name == OWNER)
-        return NULL;
 
     Vertex* ret = NULL;
     uint s = Body.size();
@@ -248,22 +241,22 @@ Vertex* Vertex::Find(RegularExpression* expression)
     for(uint i=0; i<s; i++)
     {
         ret = Body.at(i);
-        if(expression->Matches(ret->GetName()))
+        if(expression->Matches(ret->Name()))
             return ret;
     }
     return NULL;
 }
 
 
-void Vertex::SetName(string name)
+void Vertex::Name(string name)
 {
-    Name = name;
+    _Name = name;
 }
 
 
-string& Vertex::GetName()
+string& Vertex::Name()
 {
-    return Name;
+    return _Name;
 }
 
 
@@ -287,7 +280,7 @@ string Vertex::GetType()
     // TODO: needs context sensitive type
     Vertex* types = Vertex::Get(ANY, TYPE);
     if(types)
-        return types->Body.back()->GetName();
+        return types->Body.back()->Name();
 
     return VERTEX;
 }
@@ -301,7 +294,7 @@ bool Vertex::IsType(string type)
 
     VIterator _end = types->Body.end();
     for(VIterator curr=types->Body.begin(); curr!=_end; curr++)
-        if((*curr)->GetName() == type)
+        if((*curr)->Name() == type)
             return true;
 
     return false;
@@ -319,38 +312,22 @@ bool Vertex::IsType(RegularExpression* se)
 
     VIterator _end = types->Body.end();
     for(VIterator curr=types->Body.begin(); curr!=_end; curr++)
-        if(se->Matches((*curr)->GetName()))
+        if(se->Matches((*curr)->Name()))
             return true;
 
     return false;
 }
 
 
-void Vertex::SetOwner(Vertex* owner)
+void Vertex::Owner(Vertex* owner)
 {
-    Vertex* ao = Get(ANY, OWNER);
-    // Allow only one owner
-    if(ao)
-        ao->Body.clear();
-    else
-    {
-        ao = new Vertex(OWNER);
-        Body.push_back(ao);
-    }
-
-    if(owner)
-        ao->Body.push_back(owner);
+    _Owner = owner;
 }
 
 
-bool Vertex::IsOwner(Vertex* owner)
+Vertex* Vertex::Owner()
 {
-    Vertex* rel_p = Vertex::Get(ANY, OWNER);
-    if(!rel_p)
-        return true;
-    uint ps = rel_p->Body.size();
-    // Check if this node has only the caller as parent
-    return ((ps == 0) || ((ps == 1) && (rel_p->Body.at(0) == owner)));
+    return _Owner;
 }
 
 
@@ -360,21 +337,24 @@ void Vertex::Reset()
     VIterator _end = Body.end();
     while(curr != _end)
     {
-        // TODO: delete also attached objects, but not the owner
-        if((*curr)->IsOwner(this))
+        if((*curr)->Owner() == this)
         {
             (*curr)->Vertex::Reset();
             curr++;
         }
         else
+        {
+            if((*curr)->Owner() == NULL)
+                delete(*curr);
             Body.erase(curr);
+        }
     }
 }
 
 
 string Vertex::GetAsString()
 {
-    return Name;
+    return _Name;
 }
 
 
@@ -390,7 +370,7 @@ bool Vertex::IsOpen(Search* search)
         return true;
     // The search cookie should be the last element
     Vertex* last = Body.back();
-    if(last && (last->GetName()==search->GetCookieName()))
+    if(last && (last->Name()==search->GetCookieName()))
         // Already searched from different branch
         return false;
     return true;

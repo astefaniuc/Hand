@@ -72,7 +72,7 @@ HandAppLoader::HandAppLoader(FileVertex* path_obj) : Factory(NAME_NOT_INIT,
         Destroy = (destroyer*) dlsym(LoadedLib, "Destroy");
         if(Create && Destroy)
         {
-            SetName(path_obj->GetName());
+            Name(path_obj->Name());
             return; // true
         }
     }
@@ -148,7 +148,7 @@ Vertex* HandAppLoader_Factory::Produce(Vertex* input)
         return NULL;
     HandAppLoader* ret = new HandAppLoader(path_obj);
     // Check if the library could be opened
-    if(ret->GetName() == input->GetName())
+    if(ret->Name() == input->Name())
         return ret;
 
     delete(ret);
