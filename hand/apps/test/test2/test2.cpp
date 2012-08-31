@@ -118,7 +118,7 @@ Vertex* FindTester::_Build
             string name = n.str();
             f = new List(name);
         }
-        f->SetType(type);
+        f->Type(type);
         entry->Get(CHILDREN)->Add(f);
         if(depth > 1)
             f = _Build(f, depth-1, i, type);

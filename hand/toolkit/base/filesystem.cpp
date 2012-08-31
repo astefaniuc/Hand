@@ -65,7 +65,7 @@ void FileVertex_Factory::TakeBack(Vertex* product)
 
 FileVertex::FileVertex(string file_name) : List(file_name)
 {
-    SetType(FILEVERTEX);
+    Type(FILEVERTEX);
     if(file_name.find(URI_FILE) == 0)
         // Remove the URI string from the name
         file_name.erase(0, sizeof(URI_FILE)-1);

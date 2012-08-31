@@ -66,7 +66,7 @@ class LayoutFactory : public Factory
         Vertex* Produce(Vertex* in_out)
         {
             Layout* descr = dynamic_cast<Layout*>(in_out);
-            if(!descr || !descr->IsType(GetInputType()))
+            if(!descr || !descr->Is(GetInputType()))
                 return NULL;
             // TODO Already initialized?
             (Producer->*Function)(in_out);
@@ -83,7 +83,7 @@ class LayoutFactory : public Factory
             Layout* descr = dynamic_cast<Layout*>(input);
             if(!descr)
                 return false;
-            return descr->IsType(GetInputType());
+            return descr->Is(GetInputType());
         };
 
     private:
@@ -111,7 +111,7 @@ class PropertyFactory : public Factory
         Vertex* Produce(Vertex* in_out)
         {
             Link* descr = dynamic_cast<Link*>(in_out);
-            if(!descr || !descr->IsType(GetInputType()))
+            if(!descr || !descr->Is(GetInputType()))
                 return NULL;
             Vertex* layout = descr->Vertex::Get();
             // Already initialized?
@@ -133,7 +133,7 @@ class PropertyFactory : public Factory
             Link* descr = dynamic_cast<Link*>(input);
             if(!descr)
                 return false;
-            return descr->IsType(GetInputType());
+            return descr->Is(GetInputType());
         };
 
     private:

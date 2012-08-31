@@ -37,7 +37,7 @@ Layer::Layer() : VirtualSurface("Layer")
     IsVisible = true;
     IsExpanded = false;
     _Node = NULL;
-    SetType(LAYER);
+    Type(LAYER);
 }
 
 
@@ -195,7 +195,7 @@ Layer* Layer::Insert(Vertex* data, string position)
     if(!field)
         return NULL;
 
-    Layer* sub_layer = GetLayerManager()->CreateLayer(data, field->GetType());
+    Layer* sub_layer = GetLayerManager()->CreateLayer(data, field->Type());
     if(!sub_layer)
         return NULL;
 
@@ -251,7 +251,7 @@ void Layer::SetLayout(Vertex* drawer_lib)
     Vertex* layout = Get("Layout")->Get();
     if(!layout)
     {
-        layout = new Layout("Layout", GetType()+"_Layout");
+        layout = new Layout("Layout", Type()+"_Layout");
         Get("Layout")->Set(layout);
     }
     drawer_lib->Execute(layout);

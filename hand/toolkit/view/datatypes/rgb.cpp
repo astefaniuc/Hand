@@ -27,7 +27,7 @@ using namespace std;
 
 Rgb::Rgb(string name, Uint8 r_, Uint8 g_, Uint8 b_) : Vertex(name)
 {
-    SetType(RGB);
+    Type(RGB);
     // For now add plain data directly
     Add(new Data<Uint8>("r", r_));
     Add(new Data<Uint8>("g", g_));

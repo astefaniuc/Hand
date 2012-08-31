@@ -33,7 +33,7 @@ using namespace std;
 HandApp::HandApp(string name) : List(name)
 {
     _LayerManager = NULL;
-    SetType(HANDAPP);
+    Type(HANDAPP);
 }
 
 
@@ -61,7 +61,7 @@ HandAppLoader::HandAppLoader(FileVertex* path_obj) : Factory(NAME_NOT_INIT,
                                                              FILEVERTEX,
                                                              HANDAPP, "")
 {
-    SetType(APPLOADER);
+    Type(APPLOADER);
     if(!path_obj)
         return; // false
     LibraryPath = path_obj->GetFullPath();
@@ -123,7 +123,7 @@ HandAppLoader_Factory::HandAppLoader_Factory() : Factory("Library Loader",
                                                          APPLOADER,
                                                          URI_FILE)
 {
-    SetType(APPLOADERFACTORY);
+    Type(APPLOADERFACTORY);
 }
 
 

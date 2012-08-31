@@ -36,7 +36,7 @@ using namespace std;
 LayerManager::LayerManager() : ListLayer()
 {
     SetLayerManager(this);
-    SetType(LAYERMANAGER);
+    Type(LAYERMANAGER);
     _Theme = NULL;
     NextRequest = NULL;
     _InputState = NULL;
@@ -129,7 +129,7 @@ Vertex* LayerManager::GetCommandList(Vertex* menu)
     uint i = 0;
     while((child=menu->Get(++i)) != NULL)
     {
-        if(child->IsType(METHOD))
+        if(child->Is(METHOD))
             return menu;
 
         else if((child=GetCommandList(child)) != NULL)
@@ -256,7 +256,7 @@ bool LayerManager::Expand(Vertex* to_expand)
         string type = GetContentType(to_expand);
         if(type == "")
             return false;
-        if(MasterView && MasterView->IsType(type))
+        if(MasterView && MasterView->Is(type))
         {
             // In this case we re-use the layer
             MasterView->SetContent(to_expand);
@@ -274,7 +274,7 @@ bool LayerManager::Expand(Vertex* to_expand)
             // Ever possible?
             return false;
 
-        if(MasterView->IsType("Expansive"))
+        if(MasterView->Is("Expansive"))
         {
             // Insert() = Add() != SetContent()
             MasterView->Set(CHILDREN)->Add(new_view);
@@ -324,7 +324,7 @@ Layer* LayerManager::CreateLayer(Vertex* content, string layer_type)
     {
         Vertex* attached_layout = content->Get(RELATION, "Layout");
         if(attached_layout)
-            layer_type = attached_layout->Get()->GetType();
+            layer_type = attached_layout->Get()->Type();
         else
             layer_type = GetContentType(content);
     }

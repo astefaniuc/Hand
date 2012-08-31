@@ -26,7 +26,7 @@ using namespace std;
 
 Link::Link(string name, string type) : List(name)
 {
-    SetType(type);
+    Type(type);
 }
 
 
@@ -48,7 +48,7 @@ bool Link::Execute(Vertex* vs)
 
 Relation::Relation(string name) : List(name)
 {
-    SetType(RELATION);
+    Type(RELATION);
 }
 
 

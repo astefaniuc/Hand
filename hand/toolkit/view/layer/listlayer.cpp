@@ -27,7 +27,7 @@ using namespace std;
 ListLayer::ListLayer() : Layer()
 {
     BufferType = OVERLAY;
-    SetType(LISTLAYER);
+    Type(LISTLAYER);
 }
 
 
@@ -90,7 +90,7 @@ void ListLayer::Configure(Vertex* sub_layout)
 
 bool ListLayerFactory::IsValidInput(Vertex* input)
 {
-    if(input->IsType(LIST))
+    if(input->Is(LIST))
         return true;
     return false;
 }

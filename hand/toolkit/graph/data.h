@@ -33,8 +33,8 @@ class Data : public Vertex
         Data(std::string name, I val) : Vertex(name)
         {
             Value = val;
-            SetType(DATA);
-            SetType(std::string(typeid(val).name()));
+            Type(DATA);
+            Type(std::string(typeid(val).name()));
         };
 
         bool Set(I val)

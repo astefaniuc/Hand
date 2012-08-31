@@ -133,7 +133,7 @@ Vertex* Vertex::Get(string type, string name)
             return (*curr);
         else
             for(; curr!=_end; curr++)
-                if((*curr)->IsType(type))
+                if((*curr)->Is(type))
                     return (*curr);
     }
     else if(type == ANY)
@@ -144,7 +144,7 @@ Vertex* Vertex::Get(string type, string name)
     }
     else
         for(; curr!=_end; curr++)
-            if(((*curr)->Name()==name) && (*curr)->IsType(type))
+            if(((*curr)->Name()==name) && (*curr)->Is(type))
                 return (*curr);
 
     return NULL;
@@ -272,7 +272,7 @@ string& Vertex::Name()
 }
 
 
-void Vertex::SetType(string type)
+void Vertex::Type(string type)
 {
     if(type.empty())
         return;
@@ -287,7 +287,7 @@ void Vertex::SetType(string type)
 }
 
 
-string Vertex::GetType()
+string Vertex::Type()
 {
     // TODO: needs context sensitive type
     Vertex* types = Vertex::Get(ANY, TYPE);
@@ -298,7 +298,7 @@ string Vertex::GetType()
 }
 
 
-bool Vertex::IsType(string type)
+bool Vertex::Is(string type)
 {
     Vertex* types = Vertex::Get(ANY, TYPE);
     if(!types)
@@ -313,7 +313,7 @@ bool Vertex::IsType(string type)
 }
 
 
-bool Vertex::IsType(RegularExpression* se)
+bool Vertex::Is(RegularExpression* se)
 {
     if(!se)
         return false;

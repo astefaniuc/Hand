@@ -30,7 +30,7 @@ List::List(string name) : Vertex(name)
        allows initialization with a customized list
     */
 
-    SetType(LIST);
+    Type(LIST);
 }
 
 

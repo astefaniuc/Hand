@@ -53,7 +53,7 @@ Vertex* DrawerFactory::Produce(Vertex* descr)
 
 bool DrawerFactory::IsValidInput(Vertex* input)
 {
-    if(dynamic_cast<Link*>(input) && input->IsType(GetOutputType()))
+    if(dynamic_cast<Link*>(input) && input->Is(GetOutputType()))
         return true;
     return false;
 }

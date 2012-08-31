@@ -33,7 +33,7 @@ class Method : public Vertex
         {
             Object = obj;
             Function = func;
-            SetType(METHOD);
+            Type(METHOD);
         };
         // Clean-up object
         void Clean(void)

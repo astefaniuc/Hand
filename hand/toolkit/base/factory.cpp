@@ -32,7 +32,7 @@ Factory::Factory
         string uri_scheme
 ) : HandApp(name)
 {
-    SetType(FACTORY);
+    Type(FACTORY);
     SetSpecifierString(FACTORY_INPUTSTRING, input_type);
     SetSpecifierString(FACTORY_OUTPUTSTRING, output_type);
     SetSpecifierString(URI_FACTORY, uri_scheme);
@@ -82,7 +82,7 @@ string Factory::GetSpecifierString(string name)
 
 FactoryMap::FactoryMap(string name) : List(name)
 {
-    SetType(FACTORYMAP);
+    Type(FACTORYMAP);
 }
 
 

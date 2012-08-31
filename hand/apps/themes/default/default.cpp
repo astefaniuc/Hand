@@ -297,21 +297,21 @@ bool Default::DrawView(Vertex* layout)
     if(!vs)
         return false;
 
-/*    if(!drawing || !drawing->IsType(GUI_DRAWER_VIEW) ||
-            !drawing->IsType(VIRTUALSURFACE))
+/*    if(!drawing || !drawing->Is(GUI_DRAWER_VIEW) ||
+            !drawing->Is(VIRTUALSURFACE))
         return false;
 
     // A View has three possible components, 1. the frame
     Vertex* sub = drawing->Get(LAYOUT_COMPONENT_FRAME);
-    if(sub && sub->IsType(VIRTUALSURFACE))
+    if(sub && sub->Is(VIRTUALSURFACE))
         ((VirtualSurface*)sub)->Draw(true);
     // 2. the background
     sub = drawing->Get(LAYOUT_COMPONENT_FRAME);
-    if(sub && sub->IsType(VIRTUALSURFACE))
+    if(sub && sub->Is(VIRTUALSURFACE))
         ((VirtualSurface*)sub)->Draw(true);
     // 3. the content
     sub = drawing->Get(LAYOUT_COMPONENT_CONTENT);
-    if(sub && sub->IsType(VIRTUALSURFACE))
+    if(sub && sub->Is(VIRTUALSURFACE))
         ((VirtualSurface*)sub)->Draw(true);*/
     return true;
 }

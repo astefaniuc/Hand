@@ -76,11 +76,12 @@ class Vertex
         // Get the Vertex name
         std::string& Name();
 
-        void SetType(std::string type);
+        // Set the Vertex type/tag
+        void Type(std::string type);
         // Returns the last set type
-        std::string GetType();
-        bool IsType(std::string type);
-        bool IsType(RegularExpression* type);
+        std::string Type();
+        bool Is(std::string type);
+        bool Is(RegularExpression* type);
 
         // Set object owner (for memory management).
         void Owner(Vertex* owner);

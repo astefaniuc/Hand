@@ -26,7 +26,7 @@ using namespace std;
 TextLayer::TextLayer() : Layer()
 {
     BufferType = OVERLAY;
-    SetType(TEXTLAYER);
+    Type(TEXTLAYER);
 }
 
 

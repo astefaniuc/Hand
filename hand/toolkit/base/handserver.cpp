@@ -169,7 +169,7 @@ void HandServer::SetLayerManagerPositions()
 bool HandServer::Present(string file)
 {
     Vertex* app = Produce(new Note("Command line input", file), "");
-    if(app && app->IsType(HANDAPP))
+    if(app && app->Is(HANDAPP))
     {
         LayerMgrs[0]->LoadAppInterface(app, true);
         return true;

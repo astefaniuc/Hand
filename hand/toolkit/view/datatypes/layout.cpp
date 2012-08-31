@@ -26,8 +26,8 @@ using namespace std;
 
 Layout::Layout(string name, string type) : List(name)
 {
-    SetType(GUI_LAYOUT);
-    SetType(type);
+    Type(GUI_LAYOUT);
+    Type(type);
     Set(new Rect(SIZEANDPOSITION, 0, 0, 1, 1));
     // Colours.Set(r[ed], g[reen], b[lue])
 /*    Color_Frame.Set(0, 3, 200);
@@ -44,7 +44,7 @@ Layout::Layout(string name, string type) : List(name)
 List* Layout::AddField(string name, string type)
 {
     List* field = new List(name);
-    field->SetType(type);
+    field->Type(type);
     field->Get("Layout")->Set(this);
     Get("Fields")->Add(field);
     return field;

@@ -27,8 +27,8 @@ using namespace std;
 
 Search::Search(string name) : Vertex(name)
 {
-    SetType(METHOD);
-    SetType(SEARCH);
+    Type(METHOD);
+    Type(SEARCH);
 
     Findings = Get("Findings");
     SearchName = NULL;
@@ -148,7 +148,7 @@ bool Search::Matches(Vertex* target)
     if(SearchName && (!SearchName->Matches(target->Name())))
         return false;
 
-    if(SearchType && (!target->IsType(SearchType)))
+    if(SearchType && (!target->Is(SearchType)))
         return false;
 
     Findings->Attach(target);

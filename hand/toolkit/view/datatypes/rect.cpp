@@ -27,14 +27,14 @@ using namespace std;
 
 Rect::Rect(string name, double x_, double y_, double w_, double h_) : Vertex(name)
 {
-    SetType(RECT);
+    Type(RECT);
     Init(x_, y_, w_, h_);
 }
 
 
 Rect::Rect() : Vertex("No name")
 {
-    SetType(RECT);
+    Type(RECT);
     Init(0.0, 0.0, 1.0, 1.0);
 }
 
