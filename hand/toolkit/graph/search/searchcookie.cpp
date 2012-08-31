@@ -24,6 +24,9 @@
 using namespace std;
 
 
+extern Pool* CookiePool;
+
+
 SearchCookie::SearchCookie() : List(SEARCHCOOKIE)
 {
     Target = NULL;
@@ -35,6 +38,34 @@ SearchCookie::~SearchCookie()
 {
     if(Target)
         Target->Vertex::Detach(this);
+}
+
+
+bool SearchCookie::Attach(Vertex* target)
+{
+    if(target->GetSize() == 0)
+    {
+        IsDeadBranch = true;
+        return false;
+    }
+    Target = target;
+    return Target->Vertex::Attach(this);
+}
+
+
+Vertex* SearchCookie::Get(uint i)
+{
+    SearchCookie* branch = (SearchCookie*)List::Get(i);
+    if(branch && branch->IsDeadBranch)
+    {
+        Detach(branch);
+        CookiePool->Take(branch);
+
+        branch = (SearchCookie*)SearchCookie::Get(i);
+        if(!branch && (i==1))
+            IsDeadBranch = true;
+    }
+    return branch;
 }
 
 
@@ -52,27 +83,6 @@ void SearchCookie::Reset()
     IsDeadBranch = false;
 }
 
-
-bool SearchCookie::MarkDeathBranch()
-{
-    SearchCookie* c;
-    uint i = 0;
-    while((c=(SearchCookie*)Get(++i)) != NULL)
-        if(!c->IsDeadBranch)
-            return false;
-
-    IsDeadBranch = true;
-
-    Vertex* p_rel = Vertex::Get(ANY, OWNER);
-    if(p_rel)
-    {
-        SearchCookie* parent = dynamic_cast<SearchCookie*>(p_rel->Get(1));
-        if(parent)
-            return parent->MarkDeathBranch();
-    }
-    return false;
-}
-
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
@@ -80,11 +90,12 @@ bool SearchCookie::MarkDeathBranch()
 
 Vertex* Pool::Get()
 {
-    Vertex* ret = List::Get(1);
-    if(ret)
+    Vertex* cookie = List::Get(1);
+    if(cookie)
     {
-        Detach(ret);
-        return ret;
+        Detach(cookie);
+        cookie->Reset();
+        return cookie;
     }
     return new SearchCookie();
 }
@@ -92,18 +103,29 @@ Vertex* Pool::Get()
 
 void Pool::Take(Vertex* cookie)
 {
-    cookie->Reset();
+    if(GetSize() >= MAX_POOL_SIZE)
+    {
+        delete(cookie);
+        return;
+    }
+
     // Add to the pool
     Attach(cookie);
 
     Vertex* child;
-    uint i = 0;
-    while((child=cookie->Get(++i)) != NULL)
+    while((child=cookie->Get(1)) != NULL)
     {
-        if(dynamic_cast<SearchCookie*>(child))
-        {
-            cookie->Detach(child);
-            Take(child);
-        }
+        cookie->Detach(child);
+        Take(child);
     }
 }
+
+
+void Pool::Reset()
+{
+    Vertex* child;
+    uint i = 0;
+    while((child=List::Get(++i)) != NULL)
+        child->Reset();
+}
+

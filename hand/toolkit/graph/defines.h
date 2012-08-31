@@ -45,6 +45,7 @@
 // Arbitrary search depth (should be big enough to find everything
 // and small enough to return fast from circles)
 #define MAX_SEARCH_DEPTH 1024
+#define MAX_POOL_SIZE 500
 
 
 #endif /* GRAPH_DEFINES_H */

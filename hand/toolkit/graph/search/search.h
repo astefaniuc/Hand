@@ -48,9 +48,8 @@ class Search : public Vertex
         bool Execute(Vertex* target);
     protected:
         bool Matches(Vertex* target);
-        bool Step(SearchCookie* path);
-        bool SearchAllChilds(SearchCookie* trail_end);
-        Vertex* BuildPath(Vertex* target);
+        bool Step(Vertex* path);
+        bool SearchAllChilds(SearchCookie* path_end);
         RegularExpression* AddSearchRegex(std::string name,
                                           std::string s,
                                           bool make_regex);
@@ -59,13 +58,11 @@ class Search : public Vertex
         RegularExpression* SearchName;
         RegularExpression* SearchType;
         RegularExpression* SearchRelation;
-        Pool* CookiePool;
         Vertex* Findings;
     public:
         // TODO: GUI display?
         uint MaxDepth;
         bool MultipleFinds;
-        bool RemoveDeadBranch;
 };
 
 #endif /* GRAPH_SEARCH_H */

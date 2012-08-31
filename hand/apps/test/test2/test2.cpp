@@ -144,7 +144,6 @@ Vertex* FindTester::TestFind(string name, string type, bool relation)
         }
     }
     cout << ") time: ";
-    search.RemoveDeadBranch = true;
     bool found = search.Execute(this);
     cout << (clock()-start_time)/CLOCKS_PER_SEC << endl;
 

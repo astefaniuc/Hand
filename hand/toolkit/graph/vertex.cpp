@@ -38,23 +38,18 @@ Vertex::Vertex(string name)
 Vertex::~Vertex()
 {
     // Don't delete the parent(s)
-    Vertex* curr = Get(ANY, OWNER);
-    if(curr)
-        curr->Body.clear();
+    Vertex* o = Get(ANY, OWNER);
+    if(o)
+        o->Body.clear();
 
-    uint s = Body.size();
-    for(uint i=0; i<s; i++)
+    VIterator curr = Body.begin();
+    while(curr != Body.end())
     {
-        curr = Body.at(i);
-
-        if(curr->IsOwner(this))
-        {
-            // Recursively delete all children
-            delete curr;
-        }
+        // Recursively delete all children
+        if((*curr)->IsOwner(this))
+            delete(*curr);
+        Body.erase(curr);
     }
-    if(s != 0)
-        Body.clear();
 }
 
 
@@ -85,7 +80,7 @@ bool Vertex::Set(Vertex* child)
         if((*curr)->GetName() == s)
         {
             if((*curr)->IsOwner(this))
-                delete((*curr));
+                delete(*curr);
             Body.erase(curr);
         }
         else
@@ -157,10 +152,8 @@ Vertex* Vertex::Get(uint i)
     --i;
 
     if(i < Body.size())
-    {
-        Vertex* test = Body.at(i);
-        return test;
-    }
+        return Body.at(i);
+
     return NULL;
 }
 

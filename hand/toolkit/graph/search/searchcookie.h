@@ -33,11 +33,14 @@ class SearchCookie : public List
         SearchCookie();
         virtual ~SearchCookie();
 
-        bool MarkDeathBranch();
-        bool IsOpen(Search* search);
+        virtual bool Attach(Vertex* target);
+        Vertex* Get(uint item);
+
         // Detaches cookie from Target
         void Reset();
+        bool IsOpen(Search* search);
         Vertex* Target;
+    private:
         bool IsDeadBranch;
 };
 
@@ -49,6 +52,7 @@ class Pool : public List
         virtual ~Pool(){};
         Vertex* Get();
         void Take(Vertex* cookie);
+        void Reset();
 };
 
 #endif /* GRAPH_SEARCH_SEARCHCOOKIE_H */

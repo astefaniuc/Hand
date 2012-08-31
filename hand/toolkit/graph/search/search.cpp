@@ -25,6 +25,8 @@
 using namespace std;
 
 
+Pool* CookiePool = new Pool();
+
 Search::Search(string name) : Vertex(name)
 {
     SetType(METHOD);
@@ -35,16 +37,12 @@ Search::Search(string name) : Vertex(name)
     SearchType = NULL;
     SearchRelation = NULL;
     MaxDepth = MAX_SEARCH_DEPTH;
-    RemoveDeadBranch = false;
     MultipleFinds = false;
-
-    CookiePool = new Pool();
 }
 
 
 Search::~Search()
 {
-    delete(CookiePool);
     Reset();
 }
 
@@ -71,7 +69,8 @@ bool Search::Execute(Vertex* target)
         found = true;
     }
 
-    SearchCookie* path = (SearchCookie*)BuildPath(target);
+    Vertex* path = CookiePool->Get();
+    path->Attach(target);
 
     uint depth;
     for(depth=0; depth<=MaxDepth; depth++)
@@ -82,29 +81,27 @@ bool Search::Execute(Vertex* target)
             if(!MultipleFinds)
                 break;
         }
-        if(path->IsDeadBranch)
+
+        if(path->GetSize() == 0)
             break;
     }
+
     CookiePool->Take(path);
+    CookiePool->Reset();
     return found;
 }
 
 
-bool Search::Step(SearchCookie* path)
+bool Search::Step(Vertex* path)
 {
     bool found = false;
     if(path->GetSize() > 0)
     {
-        SearchCookie* branch;
+        Vertex* branch;
         uint i = 0;
-        while((branch=(SearchCookie*)path->Get(++i)) != NULL)
+        while((branch=path->Get(++i)) != NULL)
         {
-            if(branch->IsDeadBranch && RemoveDeadBranch)
-            {
-                path->Detach(branch);
-                CookiePool->Take(branch);
-            }
-            else if(Step(branch))
+            if(Step(branch))
             {
                 found = true;
                 if(!MultipleFinds)
@@ -115,12 +112,9 @@ bool Search::Step(SearchCookie* path)
     else
     {
         // Head of path
-        found = SearchAllChilds(path);
+        found = SearchAllChilds((SearchCookie*)path);
         if(found && !MultipleFinds)
             return true;
-
-        // Is this branch dead?
-        path->MarkDeathBranch();
     }
     return found;
 }
@@ -130,6 +124,7 @@ bool Search::SearchAllChilds(SearchCookie* path)
 {
     bool found = false;
     Vertex* child;
+    Vertex* path_extension;
     uint i = 0;
     while((child=path->Target->Get(++i)) != NULL)
     {
@@ -141,23 +136,12 @@ bool Search::SearchAllChilds(SearchCookie* path)
                 return true;
             found = true;
         }
-        path->Add(BuildPath(child));
+        path_extension = CookiePool->Get();
+        path_extension->Attach(child);
+        path->Add(path_extension);
     }
 
     return found;
-}
-
-
-Vertex* Search::BuildPath(Vertex* target)
-{
-    if(!target)
-        return NULL;
-
-    Vertex* path_extension = CookiePool->Get();
-    ((SearchCookie*)path_extension)->Target = target;
-    target->Vertex::Attach(path_extension);
-
-    return path_extension;
 }
 
 
