@@ -32,7 +32,8 @@ typedef vector<Vertex*>::iterator VIterator;
 Vertex::Vertex(string name)
 {
     _Owner = NULL;
-    Name(name);
+    _Type = NULL;
+    _Name = name;
 }
 
 
@@ -277,22 +278,19 @@ void Vertex::Type(string type)
     if(type.empty())
         return;
 
-    Vertex* types = Vertex::Get(ANY, TYPE);
-    if(!types)
+    if(!_Type)
     {
-        types = new Vertex(TYPE);
-        Vertex::Set(types);
+        _Type = new Vertex(TYPE);
     }
-    types->Vertex::Set(new Vertex(type));
+    _Type->Set(new Vertex(type));
 }
 
 
 string Vertex::Type()
 {
     // TODO: needs context sensitive type
-    Vertex* types = Vertex::Get(ANY, TYPE);
-    if(types)
-        return types->Body.back()->Name();
+    if(_Type)
+        return _Type->Body.back()->Name();
 
     return VERTEX;
 }
@@ -300,12 +298,14 @@ string Vertex::Type()
 
 bool Vertex::Is(string type)
 {
-    Vertex* types = Vertex::Get(ANY, TYPE);
-    if(!types)
+    if(type.empty())
+        return false;
+
+    if(!_Type)
         return (type == VERTEX);
 
-    VIterator _end = types->Body.end();
-    for(VIterator curr=types->Body.begin(); curr!=_end; curr++)
+    VIterator _end = _Type->Body.end();
+    for(VIterator curr=_Type->Body.begin(); curr!=_end; curr++)
         if((*curr)->Name() == type)
             return true;
 
@@ -318,12 +318,11 @@ bool Vertex::Is(RegularExpression* se)
     if(!se)
         return false;
 
-    Vertex* types = Vertex::Get(ANY, TYPE);
-    if(!types)
+    if(!_Type)
         return se->Matches(VERTEX);
 
-    VIterator _end = types->Body.end();
-    for(VIterator curr=types->Body.begin(); curr!=_end; curr++)
+    VIterator _end = _Type->Body.end();
+    for(VIterator curr=_Type->Body.begin(); curr!=_end; curr++)
         if(se->Matches((*curr)->Name()))
             return true;
 

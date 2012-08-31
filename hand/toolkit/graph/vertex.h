@@ -119,6 +119,7 @@ class Vertex
         std::string _Name;
         std::vector<Vertex*> Body;
         Vertex* _Owner;
+        Vertex* _Type;
 };
 
 #endif /* HAND_VERTEX_H */
