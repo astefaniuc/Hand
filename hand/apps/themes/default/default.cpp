@@ -88,6 +88,7 @@ bool Default::GetViewLayout(Vertex* out)
     // Horizontal list alignment
     controls->Set(new Rect(ALIGNMENT, 1, 0, 1, 0));
     layout->Get(CHILDREN)->Add(controls);
+    controls->Get(PARENT)->Set(layout);
     controls->AddField("ListElement", BUTTONLAYER);
     return true;
 }
@@ -113,9 +114,11 @@ bool Default::GetFramedListLayout(Vertex* out)
 
     Layout* frame = new Layout("Background", GUI_LAYOUT_BACKGROUND);
     layout->Get(CHILDREN)->Add(frame);
+    frame->Get(PARENT)->Set(layout);
 
     Layout* content = new Layout("Content", GUI_LAYOUT_LIST);
     layout->Get(CHILDREN)->Add(content);
+    content->Get(PARENT)->Set(layout);
     frame->Get("Update")->Attach(content);
 
     return true;
@@ -131,10 +134,12 @@ bool Default::GetButtonLayout(Vertex* out)
 
     Layout* frame = new Layout("Frame", GUI_LAYOUT_FRAME);
     layout->Get(CHILDREN)->Add(frame);
+    frame->Get(PARENT)->Set(layout);
     // The Button container
     Layout* content = new Layout("Button Content", GUI_LAYOUT_LIST);
     content->Set(new Rect(ALIGNMENT, 0, 1, 0, 1));
     layout->Get(CHILDREN)->Add(content);
+    content->Get(PARENT)->Set(layout);
     frame->Get("Update")->Attach(content);
 
     Layout* upper = new Layout("Upper", GUI_LAYOUT_LIST);
@@ -142,12 +147,14 @@ bool Default::GetButtonLayout(Vertex* out)
     upper->AddField(BTN_FIELD_ICON, TEXTLAYER);
     upper->AddField(BTN_FIELD_NAME, TEXTLAYER);
     content->Get(CHILDREN)->Add(upper);
+    upper->Get(PARENT)->Set(content);
 
     Layout* lower = new Layout("Lower", GUI_LAYOUT_LIST);
     lower->Set(new Rect(ALIGNMENT, 1, 0, 0.5, 0));
     lower->AddField(BTN_FIELD_DESCRIPTION, TEXTLAYER);
     lower->AddField(BTN_FIELD_CONTROL, BUTTONLAYER);
     content->Get(CHILDREN)->Add(lower);
+    lower->Get(PARENT)->Set(content);
 
     return true;
 }
@@ -159,6 +166,7 @@ bool Default::GetControlLayout(Vertex* out)
 
     Layout* frame = new Layout("Frame", GUI_LAYOUT_FRAME);
     layout->Get(CHILDREN)->Add(frame);
+    frame->Get(PARENT)->Set(layout);
     return true;
 }
 
@@ -173,6 +181,7 @@ bool Default::GetFrameLayout(Vertex* out)
 
     Layout* bgrd = new Layout("Background", GUI_LAYOUT_BACKGROUND);
     layout->Get(CHILDREN)->Add(bgrd);
+    bgrd->Get(PARENT)->Set(layout);
     layout->Get("Update")->Attach(bgrd);
 
     return true;
@@ -354,7 +363,7 @@ bool Default::DrawList(Vertex* layout)
     Vertex* children = layout->Get("Update");
     if(!children)
         return false;
-    // Ignore the "runtime" child
+
     uint child_cnt = children->Size();
     if(child_cnt < 1)
         return true;

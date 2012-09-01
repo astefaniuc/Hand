@@ -89,6 +89,7 @@
 
 // Content items
 #define DESCRIPTION "Description"
+#define PARENT "Parent"
 #define CHILDREN "Children"
 
 // Name of the Vertex containing the Theme object and the drawing func
