@@ -26,7 +26,7 @@
 #define LIST     "List"
 #define METHOD   "Method"
 #define RELATION "Relation"
-#define DESCRIPTOR "Link"
+#define LINK     "Link"
 #define DATA     "Data"
 #define SEARCH   "Search"
 // TODO: The string returned by typeid() for 'string' varies

@@ -39,14 +39,8 @@ Vertex::Vertex(string name)
 
 Vertex::~Vertex()
 {
-    VIterator curr = Body.begin();
-    while(curr != Body.end())
-    {
-        // Recursively delete all children
-        if(!(*curr)->Owner() || ((*curr)->Owner()==this))
-            delete(*curr);
-        Body.erase(curr);
-    }
+    Reset();
+    delete(_Type);
 }
 
 
@@ -345,20 +339,12 @@ Vertex* Vertex::Owner()
 void Vertex::Reset()
 {
     VIterator curr = Body.begin();
-    VIterator _end = Body.end();
-    while(curr != _end)
+    while(curr != Body.end())
     {
-        if((*curr)->Owner() == this)
-        {
-            (*curr)->Vertex::Reset();
-            curr++;
-        }
-        else
-        {
-            if((*curr)->Owner() == NULL)
-                delete(*curr);
-            Body.erase(curr);
-        }
+        // Recursively delete all children
+        if(!(*curr)->Owner() || ((*curr)->Owner()==this))
+            delete(*curr);
+        Body.erase(curr);
     }
 }
 

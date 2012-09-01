@@ -48,11 +48,8 @@ void Rgb::Reset()
 
 Rgb* GetRgb(string name, Vertex* tree)
 {
-    Search search("Rgb search");
-    search.SetSearchName(name);
-    search.SetSearchType(RGB);
-    if(search.Execute(tree))
-        return dynamic_cast<Rgb*>(search.Get("Findings")->Get());
-
-    return NULL;
+    Vertex* rgb = tree->Get(ANY, "Color");
+    if(rgb)
+        rgb = rgb->Get();
+    return dynamic_cast<Rgb*>(rgb);
 }

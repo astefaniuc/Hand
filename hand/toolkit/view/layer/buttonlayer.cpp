@@ -118,7 +118,7 @@ void ButtonLayer::ReleaseGui()
 
 bool ButtonLayerFactory::IsValidInput(Vertex* input)
 {
-//    if(input->Is(METHOD) || input->Is(DESCRIPTOR))
+//    if(input->Is(METHOD) || input->Is(LINK))
     if(input)
         return true;
     return false;

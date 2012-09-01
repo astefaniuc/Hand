@@ -29,7 +29,7 @@ using namespace std;
 DrawerFactory::DrawerFactory
 (
         Vertex* draw_func
-) : Factory(DRAWOBJ_DRAWER, DESCRIPTOR, draw_func->Name(), "")
+) : Factory(DRAWOBJ_DRAWER, LINK, draw_func->Name(), "")
 {
     // Basic implementation check
     if(!draw_func)

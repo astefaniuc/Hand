@@ -212,18 +212,6 @@ Layer* Layer::Insert(Vertex* data, string position)
 }
 
 
-Layer* Layer::GetAttachedLayer(Vertex* target)
-{
-    Search search("Layer search");
-    search.MaxDepth = 2;
-    search.SetSearchType(LAYER);
-    search.SetSearchRelation(LAYER);
-    if(search.Execute(target))
-        return dynamic_cast<Layer*>(search.Get("Findings")->Get());
-    return NULL;
-}
-
-
 void Layer::SetTheme(Theme* theme)
 {
     // TODO: generic recursive Set() on a sub-tree defined by a "relation"

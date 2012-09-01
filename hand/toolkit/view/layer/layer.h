@@ -67,8 +67,6 @@ class Layer : public VirtualSurface
         virtual void NotifyChanged();
         virtual void Init(){};
 
-        // Helper Func returning the Layer attached to a Vertex
-        Layer* GetAttachedLayer(Vertex* target);
         virtual void SetTheme(Theme* theme);
         // Loads and stores from the layout library the layout for the current layer
         virtual void SetLayout(Vertex* layouts_lib);

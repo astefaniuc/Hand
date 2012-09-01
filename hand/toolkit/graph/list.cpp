@@ -100,10 +100,7 @@ void List::Reset()
 {
     Vertex* pl = Vertex::Get(ANY, PUBLICLIST);
     if(pl)
-    {
-        Vertex::Detach(pl);
-        delete(pl);
-    }
+        pl->Vertex::Reset();
 }
 
 

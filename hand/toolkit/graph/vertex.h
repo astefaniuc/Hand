@@ -88,7 +88,7 @@ class Vertex
         // Returns the pointer to the owner vertex
         Vertex* Owner();
 
-        // Removes all objects not owned
+        // Removes all sub-objects
         virtual void Reset();
         // Removes child from Vertex. If Vertex is the owner of child it also
         // resets the ownership

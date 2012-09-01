@@ -155,7 +155,7 @@ void VirtualSurface::MapSurface(Rect* src_rect, SDL_Rect &tgt_rect, SDL_Surface*
     }
 
     // Get the next layers buffer and absolute position
-    Rect* sap = GetRect(SIZEANDPOSITION, Get("Layout"));
+    Rect* sap = GetRect(SIZEANDPOSITION, Get("Layout")->Get());
     src_rect->Multiply(sap);
     if(Parent)
         Parent->MapSurface(src_rect, tgt_rect, tgt_surface);
