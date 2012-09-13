@@ -24,7 +24,7 @@
 
 
 // Keeps a list of "public" elements in a clean(*) child vertex
-// under PUBLICLIST.
+// under PUBLIC.
 //
 // (*) no type or runtime info
 //
@@ -43,7 +43,7 @@ class List : public Vertex
         virtual Vertex* Get(std::string type, std::string name);
         virtual Vertex* Get(uint child);
         virtual uint Size();
-        // Removes the complete PUBLICLIST vertex
+        // Removes the complete PUBLIC vertex
         virtual void Reset();
         virtual bool Detach(Vertex* item);
         virtual bool Delete(Vertex* child);

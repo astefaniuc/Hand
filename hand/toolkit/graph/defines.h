@@ -36,7 +36,7 @@
 
 // Names of "runtime" Vertex elements
 #define TYPE "TYPE"
-#define PUBLICLIST "PublicList"
+#define PUBLIC "Public"
 
 
 // Wildcard for Get(type, name)

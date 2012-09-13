@@ -36,19 +36,19 @@ List::List(string name) : Vertex(name)
 
 bool List::Add(Vertex* child)
 {
-    return List::Get(PUBLICLIST)->Add(child);
+    return List::Get(PUBLIC)->Add(child);
 }
 
 
 bool List::Set(Vertex* child)
 {
-    return List::Get(PUBLICLIST)->Set(child);
+    return List::Get(PUBLIC)->Set(child);
 }
 
 
 bool List::Attach(Vertex* child)
 {
-    return List::Get(PUBLICLIST)->Attach(child);
+    return List::Get(PUBLIC)->Attach(child);
 }
 
 
@@ -60,7 +60,7 @@ Vertex* List::_Get()
 
 Vertex* List::Get(string s)
 {
-    if(s == PUBLICLIST)
+    if(s == PUBLIC)
     {
         Vertex* child;
         uint i = 0;
@@ -74,31 +74,31 @@ Vertex* List::Get(string s)
         return child;
     }
 
-    return List::Get(PUBLICLIST)->Get(s);
+    return List::Get(PUBLIC)->Get(s);
 }
 
 
 Vertex* List::Get(uint i)
 {
-    return List::Get(PUBLICLIST)->Get(i);
+    return List::Get(PUBLIC)->Get(i);
 }
 
 
 Vertex* List::Get(string type, string name)
 {
-    return List::Get(PUBLICLIST)->Get(type, name);
+    return List::Get(PUBLIC)->Get(type, name);
 }
 
 
 uint List::Size()
 {
-    return List::Get(PUBLICLIST)->Size();
+    return List::Get(PUBLIC)->Size();
 }
 
 
 void List::Reset()
 {
-    Vertex* pl = Vertex::Get(ANY, PUBLICLIST);
+    Vertex* pl = Vertex::Get(ANY, PUBLIC);
     if(pl)
         pl->Vertex::Reset();
 }
@@ -106,11 +106,11 @@ void List::Reset()
 
 bool List::Delete(Vertex* child)
 {
-    return List::Get(PUBLICLIST)->Delete(child);
+    return List::Get(PUBLIC)->Delete(child);
 }
 
 
 bool List::Detach(Vertex* child)
 {
-    return List::Get(PUBLICLIST)->Detach(child);
+    return List::Get(PUBLIC)->Detach(child);
 }
