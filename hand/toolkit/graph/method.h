@@ -35,11 +35,7 @@ class Method : public Vertex
             Function = func;
             Type(METHOD);
         };
-        // Clean-up object
-        void Clean(void)
-        {
-            delete(Object);
-        };
+        virtual ~Method(){};
 
         // Execute the Method
         bool Execute(Vertex* param)
@@ -49,10 +45,12 @@ class Method : public Vertex
             return false;
         };
 
+        using Vertex::Set;
         void Set(TFunction func)
         {
             Function = func;
         };
+        using Vertex::Get;
         virtual I* Get()
         {
             // Only makes sense to return the object
