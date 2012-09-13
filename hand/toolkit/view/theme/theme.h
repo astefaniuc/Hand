@@ -28,12 +28,6 @@
 #include <map>
 
 
-#define DIM_FONT_PREFERRED "DIM_FONT_PREFERRED"
-#define DIM_FONT_MAX "DIM_FONT_MAX"
-#define ALIGNMENT "ALIGNMENT"
-#define TAG_RELATION_CONTENT "TAG_RELATION_CONTENT"
-
-
 class Rgb;
 class Rect;
 class Layout;

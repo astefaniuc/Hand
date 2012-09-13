@@ -36,12 +36,15 @@ class Data : public Vertex
             Type(DATA);
             Type(std::string(typeid(val).name()));
         };
+        virtual ~Data(){};
 
+        using Vertex::Set;
         bool Set(I val)
         {
             Value = val;
             return true;
         };
+        using Vertex::Get;
         I Get()
         {
             return Value;
