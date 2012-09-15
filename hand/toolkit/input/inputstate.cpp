@@ -33,7 +33,7 @@ InputState::InputState(Device* d)
     // TODO: check the size of the existing tree, if it doesn't matches
     // create a new one and store it in a vector in the server
     STree = new StateTree(InputDevice->GetNumberOfKeys());
-    NullKey = PressedKey = ReleasedKey = FollowerKey = STree->GetEntryPoint();
+    NullKey = PressedKey = FollowerKey = STree->GetEntryPoint();
 }
 
 
@@ -57,9 +57,6 @@ void InputState::SetDevice(Device* d)
 
 bool InputState::Press(int k)
 {
-    // Reset the "Released" info
-    ReleasedKey = NullKey;
-
     PressedKey = FollowerKey = FollowerKey->GetChild(k);
     if(PressedKey == NULL)
     {
@@ -86,7 +83,6 @@ bool InputState::Release(int k)
     // Move the ReleasedKey up the the three
     // and the FollowerKey down to the current key combination node
     if((PressedKey==NullKey) ||
-        ((ReleasedKey=ReleasedKey->GetChild(k)) == NULL) ||
         ((FollowerKey=FollowerKey->GetParent(k)) == NULL))
     {
         // Some events get lost, this command is corrupted
@@ -95,11 +91,10 @@ bool InputState::Release(int k)
     }
 
     // Execute command when all pressed keys have been released
-    if((ReleasedKey == PressedKey) &&
-        (ReleasedKey != NullKey))
+    if(FollowerKey == NullKey)
     {
         // Inform the GUI
-        Layer* layer = ReleasedKey->GetLayer();
+        Layer* layer = PressedKey->GetLayer();
         if(layer)
             // There is a GUI item mapped to this command
             layer->ReleaseGui();
@@ -117,7 +112,7 @@ bool InputState::Release(int k)
 
 void InputState::Reset(void)
 {
-    PressedKey = ReleasedKey = FollowerKey = NullKey;
+    PressedKey = FollowerKey = NullKey;
 }
 
 
@@ -129,8 +124,6 @@ Node* InputState::GetKey(key_pointer key)
             return NullKey;
         case PRESSED:
             return PressedKey;
-        case RELEASED:
-            return ReleasedKey;
         case FOLLOWER:
             return FollowerKey;
         default:

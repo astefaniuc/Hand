@@ -43,7 +43,6 @@ LayerManager::LayerManager() : ListLayer()
     MasterView = NULL;
     // TODO: still needed?
     BufferType = COLLECTOR;
-    Layer::SetContent(this);
 
     // Register default layer types/factories. TODO: dynamic loading
     LayerTopos = new FactoryMap("LayerTopos");
@@ -64,11 +63,8 @@ LayerManager::~LayerManager()
 
 void LayerManager::Init()
 {
-    Name("System");
-
     // Theme menu
     List* theme_menu = new List(THEMES_MENU);
-    Add(theme_menu);
     // The path to the theme files
     List* theme_dir = new FileVertex(THEMES_DIRECTORY);
     theme_menu->Add(theme_dir);
@@ -82,12 +78,13 @@ void LayerManager::Init()
     // Load the theme
     LoadTheme(curr_theme);
 
-
+    List* pub = new List("System");
+    Layer::SetContent(pub);
+    pub->Add(theme_menu);
+    pub->Add(new Method<LayerManager>("Exit", this, &LayerManager::Exit));
     // Add the exit function to the tree of available funcs
-    Add(new Method<LayerManager>("Exit", this, &LayerManager::Exit));
-
     // Request command at highest level
-    GetCommand(Get("Exit"), _InputState->GetNumberOfKeys());
+    GetCommand(pub->Get("Exit"), _InputState->GetNumberOfKeys());
     // Start the focus handling layer
 /*    MasterView = CreateLayer(FOCUSLAYER);
     MasterView->Init();

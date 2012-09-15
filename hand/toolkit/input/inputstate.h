@@ -62,7 +62,6 @@ class InputState
         // Members:
         Node* NullKey;
         Node* PressedKey;
-        Node* ReleasedKey;
         Node* FollowerKey;
 };
 
