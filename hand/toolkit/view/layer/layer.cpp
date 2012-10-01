@@ -195,7 +195,9 @@ Layer* Layer::Insert(Vertex* data, string position)
     if(!field)
         return NULL;
 
-    Layer* sub_layer = GetLayerManager()->CreateLayer(data, field->Type());
+    // TODO: generic factory
+    Layer* sub_layer = dynamic_cast<LayerManager*>(Vertex::Get(LAYERMANAGER)->Get())
+            ->CreateLayer(data, field->Type());
     if(!sub_layer)
         return NULL;
 

@@ -18,6 +18,7 @@
  */
 
 #include "view/screen.h"
+#include "view/layer/layer.h"
 #include "base/handserver.h"
 #include "graph/data.h"
 #include "graph/method.h"
@@ -50,7 +51,6 @@ void Screen::Init()
 bool Screen::ToggleFullscreen(Vertex* ignore)
 {
     bool ret = IsFullscreen ? SetWindowed() : SetFullscreen();
-    Server()->SetLayerManagerPositions();
     return ret;
 }
 
@@ -114,6 +114,26 @@ SDL_Rect Screen::GetResolution()
 }
 
 
+void Screen::SetLayerManagerPositions()
+{
+    Vertex* all_lm = Vertex::Get(LAYERMANAGER);
+    if(all_lm->Size() < 1)
+        exit(0);
+
+    SDL_Rect screen = GetResolution();
+    SDL_Rect screen_tmp = screen;
+
+    Layer* lm;
+    uint i = 0;
+    while((lm=dynamic_cast<Layer*>(all_lm->Get(++i))) != NULL)
+    {
+        screen_tmp.w = screen.w/all_lm->Size();
+        screen_tmp.x = screen_tmp.w*i;
+        lm->SetSize(screen_tmp);
+    }
+}
+
+
 SDL_Surface* Screen::GetSurface()
 {
     return Surface;
@@ -122,6 +142,14 @@ SDL_Surface* Screen::GetSurface()
 
 void Screen::ShowSurface(void)
 {
+    SetLayerManagerPositions();
+
+    Vertex* all_lm = Vertex::Get(LAYERMANAGER);
+    Layer* layer;
+    uint i = 0;
+    while((layer=dynamic_cast<Layer*>(all_lm->Get(++i))) != NULL)
+        layer->Update(false);
+
     // Need to call this extra as BuildSurface is called recursively
     SDL_Flip(Surface);
 }

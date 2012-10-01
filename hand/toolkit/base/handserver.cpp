@@ -66,21 +66,7 @@ HandServer::~HandServer()
 void HandServer::Start()
 {
     _Screen = new Screen();
-    _Screen->SetLayerManager(GetLayerManager());
-}
-
-
-void HandServer::Exit(Vertex* lm)
-{
-    Vertex* all_lm = Get("LayerManagers");
-    if(all_lm->Size() <= 1)
-        exit(0);
-
-    // Multiple LayerManager
-    all_lm->Delete(lm);
-
-    // Update layouts
-    SetLayerManagerPositions();
+    GetLayerManager();
 }
 
 
@@ -93,14 +79,8 @@ void HandServer::Pump()
     // Wait till next cycle before setting the next content
     // because this deletes the calling object
     GetUserInput();
-
-    Vertex* all_lm = Get("LayerManagers");
-    LayerManager* layer;
-    uint i = 0;
-    while((layer=dynamic_cast<LayerManager*>(all_lm->Get(++i))) != NULL)
-        layer->Update(false);
-
     _Screen->ShowSurface();
+
     ExecNotFinished = false;
 }
 
@@ -109,7 +89,7 @@ LayerManager* HandServer::GetLayerManager()
 {
     // Start the layer manager
     LayerManager* layer_mgr = new LayerManager();
-    Get("LayerManagers")->Add(layer_mgr);
+    _Screen->Vertex::Get(LAYERMANAGER)->Add(layer_mgr);
 //    layer_mgr->Init();
 
     // Create device object with input state
@@ -118,27 +98,7 @@ LayerManager* HandServer::GetLayerManager()
     Get("Devices")->Add(device);
     layer_mgr->SetScreen(_Screen->GetSurface());
 
-    SetLayerManagerPositions();
-
     return layer_mgr;
-}
-
-
-void HandServer::SetLayerManagerPositions()
-{
-    Vertex* all_lm = Get("LayerManagers");
-
-    SDL_Rect screen = _Screen->GetResolution();
-    SDL_Rect screen_tmp = screen;
-
-    LayerManager* lm;
-    uint i = 0;
-    while((lm=dynamic_cast<LayerManager*>(all_lm->Get(++i))) != NULL)
-    {
-        screen_tmp.w = screen.w/all_lm->Size();
-        screen_tmp.x = screen_tmp.w*i;
-        lm->SetSize(screen_tmp);
-    }
 }
 
 
@@ -147,7 +107,8 @@ bool HandServer::Present(string file)
     Vertex* app = Produce(new Note("Command line input", file), "");
     if(app && app->Is(HANDAPP))
     {
-        dynamic_cast<LayerManager*>(Get("LayerManagers")->Get())->LoadAppInterface(app, true);
+        dynamic_cast<LayerManager*>(_Screen->Vertex::Get(LAYERMANAGER)->Get())
+                ->LoadAppInterface(app, true);
         return true;
     }
     return false;
@@ -236,7 +197,7 @@ void HandServer::Press(SDLKey k)
 
 void HandServer::Release(SDLKey k)
 {
-    Vertex* lm = Get("LayerManagers");
+    Vertex* lm = _Screen->Vertex::Get(LAYERMANAGER);
     // Gets the device
     Vertex* all_dev = Get("Devices");
     Device* dev;
@@ -250,7 +211,7 @@ void HandServer::Release(SDLKey k)
                && (lm->Size() > 1))
             {
                 // Exit last layer
-                Exit(lm->Get(lm->Size()));
+                delete(lm->Get(lm->Size()));
             }
             return;
         }

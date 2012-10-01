@@ -35,7 +35,7 @@ using namespace std;
 
 LayerManager::LayerManager() : ListLayer()
 {
-    SetLayerManager(this);
+    Vertex::Get(LAYERMANAGER)->Set(this);
     Type(LAYERMANAGER);
     _Theme = NULL;
     NextRequest = NULL;
@@ -164,7 +164,8 @@ bool LayerManager::Exit(Vertex* content)
     if(MasterView && (MasterView->GetContent()!=content))
         return Request(content);
 
-    Server()->Exit(this);
+    // Suicide
+    delete(this);
     return false;
 }
 
@@ -177,7 +178,7 @@ Device* LayerManager::GetDevice()
 
 void LayerManager::SetDevice(Device* device)
 {
-    device->SetLayerManager(this);
+    device->Vertex::Get(LAYERMANAGER)->Set(this);
     // Is the Device initialized?
     _InputState = device->GetInputState();
     // Delayed initialization of the LayerManager, needs _InputState ptr
@@ -329,7 +330,7 @@ Layer* LayerManager::CreateLayer(Vertex* content, string layer_type)
     Layer* layer = dynamic_cast<Layer*>(LayerTopos->Produce(content, layer_type));
     if(!layer)
         return NULL;
-    layer->SetLayerManager(this);
+    layer->Vertex::Get(LAYERMANAGER)->Set(this);
     layer->SetLayout(_Theme);
     layer->SetContent(content);
 

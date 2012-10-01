@@ -28,7 +28,6 @@
 
 
 class HandServer;
-class LayerManager;
 
 class HandApp : public List
 {
@@ -36,11 +35,6 @@ class HandApp : public List
                       HandApp(std::string name);
               virtual ~HandApp(){};
         HandServer*  Server();
-        LayerManager* GetLayerManager();
-        void          SetLayerManager(LayerManager* lm);
-
-    protected:
-        LayerManager* _LayerManager;
 };
 
 #endif /* BASE_HANDAPP_H */

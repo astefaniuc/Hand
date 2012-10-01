@@ -32,13 +32,10 @@ class HandServer : public virtual DataManager
 {
     public:
         static HandServer* GetInstance(void);
-        void Exit(Vertex* layermanager);
         void Pump();
 
         // Initializes all subsystems:
         LayerManager* GetLayerManager();
-        // Re-calculate position for all layer manager
-        void SetLayerManagerPositions();
         // Called from main() of stand-alone apps
         bool Present(std::string file);
         // Starts timer

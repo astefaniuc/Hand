@@ -32,22 +32,7 @@ using namespace std;
 
 HandApp::HandApp(string name) : List(name)
 {
-    _LayerManager = NULL;
     Type(HANDAPP);
-}
-
-
-LayerManager* HandApp::GetLayerManager()
-{
-    if(_LayerManager == NULL)
-        _LayerManager = Server()->GetLayerManager();
-    return _LayerManager;
-}
-
-
-void HandApp::SetLayerManager(LayerManager* lm)
-{
-    _LayerManager = lm;
 }
 
 

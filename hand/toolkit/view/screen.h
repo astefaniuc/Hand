@@ -38,6 +38,8 @@ class Screen : public virtual HandApp
         // GetSize()/ GetPosition()
         SDL_Rect GetResolution(void);
         // GetBuffer()
+        // Re-calculate position for all layer manager
+        void SetLayerManagerPositions();
         SDL_Surface* GetSurface(void);
         void ShowSurface(void);
 
