@@ -59,15 +59,6 @@ HandServer::HandServer()
 
 HandServer::~HandServer()
 {
-    vector<LayerManager*>::iterator curr = LayerMgrs.begin();
-    LayerManager* tmp;
-    // Recursively deletes sub-layers
-    while(curr!=LayerMgrs.end())
-    {
-        tmp = (*curr);
-        curr = LayerMgrs.erase(curr);
-        delete tmp;
-    }
     delete _Screen;
 }
 
@@ -82,24 +73,15 @@ void HandServer::Start()
 
 void HandServer::Exit(LayerManager* lm)
 {
-    if(LayerMgrs.size() <= 1)
+    Vertex* all_lm = Get("LayerManagers");
+    if(all_lm->Size() <= 1)
         exit(0);
 
-    // Multiple LayerManager => don't exit; UnregisterDevice()
-    vector<LayerManager*>::iterator curr;
-    LayerManager* tmp;
-    // Recursively deletes sub-layers
-    for(curr=LayerMgrs.begin(); curr!=LayerMgrs.end(); curr++)
-    {
-        tmp = (*curr);
-        if(tmp == lm)
-        {
-            Unregister(tmp->GetDevice());
-            LayerMgrs.erase(curr);
-            delete tmp;
-            break;
-        }
-    }
+    // Multiple LayerManager
+    Unregister(lm->GetDevice());
+    all_lm->Delete(lm);
+
+    // Update layouts
     SetLayerManagerPositions();
 }
 
@@ -113,14 +95,13 @@ void HandServer::Pump()
     // Wait till next cycle before setting the next content
     // because this deletes the calling object
     GetUserInput();
-    LayerManager* layer_mgr;
-    vector<LayerManager*>::iterator curr;
-    vector<LayerManager*>::iterator end = LayerMgrs.end();
-    for(curr=LayerMgrs.begin(); curr!=end; curr++)
-    {
-        layer_mgr = (*curr);
-        layer_mgr->Update(false);
-    }
+
+    Vertex* all_lm = Get("LayerManagers");
+    LayerManager* layer;
+    uint i = 0;
+    while((layer=dynamic_cast<LayerManager*>(all_lm->Get(++i))) != NULL)
+        layer->Update(false);
+
     _Screen->ShowSurface();
     ExecNotFinished = false;
 }
@@ -130,8 +111,7 @@ LayerManager* HandServer::GetLayerManager()
 {
     // Start the layer manager
     LayerManager* layer_mgr = new LayerManager();
-    LayerMgrs.push_back(layer_mgr);
-    layer_mgr->Owner(this);
+    Get("LayerManagers")->Add(layer_mgr);
 //    layer_mgr->Init();
 
     // Create device object with input state
@@ -148,20 +128,18 @@ LayerManager* HandServer::GetLayerManager()
 
 void HandServer::SetLayerManagerPositions()
 {
-    LayerManager* lm;
-    vector<LayerManager*>::iterator curr;
-    vector<LayerManager*>::iterator end = LayerMgrs.end();
-    int i = 0;
+    Vertex* all_lm = Get("LayerManagers");
+
     SDL_Rect screen = _Screen->GetResolution();
     SDL_Rect screen_tmp = screen;
-    int nr_of_lms = LayerMgrs.size();
-    for(curr=LayerMgrs.begin(); curr!=end; curr++)
+
+    LayerManager* lm;
+    uint i = 0;
+    while((lm=dynamic_cast<LayerManager*>(all_lm->Get(++i))) != NULL)
     {
-        lm = (*curr);
-        screen_tmp.w = screen.w/nr_of_lms;
+        screen_tmp.w = screen.w/all_lm->Size();
         screen_tmp.x = screen_tmp.w*i;
         lm->SetSize(screen_tmp);
-        i++;
     }
 }
 
@@ -171,7 +149,7 @@ bool HandServer::Present(string file)
     Vertex* app = Produce(new Note("Command line input", file), "");
     if(app && app->Is(HANDAPP))
     {
-        LayerMgrs[0]->LoadAppInterface(app, true);
+        dynamic_cast<LayerManager*>(Get("LayerManagers")->Get())->LoadAppInterface(app, true);
         return true;
     }
     return false;
@@ -290,6 +268,7 @@ void HandServer::Press(SDLKey k)
 
 void HandServer::Release(SDLKey k)
 {
+    Vertex* lm = Get("LayerManagers");
     // Gets the device
     for(currentDevice=Devices.begin(); currentDevice!=endDevice; currentDevice++)
     {
@@ -297,9 +276,10 @@ void HandServer::Release(SDLKey k)
         {
             if(DeleteDeviceIfEmpty
                && (*currentDevice)->IsUnused()
-               && (LayerMgrs.size() > 1))
+               && (lm->Size() > 1))
             {
-                Exit(LayerMgrs.back());
+                // Exit last layer
+                Exit(dynamic_cast<LayerManager*>(lm->Get(lm->Size())));
             }
             return;
         }

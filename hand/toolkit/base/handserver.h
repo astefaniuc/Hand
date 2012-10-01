@@ -65,12 +65,11 @@ class HandServer : public virtual DataManager
         // Members:
         // The one and only server (singleton)
         static HandServer* Instance;
-        std::vector<LayerManager*> LayerMgrs;
         // TODO: declare here iterator for LM as for Device
         std::vector<Device*> Devices;
         std::vector<Device*>::iterator currentDevice;
         std::vector<Device*>::iterator endDevice;
-        // TODO: multiple drawers e.g. touch screen device
+        // TODO: multiple screens e.g. touch screen device
         Screen* _Screen;
         // The queue for system device events
         SDL_Event Event;
