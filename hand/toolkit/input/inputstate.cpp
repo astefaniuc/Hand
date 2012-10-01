@@ -40,6 +40,7 @@ InputState::InputState(Device* d)
 InputState::~InputState()
 {
     delete(STree);
+    delete(InputDevice);
 }
 
 

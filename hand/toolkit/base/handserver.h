@@ -32,7 +32,7 @@ class HandServer : public virtual DataManager
 {
     public:
         static HandServer* GetInstance(void);
-        void Exit(LayerManager*);
+        void Exit(Vertex* layermanager);
         void Pump();
 
         // Initializes all subsystems:

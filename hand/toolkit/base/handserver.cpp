@@ -66,19 +66,17 @@ HandServer::~HandServer()
 void HandServer::Start()
 {
     _Screen = new Screen();
-    LayerManager* layer_mgr = GetLayerManager();
-    _Screen->SetLayerManager(layer_mgr);
+    _Screen->SetLayerManager(GetLayerManager());
 }
 
 
-void HandServer::Exit(LayerManager* lm)
+void HandServer::Exit(Vertex* lm)
 {
     Vertex* all_lm = Get("LayerManagers");
     if(all_lm->Size() <= 1)
         exit(0);
 
     // Multiple LayerManager
-    Get("Devices")->Delete(lm->GetDevice());
     all_lm->Delete(lm);
 
     // Update layouts
@@ -116,8 +114,8 @@ LayerManager* HandServer::GetLayerManager()
 
     // Create device object with input state
     Device* device = new Device();
-    Get("Devices")->Add(device);
     layer_mgr->SetDevice(device);
+    Get("Devices")->Add(device);
     layer_mgr->SetScreen(_Screen->GetSurface());
 
     SetLayerManagerPositions();
@@ -252,7 +250,7 @@ void HandServer::Release(SDLKey k)
                && (lm->Size() > 1))
             {
                 // Exit last layer
-                Exit(dynamic_cast<LayerManager*>(lm->Get(lm->Size())));
+                Exit(lm->Get(lm->Size()));
             }
             return;
         }
