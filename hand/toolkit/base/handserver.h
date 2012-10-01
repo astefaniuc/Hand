@@ -35,10 +35,6 @@ class HandServer : public virtual DataManager
         void Exit(LayerManager*);
         void Pump();
 
-        // Adds device (keys) to the input poll
-        int  Register(Device*);
-        // Removes device from the input poll
-        void Unregister(Device*);
         // Initializes all subsystems:
         LayerManager* GetLayerManager();
         // Re-calculate position for all layer manager
@@ -65,10 +61,6 @@ class HandServer : public virtual DataManager
         // Members:
         // The one and only server (singleton)
         static HandServer* Instance;
-        // TODO: declare here iterator for LM as for Device
-        std::vector<Device*> Devices;
-        std::vector<Device*>::iterator currentDevice;
-        std::vector<Device*>::iterator endDevice;
         // TODO: multiple screens e.g. touch screen device
         Screen* _Screen;
         // The queue for system device events

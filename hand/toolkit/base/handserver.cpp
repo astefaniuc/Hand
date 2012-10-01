@@ -78,7 +78,7 @@ void HandServer::Exit(LayerManager* lm)
         exit(0);
 
     // Multiple LayerManager
-    Unregister(lm->GetDevice());
+    Get("Devices")->Delete(lm->GetDevice());
     all_lm->Delete(lm);
 
     // Update layouts
@@ -116,7 +116,7 @@ LayerManager* HandServer::GetLayerManager()
 
     // Create device object with input state
     Device* device = new Device();
-    this->Register(device);
+    Get("Devices")->Add(device);
     layer_mgr->SetDevice(device);
     layer_mgr->SetScreen(_Screen->GetSurface());
 
@@ -179,35 +179,6 @@ Uint32 CallServerMethod(Uint32 i, void* server)
 }
 
 
-int HandServer::Register(Device* d)
-{
-    Devices.push_back(d);
-    endDevice = Devices.end();
-    if(Devices.size() == 1)
-    {
-//        DataManager::Validate(d->App_Interface());
-    }
-    return Devices.size();
-}
-
-
-void HandServer::Unregister(Device* d)
-{
-    Device* tmp;
-    for(currentDevice=Devices.begin(); currentDevice!=endDevice; currentDevice++)
-    {
-        tmp = (*currentDevice);
-        if(tmp == d)
-        {
-            currentDevice = Devices.erase(currentDevice);
-            delete tmp;
-            endDevice = Devices.end();
-            return;
-        }
-    }
-}
-
-
 void HandServer::Beat()
 {
     // Start only once
@@ -252,17 +223,16 @@ void HandServer::GetUserInput()
 
 void HandServer::Press(SDLKey k)
 {
-    for(currentDevice=Devices.begin(); currentDevice!=endDevice; currentDevice++)
-        if((*currentDevice)->Press(k))
+    Vertex* all_dev = Get("Devices");
+    Device* dev;
+    uint i = 0;
+    while((dev=dynamic_cast<Device*>(all_dev->Get(++i))) != NULL)
+        if(dev->Press(k))
             return;
 
     if(CreateNewUserOnOrphanKeyPress)
-    {
         // Create a new device if the pressed key doesn't fits to an existing one
-        LayerManager* lm = GetLayerManager();
-        Device* dev = lm->GetDevice();
-        dev->Press(k);
-    }
+        GetLayerManager()->GetDevice()->Press(k);
 }
 
 
@@ -270,12 +240,15 @@ void HandServer::Release(SDLKey k)
 {
     Vertex* lm = Get("LayerManagers");
     // Gets the device
-    for(currentDevice=Devices.begin(); currentDevice!=endDevice; currentDevice++)
+    Vertex* all_dev = Get("Devices");
+    Device* dev;
+    uint i = 0;
+    while((dev=dynamic_cast<Device*>(all_dev->Get(++i))) != NULL)
     {
-        if((*currentDevice)->Release(k))
+        if(dev->Release(k))
         {
             if(DeleteDeviceIfEmpty
-               && (*currentDevice)->IsUnused()
+               && dev->IsUnused()
                && (lm->Size() > 1))
             {
                 // Exit last layer
