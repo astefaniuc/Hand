@@ -117,7 +117,7 @@ class Vertex
 
     private:
         std::string _Name;
-        std::vector<Vertex*> Body;
+        std::vector<Vertex*> _Body;
         Vertex* _Owner;
         Vertex* _Type;
 };
