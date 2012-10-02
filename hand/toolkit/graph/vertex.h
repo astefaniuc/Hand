@@ -83,11 +83,6 @@ class Vertex
         bool Is(std::string type);
         bool Is(RegularExpression* type);
 
-        // Set object owner (for memory management).
-        void Owner(Vertex* owner);
-        // Returns the pointer to the owner vertex
-        Vertex* Owner();
-
         // Removes all sub-objects
         virtual void Reset();
         // Removes child from Vertex. If Vertex is the owner of child it also
@@ -116,6 +111,11 @@ class Vertex
         virtual Vertex* _Find(std::string name, int depth);
 
     private:
+        // Set object owner (for memory management).
+        void Owner(Vertex* owner);
+        // Returns the pointer to the owner vertex
+        Vertex* Owner();
+
         std::string _Name;
         BaseList* _Body;
         BaseList* _References;

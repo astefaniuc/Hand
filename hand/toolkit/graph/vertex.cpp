@@ -48,6 +48,24 @@ Vertex::~Vertex()
 }
 
 
+void Vertex::Reset()
+{
+    VIterator curr = _Body->begin();
+    while(curr != _Body->end())
+    {
+        // Recursively delete all children
+        if(!(*curr)->Owner() || ((*curr)->Owner()==this))
+            delete((*curr));
+        else
+        {
+            // Detach
+            (*curr)->_References->erase(this);
+            _Body->erase(curr);
+        }
+    }
+}
+
+
 bool Vertex::Add(Vertex* child)
 {
     if(!child)
@@ -274,24 +292,6 @@ void Vertex::Owner(Vertex* owner)
 Vertex* Vertex::Owner()
 {
     return _References->front();
-}
-
-
-void Vertex::Reset()
-{
-    VIterator curr = _Body->begin();
-    while(curr != _Body->end())
-    {
-        // Recursively delete all children
-        if(!(*curr)->Owner() || ((*curr)->Owner()==this))
-            delete((*curr));
-        else
-        {
-            // Detach
-            (*curr)->_References->erase(this);
-            _Body->erase(curr);
-        }
-    }
 }
 
 
