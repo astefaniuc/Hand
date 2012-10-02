@@ -37,9 +37,8 @@ class Vertex
         virtual ~Vertex();
 
         // Inserts a sub-item to the current vertex and makes the current
-        // vertex the owner of it if it is unowned; allows multiple objects
-        // with the same name
-        virtual bool Add(Vertex* child);
+        // vertex the owner of it; allows multiple objects with same name
+         virtual bool Add(Vertex* child);
         // Inserts a sub-item to the current vertex without changing
         // the ownership of 'item'; it replaces any object with same name
         virtual bool Set(Vertex* sub);
