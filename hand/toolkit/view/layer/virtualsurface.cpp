@@ -27,11 +27,8 @@
 using namespace std;
 
 
-AnimationsList::AnimationsList()
+AnimationsList::AnimationsList() : List("AnimationsList")
 {
-    Begin = Animations.begin();
-    End = Animations.end();
-    Current = End;
 };
 
 
@@ -49,7 +46,7 @@ AnimationsList::~AnimationsList()
 
 void AnimationsList::Reset()
 {
-    for(Current=Begin; Begin!=End; Current++)
+//    for(Current=Begin; Begin!=End; Current++)
     {
         RemoveCurrentAnimation();
     }
@@ -58,8 +55,6 @@ void AnimationsList::Reset()
 
 void AnimationsList::AppendAnimation(Animation* a)
 {
-    Animations.push_back(a);
-    End = Animations.end();
 }
 
 
@@ -83,33 +78,24 @@ bool AnimationsList::Update(Vertex* layout)
 
 void AnimationsList::RemoveCurrentAnimation()
 {
-    if(Current != End)
-        delete(*Current);
-        Animations.erase(Current);
-    End = Animations.end();
 }
 
 
 Animation* AnimationsList::GetFirstAnimation()
 {
-    Current = Begin;
     return GetCurrentAnimation();
 }
 
 
 Animation* AnimationsList::GetNextAnimation()
 {
-    if(Current != End)
-        Current++;
     return GetCurrentAnimation();
 }
 
 
 Animation* AnimationsList::GetCurrentAnimation()
 {
-    if(Current == End)
-        return NULL;
-    return (*Current);
+    return NULL;
 }
 
 

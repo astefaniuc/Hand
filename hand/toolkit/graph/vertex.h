@@ -17,16 +17,16 @@
  *  License along with Hand. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HAND_VERTEX_H
-#define HAND_VERTEX_H
+#ifndef GRAPH_VERTEX_H
+#define GRAPH_VERTEX_H
 
 #include "include/defines.h"
 
 #include <string>
 #include <sstream>
-#include <vector>
 
 
+class BaseList;
 class Search;
 class RegularExpression;
 
@@ -117,9 +117,9 @@ class Vertex
 
     private:
         std::string _Name;
-        std::vector<Vertex*> _Body;
-        Vertex* _Owner;
+        BaseList* _Body;
+        BaseList* _References;
         Vertex* _Type;
 };
 
-#endif /* HAND_VERTEX_H */
+#endif /* GRAPH_VERTEX_H */

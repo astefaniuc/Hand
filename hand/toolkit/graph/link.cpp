@@ -56,7 +56,6 @@ bool Relation::Set(Vertex* target)
 {
     List::Reset();
     return List::Set(target);
-    return true;
 }
 
 

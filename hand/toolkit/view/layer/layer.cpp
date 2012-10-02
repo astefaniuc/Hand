@@ -122,15 +122,15 @@ void Layer::ReleaseCommand()
 
 void Layer::Collapse()
 {
-    vector<Layer*>::iterator curr = SubLayers.begin();
-    Layer* tmp;
-    // Recursively deletes sub-layers
-    while(curr!=SubLayers.end())
-    {
-        tmp = (*curr);
-        curr = SubLayers.erase(curr);
-        delete tmp;
-    }
+    Vertex* children = Get(RELATION, CHILDREN);
+    if(!children)
+        return;
+
+    Vertex* child;
+    while((child=children->Get(1)) != NULL)
+        // Recursively deletes sub-layers
+        delete child;
+
     IsExpanded = false;
 }
 

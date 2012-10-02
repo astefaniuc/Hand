@@ -17,16 +17,17 @@
  *  License along with Hand. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HAND_VIRTUALSURFACE_H
-#define HAND_VIRTUALSURFACE_H
+#ifndef VIEW_LAYER_VIRTUALSURFACE_H
+#define VIEW_LAYER_VIRTUALSURFACE_H
 
 #include "base/handapp.h"
+
 #include <SDL/SDL.h>
 
 
 class Animation;
 
-class AnimationsList
+class AnimationsList : public List
 {
     public:
         AnimationsList();
@@ -38,12 +39,6 @@ class AnimationsList
         Animation* GetFirstAnimation();
         Animation* GetNextAnimation();
         Animation* GetCurrentAnimation();
-
-    private:
-        std::vector<Animation*> Animations;
-        std::vector<Animation*>::iterator Current;
-        std::vector<Animation*>::iterator Begin;
-        std::vector<Animation*>::iterator End;
 };
 
 
@@ -97,4 +92,4 @@ class VirtualSurface : public HandApp
 };
 
 
-#endif /* HAND_VIRTUALSURFACE_H */
+#endif /* VIEW_LAYER_VIRTUALSURFACE_H */

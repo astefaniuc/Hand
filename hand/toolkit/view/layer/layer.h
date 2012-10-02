@@ -80,8 +80,6 @@ class Layer : public VirtualSurface
         virtual void DrawChilds(bool forced);
 
         Layer*         ParentLayer;
-        // Internal map of enabled key/button pairs
-        std::vector<Layer*> SubLayers;
 
 //        bool Updated;
     public:

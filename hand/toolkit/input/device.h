@@ -17,11 +17,13 @@
  *  License along with Hand. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HAND_DEVICE_H
-#define HAND_DEVICE_H
+#ifndef INPUT_DEVICE_H
+#define INPUT_DEVICE_H
 
 #include "base/handapp.h"
+
 #include <SDL/SDL.h>
+#include <vector>
 
 
 class InputState;
@@ -68,4 +70,4 @@ class Device : public virtual HandApp
 
 #define DEVICE_KEYLIST "Keylist"
 
-#endif /* HAND_DEVICE_H */
+#endif /* INPUT_DEVICE_H */

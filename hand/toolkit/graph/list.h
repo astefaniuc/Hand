@@ -17,8 +17,8 @@
  *  License along with Hand. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TOOLKIT_GRAPH_LIST_H
-#define TOOLKIT_GRAPH_LIST_H
+#ifndef GRAPH_LIST_H
+#define GRAPH_LIST_H
 
 #include "graph/vertex.h"
 
@@ -51,4 +51,4 @@ class List : public Vertex
         virtual Vertex* _Get();
 };
 
-#endif /* TOOLKIT_GRAPH_LIST_H */
+#endif /* GRAPH_LIST_H */

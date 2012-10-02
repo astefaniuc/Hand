@@ -17,6 +17,7 @@
  *  License along with Hand. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "graph/baselist.h"
 #include "graph/vertex.h"
 #include "graph/link.h"
 #include "graph/search/regularexpression.h"
@@ -26,14 +27,12 @@
 using namespace std;
 
 
-typedef vector<Vertex*>::iterator VIterator;
-
-
 Vertex::Vertex(string name)
 {
-    _Owner = NULL;
     _Type = NULL;
     _Name = name;
+    _Body = new BaseList();
+    _References = new BaseList();
 }
 
 
@@ -41,6 +40,12 @@ Vertex::~Vertex()
 {
     Reset();
     delete(_Type);
+    // Remove references to this object
+    VIterator curr = _References->begin();
+    while(curr != _References->end())
+        (*curr)->Detach(this);
+    delete(_Body);
+    delete(_References);
 }
 
 
@@ -49,11 +54,8 @@ bool Vertex::Add(Vertex* child)
     if(!child)
         return false;
 
-    _Body.push_back(child);
-
-    // Take ownership only for unowned objects
-    if(!child->Owner())
-        child->Owner(this);
+    _Body->push_back(child);
+    child->Owner(this);
 
     return true;
 }
@@ -65,20 +67,23 @@ bool Vertex::Set(Vertex* child)
         return false;
 
     string s = child->Name();
-    VIterator curr = _Body.begin();
-    while(curr != _Body.end())
+    VIterator curr = _Body->begin();
+    while(curr != _Body->end())
     {
         // TODO: is the Type relevant?
         if((*curr)->Name() == s)
         {
             if(!(*curr)->Owner() || ((*curr)->Owner()==this))
                 delete(*curr);
-            _Body.erase(curr);
+            else
+                _Body->erase(curr);
         }
         else
             curr++;
     }
-    _Body.push_back(child);
+    _Body->push_back(child);
+    child->_References->push_back(this);
+
     return true;
 }
 
@@ -87,7 +92,10 @@ bool Vertex::Attach(Vertex* child)
 {
     if(!child)
         return false;
-    _Body.push_back(child);
+
+    _Body->push_back(child);
+    child->_References->push_back(this);
+
     return true;
 }
 
@@ -107,8 +115,8 @@ Vertex* Vertex::_Get()
 Vertex* Vertex::Get(string s)
 {
     VIterator curr;
-    VIterator _end = _Body.end();
-    for(curr=_Body.begin(); curr!=_end; curr++)
+    VIterator _end = _Body->end();
+    for(curr=_Body->begin(); curr!=_end; curr++)
         if((*curr)->Name() == s)
             return (*curr);
 
@@ -120,8 +128,8 @@ Vertex* Vertex::Get(string s)
 
 Vertex* Vertex::Get(string type, string name)
 {
-    VIterator curr = _Body.begin();
-    VIterator _end = _Body.end();
+    VIterator curr = _Body->begin();
+    VIterator _end = _Body->end();
 
     if(name == ANY)
     {
@@ -155,8 +163,8 @@ Vertex* Vertex::Get(uint i)
     // 1-based
     --i;
 
-    if(i < _Body.size())
-        return _Body.at(i);
+    if(i < _Body->size())
+        return _Body->at(i);
 
     return NULL;
 }
@@ -179,24 +187,134 @@ bool Vertex::Detach(Vertex* child)
     if(!child)
         return false;
 
-    VIterator curr;
-    for(curr=_Body.begin(); curr!=_Body.end(); curr++)
-    {
-        if((*curr) == child)
-        {
-            _Body.erase(curr);
-            if(child->Owner() == this)
-                child->Owner(NULL);
-            return true;
-        }
-    }
-    return false;
+    child->_References->erase(this);
+    return _Body->erase(child);
 }
 
 
 uint Vertex::Size()
 {
-    return _Body.size();
+    return _Body->size();
+}
+
+
+void Vertex::Name(string name)
+{
+    _Name = name;
+}
+
+
+string& Vertex::Name()
+{
+    return _Name;
+}
+
+
+void Vertex::Type(string type)
+{
+    if(type.empty())
+        return;
+
+    if(!_Type)
+        _Type = new Vertex(TYPE);
+
+    _Type->Set(new Vertex(type));
+}
+
+
+string Vertex::Type()
+{
+    // TODO: needs context sensitive type
+    if(_Type)
+        return _Type->_Body->back()->Name();
+
+    return VERTEX;
+}
+
+
+bool Vertex::Is(string type)
+{
+    if(type.empty())
+        return false;
+
+    if(!_Type)
+        return (type == VERTEX);
+
+    VIterator _end = _Type->_Body->end();
+    for(VIterator curr=_Type->_Body->begin(); curr!=_end; curr++)
+        if((*curr)->Name() == type)
+            return true;
+
+    return false;
+}
+
+
+bool Vertex::Is(RegularExpression* se)
+{
+    if(!se)
+        return false;
+
+    if(!_Type)
+        return se->Matches(VERTEX);
+
+    VIterator _end = _Type->_Body->end();
+    for(VIterator curr=_Type->_Body->begin(); curr!=_end; curr++)
+        if(se->Matches((*curr)->Name()))
+            return true;
+
+    return false;
+}
+
+
+void Vertex::Owner(Vertex* owner)
+{
+    _References->insert(_References->begin(), owner);
+}
+
+
+Vertex* Vertex::Owner()
+{
+    return _References->front();
+}
+
+
+void Vertex::Reset()
+{
+    VIterator curr = _Body->begin();
+    Vertex* tmp;
+    while(curr != _Body->end())
+    {
+        tmp = (*curr);
+        _Body->erase(curr);
+        // Recursively delete all children
+        if(!tmp->Owner() || ((tmp->Size()==1) && (tmp->Owner()==this)))
+            delete(tmp);
+    }
+}
+
+
+string Vertex::GetAsString()
+{
+    return _Name;
+}
+
+
+bool Vertex::Execute(Vertex* func_param)
+{
+    return false;
+}
+
+
+bool Vertex::IsOpen(Search* search)
+{
+    if(_Body->size() == 0)
+        return true;
+    // The search cookie should be the last element
+    Vertex* last = _Body->back();
+    if(last && (last->Name()==search->GetCookieName()))
+        // Already searched from different branch
+        return false;
+    return true;
 }
 
 
@@ -229,11 +347,11 @@ Vertex* Vertex::_Find(string name, int depth)
     }
 
     Vertex* ret = NULL;
-    uint s = _Body.size();
+    uint s = _Body->size();
     --depth;
     for(uint i=0; i<s; i++)
     {
-        ret = _Body.at(i)->Vertex::_Find(name, depth);
+        ret = _Body->at(i)->Vertex::_Find(name, depth);
         if(ret != NULL)
             break;
     }
@@ -244,133 +362,15 @@ Vertex* Vertex::_Find(string name, int depth)
 Vertex* Vertex::Find(RegularExpression* expression)
 {
     // "Plain" find, don't descend
-    uint s = _Body.size();
+    uint s = _Body->size();
     Vertex* ret;
     for(uint i=0; i<s; i++)
     {
-        ret = _Body.at(i);
+        ret = _Body->at(i);
         if(expression->Matches(ret->Name()))
             return ret;
     }
     return NULL;
-}
-
-
-void Vertex::Name(string name)
-{
-    _Name = name;
-}
-
-
-string& Vertex::Name()
-{
-    return _Name;
-}
-
-
-void Vertex::Type(string type)
-{
-    if(type.empty())
-        return;
-
-    if(!_Type)
-        _Type = new Vertex(TYPE);
-
-    _Type->Set(new Vertex(type));
-}
-
-
-string Vertex::Type()
-{
-    // TODO: needs context sensitive type
-    if(_Type)
-        return _Type->_Body.back()->Name();
-
-    return VERTEX;
-}
-
-
-bool Vertex::Is(string type)
-{
-    if(type.empty())
-        return false;
-
-    if(!_Type)
-        return (type == VERTEX);
-
-    VIterator _end = _Type->_Body.end();
-    for(VIterator curr=_Type->_Body.begin(); curr!=_end; curr++)
-        if((*curr)->Name() == type)
-            return true;
-
-    return false;
-}
-
-
-bool Vertex::Is(RegularExpression* se)
-{
-    if(!se)
-        return false;
-
-    if(!_Type)
-        return se->Matches(VERTEX);
-
-    VIterator _end = _Type->_Body.end();
-    for(VIterator curr=_Type->_Body.begin(); curr!=_end; curr++)
-        if(se->Matches((*curr)->Name()))
-            return true;
-
-    return false;
-}
-
-
-void Vertex::Owner(Vertex* owner)
-{
-    _Owner = owner;
-}
-
-
-Vertex* Vertex::Owner()
-{
-    return _Owner;
-}
-
-
-void Vertex::Reset()
-{
-    VIterator curr = _Body.begin();
-    while(curr != _Body.end())
-    {
-        // Recursively delete all children
-        if(!(*curr)->Owner() || ((*curr)->Owner()==this))
-            delete(*curr);
-        _Body.erase(curr);
-    }
-}
-
-
-string Vertex::GetAsString()
-{
-    return _Name;
-}
-
-
-bool Vertex::Execute(Vertex* func_param)
-{
-    return false;
-}
-
-
-bool Vertex::IsOpen(Search* search)
-{
-    if(_Body.size() == 0)
-        return true;
-    // The search cookie should be the last element
-    Vertex* last = _Body.back();
-    if(last && (last->Name()==search->GetCookieName()))
-        // Already searched from different branch
-        return false;
-    return true;
 }
 
 /*

@@ -17,8 +17,8 @@
  *  License along with Hand. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TOOLKIT_GRAPH_DATA_H
-#define TOOLKIT_GRAPH_DATA_H
+#ifndef GRAPH_DATA_H
+#define GRAPH_DATA_H
 
 #include "graph/vertex.h"
 
@@ -61,4 +61,4 @@ class Data : public Vertex
 
 typedef Data<std::string> Note;
 
-#endif /* TOOLKIT_GRAPH_DATA_H */
+#endif /* GRAPH_DATA_H */

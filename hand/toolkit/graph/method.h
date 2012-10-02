@@ -17,8 +17,8 @@
  *  License along with Hand. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TOOLKIT_GRAPH_METHOD_H
-#define TOOLKIT_GRAPH_METHOD_H
+#ifndef GRAPH_METHOD_H
+#define GRAPH_METHOD_H
 
 #include "graph/vertex.h"
 
@@ -62,4 +62,4 @@ class Method : public Vertex
         I* Object;
 };
 
-#endif /* TOOLKIT_GRAPH_METHOD_H */
+#endif /* GRAPH_METHOD_H */
