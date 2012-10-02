@@ -56,6 +56,7 @@ LayerManager::LayerManager() : ListLayer()
 LayerManager::~LayerManager()
 {
     delete(LayerTopos);
+    delete(GetDevice());
     // TODO: unregister (DataManager + Server)
     // UnloadTheme();
 }
