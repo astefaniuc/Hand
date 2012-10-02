@@ -41,11 +41,10 @@ Vertex::~Vertex()
     Reset();
     delete(_Type);
     // Remove references to this object
-    VIterator curr = _References->begin();
-    while(curr != _References->end())
-        (*curr)->Detach(this);
-    delete(_Body);
+    for(VIterator curr = _References->begin(); curr != _References->end(); curr++)
+        (*curr)->_Body->erase(this);
     delete(_References);
+    delete(_Body);
 }
 
 
@@ -281,14 +280,17 @@ Vertex* Vertex::Owner()
 void Vertex::Reset()
 {
     VIterator curr = _Body->begin();
-    Vertex* tmp;
     while(curr != _Body->end())
     {
-        tmp = (*curr);
-        _Body->erase(curr);
         // Recursively delete all children
-        if(!tmp->Owner() || ((tmp->Size()==1) && (tmp->Owner()==this)))
-            delete(tmp);
+        if(!(*curr)->Owner() || ((*curr)->Owner()==this))
+            delete((*curr));
+        else
+        {
+            // Detach
+            (*curr)->_References->erase(this);
+            _Body->erase(curr);
+        }
     }
 }
 
