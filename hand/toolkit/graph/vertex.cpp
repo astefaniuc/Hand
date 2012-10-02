@@ -374,18 +374,3 @@ Vertex* Vertex::Find(RegularExpression* expression)
     }
     return NULL;
 }
-
-/*
-bool Vertex::NotifyChanged()
-{
-    // TODO: insert a "Changed" flag under "properties"
-    Layer* layer;
-    if((layer = GetLayer()) != NULL)
-    {
-        layer->NotifyChanged();
-        return true;
-    }
-    return false;
-
-}
-*/
