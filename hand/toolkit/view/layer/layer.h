@@ -33,7 +33,6 @@ enum maximum_number_of_buttons
 
 class LayerManager;
 class Node;
-class Theme;
 class FactoryMap;
 
 #define LAYER "Layer"
@@ -53,7 +52,7 @@ class Layer : public VirtualSurface
         Layer*       GetParentLayer();
         // Set pointer to a data tree node
         virtual void SetContent(Vertex*);
-        Vertex*    GetContent();
+        Vertex*      GetContent();
         void         SetCommand(Node* cmd);
         void         ReleaseCommand();
         void         Collapse();
@@ -67,7 +66,7 @@ class Layer : public VirtualSurface
         virtual void NotifyChanged();
         virtual void Init(){};
 
-        virtual void SetTheme(Theme* theme);
+        virtual void SetTheme(Vertex* theme);
         // Loads and stores from the layout library the layout for the current layer
         virtual void SetLayout(Vertex* layouts_lib);
         virtual void Draw(bool forced);

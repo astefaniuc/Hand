@@ -214,7 +214,7 @@ Layer* Layer::Insert(Vertex* data, string position)
 }
 
 
-void Layer::SetTheme(Theme* theme)
+void Layer::SetTheme(Vertex* theme)
 {
     // TODO: generic recursive Set() on a sub-tree defined by a "relation"
     // (possibly using Search() with MultipleFindings)
