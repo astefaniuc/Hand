@@ -30,7 +30,6 @@ using namespace std;
 HandServer::HandServer()
 {
     ExecNotFinished = false;
-    // DrawObject
     CreateNewUserOnOrphanKeyPress = true;
     DeleteDeviceIfEmpty = true;
     Timer = NULL;
@@ -187,4 +186,3 @@ void HandServer::Release(SDLKey k)
         }
     }
 }
-// End Device Manager
