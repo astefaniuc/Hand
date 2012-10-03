@@ -21,7 +21,6 @@
 #define BASE_HANDAPP_H
 
 #include "graph/list.h"
-#include "graph/search/search.h"
 
 
 #define HANDAPP "HandApp"

@@ -1,7 +1,7 @@
 #ifndef HANDAPP_TEST2_H
 #define HANDAPP_TEST2_H
 
-#include "base/handapp.h"
+#include "include/hand.h"
 
 
 using namespace std;

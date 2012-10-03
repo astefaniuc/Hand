@@ -67,6 +67,7 @@ void HandServer::Pump()
     // because this deletes the calling object
     GetUserInput();
     if(!_Screen->ShowSurface())
+        // Nothing to show, the normal exit
         exit(0);
 
     ExecNotFinished = false;

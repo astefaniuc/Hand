@@ -25,5 +25,6 @@
 #include "graph/link.h"
 #include "graph/data.h"
 #include "graph/method.h"
+#include "graph/search/search.h"
 
 #endif /* INCLUDE_HAND_H */
