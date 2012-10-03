@@ -42,9 +42,7 @@ class AnimationsList : public List
 };
 
 
-class Theme;
 class Rect;
-
 
 class VirtualSurface : public Vertex
 {

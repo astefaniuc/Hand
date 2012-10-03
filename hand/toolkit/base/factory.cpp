@@ -104,20 +104,20 @@ Vertex* FactoryMap::Produce(Vertex* entry, string output_type)
     // Factory chain "bottom up"
     f = GetFactory(entry);
     if(!f)
-        return entry;
-
-    Vertex* ret = f->Produce(entry);
-    if(!ret)
         return NULL;
 
-    if(ret->Is(output_type))
-        return ret;
+    Vertex* prod = f->Produce(entry);
+    if(!prod)
+        return NULL;
+
+    if(prod->Is(output_type))
+        return prod;
     // Do we have a new entry or a new factory?
-    f = dynamic_cast<Factory*>(ret);
+    f = dynamic_cast<Factory*>(prod);
     if(f)
         return f->Produce(entry);
 
-    return Produce(ret, output_type);
+    return Produce(prod, output_type);
 }
 
 

@@ -37,7 +37,6 @@ LayerManager::LayerManager() : ListLayer()
 {
     Vertex::Get(LAYERMANAGER)->Set(this);
     Type(LAYERMANAGER);
-    _Theme = NULL;
     NextRequest = NULL;
     _InputState = NULL;
     MasterView = NULL;
@@ -213,7 +212,7 @@ bool LayerManager::LoadTheme(Vertex* f)
     if(!theme)
         return false;
 
-    _Theme = theme;
+    Get("Theme")->Set(theme);
     SetTheme(theme);
     return true;
 }
@@ -329,7 +328,7 @@ Layer* LayerManager::CreateLayer(Vertex* content, string layer_type)
     if(!layer)
         return NULL;
     layer->Vertex::Get(LAYERMANAGER)->Set(this);
-    layer->SetLayout(_Theme);
+    layer->SetLayout(Get("Theme")->Get());
     layer->SetContent(content);
 
     return layer;

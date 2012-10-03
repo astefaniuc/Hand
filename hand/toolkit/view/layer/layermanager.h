@@ -69,7 +69,6 @@ class LayerManager : public ListLayer
         SDL_Surface* Screen;
         Layer*       MasterView;
         FactoryMap*  LayerTopos;
-        Theme*         _Theme;
 };
 
 #endif /* HAND_LAYERMANAGER_H */
