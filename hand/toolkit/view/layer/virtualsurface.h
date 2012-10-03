@@ -20,7 +20,7 @@
 #ifndef VIEW_LAYER_VIRTUALSURFACE_H
 #define VIEW_LAYER_VIRTUALSURFACE_H
 
-#include "base/handapp.h"
+#include "graph/list.h"
 
 #include <SDL/SDL.h>
 
@@ -42,22 +42,11 @@ class AnimationsList : public List
 };
 
 
-// GUI types (Vertex tags)
-#define VIRTUALSURFACE "VIRTUALSURFACE"
-
-enum buffer_type
-{
-    NONE,
-    OVERLAY,
-    COLLECTOR
-};
-
-
 class Theme;
 class Rect;
 
 
-class VirtualSurface : public HandApp
+class VirtualSurface : public Vertex
 {
     public:
         VirtualSurface(std::string name);

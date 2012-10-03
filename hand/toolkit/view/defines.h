@@ -21,6 +21,7 @@
 #define VIEW_DEFINES_H
 
 
+#define VIRTUALSURFACE "VIRTUALSURFACE"
 // Layer types
 #define LAYERMANAGER "LayerManager"
 #define VIEWLAYER "ViewLayer"
@@ -81,6 +82,14 @@ enum button_string
     BTN_ICON = 4,
     BTN_CONTROL = 8,
     BTN_PREVIEW = 16
+};
+
+
+enum buffer_type
+{
+    NONE,
+    OVERLAY,
+    COLLECTOR
 };
 
 

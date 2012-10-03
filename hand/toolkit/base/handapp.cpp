@@ -19,7 +19,6 @@
 
 #include "base/handapp.h"
 #include "base/handapploader.h"
-#include "base/handserver.h"
 #include "base/filesystem.h"
 
 #include <dlfcn.h>
@@ -33,12 +32,6 @@ using namespace std;
 HandApp::HandApp(string name) : List(name)
 {
     Type(HANDAPP);
-}
-
-
-HandServer* HandApp::Server()
-{
-    return HandServer::GetInstance();
 }
 
 

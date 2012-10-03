@@ -26,14 +26,11 @@
 #define HANDAPP "HandApp"
 
 
-class HandServer;
-
 class HandApp : public List
 {
     public:
         HandApp(std::string name);
         virtual ~HandApp(){};
-        HandServer*  Server();
 };
 
 #endif /* BASE_HANDAPP_H */

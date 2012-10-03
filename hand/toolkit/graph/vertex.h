@@ -100,9 +100,6 @@ class Vertex
         // Helper method for the search engine
         virtual bool IsOpen(Search* search);
 
-        // TODO:
-//        virtual bool NotifyChanged();
-
     protected:
         // Helper method allowing to virtualize the return value of Get(void);
         // overload this if you want to return a different default value

@@ -208,15 +208,11 @@ bool LayerManager::Request(Vertex* request)
 
 bool LayerManager::LoadTheme(Vertex* f)
 {
-/* This would be the proper solution but gives link error:
- * undefined reference to `typeinfo for Theme'
- *
-    Theme* theme = dynamic_cast<Theme*>(Server()->Produce(f, HANDAPP));
-*/
-    Theme* theme = (Theme*)(Server()->Produce(f, HANDAPP));
-
+    Theme* theme = dynamic_cast<Theme*>(
+            HandServer::GetInstance()->Produce(f, HANDAPP));
     if(!theme)
         return false;
+
     _Theme = theme;
     SetTheme(theme);
     return true;
@@ -226,7 +222,8 @@ bool LayerManager::LoadTheme(Vertex* f)
 bool LayerManager::GetAllThemes(Vertex* themes_dir)
 {
     // (Re-)read the list of available themes
-    List* themes_list = dynamic_cast<List*>(Server()->Produce(themes_dir, FILEVERTEX));
+    List* themes_list = dynamic_cast<List*>(
+            HandServer::GetInstance()->Produce(themes_dir, FILEVERTEX));
     if(!themes_list)
         return false;
 

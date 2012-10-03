@@ -103,7 +103,7 @@ Animation* AnimationsList::GetCurrentAnimation()
 //-----------------------------------------------
 
 
-VirtualSurface::VirtualSurface(string name) : HandApp(name)
+VirtualSurface::VirtualSurface(string name) : Vertex(name)
 {
     Type(VIRTUALSURFACE);
     Changed = true;
@@ -111,14 +111,6 @@ VirtualSurface::VirtualSurface(string name) : HandApp(name)
     Parent = NULL;
     SizeAndPositionOnBuffer.x = SizeAndPositionOnBuffer.y =
             SizeAndPositionOnBuffer.w = SizeAndPositionOnBuffer.h = 0;
-/*    // In case of the "Content" the surface is a Layer added at Layer level
-    if(name != LAYOUT_COMPONENT_CONTENT)
-    {
-        VirtualSurface* surface = new VirtualSurface();
-        // Connect VirtualSurface and LayoutMap
-        surface->SetLayout(this);
-        Add(new Data<VirtualSurface*>("Data", surface));
-    }*/
 }
 
 

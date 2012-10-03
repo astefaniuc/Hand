@@ -18,7 +18,6 @@
  */
 
 #include "base/filesystem.h"
-#include "base/handserver.h"
 #include "graph/data.h"
 
 #include <boost/filesystem/path.hpp>
