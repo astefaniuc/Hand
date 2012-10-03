@@ -53,25 +53,11 @@ void ListLayer::SetContent(Vertex* data)
 
     Vertex* child;
     uint i = 0;
-    uint j = 0;
     // Now create layout
     while((child=data->Get(++i)) != NULL)
-    {
         // Create the sub-objects
         // Check if the Layer supports insertion at position
-//        if(Insert(child, GetFieldName(j)))
-        if(Insert(child, "ListElement"))
-            j++;
-    }
-}
-
-
-string ListLayer::GetFieldName(uint position)
-{
-    // Don't do any error checking here
-    stringstream s;
-    s << LST_FIELD_NR << position;
-    return s.str();
+        Insert(child, "ListElement");
 }
 
 

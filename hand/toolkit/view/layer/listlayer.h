@@ -28,8 +28,6 @@ class ListLayer : public Layer
     public:
         ListLayer();
         virtual ~ListLayer();
-        // Generate list names
-        virtual std::string GetFieldName(uint position);
 
         // Set pointer to a data tree node
         void SetContent(Vertex* focus);
