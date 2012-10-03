@@ -20,7 +20,7 @@
 #ifndef BASE_FACTORY_H
 #define BASE_FACTORY_H
 
-#include "base/handapp.h"
+#include "graph/list.h"
 
 
 #define FACTORY "FACTORY"
@@ -28,7 +28,7 @@
 #define FACTORY_INPUTSTRING "FACTORY_INPUTSTRING"
 #define FACTORY_OUTPUTSTRING "FACTORY_OUTPUTSTRING"
 
-class Factory : public HandApp
+class Factory : public List
 {
     public:
         Factory(std::string name,

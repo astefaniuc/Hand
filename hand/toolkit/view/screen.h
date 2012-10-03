@@ -39,9 +39,9 @@ class Screen : public virtual HandApp
         SDL_Rect GetResolution(void);
         // GetBuffer()
         // Re-calculate position for all layer manager
-        void SetLayerManagerPositions();
+        bool SetLayerManagerPositions();
         SDL_Surface* GetSurface(void);
-        void ShowSurface(void);
+        bool ShowSurface(void);
 
     private:
         void InitSDL(void);

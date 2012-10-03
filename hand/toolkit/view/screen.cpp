@@ -114,11 +114,11 @@ SDL_Rect Screen::GetResolution()
 }
 
 
-void Screen::SetLayerManagerPositions()
+bool Screen::SetLayerManagerPositions()
 {
     Vertex* all_lm = Vertex::Get(LAYERMANAGER);
     if(all_lm->Size() < 1)
-        exit(0);
+        return false;
 
     SDL_Rect screen = GetResolution();
     SDL_Rect screen_tmp = screen;
@@ -131,6 +131,7 @@ void Screen::SetLayerManagerPositions()
         screen_tmp.x = screen_tmp.w*i;
         lm->SetSize(screen_tmp);
     }
+    return true;
 }
 
 
@@ -140,9 +141,10 @@ SDL_Surface* Screen::GetSurface()
 }
 
 
-void Screen::ShowSurface(void)
+bool Screen::ShowSurface(void)
 {
-    SetLayerManagerPositions();
+    if(!SetLayerManagerPositions())
+        return false;
 
     Vertex* all_lm = Vertex::Get(LAYERMANAGER);
     Layer* layer;
@@ -152,4 +154,5 @@ void Screen::ShowSurface(void)
 
     // Need to call this extra as BuildSurface is called recursively
     SDL_Flip(Surface);
+    return true;
 }

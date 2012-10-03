@@ -32,8 +32,8 @@ class HandServer;
 class HandApp : public List
 {
     public:
-                      HandApp(std::string name);
-              virtual ~HandApp(){};
+        HandApp(std::string name);
+        virtual ~HandApp(){};
         HandServer*  Server();
 };
 

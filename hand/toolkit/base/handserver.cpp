@@ -35,13 +35,7 @@ HandServer* HandServer::Instance = NULL;
 HandServer* HandServer::GetInstance()
 {
     if(Instance == NULL)
-    {
-        // Step 1 (of 3):
         Instance = new HandServer();
-        // Step 2 (of 3): this calls subsequently GetInstance() thus have to be called
-        // after initializing Instance
-        Instance->Start();
-    }
     return Instance;
 }
 
@@ -49,24 +43,17 @@ HandServer* HandServer::GetInstance()
 HandServer::HandServer()
 {
     ExecNotFinished = false;
-
     // DrawObject
     CreateNewUserOnOrphanKeyPress = true;
     DeleteDeviceIfEmpty = true;
     Timer = NULL;
+    _Screen = new Screen();
 }
 
 
 HandServer::~HandServer()
 {
     delete _Screen;
-}
-
-
-void HandServer::Start()
-{
-    _Screen = new Screen();
-    GetLayerManager();
 }
 
 
@@ -79,7 +66,8 @@ void HandServer::Pump()
     // Wait till next cycle before setting the next content
     // because this deletes the calling object
     GetUserInput();
-    _Screen->ShowSurface();
+    if(!_Screen->ShowSurface())
+        exit(0);
 
     ExecNotFinished = false;
 }
@@ -107,8 +95,7 @@ bool HandServer::Present(string file)
     Vertex* app = Produce(new Note("Command line input", file), "");
     if(app && app->Is(HANDAPP))
     {
-        dynamic_cast<LayerManager*>(_Screen->Vertex::Get(LAYERMANAGER)->Get())
-                ->LoadAppInterface(app, true);
+        GetLayerManager()->LoadAppInterface(app, true);
         return true;
     }
     return false;

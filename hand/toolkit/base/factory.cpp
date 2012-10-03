@@ -30,7 +30,7 @@ Factory::Factory
         string input_type,
         string output_type,
         string uri_scheme
-) : HandApp(name)
+) : List(name)
 {
     Type(FACTORY);
     SetSpecifierString(FACTORY_INPUTSTRING, input_type);
@@ -97,35 +97,27 @@ Vertex* FactoryMap::Produce(Vertex* entry, string output_type)
         if(f->IsValidInput(entry))
             // We have the right factory
             return f->Produce(entry);
-        else
-            // Factory chain "top down"
-            return Produce(Produce(entry, f->GetInputType()), output_type);
+        // Factory chain "top down"
+        return Produce(Produce(entry, f->GetInputType()), output_type);
     }
 
     // Factory chain "bottom up"
-    Vertex* ret = entry;
-
     f = GetFactory(entry);
-    if(f)
-    {
-        ret = f->Produce(entry);
-        if(ret)
-        {
-            // Do we have a new entry or a new factory?
-            f = dynamic_cast<Factory*>(ret);
-            if(f)
-                Add(f);
-            else
-                entry = ret;
-            return Produce(entry, output_type);
-        }
-        else
-            ret = entry;
-    }
-    if(output_type == "")
-        // Can't continue, return what we have so far
+    if(!f)
+        return entry;
+
+    Vertex* ret = f->Produce(entry);
+    if(!ret)
+        return NULL;
+
+    if(ret->Is(output_type))
         return ret;
-    return NULL;
+    // Do we have a new entry or a new factory?
+    f = dynamic_cast<Factory*>(ret);
+    if(f)
+        return f->Produce(entry);
+
+    return Produce(ret, output_type);
 }
 
 

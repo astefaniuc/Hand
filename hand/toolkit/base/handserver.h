@@ -45,8 +45,6 @@ class HandServer : public virtual DataManager
         HandServer();
         ~HandServer();
 
-        // Starts polling and drawing
-        void Start();
         // Stop the event polling endless loop from outside
         void StopBeating();
 
