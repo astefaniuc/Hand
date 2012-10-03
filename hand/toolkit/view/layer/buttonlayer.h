@@ -17,8 +17,8 @@
  *  License along with Hand. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HAND_BUTTONLAYER_H
-#define HAND_BUTTONLAYER_H
+#ifndef VIEW_LAYER_BUTTONLAYER_H
+#define VIEW_LAYER_BUTTONLAYER_H
 
 #include "view/layer/layer.h"
 
@@ -58,4 +58,4 @@ class ButtonLayerFactory : public Factory
         void TakeBack(Vertex* product);
 };
 
-#endif /* HAND_BUTTONLAYER_H */
+#endif /* VIEW_LAYER_BUTTONLAYER_H */

@@ -17,8 +17,8 @@
  *  License along with Hand. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HAND_LISTLAYER_H
-#define HAND_LISTLAYER_H
+#ifndef VIEW_LAYER_LISTLAYER_H
+#define VIEW_LAYER_LISTLAYER_H
 
 #include "view/layer/layer.h"
 
@@ -52,4 +52,4 @@ class ListLayerFactory : public Factory
         void TakeBack(Vertex* product);
 };
 
-#endif /* HAND_LISTLAYER_H */
+#endif /* VIEW_LAYER_LISTLAYER_H */

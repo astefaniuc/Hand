@@ -17,8 +17,8 @@
  *  License along with Hand. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HAND_FOCUSLAYER_H
-#define HAND_FOCUSLAYER_H
+#ifndef VIEW_LAYER_FOCUSLAYER_H
+#define VIEW_LAYER_FOCUSLAYER_H
 
 #include "view/layer/listlayer.h"
 
@@ -45,4 +45,4 @@ class FocusLayer : public ListLayer
         Vertex* KeyList;
 };
 
-#endif /* HAND_FOCUSLAYER_H */
+#endif /* VIEW_LAYER_FOCUSLAYER_H */

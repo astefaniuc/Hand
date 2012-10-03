@@ -17,8 +17,8 @@
  *  License along with Hand. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HAND_TEXTLAYER_H
-#define HAND_TEXTLAYER_H
+#ifndef VIEW_LAYER_TEXTLAYER_H
+#define VIEW_LAYER_TEXTLAYER_H
 
 #include "view/layer/layer.h"
 
@@ -48,4 +48,4 @@ class TextLayerFactory : public Factory
         void TakeBack(Vertex* product);
 };
 
-#endif /* HAND_TEXTLAYER_H */
+#endif /* VIEW_LAYER_TEXTLAYER_H */

@@ -23,12 +23,15 @@
 
 #define VIRTUALSURFACE "VIRTUALSURFACE"
 // Layer types
+#define LAYER "Layer"
 #define LAYERMANAGER "LayerManager"
 #define VIEWLAYER "ViewLayer"
 #define LISTLAYER "ListLayer"
 #define BUTTONLAYER "ButtonLayer"
 #define TEXTLAYER "TextLayer"
 #define FOCUSLAYER "FocusLayer"
+
+#define LAYER_TOPOGRAPHY "Layer Topography"
 
 // Layout types
 #define GUI_LAYOUT "Layout"
@@ -92,5 +95,10 @@ enum buffer_type
     COLLECTOR
 };
 
+
+enum maximum_number_of_buttons
+{
+    MAX_NUMBER_OF_BUTTONS = 5
+};
 
 #endif /* VIEW_DEFINES_H */

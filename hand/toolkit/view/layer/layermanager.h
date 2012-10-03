@@ -17,8 +17,8 @@
  *  License along with Hand. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HAND_LAYERMANAGER_H
-#define HAND_LAYERMANAGER_H
+#ifndef VIEW_LAYER_LAYERMANAGER_H
+#define VIEW_LAYER_LAYERMANAGER_H
 
 #include "view/layer/listlayer.h"
 
@@ -71,4 +71,4 @@ class LayerManager : public ListLayer
         FactoryMap*  LayerTopos;
 };
 
-#endif /* HAND_LAYERMANAGER_H */
+#endif /* VIEW_LAYER_LAYERMANAGER_H */

@@ -18,26 +18,14 @@
  */
 
 
-#ifndef HAND_LAYER_H
-#define HAND_LAYER_H
+#ifndef VIEW_LAYER_LAYER_H
+#define VIEW_LAYER_LAYER_H
 
 #include "view/layer/virtualsurface.h"
 #include "base/factory.h"
 
 
-enum maximum_number_of_buttons
-{
-    MAX_NUMBER_OF_BUTTONS = 5
-};
-
-
-class LayerManager;
 class Node;
-class FactoryMap;
-
-#define LAYER "Layer"
-#define LAYER_TOPOGRAPHY "Layer Topography"
-
 
 class Layer : public VirtualSurface
 {
@@ -89,4 +77,4 @@ class Layer : public VirtualSurface
 };
 
 
-#endif /* HAND_LAYER_H */
+#endif /* VIEW_LAYER_LAYER_H */
