@@ -18,26 +18,13 @@
  */
 
 #include "base/handserver.h"
-#include "view/layer/layer.h"
 #include "view/layer/layermanager.h"
 #include "input/device.h"
-#include "input/inputstate.h"
 #include "view/screen.h"
 #include "graph/data.h"
 
 
 using namespace std;
-
-
-HandServer* HandServer::Instance = NULL;
-
-
-HandServer* HandServer::GetInstance()
-{
-    if(Instance == NULL)
-        Instance = new HandServer();
-    return Instance;
-}
 
 
 HandServer::HandServer()
@@ -57,6 +44,78 @@ HandServer::~HandServer()
 }
 
 
+HandServer* HandServer::Instance = NULL;
+
+HandServer* HandServer::GetInstance()
+{
+    if(Instance == NULL)
+        Instance = new HandServer();
+    return Instance;
+}
+
+
+void HandServer::Present(string file)
+{
+    Vertex* app = Produce(new Note("Command line input", file), "");
+    GetLayerManager()->LoadAppInterface(app, true);
+    // Start the timer driven (callback) execution and stop the current thread
+    Beat();
+}
+
+
+LayerManager* HandServer::GetLayerManager()
+{
+    // Start the layer manager
+    LayerManager* layer_mgr = new LayerManager();
+    _Screen->Vertex::Get(LAYERMANAGER)->Add(layer_mgr);
+
+    // Create device object with input state
+    Device* device = new Device();
+    layer_mgr->SetDevice(device);
+    Get("Devices")->Add(device);
+    layer_mgr->SetScreen(_Screen->GetSurface());
+
+    return layer_mgr;
+}
+
+
+// C Method used in HandServer::Beat()
+// C++ methods can't be called directly as a callback
+Uint32 CallServerPump(Uint32 i, void* server)
+{
+    HandServer* hand = reinterpret_cast<HandServer*>(server);
+    hand->Pump();
+    return i;
+}
+
+
+// C Method used in HandServer::Beat()
+// Removes all devices but the keyboard from the event queue
+int EventFilter(const SDL_Event *event)
+{
+    if((event->type == SDL_KEYDOWN) || (event->type == SDL_KEYUP))
+        return 1;
+    return 0;
+}
+
+
+void HandServer::Beat()
+{
+    // Start only once
+    if(Timer)
+        return;
+    // Only for speed
+    SDL_SetEventFilter(EventFilter);
+    // 25 pix per sec
+    Uint32 interval = 1000/25;
+    Timer = SDL_AddTimer(interval, &CallServerPump, (void*)(this));
+    if(!Timer)
+        exit(1);
+    // Stop the main execution line
+    pause();
+}
+
+
 void HandServer::Pump()
 {
     // Executed 25x per sec
@@ -71,83 +130,6 @@ void HandServer::Pump()
         exit(0);
 
     ExecNotFinished = false;
-}
-
-
-LayerManager* HandServer::GetLayerManager()
-{
-    // Start the layer manager
-    LayerManager* layer_mgr = new LayerManager();
-    _Screen->Vertex::Get(LAYERMANAGER)->Add(layer_mgr);
-//    layer_mgr->Init();
-
-    // Create device object with input state
-    Device* device = new Device();
-    layer_mgr->SetDevice(device);
-    Get("Devices")->Add(device);
-    layer_mgr->SetScreen(_Screen->GetSurface());
-
-    return layer_mgr;
-}
-
-
-bool HandServer::Present(string file)
-{
-    Vertex* app = Produce(new Note("Command line input", file), "");
-    if(app && app->Is(HANDAPP))
-    {
-        GetLayerManager()->LoadAppInterface(app, true);
-        return true;
-    }
-    return false;
-}
-
-
-// -----------------------------------------------
-// Device Manager
-
-
-// C Methods
-
-// Removes all devices but the keyboard from the event queue
-int EventFilter(const SDL_Event *event)
-{
-    if((event->type == SDL_KEYDOWN) || (event->type == SDL_KEYUP))
-        return 1;
-    return 0;
-}
-
-// C++ methods can't be called directly as a callback
-Uint32 CallServerMethod(Uint32 i, void* server)
-{
-    HandServer* hand = reinterpret_cast<HandServer*>(server);
-    hand->Pump();
-    return i;
-}
-
-
-void HandServer::Beat()
-{
-    // Start only once
-    if(Timer != NULL)
-        return;
-    // Only for speed
-    SDL_SetEventFilter(EventFilter);
-    // 25 pix per sec
-    Uint32 interval = 1000/25;
-    Timer = SDL_AddTimer(interval, &CallServerMethod, (void*)(this));
-    if(Timer == NULL)
-        exit(1);
-    // Stop the main execution line
-    pause();
-}
-
-
-void HandServer::StopBeating()
-{
-    // TODO: probably never ever used
-    if(Timer != NULL)
-        SDL_RemoveTimer(Timer);
 }
 
 

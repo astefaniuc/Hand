@@ -28,27 +28,27 @@ class LayerManager;
 class Device;
 class Screen;
 
-class HandServer : public virtual DataManager
+class HandServer : public DataManager
 {
-    public:
-        static HandServer* GetInstance(void);
-        void Pump();
-
-        // Initializes all subsystems:
-        LayerManager* GetLayerManager();
-        // Called from main() of stand-alone apps
-        bool Present(std::string file);
-        // Starts timer
-        void Beat();
-
+    // Singleton
     private:
         HandServer();
         ~HandServer();
 
-        // Stop the event polling endless loop from outside
-        void StopBeating();
-
-        // Infinite loop handling user input
+    public:
+        static HandServer* GetInstance(void);
+        // Called from main()
+        void Present(std::string file);
+    private:
+        // Initializes all subsystems:
+        LayerManager* GetLayerManager();
+        // Starts timer (infinite loop)
+        void Beat();
+    public:
+        // Called from C callback
+        void Pump();
+    private:
+        //  User input handling
         void GetUserInput(void);
         void Press(SDLKey);
         void Release(SDLKey);

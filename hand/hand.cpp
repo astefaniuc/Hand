@@ -25,15 +25,11 @@ using namespace std;
 
 int main(int argc, const char *argv[])
 {
-    HandServer* server = HandServer::GetInstance();
-    if(argc == 2)
-    {
-        string file = argv[1];
-        if(!server->Present(file))
-            return -1;
-    }
-    // Step 3 of the 3 staged server starting process
-    // Start the timer driven (callback) execution and stop the current thread
-    server->Beat();
+    if(argc != 2)
+        return -1;
+
+    HandServer::GetInstance()->Present(argv[1]);
+
+    // Never reached
     return 0;
 }
