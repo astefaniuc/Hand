@@ -55,7 +55,14 @@ HandServer* HandServer::GetInstance()
 
 void HandServer::Present(string file)
 {
-    Vertex* app = Produce(new Note("Command line input", file), "");
+    Vertex* app = new Note("Command line input", file);
+    while(Execute(app))
+    {
+        Vertex* ot = app->Vertex::Get(ANY, "Output Type");
+        if(!ot)
+            break;
+        app = app->Vertex::Get(ot->Type(), ANY);
+    }
     GetLayerManager()->LoadAppInterface(app, true);
     // Start the timer driven (callback) execution and stop the current thread
     Beat();

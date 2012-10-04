@@ -63,7 +63,7 @@ void Theme::Register(Factory* f)
 
 bool Theme::Execute(Vertex* request)
 {
-    Map->Produce(request, request->Type());
+    Map->Execute(request);
     return FillOut(request);
 }
 

@@ -60,12 +60,10 @@ class FactoryMap : public List
         FactoryMap(std::string name);
         virtual ~FactoryMap(){};
 
-        virtual Vertex* Produce(Vertex* input, std::string output_type);
+        virtual bool Execute(Vertex* input);
 
         Factory* GetFactory(Vertex* input);
         Factory* GetFactory(std::string output_type);
-//        virtual void RegisterFactory(Factory* resolver);
-//        virtual void UnregisterFactory(Factory* resolver);
 };
 
 #endif /* BASE_FACTORY_H */

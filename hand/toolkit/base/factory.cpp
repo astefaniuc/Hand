@@ -86,38 +86,50 @@ FactoryMap::FactoryMap(string name) : List(name)
 }
 
 
-Vertex* FactoryMap::Produce(Vertex* entry, string output_type)
+bool FactoryMap::Execute(Vertex* input)
 {
-    if(!entry)
+    if(!input)
         return NULL;
+
+    string output_type = "";
+    Vertex* ot = input->Vertex::Get("Output Type", ANY);
+    if(ot)
+        output_type = ot->Type();
 
     Factory* f = GetFactory(output_type);
     if(f)
     {
-        if(f->IsValidInput(entry))
-            // We have the right factory
-            return f->Produce(entry);
         // Factory chain "top down"
-        return Produce(Produce(entry, f->GetInputType()), output_type);
+        if(f->IsValidInput(input))
+            // We have the right factory
+            return f->Produce(input);
+
+        // Change to the subsequent output type
+        input->Vertex::Get("Output Type")->Type(f->GetOutputType());
+        if(Execute(input))
+            // Resolve the intermediate product
+            return Execute(input->Get(ANY, f->GetOutputType()));
+        return false;
     }
 
     // Factory chain "bottom up"
-    f = GetFactory(entry);
+    f = GetFactory(input);
     if(!f)
-        return NULL;
+        return false;
 
-    Vertex* prod = f->Produce(entry);
+    Vertex* prod = f->Produce(input);
     if(!prod)
-        return NULL;
+        return false;
 
-    if(prod->Is(output_type))
-        return prod;
-    // Do we have a new entry or a new factory?
+    input->Vertex::Get("Output Type")->Type(f->GetOutputType());
+    // TODO: does this still make sense?
+    // Do we have a new factory?
     f = dynamic_cast<Factory*>(prod);
     if(f)
-        return f->Produce(entry);
+        return f->Produce(input);
 
-    return Produce(prod, output_type);
+    //return Execute(prod);
+    return true;
 }
 
 

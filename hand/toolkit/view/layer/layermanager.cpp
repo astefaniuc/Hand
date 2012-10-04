@@ -207,8 +207,10 @@ bool LayerManager::Request(Vertex* request)
 
 bool LayerManager::LoadTheme(Vertex* f)
 {
-    Theme* theme = dynamic_cast<Theme*>(
-            HandServer::GetInstance()->Produce(f, HANDAPP));
+    f->Vertex::Get("Output Type")->Type(HANDAPP);
+    HandServer::GetInstance()->Execute(f);
+    Theme* theme = dynamic_cast<Theme*>(f->Get(ANY, HANDAPP));
+
     if(!theme)
         return false;
 
@@ -220,9 +222,10 @@ bool LayerManager::LoadTheme(Vertex* f)
 
 bool LayerManager::GetAllThemes(Vertex* themes_dir)
 {
+    themes_dir->Vertex::Get("Output Type")->Type(FILEVERTEX);
     // (Re-)read the list of available themes
-    List* themes_list = dynamic_cast<List*>(
-            HandServer::GetInstance()->Produce(themes_dir, FILEVERTEX));
+    HandServer::GetInstance()->Execute(themes_dir);
+    List* themes_list = dynamic_cast<List*>(themes_dir->Get(ANY, FILEVERTEX));
     if(!themes_list)
         return false;
 
@@ -324,7 +327,9 @@ Layer* LayerManager::CreateLayer(Vertex* content, string layer_type)
             layer_type = GetContentType(content);
     }
 
-    Layer* layer = dynamic_cast<Layer*>(LayerTopos->Produce(content, layer_type));
+    content->Vertex::Get("Output Type")->Type(layer_type);
+    LayerTopos->Execute(content);
+    Layer* layer = dynamic_cast<Layer*>(content->Get(ANY, layer_type));
     if(!layer)
         return NULL;
     layer->Vertex::Get(LAYERMANAGER)->Set(this);

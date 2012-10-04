@@ -46,7 +46,9 @@ Vertex* FileVertex_Factory::Produce(Vertex* descriptor)
     Note* d_path = dynamic_cast<Note*>(descriptor);
     if(!d_path)
         return NULL;
-    return new FileVertex(d_path->Get());
+    Vertex* ret =  new FileVertex(d_path->Get());
+    descriptor->Vertex::Attach(ret);
+    return ret;
 }
 
 
