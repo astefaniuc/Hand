@@ -55,7 +55,7 @@ class Vertex
         // Get the first sub-item by name and type; if the item is not found
         // it returns NULL; the parameters can be set to ANY e.g.
         // Get(ANY, ANY) returns the first stored item
-        virtual Vertex* Get(std::string name, std::string type);
+        virtual Vertex* Get(std::string type, std::string name);
         // Get the child by position, 1-based
         virtual Vertex* Get(uint item);
 

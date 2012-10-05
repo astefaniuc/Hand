@@ -35,78 +35,72 @@ HandApp::HandApp(string name) : List(name)
 }
 
 
-HandAppLoader::HandAppLoader(FileVertex* path_obj) : Factory(NAME_NOT_INIT,
-                                                             FILEVERTEX,
-                                                             HANDAPP, "")
+Binary::Binary() : Vertex(NAME_NOT_INIT)
 {
     Type(APPLOADER);
+    LoadedLib = NULL;
+    Create = NULL;
+    Destroy = NULL;
+}
+
+
+Binary::~Binary()
+{
+    Reset();
+}
+
+
+bool Binary::Execute(Vertex* input)
+{
+    Reset();
+    FileVertex* path_obj = dynamic_cast<FileVertex*>(input);
     if(!path_obj)
-        return; // false
-    LibraryPath = path_obj->GetFullPath();
-    LoadedLib = dlopen(LibraryPath.c_str(), RTLD_LAZY | RTLD_GLOBAL);
+        return false;
+
+    LoadedLib = dlopen(path_obj->GetFullPath().c_str(), RTLD_LAZY | RTLD_GLOBAL);
     if(LoadedLib)
     {
         Create = (creator*) dlsym(LoadedLib, "Create");
         Destroy = (destroyer*) dlsym(LoadedLib, "Destroy");
         if(Create && Destroy)
-        {
-            Name(path_obj->Name());
-            return; // true
-        }
+            return input->Vertex::Attach(Create());
     }
 
     cout << dlerror() << endl;
-    LibraryPath = ""; // "return false"
-}
-
-
-HandAppLoader::~HandAppLoader()
-{
-    if(LoadedLib != NULL)
-        dlclose(LoadedLib);
-}
-
-
-bool HandAppLoader::IsValidInput(Vertex* entry)
-{
-    FileVertex* path_obj = dynamic_cast<FileVertex*>(entry);
-    if(path_obj && (path_obj->GetFullPath()==LibraryPath))
-        return true;
     return false;
 }
 
 
-Vertex* HandAppLoader::Produce(Vertex* ignore)
+void Binary::Reset()
 {
-//    path_obj->Add(Create());
-    return Create();
+    if(LoadedLib)
+    {
+        HandApp* casted = dynamic_cast<HandApp*>(Get(ANY, HANDAPP));
+        if(Destroy && casted)
+            Destroy(casted);
+        dlclose(LoadedLib);
+    }
+    LoadedLib = NULL;
+    Create = NULL;
+    Destroy = NULL;
 }
 
 
-void HandAppLoader::TakeBack(Vertex* app)
-{
-    HandApp* casted = dynamic_cast<HandApp*>(app);
-    if(Destroy && casted)
-        Destroy(casted);
-}
-
-
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 
 
-HandAppLoader_Factory::HandAppLoader_Factory() : Factory("Library Loader",
-                                                         FILEVERTEX,
-                                                         APPLOADER,
-                                                         URI_FILE)
+HandAppFactory::HandAppFactory() : Factory("Library Loader",
+                                           FILEVERTEX,
+                                           APPLOADER,
+                                           URI_FILE)
 {
     Type(APPLOADERFACTORY);
 }
 
 
-
-bool HandAppLoader_Factory::IsValidInput(Vertex* entry)
+bool HandAppFactory::IsValidInput(Vertex* entry)
 {
     FileVertex* ff = dynamic_cast<FileVertex*>(entry);
     if(!ff)
@@ -119,24 +113,24 @@ bool HandAppLoader_Factory::IsValidInput(Vertex* entry)
 }
 
 
-Vertex* HandAppLoader_Factory::Produce(Vertex* input)
+Vertex* HandAppFactory::Produce(Vertex* input)
 {
-    FileVertex* path_obj = dynamic_cast<FileVertex*>(input);
-    if(!path_obj)
+    Binary* bin = new Binary();
+    // Open the library
+    if(!bin->Execute(input))
+    {
+        delete(bin);
         return NULL;
-    HandAppLoader* ret = new HandAppLoader(path_obj);
-    // Check if the library could be opened
-    if(ret->Name() == input->Name())
-        return ret;
-
-    delete(ret);
-    return NULL;
+    }
+    input->Vertex::Attach(bin);
+    input->Vertex::Get("Output Type")->Set(new Vertex(HANDAPP));
+    return input->Vertex::Get(HANDAPP, ANY);
 }
 
 
-void HandAppLoader_Factory::TakeBack(Vertex* product)
+void HandAppFactory::TakeBack(Vertex* product)
 {
     // TODO: shouldn't delete objects of derived classes
-    if(dynamic_cast<HandAppLoader*>(product))
+    if(dynamic_cast<Binary*>(product))
         delete(product);
 }

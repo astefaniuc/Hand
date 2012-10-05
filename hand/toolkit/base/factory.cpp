@@ -92,9 +92,9 @@ bool FactoryMap::Execute(Vertex* input)
         return NULL;
 
     string output_type = "";
-    Vertex* ot = input->Vertex::Get("Output Type", ANY);
+    Vertex* ot = input->Vertex::Get("Output Type")->Get();
     if(ot)
-        output_type = ot->Type();
+        output_type = ot->Name();
 
     Factory* f = GetFactory(output_type);
     if(f)
@@ -105,10 +105,10 @@ bool FactoryMap::Execute(Vertex* input)
             return f->Produce(input);
 
         // Change to the subsequent output type
-        input->Vertex::Get("Output Type")->Type(f->GetOutputType());
+        input->Vertex::Get("Output Type")->Set(new Vertex(f->GetOutputType()));
         if(Execute(input))
             // Resolve the intermediate product
-            return Execute(input->Get(ANY, f->GetOutputType()));
+            return Execute(input->Get(f->GetOutputType(), ANY));
         return false;
     }
 
@@ -117,11 +117,13 @@ bool FactoryMap::Execute(Vertex* input)
     if(!f)
         return false;
 
+    // Set output type for caller
+    input->Vertex::Get("Output Type")->Set(new Vertex(f->GetOutputType()));
+
     Vertex* prod = f->Produce(input);
     if(!prod)
         return false;
 
-    input->Vertex::Get("Output Type")->Type(f->GetOutputType());
     // TODO: does this still make sense?
     // Do we have a new factory?
     f = dynamic_cast<Factory*>(prod);

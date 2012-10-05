@@ -32,35 +32,29 @@ typedef void destroyer(void*);
 
 class FileVertex;
 
-class HandAppLoader : public Factory
+class Binary : public Vertex
 {
     public:
-        HandAppLoader(FileVertex* path);
-        ~HandAppLoader();
+        Binary();
+        ~Binary();
 
-        Vertex* Produce(Vertex* ignore);
-        void TakeBack(Vertex* product);
-
-        bool IsValidInput(Vertex* input);
+        bool Execute(Vertex* ignore);
+        void Reset();
     private:
         // Shared library handle
         void* LoadedLib;
-
         creator*   Create;
         destroyer* Destroy;
-        // Stores a path to the library;
-        // once this variable is set it can't be changed anymore
-        std::string LibraryPath;
 };
 
 
 #define APPLOADERFACTORY "HandAppLoader_Factory"
 
-class HandAppLoader_Factory : public Factory
+class HandAppFactory : public Factory
 {
     public:
-        HandAppLoader_Factory();
-        ~HandAppLoader_Factory(){};
+        HandAppFactory();
+        ~HandAppFactory(){};
 
         virtual Vertex* Produce(Vertex* descriptor);
         virtual void TakeBack(Vertex* product);
