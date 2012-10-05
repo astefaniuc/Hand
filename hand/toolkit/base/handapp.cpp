@@ -91,7 +91,7 @@ void Binary::Reset()
 // ----------------------------------------------------------------
 
 
-HandAppFactory::HandAppFactory() : Factory("Library Loader",
+HandAppLoader::HandAppLoader() : Factory("Library Loader",
                                            FILEVERTEX,
                                            APPLOADER,
                                            URI_FILE)
@@ -100,7 +100,7 @@ HandAppFactory::HandAppFactory() : Factory("Library Loader",
 }
 
 
-bool HandAppFactory::IsValidInput(Vertex* entry)
+bool HandAppLoader::IsValidInput(Vertex* entry)
 {
     FileVertex* ff = dynamic_cast<FileVertex*>(entry);
     if(!ff)
@@ -113,22 +113,22 @@ bool HandAppFactory::IsValidInput(Vertex* entry)
 }
 
 
-Vertex* HandAppFactory::Produce(Vertex* input)
+bool HandAppLoader::Execute(Vertex* input)
 {
     Binary* bin = new Binary();
     // Open the library
     if(!bin->Execute(input))
     {
         delete(bin);
-        return NULL;
+        return false;
     }
-    input->Vertex::Attach(bin);
+    input->Vertex::Add(bin);
     input->Vertex::Get("Output Type")->Set(new Vertex(HANDAPP));
-    return input->Vertex::Get(HANDAPP, ANY);
+    return true;
 }
 
 
-void HandAppFactory::TakeBack(Vertex* product)
+void HandAppLoader::TakeBack(Vertex* product)
 {
     // TODO: shouldn't delete objects of derived classes
     if(dynamic_cast<Binary*>(product))

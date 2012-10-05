@@ -37,7 +37,7 @@ class Factory : public List
                 std::string uri_scheme);
         virtual ~Factory(){};
 
-        virtual Vertex* Produce(Vertex* input) = 0;
+        virtual bool Execute(Vertex* input) = 0;
         virtual void TakeBack(Vertex* product) = 0;
 
         virtual bool IsValidInput(Vertex* input) = 0;

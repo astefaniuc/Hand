@@ -96,13 +96,15 @@ bool FactoryMap::Execute(Vertex* input)
     if(ot)
         output_type = ot->Name();
 
+    // TODO: get list of factories for the output type and iterate through it
+    // till we get a positive result
     Factory* f = GetFactory(output_type);
     if(f)
     {
         // Factory chain "top down"
         if(f->IsValidInput(input))
             // We have the right factory
-            return f->Produce(input);
+            return f->Execute(input);
 
         // Change to the subsequent output type
         input->Vertex::Get("Output Type")->Set(new Vertex(f->GetOutputType()));
@@ -120,18 +122,7 @@ bool FactoryMap::Execute(Vertex* input)
     // Set output type for caller
     input->Vertex::Get("Output Type")->Set(new Vertex(f->GetOutputType()));
 
-    Vertex* prod = f->Produce(input);
-    if(!prod)
-        return false;
-
-    // TODO: does this still make sense?
-    // Do we have a new factory?
-    f = dynamic_cast<Factory*>(prod);
-    if(f)
-        return f->Produce(input);
-
-    //return Execute(prod);
-    return true;
+    return f->Execute(input);
 }
 
 

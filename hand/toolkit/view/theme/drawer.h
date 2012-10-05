@@ -17,8 +17,8 @@
  *  License along with Hand. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HAND_LAYOUTS_H
-#define HAND_LAYOUTS_H
+#ifndef VIEW_THEME_DRAWER_H
+#define VIEW_THEME_DRAWER_H
 
 #include "base/factory.h"
 
@@ -38,11 +38,12 @@ class DrawerFactory : public Factory
     public:
         DrawerFactory(Vertex* draw_func);
         ~DrawerFactory();
-        Vertex* Produce(Vertex* ignore);
+
+        bool Execute(Vertex* in_out);
         void TakeBack(Vertex* product){};
         bool IsValidInput(Vertex* input);
     protected:
         Vertex* DrawFunction;
 };
 
-#endif /* HAND_LAYOUTS_H */
+#endif /* VIEW_THEME_DRAWER_H */

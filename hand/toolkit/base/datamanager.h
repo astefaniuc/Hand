@@ -40,7 +40,7 @@ class Persistence : public Factory
                                 URI_SETTINGS){};
         virtual ~Persistence(){};
 
-        Vertex* Produce(Vertex* descriptor);
+        bool Execute(Vertex* descriptor);
         void TakeBack(Vertex* product);
 
         bool IsValidInput(Vertex* input);

@@ -27,8 +27,8 @@ using namespace std;
 
 DataManager::DataManager() : FactoryMap("DefaultDataManager")
 {
-    Add(new HandAppFactory());
-    Add(new FileVertex_Factory());
+    Add(new HandAppLoader());
+    Add(new FileVertexFactory());
     Add(new Persistence());
 }
 
@@ -44,7 +44,7 @@ DataManager::~DataManager()
 //----------------------------------------------------------------------------
 
 
-Vertex* Persistence::Produce(Vertex* keys_tree)
+bool Persistence::Execute(Vertex* keys_tree)
 {
     // Change name
     keys_tree->Name("settings:Keyboard::1");
@@ -58,7 +58,7 @@ Vertex* Persistence::Produce(Vertex* keys_tree)
         // Init keys with SDLKey values
 //        keys_tree->List[i]->Set(key_ids[i]);
     }
-    return keys_tree;
+    return true;
 }
 
 

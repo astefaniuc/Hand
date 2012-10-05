@@ -82,10 +82,9 @@ bool ListLayerFactory::IsValidInput(Vertex* input)
 }
 
 
-Vertex* ListLayerFactory::Produce(Vertex* descriptor)
+bool ListLayerFactory::Execute(Vertex* tree)
 {
-    Layer* ret = new ListLayer();
-    return ret;
+    return tree->Vertex::Add(new ListLayer());
 }
 
 

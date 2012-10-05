@@ -17,8 +17,8 @@
  *  License along with Hand. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HAND_LAYOUT_H
-#define HAND_LAYOUT_H
+#ifndef VIEW_DATATYPES_LAYOUT_H
+#define VIEW_DATATYPES_LAYOUT_H
 
 #include "include/defines.h"
 #include "base/factory.h"
@@ -63,14 +63,13 @@ class LayoutFactory : public Factory
         };
         virtual ~LayoutFactory(){};
 
-        Vertex* Produce(Vertex* in_out)
+        bool Execute(Vertex* in_out)
         {
             Layout* descr = dynamic_cast<Layout*>(in_out);
             if(!descr || !descr->Is(GetInputType()))
-                return NULL;
+                return false;
             // TODO Already initialized?
-            (Producer->*Function)(in_out);
-            return in_out;
+            return (Producer->*Function)(in_out);
         };
 
         void TakeBack(Vertex* product)
@@ -108,19 +107,18 @@ class PropertyFactory : public Factory
         };
         virtual ~PropertyFactory(){};
 
-        Vertex* Produce(Vertex* in_out)
+        bool Execute(Vertex* in_out)
         {
             Link* descr = dynamic_cast<Link*>(in_out);
             if(!descr || !descr->Is(GetInputType()))
-                return NULL;
+                return false;
             Vertex* layout = descr->Vertex::Get();
             // Already initialized?
             if(layout)
-                return layout;
+                return true;
             (Producer->*Function)(Container);
             layout = Container->Get();
-            descr->Set(layout);
-            return layout;
+            return in_out->Set(layout);
         };
 
         void TakeBack(Vertex* product)
@@ -142,4 +140,4 @@ class PropertyFactory : public Factory
         Data<Vertex*>* Container;
 };
 
-#endif /* HAND_LAYOUT_H */
+#endif /* VIEW_DATATYPES_LAYOUT_H */

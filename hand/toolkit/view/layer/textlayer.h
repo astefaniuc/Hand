@@ -44,7 +44,7 @@ class TextLayerFactory : public Factory
 
         bool IsValidInput(Vertex* input);
 
-        Vertex* Produce(Vertex* input);
+        bool Execute(Vertex* input);
         void TakeBack(Vertex* product);
 };
 

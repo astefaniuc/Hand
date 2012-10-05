@@ -28,42 +28,6 @@ using namespace std;
 using namespace boost::filesystem;
 
 
-bool FileVertex_Factory::IsValidInput(Vertex* input)
-{
-    // Very basic check here
-    Note* d_path = dynamic_cast<Note*>(input);
-    if(!d_path)
-        return false;
-    string s_path = d_path->Get();
-    if(s_path.find(URI_FILE) == 0)
-        return true;
-    return false;
-}
-
-
-Vertex* FileVertex_Factory::Produce(Vertex* descriptor)
-{
-    Note* d_path = dynamic_cast<Note*>(descriptor);
-    if(!d_path)
-        return NULL;
-    Vertex* ret =  new FileVertex(d_path->Get());
-    descriptor->Vertex::Attach(ret);
-    return ret;
-}
-
-
-void FileVertex_Factory::TakeBack(Vertex* product)
-{
-    if(dynamic_cast<FileVertex*>(product))
-        delete(product);
-}
-
-
-// ----------------------------------------------------------------
-// ----------------------------------------------------------------
-// ----------------------------------------------------------------
-
-
 FileVertex::FileVertex(string file_name) : List(file_name)
 {
     Type(FILEVERTEX);
@@ -115,10 +79,40 @@ path FileVertex::GetPath()
 // ----------------------------------------------------------------
 
 
-DirectoryLoader::~DirectoryLoader()
+bool FileVertexFactory::IsValidInput(Vertex* input)
 {
-//    Unload();
+    // Very basic check here
+    Note* d_path = dynamic_cast<Note*>(input);
+    if(!d_path)
+        return false;
+    string s_path = d_path->Get();
+    if(s_path.find(URI_FILE) == 0)
+        return true;
+    return false;
 }
+
+
+bool FileVertexFactory::Execute(Vertex* tree)
+{
+    Note* d_path = dynamic_cast<Note*>(tree);
+    if(!d_path)
+        return false;
+    Vertex* ret =  new FileVertex(d_path->Get());
+    tree->Vertex::Add(ret);
+    return true;
+}
+
+
+void FileVertexFactory::TakeBack(Vertex* product)
+{
+    if(dynamic_cast<FileVertex*>(product))
+        delete(product);
+}
+
+
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
 
 
 bool  DirectoryLoader::IsValidInput(Vertex* entry)
@@ -130,15 +124,14 @@ bool  DirectoryLoader::IsValidInput(Vertex* entry)
 }
 
 
-Vertex*  DirectoryLoader::Produce(Vertex* dir_obj)
+bool  DirectoryLoader::Execute(Vertex* tree)
 {
-    Vertex* ret = NULL;
-    FileVertex* ff_dir = dynamic_cast<FileVertex*>(dir_obj);
+    FileVertex* ff_dir = dynamic_cast<FileVertex*>(tree);
     if(!ff_dir)
-        return ret;
+        return false;
     path dir_path = ff_dir->GetPath();
     if(!is_directory(dir_path))
-        return ret;
+        return false;
 
     directory_iterator end;
     // (Re-)read the themes in
@@ -153,8 +146,6 @@ Vertex*  DirectoryLoader::Produce(Vertex* dir_obj)
                 file = new FileVertex(dir_it->path().filename().string());
                 file->Get(RELATION_PARENT_PATH)->Set(ff_dir);
                 ff_dir->Add(file);
-                // Set return value != NULL
-                ret = dir_obj;
             }
         }
         else if(is_directory(dir_it->status()))
@@ -162,7 +153,7 @@ Vertex*  DirectoryLoader::Produce(Vertex* dir_obj)
             // TODO: check or add dir
         }
     }
-    return ret;
+    return true;
 }
 
 

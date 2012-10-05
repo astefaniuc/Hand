@@ -54,10 +54,9 @@ bool TextLayerFactory::IsValidInput(Vertex* input)
 }
 
 
-Vertex* TextLayerFactory::Produce(Vertex* descriptor)
+bool TextLayerFactory::Execute(Vertex* tree)
 {
-    Layer* ret = new TextLayer();
-    return ret;
+    return tree->Vertex::Add(new TextLayer());
 }
 
 

@@ -50,14 +50,14 @@ class Binary : public Vertex
 
 #define APPLOADERFACTORY "HandAppLoader_Factory"
 
-class HandAppFactory : public Factory
+class HandAppLoader : public Factory
 {
     public:
-        HandAppFactory();
-        ~HandAppFactory(){};
+        HandAppLoader();
+        ~HandAppLoader(){};
 
-        virtual Vertex* Produce(Vertex* descriptor);
-        virtual void TakeBack(Vertex* product);
+        bool Execute(Vertex* descriptor);
+        void TakeBack(Vertex* product);
 
         bool IsValidInput(Vertex* input);
  };

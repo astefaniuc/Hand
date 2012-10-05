@@ -17,8 +17,8 @@
  *  License along with Hand. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HAND_ANIMATIONS_H
-#define HAND_ANIMATIONS_H
+#ifndef VIEW_THEME_ANIMATIONS_H
+#define VIEW_THEME_ANIMATIONS_H
 
 #include "base/handapp.h"
 
@@ -40,4 +40,4 @@ class Animation : public virtual HandApp
 };
 
 
-#endif /* HAND_ANIMATIONS_H */
+#endif /* VIEW_THEME_ANIMATIONS_H */

@@ -35,9 +35,9 @@ class DirectoryLoader : public Factory
                                     FILEVERTEX,
                                     FILEVERTEX,
                                     URI_FILE){};
-        ~DirectoryLoader();
+        ~DirectoryLoader(){};
 
-        virtual Vertex* Produce(Vertex* descriptor);
+        bool Execute(Vertex* descriptor);
         virtual void TakeBack(Vertex* product);
 
         bool IsValidInput(Vertex* input);
@@ -55,16 +55,16 @@ class FileVertex : public List
 };
 
 
-class FileVertex_Factory : public Factory
+class FileVertexFactory : public Factory
 {
     public:
-        FileVertex_Factory() : Factory("FileVertex_Factory",
+        FileVertexFactory() : Factory("FileVertexFactory",
                                        NOTE,
                                        FILEVERTEX,
                                        URI_FILE){};
-        virtual ~FileVertex_Factory(){};
+        virtual ~FileVertexFactory(){};
 
-        Vertex* Produce(Vertex* input);
+        bool Execute(Vertex* input);
         void TakeBack(Vertex* product);
 
         bool IsValidInput(Vertex* input);

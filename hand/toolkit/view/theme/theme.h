@@ -17,8 +17,8 @@
  *  License along with Hand. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HAND_THEME_H
-#define HAND_THEME_H
+#ifndef VIEW_THEME_THEME_H
+#define VIEW_THEME_THEME_H
 
 #include "base/factory.h"
 #include "base/handapp.h"
@@ -66,4 +66,4 @@ class Theme : public HandApp
 void PlaceCentered(SDL_Surface* source, SDL_Rect& target, Rect& out);
 
 
-#endif /* HAND_THEME_H */
+#endif /* VIEW_THEME_THEME_H */

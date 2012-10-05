@@ -44,10 +44,9 @@ DrawerFactory::~DrawerFactory()
 }
 
 
-Vertex* DrawerFactory::Produce(Vertex* descr)
+bool DrawerFactory::Execute(Vertex* tree)
 {
-    descr->Set(DrawFunction);
-    return DrawFunction;
+    return tree->Set(DrawFunction);
 }
 
 

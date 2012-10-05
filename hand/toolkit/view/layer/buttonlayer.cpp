@@ -38,11 +38,6 @@ ButtonLayer::ButtonLayer() : Layer()
 }
 
 
-ButtonLayer::~ButtonLayer()
-{
-}
-
-
 void ButtonLayer::SetContent(Vertex* data)
 {
     Layer::SetContent(data);
@@ -124,10 +119,9 @@ bool ButtonLayerFactory::IsValidInput(Vertex* input)
 }
 
 
-Vertex* ButtonLayerFactory::Produce(Vertex* descriptor)
+bool ButtonLayerFactory::Execute(Vertex* tree)
 {
-    Layer* ret = new ButtonLayer();
-    return ret;
+    return tree->Vertex::Add(new ButtonLayer());
 }
 
 

@@ -27,7 +27,7 @@ class ButtonLayer : public Layer
 {
     public:
         ButtonLayer();
-        ~ButtonLayer(void);
+        ~ButtonLayer(void){};
         void SetContent(Vertex*);
         // Reacting on user input
         void PressGui(void);
@@ -54,7 +54,7 @@ class ButtonLayerFactory : public Factory
 
         bool IsValidInput(Vertex* input);
 
-        Vertex* Produce(Vertex* input);
+        bool Execute(Vertex* input);
         void TakeBack(Vertex* product);
 };
 
