@@ -27,7 +27,7 @@ using namespace std;
 Layout::Layout(string name, string type) : List(name)
 {
     Type(GUI_LAYOUT);
-    Type(type);
+    Vertex::Get("Output Type")->Set(new Vertex(type));
     Set(new Rect(SIZEANDPOSITION, 0, 0, 1, 1));
     // Colours.Set(r[ed], g[reen], b[lue])
 /*    Color_Frame.Set(0, 3, 200);
@@ -75,6 +75,8 @@ List* Layout::GetField(string position)
 
 void Layout::AddForUpdate(Vertex* sublayout)
 {
+    if(!dynamic_cast<Layout*>(sublayout))
+        exit(12);
     Get("Update")->Add(sublayout);
 
     Layout* parent = dynamic_cast<Layout*>(Get(PARENT)->Get());

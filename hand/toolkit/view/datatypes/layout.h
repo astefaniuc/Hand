@@ -65,11 +65,12 @@ class LayoutFactory : public Factory
 
         bool Execute(Vertex* in_out)
         {
-            Layout* descr = dynamic_cast<Layout*>(in_out);
-            if(!descr || !descr->Is(GetInputType()))
-                return false;
-            // TODO Already initialized?
-            return (Producer->*Function)(in_out);
+            if((Producer->*Function)(in_out))
+            {
+                Type(GetOutputType());
+                return true;
+            }
+            return false;
         };
 
         void TakeBack(Vertex* product)
@@ -87,7 +88,6 @@ class LayoutFactory : public Factory
     private:
         Method Function;
         I* Producer;
-        Data<Vertex*>* Container;
 };
 
 
@@ -102,14 +102,12 @@ class PropertyFactory : public Factory
         {
             Producer = theme;
             Function = func;
-            Container = new Data<Vertex*>("Container", NULL);
         };
         virtual ~PropertyFactory(){};
 
         bool Execute(Vertex* in_out)
         {
-            (Producer->*Function)(Container);
-            return in_out->Set(Container->Get());
+            return (Producer->*Function)(in_out);
         };
 
         void TakeBack(Vertex* product)
@@ -125,7 +123,6 @@ class PropertyFactory : public Factory
     private:
         Method Function;
         I* Producer;
-        Data<Vertex*>* Container;
 };
 
 #endif /* VIEW_DATATYPES_LAYOUT_H */
