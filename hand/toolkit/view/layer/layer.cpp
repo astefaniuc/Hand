@@ -241,6 +241,7 @@ void Layer::SetLayout(Vertex* drawer_lib)
         layout = new Layout("Layout", Type()+"_Layout");
         Get("Layout")->Set(layout);
     }
+    layout->Vertex::Get("Output Type")->Set(new Vertex(Type()+"_Layout"));
     drawer_lib->Execute(layout);
 }
 
