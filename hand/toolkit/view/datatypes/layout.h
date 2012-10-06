@@ -79,10 +79,9 @@ class LayoutFactory : public Factory
 
         bool IsValidInput(Vertex* input)
         {
-            Layout* descr = dynamic_cast<Layout*>(input);
-            if(!descr)
+            if(!dynamic_cast<Layout*>(input))
                 return false;
-            return descr->Is(GetInputType());
+            return true;
         };
 
     private:
@@ -109,16 +108,8 @@ class PropertyFactory : public Factory
 
         bool Execute(Vertex* in_out)
         {
-            Link* descr = dynamic_cast<Link*>(in_out);
-            if(!descr || !descr->Is(GetInputType()))
-                return false;
-            Vertex* layout = descr->Vertex::Get();
-            // Already initialized?
-            if(layout)
-                return true;
             (Producer->*Function)(Container);
-            layout = Container->Get();
-            return in_out->Set(layout);
+            return in_out->Set(Container->Get());
         };
 
         void TakeBack(Vertex* product)
@@ -128,10 +119,7 @@ class PropertyFactory : public Factory
 
         bool IsValidInput(Vertex* input)
         {
-            Link* descr = dynamic_cast<Link*>(input);
-            if(!descr)
-                return false;
-            return descr->Is(GetInputType());
+            return input->Is(RELATION);
         };
 
     private:

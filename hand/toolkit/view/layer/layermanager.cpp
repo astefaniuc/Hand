@@ -79,6 +79,7 @@ void LayerManager::Init()
     LoadTheme(curr_theme);
 
     List* pub = new List("System");
+    Add(pub);
     Layer::SetContent(pub);
     pub->Add(theme_menu);
     pub->Add(new Method<LayerManager>("Exit", this, &LayerManager::Exit));
@@ -329,7 +330,7 @@ Layer* LayerManager::CreateLayer(Vertex* content, string layer_type)
 
     content->Vertex::Get("Output Type")->Set(new Vertex(layer_type));
     LayerTopos->Execute(content);
-    Layer* layer = dynamic_cast<Layer*>(content->Get(layer_type, ANY));
+    Layer* layer = dynamic_cast<Layer*>(content->Vertex::Get(layer_type, ANY));
     if(!layer)
         return NULL;
     layer->Vertex::Get(LAYERMANAGER)->Set(this);

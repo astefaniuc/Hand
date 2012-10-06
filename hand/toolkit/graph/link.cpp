@@ -24,28 +24,6 @@
 using namespace std;
 
 
-Link::Link(string name, string type) : List(name)
-{
-    Type(type);
-}
-
-
-bool Link::Execute(Vertex* vs)
-{
-    uint i = 0;
-    Vertex* child;
-    while((child=Get(++i)) != NULL)
-        // TODO: needs concrete use cases for MultiLink
-        return child->Execute(vs);
-    return false;
-}
-
-
-// ----------------------------------------------------------------
-// ----------------------------------------------------------------
-// ----------------------------------------------------------------
-
-
 Relation::Relation(string name) : List(name)
 {
     Type(RELATION);

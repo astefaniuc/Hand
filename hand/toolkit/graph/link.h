@@ -17,21 +17,10 @@
  *  License along with Hand. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TOOLKIT_GRAPH_LINK_H
-#define TOOLKIT_GRAPH_LINK_H
+#ifndef GRAPH_LINK_H
+#define GRAPH_LINK_H
 
 #include "graph/list.h"
-
-
-// TODO: combine Link and Relation? Or even get rid of both?
-class Link : public List
-{
-    public:
-        Link(std::string name, std::string type);
-        virtual ~Link(){};
-
-        bool Execute(Vertex* vs);
-};
 
 
 class Relation : public List
@@ -48,4 +37,4 @@ class Relation : public List
         bool IsOpen(Search* search);
 };
 
-#endif /* TOOLKIT_GRAPH_LINK_H */
+#endif /* GRAPH_LINK_H */

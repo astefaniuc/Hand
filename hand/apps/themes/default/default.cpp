@@ -81,7 +81,8 @@ bool Default::GetViewLayout(Vertex* out)
     Layout* layout = dynamic_cast<Layout*>(out);
     // Vertical list alignment
     layout->Set(new Rect(ALIGNMENT, 0, 1, 0, 1));
-    layout->Get("Methods")->Add(new Link("DrawFunc", GUI_DRAWER_LIST));
+    layout->Get("Methods")->Get("DrawFunc")->Vertex::Get("Output Type")
+        ->Set(new Vertex(GUI_DRAWER_LIST));
     layout->AddField("ListElement", "Any");
 
     Layout* controls = new Layout("Controls", GUI_LAYOUT_FRAMEDLIST);
@@ -99,7 +100,8 @@ bool Default::GetListLayout(Vertex* out)
     Layout* layout = dynamic_cast<Layout*>(out);
 
     layout->Set(new Rect(ALIGNMENT, 0, 1, 0, 1));
-    layout->Get("Methods")->Add(new Link("DrawFunc", GUI_DRAWER_LIST));
+    layout->Get("Methods")->Get("DrawFunc")->Vertex::Get("Output Type")
+        ->Set(new Vertex(GUI_DRAWER_LIST));
     layout->AddField("ListElement", BUTTONLAYER);
 //    layout->AddField("ListElement", "Any");
     return true;
@@ -129,7 +131,8 @@ bool Default::GetButtonLayout(Vertex* out)
 {
     Layout* layout = dynamic_cast<Layout*>(out);
 
-    layout->Get("Methods")->Add(new Link("DrawFunc", GUI_DRAWER_BUTTON));
+    layout->Get("Methods")->Get("DrawFunc")->Vertex::Get("Output Type")
+        ->Set(new Vertex(GUI_DRAWER_BUTTON));
     layout->Set(new Rect(SIZEANDPOSITION, 0.1, 0.1, 0.8, 0.8));
 
     Layout* frame = new Layout("Frame", GUI_LAYOUT_FRAME);
@@ -176,8 +179,9 @@ bool Default::GetFrameLayout(Vertex* out)
     Layout* layout = dynamic_cast<Layout*>(out);
 
     layout->Set(new Rect(SIZEANDPOSITION, 0.01, 0.03, 0.98, 0.94));
-    layout->Set(new Link("Color", GUI_COLOR_FRAME));
-    layout->Get("Methods")->Add(new Link("DrawFunc", GUI_DRAWER_FRAME));
+    layout->Get("Methods")->Get("DrawFunc")->Vertex::Get("Output Type")
+        ->Set(new Vertex(GUI_DRAWER_FRAME));
+    layout->Get("Color")->Vertex::Get("Output Type")->Set(new Vertex(GUI_COLOR_FRAME));
 
     Layout* bgrd = new Layout("Background", GUI_LAYOUT_BACKGROUND);
     layout->Get(CHILDREN)->Add(bgrd);
@@ -193,8 +197,10 @@ bool Default::GetBackgroundLayout(Vertex* out)
     Layout* layout = dynamic_cast<Layout*>(out);
     layout->Name("Background Layout");
 
-    layout->Get("Methods")->Add(new Link("DrawFunc", GUI_DRAWER_BACKGROUND));
-    layout->Set(new Link("Color", GUI_COLOR_BACKGR_LIST));
+    layout->Get("Methods")->Get("DrawFunc")->Vertex::Get("Output Type")
+        ->Set(new Vertex(GUI_DRAWER_BACKGROUND));
+    layout->Get("Color")->Vertex::Get("Output Type")->Set(new Vertex(GUI_COLOR_BACKGR_LIST));
+
     return true;
 }
 
@@ -205,12 +211,10 @@ bool Default::GetTextLayout(Vertex* out)
     layout->Name("Text Layout");
 
     layout->Set(new Rect(SIZEANDPOSITION, 0.1, 0.1, 0.8, 0.8));
-    layout->Get("Methods")->Add(new Link("DrawFunc", GUI_DRAWER_TEXT));
-    layout->Set(new Link("Color", GUI_COLOR_FONT));
+    layout->Get("Methods")->Get("DrawFunc")->Vertex::Get("Output Type")
+        ->Set(new Vertex(GUI_DRAWER_TEXT));
+    layout->Get("Color")->Vertex::Get("Output Type")->Set(new Vertex(GUI_COLOR_FONT));
 
-/*    Dim_Font_Preferred = 32;
-    Dim_Font_Min = 8;
-    Color_Alt_Font.Set(0, 0, 0);*/
     return true;
 }
 

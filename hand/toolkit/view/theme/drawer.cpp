@@ -52,7 +52,5 @@ bool DrawerFactory::Execute(Vertex* tree)
 
 bool DrawerFactory::IsValidInput(Vertex* input)
 {
-    if(dynamic_cast<Link*>(input) && input->Is(GetOutputType()))
-        return true;
-    return false;
+    return true;
 }

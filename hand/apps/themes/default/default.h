@@ -27,7 +27,7 @@ class Default : public Theme
 {
     public:
         Default();
-        //~Default();
+        ~Default(){};
 
     protected:
         // Layout creators

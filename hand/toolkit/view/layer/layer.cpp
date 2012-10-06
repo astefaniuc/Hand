@@ -32,7 +32,6 @@ using namespace std;
 Layer::Layer() : VirtualSurface("Layer")
 {
     ParentLayer = NULL;
-    Set(new Link("Content", "Link"));
     Updated = false;
     IsVisible = true;
     IsExpanded = false;
