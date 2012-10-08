@@ -21,6 +21,17 @@
 #define VIEW_DEFINES_H
 
 
+// TODO: font engine
+#define FONT_FILE "/usr/share/fonts/truetype/freefont/FreeSans.ttf"
+
+// Themes strings
+#define THEMES_DIRECTORY "./apps/themes/"
+#define DEFAULT_THEME "default.so"
+// Menu names
+#define THEMES_MENU "Themes"
+
+
+
 #define VIRTUALSURFACE "VIRTUALSURFACE"
 // Layer types
 #define LAYER "Layer"
@@ -66,6 +77,11 @@
 #define DIM_FONT_PREFERRED "DIM_FONT_PREFERRED"
 #define DIM_FONT_MAX "DIM_FONT_MAX"
 
+// TODO
+#define BGRD_SOLID_COLOR "BGRD_SOLID_COLOR"
+#define BGRD_IMAGE "BGRD_IMAGE"
+
+
 // Other
 #define TAG_RELATION_CONTENT "TAG_RELATION_CONTENT"
 
@@ -76,6 +92,11 @@
 #define BTN_FIELD_CONTROL "BTN_FIELD_CONTROL"
 #define BTN_FIELD_PREVIEW "BTN_FIELD_PREVIEW"
 #define BTN_FIELD_DESCRIPTION "BTN_FIELD_DESCRIPTION"
+
+
+// Name of the Vertex containing the Theme object and the drawing func
+#define DRAWOBJ_DRAWER "Drawer"
+
 
 
 enum button_string

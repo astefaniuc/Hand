@@ -28,13 +28,12 @@
 #define FACTORY_INPUTSTRING "FACTORY_INPUTSTRING"
 #define FACTORY_OUTPUTSTRING "FACTORY_OUTPUTSTRING"
 
-class Factory : public List
+class Factory : public Vertex
 {
     public:
         Factory(std::string name,
                 std::string input_type,
-                std::string output_type,
-                std::string uri_scheme);
+                std::string output_type);
         virtual ~Factory(){};
 
         virtual bool Execute(Vertex* input) = 0;
@@ -44,7 +43,6 @@ class Factory : public List
 
         std::string GetInputType();
         std::string GetOutputType();
-        std::string GetUriScheme();
 
     private:
         bool SetSpecifierString(std::string name, std::string value);
@@ -61,6 +59,7 @@ class FactoryMap : public List
         virtual ~FactoryMap(){};
 
         virtual bool Execute(Vertex* input);
+        virtual bool Resolve(Vertex* input);
 
         Factory* GetFactory(Vertex* input);
         Factory* GetFactory(std::string output_type);

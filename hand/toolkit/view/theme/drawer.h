@@ -23,13 +23,6 @@
 #include "base/factory.h"
 
 
-#define BGRD_SOLID_COLOR "BGRD_SOLID_COLOR"
-#define BGRD_IMAGE "BGRD_IMAGE"
-
-
-#define DRAWOBJ_DRAWER "Drawer"
-
-
 class Theme;
 class VirtualSurface;
 

@@ -24,18 +24,15 @@
 using namespace std;
 
 
-Factory::Factory
-(
+Factory::Factory(
         string name,
         string input_type,
-        string output_type,
-        string uri_scheme
-) : List(name)
+        string output_type
+) : Vertex(name)
 {
     Type(FACTORY);
     SetSpecifierString(FACTORY_INPUTSTRING, input_type);
     SetSpecifierString(FACTORY_OUTPUTSTRING, output_type);
-    SetSpecifierString(URI_FACTORY, uri_scheme);
 }
 
 
@@ -48,12 +45,6 @@ string Factory::GetInputType()
 string Factory::GetOutputType()
 {
     return GetSpecifierString(FACTORY_OUTPUTSTRING);
-}
-
-
-string Factory::GetUriScheme()
-{
-    return GetSpecifierString(URI_FACTORY);
 }
 
 
@@ -91,31 +82,33 @@ bool FactoryMap::Execute(Vertex* input)
     if(!input)
         return NULL;
 
-    string output_type = "";
     Vertex* ot = input->Vertex::Get("Output Type")->Get();
-    if(ot)
-        output_type = ot->Name();
+    if(!ot)
+        return false;
 
     // TODO: get list of factories for the output type and iterate through it
     // till we get a positive result
-    Factory* f = GetFactory(output_type);
-    if(f)
-    {
-        // Factory chain "top down"
-        if(f->IsValidInput(input))
-            // We have the right factory
-            return f->Execute(input);
-
-        // Change to the subsequent output type
-        input->Vertex::Get("Output Type")->Set(new Vertex(f->GetOutputType()));
-        if(Execute(input))
-            // Resolve the intermediate product
-            return Execute(input->Get(f->GetOutputType(), ANY));
+    Factory* f = GetFactory(ot->Name());
+    if(!f)
         return false;
-    }
+    // Factory chain "top down"
+    if(f->IsValidInput(input))
+        // We have the right factory
+        return f->Execute(input);
 
+    // Change to the subsequent output type
+    input->Vertex::Get("Output Type")->Set(new Vertex(f->GetOutputType()));
+    if(Execute(input))
+        // Resolve the intermediate product
+        return Execute(input->Get(f->GetOutputType(), ANY));
+    return false;
+}
+
+
+bool FactoryMap::Resolve(Vertex* input)
+{
     // Factory chain "bottom up"
-    f = GetFactory(input);
+    Factory* f = GetFactory(input);
     if(!f)
         return false;
 

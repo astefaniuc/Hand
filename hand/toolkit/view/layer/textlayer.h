@@ -38,8 +38,7 @@ class TextLayerFactory : public Factory
 {
     public:
         TextLayerFactory() : Factory(LAYER_TOPOGRAPHY,
-                                     "",
-                                     TEXTLAYER, ""){};
+                                     "", TEXTLAYER){};
         ~TextLayerFactory(){};
 
         bool IsValidInput(Vertex* input);

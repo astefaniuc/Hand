@@ -31,10 +31,6 @@ using namespace boost::filesystem;
 FileVertex::FileVertex(string file_name) : List(file_name)
 {
     Type(FILEVERTEX);
-    if(file_name.find(URI_FILE) == 0)
-        // Remove the URI string from the name
-        file_name.erase(0, sizeof(URI_FILE)-1);
-
     path file_path(file_name);
     if(is_regular_file(file_path))
     {
@@ -81,12 +77,8 @@ path FileVertex::GetPath()
 
 bool FileVertexFactory::IsValidInput(Vertex* input)
 {
-    // Very basic check here
-    Note* d_path = dynamic_cast<Note*>(input);
-    if(!d_path)
-        return false;
-    string s_path = d_path->Get();
-    if(s_path.find(URI_FILE) == 0)
+    path file_path(input->Name());
+    if(is_regular_file(file_path) || is_directory(file_path))
         return true;
     return false;
 }

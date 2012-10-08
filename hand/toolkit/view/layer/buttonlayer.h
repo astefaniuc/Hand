@@ -48,8 +48,7 @@ class ButtonLayerFactory : public Factory
 {
     public:
         ButtonLayerFactory() : Factory(LAYER_TOPOGRAPHY,
-                                       "",
-                                       BUTTONLAYER, ""){};
+                                       "", BUTTONLAYER){};
         ~ButtonLayerFactory(){};
 
         bool IsValidInput(Vertex* input);

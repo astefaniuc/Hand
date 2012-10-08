@@ -56,7 +56,7 @@ class LayoutFactory : public Factory
 
     public:
         LayoutFactory(std::string output_type, I* theme, Method func) :
-            Factory("LayoutFactory", GUI_LAYOUT, output_type, "")
+            Factory("LayoutFactory", GUI_LAYOUT, output_type)
         {
             Producer = theme;
             Function = func;
@@ -98,7 +98,7 @@ class PropertyFactory : public Factory
 
     public:
     PropertyFactory(std::string output_type, I* theme, Method func) :
-            Factory("PropertyFactory", output_type, output_type, "")
+            Factory("PropertyFactory", output_type, output_type)
         {
             Producer = theme;
             Function = func;

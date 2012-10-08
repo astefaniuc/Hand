@@ -22,6 +22,7 @@
 #include "input/device.h"
 #include "view/screen.h"
 #include "graph/data.h"
+#include "base/filesystem.h"
 
 
 using namespace std;
@@ -55,8 +56,8 @@ HandServer* HandServer::GetInstance()
 
 void HandServer::Present(string file)
 {
-    Vertex* app = new Note("Command line input", file);
-    while(Execute(app))
+    Vertex* app = new FileVertex(file);
+    while(Resolve(app))
     {
         Vertex* ot = app->Vertex::Get("Output Type")->Get();
         if(!ot)

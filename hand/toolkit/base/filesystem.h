@@ -33,8 +33,7 @@ class DirectoryLoader : public Factory
     public:
         DirectoryLoader() : Factory("DirectoryLoader",
                                     FILEVERTEX,
-                                    FILEVERTEX,
-                                    URI_FILE){};
+                                    FILEVERTEX){};
         ~DirectoryLoader(){};
 
         bool Execute(Vertex* descriptor);
@@ -60,8 +59,7 @@ class FileVertexFactory : public Factory
     public:
         FileVertexFactory() : Factory("FileVertexFactory",
                                        NOTE,
-                                       FILEVERTEX,
-                                       URI_FILE){};
+                                       FILEVERTEX){};
         virtual ~FileVertexFactory(){};
 
         bool Execute(Vertex* input);

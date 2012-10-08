@@ -36,8 +36,7 @@ class Persistence : public Factory
     public:
         Persistence() : Factory("Persistence",
                                 LIST,
-                                LIST,
-                                URI_SETTINGS){};
+                                LIST){};
         virtual ~Persistence(){};
 
         bool Execute(Vertex* descriptor);

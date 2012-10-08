@@ -40,8 +40,7 @@ class ListLayerFactory : public Factory
 {
     public:
         ListLayerFactory() : Factory(LAYER_TOPOGRAPHY,
-                                     LIST,
-                                     LISTLAYER, ""){};
+                                     LIST, LISTLAYER){};
         ~ListLayerFactory(){};
 
         bool IsValidInput(Vertex* input);

@@ -209,7 +209,8 @@ bool LayerManager::Request(Vertex* request)
 bool LayerManager::LoadTheme(Vertex* f)
 {
     f->Vertex::Get("Output Type")->Set(new Vertex(HANDAPP));
-    HandServer::GetInstance()->Execute(f);
+    if(!HandServer::GetInstance()->Execute(f))
+        return false;
     Theme* theme = dynamic_cast<Theme*>(f->Vertex::Get(HANDAPP, ANY));
 
     if(!theme)

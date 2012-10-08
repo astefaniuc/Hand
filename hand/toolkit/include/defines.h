@@ -24,33 +24,12 @@
 #include "view/defines.h"
 
 
-// TODO: font engine
-#define FONT_FILE "/usr/share/fonts/truetype/freefont/FreeSans.ttf"
-
-// Themes strings
-#define THEMES_DIRECTORY "file://./apps/themes/"
-#define DEFAULT_THEME "file://default.so"
 #define LIBRARY_FILE_EXTENSION ".so"
-
-// Menu names
-#define SETTINGS_MENU "DrawObject"
-#define THEMES_MENU "Themes"
-
-// Default URI schemes / types (TODO)
-#define URI_ACTION "action:"
-#define URI_DATA "data:"
-#define URI_FILE "file://"
-#define URI_SETTINGS "settings:"
-#define URI_FACTORY "prod:"
 
 // Content items
 #define DESCRIPTION "Description"
 #define PARENT "Parent"
 #define CHILDREN "Children"
-
-// Name of the Vertex containing the Theme object and the drawing func
-#define DRAWOBJ_DRAWER "Drawer"
-
 
 
 enum default_number_of_items
