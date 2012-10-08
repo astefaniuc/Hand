@@ -56,7 +56,7 @@ HandServer* HandServer::GetInstance()
 
 void HandServer::Present(string file)
 {
-    Vertex* app = new FileVertex(file);
+    Vertex* app = new File(file);
     while(Resolve(app))
     {
         Vertex* ot = app->Vertex::Get("Output Type")->Get();

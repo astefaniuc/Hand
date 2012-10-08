@@ -30,7 +30,7 @@
 typedef List* creator();
 typedef void destroyer(void*);
 
-class FileVertex;
+class File;
 
 class Binary : public Vertex
 {

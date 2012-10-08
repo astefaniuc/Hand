@@ -28,7 +28,7 @@ using namespace std;
 DataManager::DataManager() : FactoryMap("DefaultDataManager")
 {
     Add(new HandAppLoader());
-    Add(new FileVertexFactory());
+    Add(new FileFactory());
     Add(new Persistence());
 }
 

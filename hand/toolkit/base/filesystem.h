@@ -25,7 +25,7 @@
 
 
 #define PATH "Path"
-#define FILEVERTEX "FileVertex"
+#define FILEVERTEX "File"
 
 
 class DirectoryLoader : public Factory
@@ -43,24 +43,24 @@ class DirectoryLoader : public Factory
 };
 
 
-class FileVertex : public List
+class File : public List
 {
     public:
-        FileVertex(std::string file);
-        virtual ~FileVertex(){};
+        File(std::string file);
+        virtual ~File(){};
 
         std::string GetFullPath();
         boost::filesystem::path GetPath();
 };
 
 
-class FileVertexFactory : public Factory
+class FileFactory : public Factory
 {
     public:
-        FileVertexFactory() : Factory("FileVertexFactory",
+        FileFactory() : Factory("FileFactory",
                                        NOTE,
                                        FILEVERTEX){};
-        virtual ~FileVertexFactory(){};
+        virtual ~FileFactory(){};
 
         bool Execute(Vertex* input);
         void TakeBack(Vertex* product);

@@ -66,12 +66,12 @@ void LayerManager::Init()
     // Theme menu
     List* theme_menu = new List(THEMES_MENU);
     // The path to the theme files
-    List* theme_dir = new FileVertex(THEMES_DIRECTORY);
+    List* theme_dir = new File(THEMES_DIRECTORY);
     theme_menu->Add(theme_dir);
     // Add a method to create a menu with the themes one HD
     theme_menu->Add(new Method<LayerManager>(THEMES_MENU, this, &LayerManager::GetAllThemes));
     // The default theme (to be loaded) (TODO: get this from persistent object)
-    List* curr_theme = new FileVertex(DEFAULT_THEME);
+    List* curr_theme = new File(DEFAULT_THEME);
     // Add the default theme to the theme folder (without scanning if it really is there)
     theme_dir->Add(curr_theme);
     curr_theme->Get(PATH)->Set(theme_dir);
@@ -233,12 +233,12 @@ bool LayerManager::GetAllThemes(Vertex* themes_dir)
 
     // Set switching theme callback to all found themes
     Vertex* loader = new Method<LayerManager>(THEMES_MENU, this, &LayerManager::LoadTheme);
-    FileVertex* file;
+    File* file;
     Vertex* elem;
     uint i = 0;
     while((elem=themes_list->Get(++i)) != NULL)
     {
-        file = dynamic_cast<FileVertex*>(elem);
+        file = dynamic_cast<File*>(elem);
         if(file)
             file->Add(loader);
     }

@@ -53,7 +53,7 @@ Binary::~Binary()
 bool Binary::Execute(Vertex* input)
 {
     Reset();
-    FileVertex* path_obj = dynamic_cast<FileVertex*>(input);
+    File* path_obj = dynamic_cast<File*>(input);
     if(!path_obj)
         return false;
 
@@ -101,7 +101,7 @@ HandAppLoader::HandAppLoader() : Factory("HandApp Loader",
 
 bool HandAppLoader::IsValidInput(Vertex* entry)
 {
-    FileVertex* ff = dynamic_cast<FileVertex*>(entry);
+    File* ff = dynamic_cast<File*>(entry);
     if(!ff)
         return false;
 
