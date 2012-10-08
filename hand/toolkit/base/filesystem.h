@@ -24,7 +24,7 @@
 #include "boost/filesystem/path.hpp"
 
 
-#define RELATION_PARENT_PATH "RELATION_PARENT_PATH"
+#define PATH "Path"
 #define FILEVERTEX "FileVertex"
 
 

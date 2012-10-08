@@ -74,7 +74,7 @@ void LayerManager::Init()
     List* curr_theme = new FileVertex(DEFAULT_THEME);
     // Add the default theme to the theme folder (without scanning if it really is there)
     theme_dir->Add(curr_theme);
-    curr_theme->Get(RELATION_PARENT_PATH)->Set(theme_dir);
+    curr_theme->Get(PATH)->Set(theme_dir);
     // Load the theme
     LoadTheme(curr_theme);
 

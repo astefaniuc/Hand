@@ -35,7 +35,7 @@ FileVertex::FileVertex(string file_name) : List(file_name)
     if(is_regular_file(file_path))
     {
         if(file_path.has_parent_path())
-            Get(RELATION_PARENT_PATH)->Set(new FileVertex(file_path.parent_path().string()));
+            Get(PATH)->Set(new FileVertex(file_path.parent_path().string()));
 
         Name(file_path.filename().string());
     }
@@ -54,7 +54,7 @@ path FileVertex::GetPath()
 {
     path _path;
     // Get directory information from parent path
-    Vertex* dir_rel = Get(RELATION_PARENT_PATH);
+    Vertex* dir_rel = Get(PATH);
     if(dir_rel)
     {
         FileVertex* parent_path = dynamic_cast<FileVertex*>(dir_rel->Get());
@@ -136,7 +136,7 @@ bool  DirectoryLoader::Execute(Vertex* tree)
             if(dir_it->path().extension() == LIBRARY_FILE_EXTENSION)
             {
                 file = new FileVertex(dir_it->path().filename().string());
-                file->Get(RELATION_PARENT_PATH)->Set(ff_dir);
+                file->Get(PATH)->Set(ff_dir);
                 ff_dir->Add(file);
             }
         }
