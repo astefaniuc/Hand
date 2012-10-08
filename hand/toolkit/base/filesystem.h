@@ -25,15 +25,13 @@
 
 
 #define PATH "Path"
-#define FILEVERTEX "File"
+#define FILE "File"
 
 
 class DirectoryLoader : public Factory
 {
     public:
-        DirectoryLoader() : Factory("DirectoryLoader",
-                                    FILEVERTEX,
-                                    FILEVERTEX){};
+        DirectoryLoader() : Factory("DirectoryLoader", FILE, FILE){};
         ~DirectoryLoader(){};
 
         bool Execute(Vertex* descriptor);
@@ -57,9 +55,7 @@ class File : public List
 class FileFactory : public Factory
 {
     public:
-        FileFactory() : Factory("FileFactory",
-                                       NOTE,
-                                       FILEVERTEX){};
+        FileFactory() : Factory("FileFactory", NOTE, FILE){};
         virtual ~FileFactory(){};
 
         bool Execute(Vertex* input);

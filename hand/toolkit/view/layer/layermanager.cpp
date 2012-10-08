@@ -224,10 +224,10 @@ bool LayerManager::LoadTheme(Vertex* f)
 
 bool LayerManager::GetAllThemes(Vertex* themes_dir)
 {
-    themes_dir->Vertex::Get("Output Type")->Set(new Vertex(FILEVERTEX));
+    themes_dir->Vertex::Get("Output Type")->Set(new Vertex(FILE));
     // (Re-)read the list of available themes
     HandServer::GetInstance()->Execute(themes_dir);
-    List* themes_list = dynamic_cast<List*>(themes_dir->Vertex::Get(FILEVERTEX, ANY));
+    List* themes_list = dynamic_cast<List*>(themes_dir->Vertex::Get(FILE, ANY));
     if(!themes_list)
         return false;
 

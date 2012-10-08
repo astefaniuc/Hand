@@ -30,7 +30,7 @@ using namespace boost::filesystem;
 
 File::File(string file_name) : List(file_name)
 {
-    Type(FILEVERTEX);
+    Type(FILE);
     path file_path(file_name);
     if(is_regular_file(file_path))
     {

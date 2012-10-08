@@ -92,7 +92,7 @@ void Binary::Reset()
 
 
 HandAppLoader::HandAppLoader() : Factory("HandApp Loader",
-                                         FILEVERTEX,
+                                         FILE,
                                          HANDAPP)
 {
     Type(APPLOADERFACTORY);
