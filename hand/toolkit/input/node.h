@@ -17,8 +17,8 @@
  *  License along with Hand. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HAND_NODE_H
-#define HAND_NODE_H
+#ifndef INPUT_NODE_H
+#define INPUT_NODE_H
 
 #include "include/defines.h"
 
@@ -64,4 +64,4 @@ class Node
 };
 
 
-#endif /* HAND_NODE_H */
+#endif /* INPUT_NODE_H */

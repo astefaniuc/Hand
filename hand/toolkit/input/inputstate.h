@@ -17,8 +17,8 @@
  *  License along with Hand. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HAND_INPUTSTATE_H
-#define HAND_INPUTSTATE_H
+#ifndef INPUT_INPUTSTATE_H
+#define INPUT_INPUTSTATE_H
 
 #include "input/node.h"
 #include "include/defines.h"
@@ -65,4 +65,4 @@ class InputState
         Node* FollowerKey;
 };
 
-#endif /* HAND_INPUTSTATE_H */
+#endif /* INPUT_INPUTSTATE_H */

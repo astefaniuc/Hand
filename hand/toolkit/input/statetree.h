@@ -17,8 +17,8 @@
  *  License along with Hand. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HAND_STATETREE_H
-#define HAND_STATETREE_H
+#ifndef INPUT_STATETREE_H
+#define INPUT_STATETREE_H
 
 #include "input/node.h"
 
@@ -38,4 +38,4 @@ class StateTree
 };
 
 
-#endif /* HAND_STATETREE_H */
+#endif /* INPUT_STATETREE_H */
