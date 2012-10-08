@@ -322,7 +322,7 @@ Layer* LayerManager::CreateLayer(Vertex* content, string layer_type)
 
     if(layer_type == "Any")
     {
-        Vertex* attached_layout = content->Get(RELATION, "Layout");
+        Vertex* attached_layout = content->Get(LINK, "Layout");
         if(attached_layout)
             layer_type = attached_layout->Get()->Type();
         else

@@ -137,7 +137,7 @@ Vertex* Vertex::Get(string s)
         if((*curr)->Name() == s)
             return (*curr);
 
-    Relation* r = new Relation(s);
+    Link* r = new Link(s);
     Vertex::Add(r);
     return r;
 }

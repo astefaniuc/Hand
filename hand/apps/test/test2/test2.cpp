@@ -139,7 +139,7 @@ Vertex* FindTester::TestFind(string name, string type, bool relation)
         cout << ", type " << type;
         if(relation)
         {
-            search.SetSearchRelation(CHILDREN);
+            search.SetSearchLink(CHILDREN);
             cout << ", relation ";
         }
     }

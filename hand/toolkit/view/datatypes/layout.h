@@ -117,7 +117,7 @@ class PropertyFactory : public Factory
 
         bool IsValidInput(Vertex* input)
         {
-            return input->Is(RELATION);
+            return input->Is(LINK);
         };
 
     private:

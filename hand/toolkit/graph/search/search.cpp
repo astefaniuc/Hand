@@ -33,7 +33,7 @@ Search::Search(string name) : Vertex(name)
     Findings = Get("Findings");
     SearchName = NULL;
     SearchType = NULL;
-    SearchRelation = NULL;
+    SearchLink = NULL;
     MaxDepth = MAX_SEARCH_DEPTH;
     MultipleFinds = false;
 }
@@ -144,7 +144,7 @@ bool Search::SearchAllChilds(Vertex* path)
 
 bool Search::Matches(Vertex* target)
 {
-    // Ignore relation_type here (it's checked in the "Relation" Vertex)
+    // Ignore relation_type here (it's checked in the "Link" Vertex)
     if(SearchName && (!SearchName->Matches(target->Name())))
         return false;
 
@@ -182,16 +182,16 @@ RegularExpression* Search::GetSearchType()
 }
 
 
-void Search::SetSearchRelation(string s, bool make_regex)
+void Search::SetSearchLink(string s, bool make_regex)
 {
     // Add a link to the own interface for the GUI
-    SearchRelation = AddSearchRegex("SearchRelation", s, make_regex);
+    SearchLink = AddSearchRegex("SearchLink", s, make_regex);
 }
 
 
-RegularExpression* Search::GetSearchRelation()
+RegularExpression* Search::GetSearchLink()
 {
-    return SearchRelation;
+    return SearchLink;
 }
 
 

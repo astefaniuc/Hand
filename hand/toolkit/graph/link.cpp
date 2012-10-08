@@ -24,25 +24,25 @@
 using namespace std;
 
 
-Relation::Relation(string name) : List(name)
+Link::Link(string name) : List(name)
 {
-    Type(RELATION);
+    Type(LINK);
 }
 
 
-bool Relation::Set(Vertex* target)
+bool Link::Set(Vertex* target)
 {
     List::Reset();
     return List::Set(target);
 }
 
 
-bool Relation::IsOpen(Search* search)
+bool Link::IsOpen(Search* search)
 {
     if(!Vertex::IsOpen(search))
         return false;
     // Does it match in its role as relation
-    RegularExpression* se = search->GetSearchRelation();
+    RegularExpression* se = search->GetSearchLink();
     if(se && !se->Matches(Name()))
         // Don't look further if it's not the right relation
         return false;

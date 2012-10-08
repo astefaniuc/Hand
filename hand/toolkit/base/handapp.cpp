@@ -91,7 +91,7 @@ void Binary::Reset()
 // ----------------------------------------------------------------
 
 
-HandAppLoader::HandAppLoader() : Factory("Library Loader",
+HandAppLoader::HandAppLoader() : Factory("HandApp Loader",
                                          FILEVERTEX,
                                          HANDAPP)
 {

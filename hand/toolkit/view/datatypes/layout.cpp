@@ -57,7 +57,7 @@ List* Layout::GetField(string position)
             Get("Fields")->Get(ANY, position));
     if(s)
         return s;
-    Vertex* childs = Get(RELATION, CHILDREN);
+    Vertex* childs = Get(LINK, CHILDREN);
     if(childs)
     {
         Vertex* layout;
@@ -94,7 +94,7 @@ bool Layout::Execute(Vertex* vs)
     if(f)
         // Execute drawer on current layout
         f->Execute(this);
-    f = Get(RELATION, CHILDREN);
+    f = Get(LINK, CHILDREN);
     if(f)
     {
         Vertex* layout;
@@ -112,7 +112,7 @@ void Layout::Reset()
     Vertex* sub = Get(RECT, SIZEANDPOSITION);
     if(sub)
         sub->Reset();
-    Vertex* children = Get(RELATION, CHILDREN);
+    Vertex* children = Get(LINK, CHILDREN);
     if(!children)
         return;
     Vertex* layout;

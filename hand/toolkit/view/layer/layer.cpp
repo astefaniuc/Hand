@@ -118,7 +118,7 @@ void Layer::ReleaseCommand()
 
 void Layer::Collapse()
 {
-    Vertex* children = Get(RELATION, CHILDREN);
+    Vertex* children = Get(LINK, CHILDREN);
     if(!children)
         return;
 
@@ -215,7 +215,7 @@ void Layer::SetTheme(Vertex* theme)
     // TODO: generic recursive Set() on a sub-tree defined by a "relation"
     // (possibly using Search() with MultipleFindings)
     SetLayout(theme);
-    Vertex* children = Get(RELATION, CHILDREN);
+    Vertex* children = Get(LINK, CHILDREN);
     if(!children)
         return;
 
@@ -285,7 +285,7 @@ void Layer::Draw(bool forced)
 
 void Layer::DrawChilds(bool forced)
 {
-    Vertex* children = Get(RELATION, CHILDREN);
+    Vertex* children = Get(LINK, CHILDREN);
     if(!children)
         return;
 

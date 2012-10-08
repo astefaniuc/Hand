@@ -42,8 +42,8 @@ class Search : public Vertex
         RegularExpression* GetSearchName();
         void SetSearchType(std::string s, bool make_regex=false);
         RegularExpression* GetSearchType();
-        void SetSearchRelation(std::string s, bool make_regex=false);
-        RegularExpression* GetSearchRelation();
+        void SetSearchLink(std::string s, bool make_regex=false);
+        RegularExpression* GetSearchLink();
         std::string GetCookieName();
         bool Execute(Vertex* target);
     protected:
@@ -57,7 +57,7 @@ class Search : public Vertex
         // Quick links
         RegularExpression* SearchName;
         RegularExpression* SearchType;
-        RegularExpression* SearchRelation;
+        RegularExpression* SearchLink;
         Vertex* Findings;
     public:
         // TODO: GUI display?

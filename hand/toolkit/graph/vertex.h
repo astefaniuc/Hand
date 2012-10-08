@@ -49,7 +49,7 @@ class Vertex
         // Return the default child/value which is NULL for a plain vertex
         Vertex* Get();
         // Get the first sub-item by name.
-        // If the item doesn't exist it returns a new Relation vertex;
+        // If the item doesn't exist it returns a new Link vertex;
         // use Get(ANY, name) to test if a vertex exists
         virtual Vertex* Get(std::string name);
         // Get the first sub-item by name and type; if the item is not found

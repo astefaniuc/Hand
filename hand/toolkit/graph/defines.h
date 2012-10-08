@@ -25,7 +25,6 @@
 #define VERTEX   "Vertex"
 #define LIST     "List"
 #define METHOD   "Method"
-#define RELATION "Relation"
 #define LINK     "Link"
 #define DATA     "Data"
 #define SEARCH   "Search"

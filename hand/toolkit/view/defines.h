@@ -82,9 +82,6 @@
 #define BGRD_IMAGE "BGRD_IMAGE"
 
 
-// Other
-#define TAG_RELATION_CONTENT "TAG_RELATION_CONTENT"
-
 // Special Content (Layout) fields for lists and buttons
 #define LST_FIELD_NR "LST_FIELD_"
 #define BTN_FIELD_NAME "BTN_FIELD_NAME"

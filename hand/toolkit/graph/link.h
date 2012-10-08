@@ -23,15 +23,15 @@
 #include "graph/list.h"
 
 
-class Relation : public List
+class Link : public List
 {
     public:
-        Relation(std::string name);
-        virtual ~Relation(){};
+        Link(std::string name);
+        virtual ~Link(){};
 
         // Inserts a sub-item to the current vertex without changing
         // the ownership of 'item'; it replaces *all* (public) objects
-        // referenced by the Relation
+        // referenced by the Link
         virtual bool Set(Vertex* target);
         // Helper method for the search engine
         bool IsOpen(Search* search);
