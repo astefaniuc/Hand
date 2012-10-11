@@ -41,10 +41,9 @@ Layout::Layout(string name, string type) : List(name)
 }
 
 
-List* Layout::AddField(string name, string type)
+List* Layout::AddField(string name)
 {
     List* field = new List(name);
-    field->Type(type);
     field->Get("Layout")->Set(this);
     Get("Fields")->Add(field);
     return field;
@@ -77,7 +76,7 @@ void Layout::AddForUpdate(Vertex* sublayout)
 {
     if(!dynamic_cast<Layout*>(sublayout))
         exit(12);
-    Get("Update")->Add(sublayout);
+    Get("Update")->Attach(sublayout);
 
     Layout* parent = dynamic_cast<Layout*>(Get(PARENT)->Get());
     if(parent)

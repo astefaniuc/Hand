@@ -39,6 +39,7 @@ class List : public Vertex
         virtual bool Add(Vertex* child);
         virtual bool Set(Vertex* sub);
         virtual bool Attach(Vertex* sub);
+        using Vertex::Get;
         virtual Vertex* Get(std::string child);
         virtual Vertex* Get(std::string type, std::string name);
         virtual Vertex* Get(uint child);

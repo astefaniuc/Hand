@@ -42,7 +42,7 @@ class Layout : public List
         virtual ~Layout(){};
 
         List* GetField(std::string position);
-        List* AddField(std::string name, std::string type);
+        List* AddField(std::string name);
         void AddForUpdate(Vertex* sublayout);
         bool Execute(Vertex* surface);
         void Reset();

@@ -71,7 +71,7 @@ bool Default::GetLMLayout(Vertex* out)
 {
     Layout* layout = dynamic_cast<Layout*>(out);
 
-    layout->AddField("MasterLayer", "Any");
+    layout->AddField("MasterLayer")->Get("Layer Type")->Add(new Vertex("Any"));
     return true;
 }
 
@@ -83,14 +83,16 @@ bool Default::GetViewLayout(Vertex* out)
     layout->Set(new Rect(ALIGNMENT, 0, 1, 0, 1));
     layout->Get("Methods")->Get("DrawFunc")->Vertex::Get("Output Type")
         ->Set(new Vertex(GUI_DRAWER_LIST));
-    layout->AddField("ListElement", "Any");
+    List* field = layout->AddField("ListElement");
+    field->Get("Layer Type")->Add(new Vertex("Any"));
 
     Layout* controls = new Layout("Controls", GUI_LAYOUT_FRAMEDLIST);
     // Horizontal list alignment
     controls->Set(new Rect(ALIGNMENT, 1, 0, 1, 0));
     layout->Get(CHILDREN)->Add(controls);
     controls->Get(PARENT)->Set(layout);
-    controls->AddField("ListElement", BUTTONLAYER);
+    field = controls->AddField("ListElement");
+    field->Get("Layer Type")->Add(new Vertex(BUTTONLAYER));
     return true;
 }
 
@@ -102,8 +104,8 @@ bool Default::GetListLayout(Vertex* out)
     layout->Set(new Rect(ALIGNMENT, 0, 1, 0, 1));
     layout->Get("Methods")->Get("DrawFunc")->Vertex::Get("Output Type")
         ->Set(new Vertex(GUI_DRAWER_LIST));
-    layout->AddField("ListElement", BUTTONLAYER);
-//    layout->AddField("ListElement", "Any");
+    List* field = layout->AddField("ListElement");
+    field->Get("Layer Type")->Add(new Vertex(BUTTONLAYER));
     return true;
 }
 
@@ -147,17 +149,21 @@ bool Default::GetButtonLayout(Vertex* out)
 
     Layout* upper = new Layout("Upper", GUI_LAYOUT_LIST);
     upper->Set(new Rect(ALIGNMENT, 1, 0, 0.5, 0));
-    upper->AddField(BTN_FIELD_ICON, TEXTLAYER);
-    upper->AddField(BTN_FIELD_NAME, TEXTLAYER);
     content->Get(CHILDREN)->Add(upper);
     upper->Get(PARENT)->Set(content);
+    List* field = upper->AddField(BTN_FIELD_ICON);
+    field->Get("Layer Type")->Add(new Vertex(TEXTLAYER));
+    field = upper->AddField(BTN_FIELD_NAME);
+    field->Get("Layer Type")->Add(new Vertex(TEXTLAYER));
 
     Layout* lower = new Layout("Lower", GUI_LAYOUT_LIST);
     lower->Set(new Rect(ALIGNMENT, 1, 0, 0.5, 0));
-    lower->AddField(BTN_FIELD_DESCRIPTION, TEXTLAYER);
-    lower->AddField(BTN_FIELD_CONTROL, BUTTONLAYER);
     content->Get(CHILDREN)->Add(lower);
     lower->Get(PARENT)->Set(content);
+    field = lower->AddField(BTN_FIELD_DESCRIPTION);
+    field->Get("Layer Type")->Add(new Vertex(TEXTLAYER));
+    field = lower->AddField(BTN_FIELD_CONTROL);
+    field->Get("Layer Type")->Add(new Vertex(BUTTONLAYER));
 
     return true;
 }
