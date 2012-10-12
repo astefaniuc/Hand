@@ -24,7 +24,7 @@
 using namespace std;
 
 
-ListLayer::ListLayer() : Layer()
+ListLayer::ListLayer(string name) : Layer(name)
 {
     BufferType = OVERLAY;
     Type(LISTLAYER);
@@ -84,7 +84,7 @@ bool ListLayerFactory::IsValidInput(Vertex* input)
 
 bool ListLayerFactory::Execute(Vertex* tree)
 {
-    return tree->Vertex::Add(new ListLayer());
+    return tree->Vertex::Add(new ListLayer(LISTLAYER));
 }
 
 

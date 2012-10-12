@@ -26,7 +26,7 @@ using namespace std;
 
 Layout::Layout(string name, string type) : List(name)
 {
-    Type(GUI_LAYOUT);
+    Type(LAYOUT);
     Vertex::Get("Output Type")->Set(new Vertex(type));
     Set(new Rect(SIZEANDPOSITION, 0, 0, 1, 1));
     // Colours.Set(r[ed], g[reen], b[lue])
@@ -44,7 +44,7 @@ Layout::Layout(string name, string type) : List(name)
 List* Layout::AddField(string name)
 {
     List* field = new List(name);
-    field->Get("Layout")->Set(this);
+    field->Get(LAYOUT)->Set(this);
     Get("Fields")->Add(field);
     return field;
 }

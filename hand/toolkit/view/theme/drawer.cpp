@@ -46,7 +46,7 @@ DrawerFactory::~DrawerFactory()
 
 bool DrawerFactory::Execute(Vertex* tree)
 {
-    return tree->Set(DrawFunction);
+    return tree->Attach(DrawFunction);
 }
 
 

@@ -29,7 +29,7 @@
 using namespace std;
 
 
-Layer::Layer() : VirtualSurface("Layer")
+Layer::Layer(string name) : VirtualSurface(name)
 {
     ParentLayer = NULL;
     Updated = false;
@@ -182,7 +182,7 @@ Layer* Layer::Insert(Vertex* data, string position)
     // TODO: check if there is already a Layer at searched
     // position and if it has the right type
     // TODO: delete / (re)create layer if needed
-    Layout* layout = dynamic_cast<Layout*>(Get(GUI_LAYOUT)->Get());
+    Layout* layout = dynamic_cast<Layout*>(Get(LAYOUT)->Get());
     // Is the layer type restricted by the current layout?
     if(!layout)
         return NULL;
@@ -191,9 +191,11 @@ Layer* Layer::Insert(Vertex* data, string position)
     if(!field)
         return NULL;
 
+    data->Vertex::Get("Output Type")->Set(
+            new Vertex(field->Get("Layer Type")->Get()->Name()));
     // TODO: generic factory
     Layer* sub_layer = dynamic_cast<LayerManager*>(Vertex::Get(LAYERMANAGER)->Get())
-            ->CreateLayer(data, field->Get("Layer Type")->Get()->Name());
+            ->CreateLayer(data);
     if(!sub_layer)
         return NULL;
 
@@ -202,9 +204,9 @@ Layer* Layer::Insert(Vertex* data, string position)
     Get(CHILDREN)->Add(sub_layer);
     sub_layer->SetParent(this);
     // on Layout level
-    Layout* field_layout = dynamic_cast<Layout*>(field->Get(GUI_LAYOUT)->Get());
+    Layout* field_layout = dynamic_cast<Layout*>(field->Get(LAYOUT)->Get());
     if(field_layout)
-        field_layout->AddForUpdate(sub_layer->Get(GUI_LAYOUT)->Get());
+        field_layout->AddForUpdate(sub_layer->Get(LAYOUT)->Get());
 
     return sub_layer;
 }

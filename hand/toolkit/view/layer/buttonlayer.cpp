@@ -25,7 +25,7 @@
 using namespace std;
 
 
-ButtonLayer::ButtonLayer() : Layer()
+ButtonLayer::ButtonLayer(string name) : Layer(name)
 {
     BufferType = COLLECTOR;
     Type(BUTTONLAYER);
@@ -121,7 +121,7 @@ bool ButtonLayerFactory::IsValidInput(Vertex* input)
 
 bool ButtonLayerFactory::Execute(Vertex* tree)
 {
-    return tree->Vertex::Add(new ButtonLayer());
+    return tree->Vertex::Add(new ButtonLayer(BUTTONLAYER));
 }
 
 

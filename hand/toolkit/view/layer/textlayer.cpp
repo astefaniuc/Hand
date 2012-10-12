@@ -23,7 +23,7 @@
 using namespace std;
 
 
-TextLayer::TextLayer() : Layer()
+TextLayer::TextLayer(string name) : Layer(name)
 {
     BufferType = OVERLAY;
     Type(TEXTLAYER);
@@ -56,7 +56,7 @@ bool TextLayerFactory::IsValidInput(Vertex* input)
 
 bool TextLayerFactory::Execute(Vertex* tree)
 {
-    return tree->Vertex::Add(new TextLayer());
+    return tree->Vertex::Add(new TextLayer(TEXTLAYER));
 }
 
 

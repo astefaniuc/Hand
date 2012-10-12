@@ -46,16 +46,16 @@
 #define LAYER_FACTORIES "Layer Factories"
 
 // Layout types
-#define GUI_LAYOUT "Layout"
-#define GUI_LAYOUT_LAYERMANAGER "LayerManager_Layout"
-#define GUI_LAYOUT_VIEW "ViewLayer_Layout"
-#define GUI_LAYOUT_LIST "List_Layout"
-#define GUI_LAYOUT_FRAMEDLIST "ListLayer_Layout"
-#define GUI_LAYOUT_BUTTON "ButtonLayer_Layout"
-#define GUI_LAYOUT_CONTROLID "ControlID_Layout"
-#define GUI_LAYOUT_FRAME "Frame_Layout"
-#define GUI_LAYOUT_BACKGROUND "Background_Layout"
-#define GUI_LAYOUT_TEXT "TextLayer_Layout"
+#define LAYOUT "Layout"
+#define LAYOUT_LAYERMANAGER "LayerManager_Layout"
+#define LAYOUT_VIEW "ViewLayer_Layout"
+#define LAYOUT_LIST "List_Layout"
+#define LAYOUT_FRAMEDLIST "ListLayer_Layout"
+#define LAYOUT_BUTTON "ButtonLayer_Layout"
+#define LAYOUT_CONTROLID "ControlID_Layout"
+#define LAYOUT_FRAME "Frame_Layout"
+#define LAYOUT_BACKGROUND "Background_Layout"
+#define LAYOUT_TEXT "TextLayer_Layout"
 
 // Drawer types
 #define GUI_DRAWER_LIST "GUI_DRAWER_LIST"

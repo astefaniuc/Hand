@@ -45,15 +45,15 @@ Default::Default() : Theme("DefaultTheme")
     Register(new DrawerFactory(new Method<Default>(GUI_DRAWER_TEXT, this, &Default::DrawText)));
 
     // Layouts
-    Register(new LayoutFactory<Default>(GUI_LAYOUT_LAYERMANAGER, this, &Default::GetLMLayout));
-    Register(new LayoutFactory<Default>(GUI_LAYOUT_VIEW, this, &Default::GetViewLayout));
-    Register(new LayoutFactory<Default>(GUI_LAYOUT_FRAMEDLIST, this, &Default::GetFramedListLayout));
-    Register(new LayoutFactory<Default>(GUI_LAYOUT_LIST, this, &Default::GetListLayout));
-    Register(new LayoutFactory<Default>(GUI_LAYOUT_CONTROLID, this, &Default::GetControlLayout));
-    Register(new LayoutFactory<Default>(GUI_LAYOUT_BUTTON, this, &Default::GetButtonLayout));
-    Register(new LayoutFactory<Default>(GUI_LAYOUT_FRAME, this, &Default::GetFrameLayout));
-    Register(new LayoutFactory<Default>(GUI_LAYOUT_BACKGROUND, this, &Default::GetBackgroundLayout));
-    Register(new LayoutFactory<Default>(GUI_LAYOUT_TEXT, this, &Default::GetTextLayout));
+    Register(new LayoutFactory<Default>(LAYOUT_LAYERMANAGER, this, &Default::GetLMLayout));
+    Register(new LayoutFactory<Default>(LAYOUT_VIEW, this, &Default::GetViewLayout));
+    Register(new LayoutFactory<Default>(LAYOUT_FRAMEDLIST, this, &Default::GetFramedListLayout));
+    Register(new LayoutFactory<Default>(LAYOUT_LIST, this, &Default::GetListLayout));
+    Register(new LayoutFactory<Default>(LAYOUT_CONTROLID, this, &Default::GetControlLayout));
+    Register(new LayoutFactory<Default>(LAYOUT_BUTTON, this, &Default::GetButtonLayout));
+    Register(new LayoutFactory<Default>(LAYOUT_FRAME, this, &Default::GetFrameLayout));
+    Register(new LayoutFactory<Default>(LAYOUT_BACKGROUND, this, &Default::GetBackgroundLayout));
+    Register(new LayoutFactory<Default>(LAYOUT_TEXT, this, &Default::GetTextLayout));
 
     // Colors
     Register(new PropertyFactory<Default>(GUI_COLOR_FRAME, this, &Default::GetColorFrame));
@@ -80,17 +80,19 @@ bool Default::GetViewLayout(Vertex* out)
 {
     Layout* layout = dynamic_cast<Layout*>(out);
     // Vertical list alignment
-    layout->Set(new Rect(ALIGNMENT, 0, 1, 0, 1));
+    layout->Attach(new Rect(ALIGNMENT, 0, 1, 0, 1));
     layout->Get("Methods")->Get("DrawFunc")->Vertex::Get("Output Type")
         ->Set(new Vertex(GUI_DRAWER_LIST));
     List* field = layout->AddField("ListElement");
+    // TODO: attach complete "Layer Type" folder (don't overwrite
+    // existing settings)
     field->Get("Layer Type")->Add(new Vertex("Any"));
 
-    Layout* controls = new Layout("Controls", GUI_LAYOUT_FRAMEDLIST);
+    Layout* controls = new Layout("Controls", LAYOUT_FRAMEDLIST);
     // Horizontal list alignment
-    controls->Set(new Rect(ALIGNMENT, 1, 0, 1, 0));
+    controls->Attach(new Rect(ALIGNMENT, 1, 0, 1, 0));
     layout->Get(CHILDREN)->Add(controls);
-    controls->Get(PARENT)->Set(layout);
+    controls->Get(PARENT)->Attach(layout);
     field = controls->AddField("ListElement");
     field->Get("Layer Type")->Add(new Vertex(BUTTONLAYER));
     return true;
@@ -101,9 +103,9 @@ bool Default::GetListLayout(Vertex* out)
 {
     Layout* layout = dynamic_cast<Layout*>(out);
 
-    layout->Set(new Rect(ALIGNMENT, 0, 1, 0, 1));
+    layout->Attach(new Rect(ALIGNMENT, 0, 1, 0, 1));
     layout->Get("Methods")->Get("DrawFunc")->Vertex::Get("Output Type")
-        ->Set(new Vertex(GUI_DRAWER_LIST));
+        ->Attach(new Vertex(GUI_DRAWER_LIST));
     List* field = layout->AddField("ListElement");
     field->Get("Layer Type")->Add(new Vertex(BUTTONLAYER));
     return true;
@@ -116,11 +118,11 @@ bool Default::GetFramedListLayout(Vertex* out)
 
     layout->Set(new Rect(SIZEANDPOSITION, 0.1, 0.1, 0.8, 0.8));
 
-    Layout* frame = new Layout("Background", GUI_LAYOUT_BACKGROUND);
+    Layout* frame = new Layout("Background", LAYOUT_BACKGROUND);
     layout->Get(CHILDREN)->Add(frame);
     frame->Get(PARENT)->Set(layout);
 
-    Layout* content = new Layout("Content", GUI_LAYOUT_LIST);
+    Layout* content = new Layout("Content", LAYOUT_LIST);
     layout->Get(CHILDREN)->Add(content);
     content->Get(PARENT)->Set(layout);
     frame->Get("Update")->Attach(content);
@@ -137,18 +139,18 @@ bool Default::GetButtonLayout(Vertex* out)
         ->Set(new Vertex(GUI_DRAWER_BUTTON));
     layout->Set(new Rect(SIZEANDPOSITION, 0.1, 0.1, 0.8, 0.8));
 
-    Layout* frame = new Layout("Frame", GUI_LAYOUT_FRAME);
+    Layout* frame = new Layout("Frame", LAYOUT_FRAME);
     layout->Get(CHILDREN)->Add(frame);
     frame->Get(PARENT)->Set(layout);
     // The Button container
-    Layout* content = new Layout("Button Content", GUI_LAYOUT_LIST);
-    content->Set(new Rect(ALIGNMENT, 0, 1, 0, 1));
+    Layout* content = new Layout("Button Content", LAYOUT_LIST);
+    content->Attach(new Rect(ALIGNMENT, 0, 1, 0, 1));
     layout->Get(CHILDREN)->Add(content);
     content->Get(PARENT)->Set(layout);
     frame->Get("Update")->Attach(content);
 
-    Layout* upper = new Layout("Upper", GUI_LAYOUT_LIST);
-    upper->Set(new Rect(ALIGNMENT, 1, 0, 0.5, 0));
+    Layout* upper = new Layout("Upper", LAYOUT_LIST);
+    upper->Attach(new Rect(ALIGNMENT, 1, 0, 0.5, 0));
     content->Get(CHILDREN)->Add(upper);
     upper->Get(PARENT)->Set(content);
     List* field = upper->AddField(BTN_FIELD_ICON);
@@ -156,8 +158,8 @@ bool Default::GetButtonLayout(Vertex* out)
     field = upper->AddField(BTN_FIELD_NAME);
     field->Get("Layer Type")->Add(new Vertex(TEXTLAYER));
 
-    Layout* lower = new Layout("Lower", GUI_LAYOUT_LIST);
-    lower->Set(new Rect(ALIGNMENT, 1, 0, 0.5, 0));
+    Layout* lower = new Layout("Lower", LAYOUT_LIST);
+    lower->Attach(new Rect(ALIGNMENT, 1, 0, 0.5, 0));
     content->Get(CHILDREN)->Add(lower);
     lower->Get(PARENT)->Set(content);
     field = lower->AddField(BTN_FIELD_DESCRIPTION);
@@ -173,7 +175,7 @@ bool Default::GetControlLayout(Vertex* out)
 {
     Layout* layout = dynamic_cast<Layout*>(out);
 
-    Layout* frame = new Layout("Frame", GUI_LAYOUT_FRAME);
+    Layout* frame = new Layout("Frame", LAYOUT_FRAME);
     layout->Get(CHILDREN)->Add(frame);
     frame->Get(PARENT)->Set(layout);
     return true;
@@ -184,12 +186,12 @@ bool Default::GetFrameLayout(Vertex* out)
 {
     Layout* layout = dynamic_cast<Layout*>(out);
 
-    layout->Set(new Rect(SIZEANDPOSITION, 0.01, 0.03, 0.98, 0.94));
+    layout->Attach(new Rect(SIZEANDPOSITION, 0.01, 0.03, 0.98, 0.94));
     layout->Get("Methods")->Get("DrawFunc")->Vertex::Get("Output Type")
-        ->Set(new Vertex(GUI_DRAWER_FRAME));
+        ->Attach(new Vertex(GUI_DRAWER_FRAME));
     layout->Get("Color")->Vertex::Get("Output Type")->Set(new Vertex(GUI_COLOR_FRAME));
 
-    Layout* bgrd = new Layout("Background", GUI_LAYOUT_BACKGROUND);
+    Layout* bgrd = new Layout("Background", LAYOUT_BACKGROUND);
     layout->Get(CHILDREN)->Add(bgrd);
     bgrd->Get(PARENT)->Set(layout);
     layout->Get("Update")->Attach(bgrd);
@@ -216,7 +218,7 @@ bool Default::GetTextLayout(Vertex* out)
     Layout* layout = dynamic_cast<Layout*>(out);
     layout->Name("Text Layout");
 
-    layout->Set(new Rect(SIZEANDPOSITION, 0.1, 0.1, 0.8, 0.8));
+    layout->Attach(new Rect(SIZEANDPOSITION, 0.1, 0.1, 0.8, 0.8));
     layout->Get("Methods")->Get("DrawFunc")->Vertex::Get("Output Type")
         ->Set(new Vertex(GUI_DRAWER_TEXT));
     layout->Get("Color")->Vertex::Get("Output Type")->Set(new Vertex(GUI_COLOR_FONT));
@@ -232,22 +234,22 @@ bool Default::GetTextLayout(Vertex* out)
 
 bool Default::GetColorFrame(Vertex* out)
 {
-    return out->Set(new Rgb("FrameColor", 0, 0, 200));
+    return out->Attach(new Rgb("FrameColor", 0, 0, 200));
 }
 
 bool Default::GetColorBgrdList(Vertex* out)
 {
-    return out->Set(new Rgb("BackgroundColor", 20, 20, 50));
+    return out->Attach(new Rgb("BackgroundColor", 20, 20, 50));
 }
 
 bool Default::GetColorBgrdButton(Vertex* out)
 {
-    return out->Set(new Rgb("BackgroundColor", 40, 40, 40));
+    return out->Attach(new Rgb("BackgroundColor", 40, 40, 40));
 }
 
 bool Default::GetColorFont(Vertex* out)
 {
-    return out->Set(new Rgb("FontColor", 200, 200, 200));
+    return out->Attach(new Rgb("FontColor", 200, 200, 200));
 }
 
 

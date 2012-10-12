@@ -26,7 +26,7 @@
 class TextLayer : public virtual Layer
 {
     public:
-        TextLayer();
+        TextLayer(std::string name);
         ~TextLayer();
 //        void SetLayout(string type, uint position);
     protected:

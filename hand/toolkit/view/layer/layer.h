@@ -30,7 +30,7 @@ class Node;
 class Layer : public VirtualSurface
 {
     public:
-                      Layer();
+                      Layer(std::string name);
         virtual      ~Layer();
         // Checks and updates content and triggers a re-draw if needed
         virtual bool Update(bool force);

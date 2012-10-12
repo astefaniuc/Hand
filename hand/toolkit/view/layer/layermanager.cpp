@@ -33,7 +33,7 @@
 using namespace std;
 
 
-LayerManager::LayerManager() : ListLayer()
+LayerManager::LayerManager() : ListLayer(LAYERMANAGER)
 {
     Vertex::Get(LAYERMANAGER)->Set(this);
     Type(LAYERMANAGER);
@@ -44,17 +44,17 @@ LayerManager::LayerManager() : ListLayer()
     BufferType = COLLECTOR;
 
     // Register default layer types/factories. TODO: dynamic loading
-    LayerTopos = new FactoryMap("LayerTopos");
     // The last added factory has the highest relevance (HACK?)
-    RegisterLayerFactory(new TextLayerFactory());
-    RegisterLayerFactory(new ButtonLayerFactory());
-    RegisterLayerFactory(new ListLayerFactory());
+    FactoryMap* fm = new FactoryMap(LAYER_FACTORIES);
+    fm->Add(new TextLayerFactory());
+    fm->Add(new ButtonLayerFactory());
+    fm->Add(new ListLayerFactory());
+    Add(fm);
 }
 
 
 LayerManager::~LayerManager()
 {
-    delete(LayerTopos);
     delete(GetDevice());
     // TODO: unregister (DataManager + Server)
     // UnloadTheme();
@@ -145,7 +145,8 @@ void LayerManager::SetScreen(SDL_Surface* screen)
 
 bool LayerManager::GetCommand(Vertex* f, int level)
 {
-    Layer* l = CreateLayer(f, BUTTONLAYER);
+    f->Vertex::Get("Output Type")->Set(new Vertex(BUTTONLAYER));
+    Layer* l = CreateLayer(f);
     return GetCommand(l, level);
 }
 
@@ -298,40 +299,10 @@ bool LayerManager::Expand(Vertex* to_expand)
 }
 
 
-void LayerManager::RegisterLayerFactory(Factory* target)
+Layer* LayerManager::CreateLayer(Vertex* content)
 {
-    // TODO: complex topographies should be tried first
-    if(target)
-        LayerTopos->Add(target);
-}
-
-
-string LayerManager::GetContentType(Vertex* target)
-{
-    Factory* f = LayerTopos->GetFactory(target);
-    if(f)
-        return f->GetOutputType();
-    return "";
-}
-
-
-Layer* LayerManager::CreateLayer(Vertex* content, string layer_type)
-{
-    if(layer_type.empty())
-        return NULL;
-
-    if(layer_type == "Any")
-    {
-        Vertex* attached_layout = content->Get(LINK, "Layout");
-        if(attached_layout)
-            layer_type = attached_layout->Get()->Type();
-        else
-            layer_type = GetContentType(content);
-    }
-
-    content->Vertex::Get("Output Type")->Set(new Vertex(layer_type));
-    LayerTopos->Execute(content);
-    Layer* layer = dynamic_cast<Layer*>(content->Vertex::Get(layer_type, ANY));
+    Get(LAYER_FACTORIES)->Execute(content);
+    Layer* layer = dynamic_cast<Layer*>(content->Vertex::Get(LAYER, ANY));
     if(!layer)
         return NULL;
     layer->Vertex::Get(LAYERMANAGER)->Set(this);

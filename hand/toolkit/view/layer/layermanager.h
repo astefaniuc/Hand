@@ -49,9 +49,7 @@ class LayerManager : public ListLayer
         // Called by HandApps to export their interface
         void    LoadAppInterface(Vertex* app,  bool make_default=false);
         bool    UnloadAppInterface(Vertex*);
-        void    RegisterLayerFactory(Factory* resolver);
-        std::string  GetContentType(Vertex* target);
-        Layer*  CreateLayer(Vertex* content, std::string layer_type);
+        Layer*  CreateLayer(Vertex* content);
 
     protected:
         void    Init();
@@ -68,7 +66,6 @@ class LayerManager : public ListLayer
         Vertex*    NextRequest;
         SDL_Surface* Screen;
         Layer*       MasterView;
-        FactoryMap*  LayerTopos;
 };
 
 #endif /* VIEW_LAYER_LAYERMANAGER_H */

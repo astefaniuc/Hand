@@ -26,7 +26,7 @@
 class ButtonLayer : public Layer
 {
     public:
-        ButtonLayer();
+        ButtonLayer(std::string name);
         ~ButtonLayer(void){};
         void SetContent(Vertex*);
         // Reacting on user input
