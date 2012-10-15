@@ -34,8 +34,8 @@ Factory::Factory(
 
     if(input_type == "")
         input_type = ANY;
-    Get(INPUTTYPE)->Set(new Vertex(input_type));
-    Get(REQUEST)->Set(new Vertex(output_type));
+    Get(INPUTTYPE)->Get(input_type);
+    Get(REQUEST)->Get(output_type);
 }
 
 

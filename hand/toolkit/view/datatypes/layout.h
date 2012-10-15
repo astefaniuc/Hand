@@ -66,10 +66,7 @@ class LayoutFactory : public Factory
         bool Execute(Vertex* in_out)
         {
             if((Producer->*Function)(in_out))
-            {
-//                in_out->Vertex::Get(REQUEST)->Set(Get(REQUEST)->Get());
                 return true;
-            }
             return false;
         };
 

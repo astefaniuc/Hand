@@ -27,7 +27,7 @@ using namespace std;
 Layout::Layout(string name, string type) : List(name)
 {
     Type(LAYOUT);
-    Vertex::Get(REQUEST)->Set(new Vertex(type));
+    Vertex::Get(REQUEST)->Get(type);
     // Colours.Set(r[ed], g[reen], b[lue])
 /*    Color_Frame.Set(0, 3, 200);
     Color_Background.Set(0, 0, 0);
