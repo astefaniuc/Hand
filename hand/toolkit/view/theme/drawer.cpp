@@ -48,9 +48,3 @@ bool DrawerFactory::Execute(Vertex* tree)
 {
     return tree->Attach(DrawFunction);
 }
-
-
-bool DrawerFactory::IsValidInput(Vertex* input)
-{
-    return true;
-}

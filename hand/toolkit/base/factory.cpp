@@ -31,38 +31,26 @@ Factory::Factory(
 ) : Vertex(name)
 {
     Type(FACTORY);
-    SetSpecifierString(FACTORY_INPUTSTRING, input_type);
-    SetSpecifierString(FACTORY_OUTPUTSTRING, output_type);
+
+    if(input_type == "")
+        input_type = ANY;
+    Get(INPUTTYPE)->Set(new Vertex(input_type));
+    Get(OUTPUTTYPE)->Set(new Vertex(output_type));
 }
 
 
-string Factory::GetInputType()
+bool Factory::IsValidInput(Vertex* input)
 {
-    return GetSpecifierString(FACTORY_INPUTSTRING);
-}
-
-
-string Factory::GetOutputType()
-{
-    return GetSpecifierString(FACTORY_OUTPUTSTRING);
-}
-
-
-bool Factory::SetSpecifierString(string name, string value)
-{
-    if(value == "")
+    if(!input)
         return false;
-    Add(new Note(name, value));
-    return true;
-}
+    Vertex* itf = Get(INPUTTYPE);
+    Vertex* it;
+    uint i = 0;
+    while((it=itf->Get(++i)) != NULL)
+        if((it->Name()==ANY) || input->Is(it->Name()))
+            return true;
 
-
-string Factory::GetSpecifierString(string name)
-{
-    Note* d = dynamic_cast<Note*>(Get(name));
-    if(d)
-        return d->Get();
-    return "";
+    return false;
 }
 
 
@@ -82,9 +70,11 @@ bool FactoryMap::Execute(Vertex* input)
     if(!input)
         return NULL;
 
-    Vertex* ot = input->Vertex::Get("Output Type")->Get();
+    Vertex* ot = input->Vertex::Get(OUTPUTTYPE)->Get();
     if(!ot)
         return false;
+    if(ot->Name() == ANY)
+        return Resolve(input);
 
     // TODO: get list of factories for the output type and iterate through it
     // till we get a positive result
@@ -97,10 +87,19 @@ bool FactoryMap::Execute(Vertex* input)
         return f->Execute(input);
 
     // Change to the subsequent output type
-    input->Vertex::Get("Output Type")->Set(new Vertex(f->GetOutputType()));
-    if(Execute(input))
-        // Resolve the intermediate product
-        return Execute(input->Get(f->GetOutputType(), ANY));
+    input->Vertex::Get(OUTPUTTYPE)->Set(f->Get(INPUTTYPE)->Get());
+
+    bool ret = Execute(input);
+    if(ret)
+    {
+        Vertex* sub_prod = input->Get(f->Get(OUTPUTTYPE)->Get()->Name(), ANY);
+        if(sub_prod)
+        {
+            sub_prod->Vertex::Get(OUTPUTTYPE)->Set(ot);
+            // Resolve the intermediate product
+            return Execute(sub_prod);
+        }
+    }
     return false;
 }
 
@@ -108,12 +107,12 @@ bool FactoryMap::Execute(Vertex* input)
 bool FactoryMap::Resolve(Vertex* input)
 {
     // Factory chain "bottom up"
-    Factory* f = GetFactory(input);
+    Vertex* f = GetFactory(input);
     if(!f)
         return false;
 
     // Set output type for caller
-    input->Vertex::Get("Output Type")->Set(new Vertex(f->GetOutputType()));
+    input->Vertex::Get(OUTPUTTYPE)->Set(f->Get(OUTPUTTYPE)->Get());
 
     return f->Execute(input);
 }
@@ -149,7 +148,7 @@ Factory* FactoryMap::GetFactory(string output_type)
     while((child=Get(++i)) != NULL)
     {
         ret = dynamic_cast<Factory*>(child);
-        if(ret && (ret->GetOutputType()==output_type))
+        if(ret && ret->Get(OUTPUTTYPE)->Get(ANY, output_type))
             return ret;
     }
 

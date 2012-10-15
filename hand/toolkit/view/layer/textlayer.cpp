@@ -30,39 +30,12 @@ TextLayer::TextLayer(string name) : Layer(name)
 }
 
 
-TextLayer::~TextLayer()
-{
-}
-
-
-void TextLayer::Configure(Vertex* sub_layout)
-{
-    // Never called
-}
-
-
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
-
-
-bool TextLayerFactory::IsValidInput(Vertex* input)
-{
-    if(input)
-        return true;
-    return false;
-}
 
 
 bool TextLayerFactory::Execute(Vertex* tree)
 {
     return tree->Vertex::Add(new TextLayer(TEXTLAYER));
-}
-
-
-void TextLayerFactory::TakeBack(Vertex* product)
-{
-    // TODO: shouldn't delete objects of derived classes
-    if(dynamic_cast<TextLayer*>(product))
-        delete(product);
 }

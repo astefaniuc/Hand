@@ -42,7 +42,6 @@
 #define TEXTLAYER "TextLayer"
 #define FOCUSLAYER "FocusLayer"
 
-#define LAYER_TOPOGRAPHY "Layer Topography"
 #define LAYER_FACTORIES "Layer Factories"
 
 // Layout types

@@ -59,7 +59,7 @@ void HandServer::Present(string file)
     Vertex* app = new File(file);
     while(Resolve(app))
     {
-        Vertex* ot = app->Vertex::Get("Output Type")->Get();
+        Vertex* ot = app->Vertex::Get(OUTPUTTYPE)->Get();
         if(!ot)
             break;
         app = app->Vertex::Get(ot->Name(), ANY);

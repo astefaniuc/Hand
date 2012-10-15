@@ -95,13 +95,6 @@ bool FileFactory::Execute(Vertex* tree)
 }
 
 
-void FileFactory::TakeBack(Vertex* product)
-{
-    if(dynamic_cast<File*>(product))
-        delete(product);
-}
-
-
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
@@ -147,12 +140,3 @@ bool  DirectoryLoader::Execute(Vertex* tree)
     }
     return true;
 }
-
-
-void DirectoryLoader::TakeBack(Vertex* dir_obj)
-{
-    File* ff_dir = dynamic_cast<File*>(dir_obj);
-    if(ff_dir && is_directory(ff_dir->GetPath()))
-        ff_dir->Reset();
-}
-

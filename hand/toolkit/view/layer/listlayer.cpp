@@ -74,23 +74,7 @@ void ListLayer::Configure(Vertex* sub_layout)
 // ----------------------------------------------------------------
 
 
-bool ListLayerFactory::IsValidInput(Vertex* input)
-{
-    if(input->Is(LIST))
-        return true;
-    return false;
-}
-
-
 bool ListLayerFactory::Execute(Vertex* tree)
 {
     return tree->Vertex::Add(new ListLayer(LISTLAYER));
-}
-
-
-void ListLayerFactory::TakeBack(Vertex* product)
-{
-    // TODO: shouldn't delete objects of derived classes
-    if(dynamic_cast<ListLayer*>(product))
-        delete(product);
 }

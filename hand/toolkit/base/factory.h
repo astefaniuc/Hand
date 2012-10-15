@@ -24,8 +24,8 @@
 
 
 #define FACTORY "FACTORY"
-#define FACTORY_INPUTSTRING "FACTORY_INPUTSTRING"
-#define FACTORY_OUTPUTSTRING "FACTORY_OUTPUTSTRING"
+#define INPUTTYPE "Input type"
+#define OUTPUTTYPE "Output type"
 
 class Factory : public Vertex
 {
@@ -36,16 +36,7 @@ class Factory : public Vertex
         virtual ~Factory(){};
 
         virtual bool Execute(Vertex* input) = 0;
-        virtual void TakeBack(Vertex* product) = 0;
-
-        virtual bool IsValidInput(Vertex* input) = 0;
-
-        std::string GetInputType();
-        std::string GetOutputType();
-
-    private:
-        bool SetSpecifierString(std::string name, std::string value);
-        std::string GetSpecifierString(std::string name);
+        virtual bool IsValidInput(Vertex* input);
 };
 
 

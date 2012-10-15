@@ -39,14 +39,12 @@ class ListLayer : public Layer
 class ListLayerFactory : public Factory
 {
     public:
-        ListLayerFactory() : Factory(LAYER_TOPOGRAPHY,
+        ListLayerFactory() : Factory("ListLayerFactory",
                                      LIST, LISTLAYER){};
         ~ListLayerFactory(){};
 
-        bool IsValidInput(Vertex* input);
 
         bool Execute(Vertex* input);
-        void TakeBack(Vertex* product);
 };
 
 #endif /* VIEW_LAYER_LISTLAYER_H */

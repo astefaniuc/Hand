@@ -47,14 +47,11 @@ class ButtonLayer : public Layer
 class ButtonLayerFactory : public Factory
 {
     public:
-        ButtonLayerFactory() : Factory(LAYER_TOPOGRAPHY,
+        ButtonLayerFactory() : Factory("ButtonLayerFactory",
                                        "", BUTTONLAYER){};
         ~ButtonLayerFactory(){};
 
-        bool IsValidInput(Vertex* input);
-
         bool Execute(Vertex* input);
-        void TakeBack(Vertex* product);
 };
 
 #endif /* VIEW_LAYER_BUTTONLAYER_H */

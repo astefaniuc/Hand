@@ -33,8 +33,6 @@ class DrawerFactory : public Factory
         ~DrawerFactory();
 
         bool Execute(Vertex* in_out);
-        void TakeBack(Vertex* product){};
-        bool IsValidInput(Vertex* input);
     protected:
         Vertex* DrawFunction;
 };

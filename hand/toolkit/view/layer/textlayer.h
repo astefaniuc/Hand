@@ -27,24 +27,18 @@ class TextLayer : public virtual Layer
 {
     public:
         TextLayer(std::string name);
-        ~TextLayer();
-//        void SetLayout(string type, uint position);
-    protected:
-        virtual void Configure(Vertex* parent_layout);
+        ~TextLayer(){};
 };
 
 
 class TextLayerFactory : public Factory
 {
     public:
-        TextLayerFactory() : Factory(LAYER_TOPOGRAPHY,
+        TextLayerFactory() : Factory("TextLayerFactory",
                                      "", TEXTLAYER){};
         ~TextLayerFactory(){};
 
-        bool IsValidInput(Vertex* input);
-
         bool Execute(Vertex* input);
-        void TakeBack(Vertex* product);
 };
 
 #endif /* VIEW_LAYER_TEXTLAYER_H */

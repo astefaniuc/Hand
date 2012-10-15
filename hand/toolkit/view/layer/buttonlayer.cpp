@@ -111,23 +111,7 @@ void ButtonLayer::ReleaseGui()
 // ----------------------------------------------------------------
 
 
-bool ButtonLayerFactory::IsValidInput(Vertex* input)
-{
-    if(input)
-        return true;
-    return false;
-}
-
-
 bool ButtonLayerFactory::Execute(Vertex* tree)
 {
     return tree->Vertex::Add(new ButtonLayer(BUTTONLAYER));
-}
-
-
-void ButtonLayerFactory::TakeBack(Vertex* product)
-{
-    // TODO: shouldn't delete objects of derived classes
-    if(dynamic_cast<ButtonLayer*>(product))
-        delete(product);
 }

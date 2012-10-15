@@ -122,14 +122,6 @@ bool HandAppLoader::Execute(Vertex* input)
         return false;
     }
     input->Vertex::Add(bin);
-    input->Vertex::Get("Output Type")->Set(new Vertex(HANDAPP));
+    input->Vertex::Get(OUTPUTTYPE)->Set(Get(OUTPUTTYPE)->Get());
     return true;
-}
-
-
-void HandAppLoader::TakeBack(Vertex* product)
-{
-    // TODO: shouldn't delete objects of derived classes
-    if(dynamic_cast<Binary*>(product))
-        delete(product);
 }

@@ -67,22 +67,10 @@ class LayoutFactory : public Factory
         {
             if((Producer->*Function)(in_out))
             {
-                Type(GetOutputType());
+//                in_out->Vertex::Get(OUTPUTTYPE)->Set(Get(OUTPUTTYPE)->Get());
                 return true;
             }
             return false;
-        };
-
-        void TakeBack(Vertex* product)
-        {
-            delete(product);
-        };
-
-        bool IsValidInput(Vertex* input)
-        {
-            if(!dynamic_cast<Layout*>(input))
-                return false;
-            return true;
         };
 
     private:
@@ -98,7 +86,7 @@ class PropertyFactory : public Factory
 
     public:
     PropertyFactory(std::string output_type, I* theme, Method func) :
-            Factory("PropertyFactory", output_type, output_type)
+            Factory("PropertyFactory", LINK, output_type)
         {
             Producer = theme;
             Function = func;
@@ -108,16 +96,6 @@ class PropertyFactory : public Factory
         bool Execute(Vertex* in_out)
         {
             return (Producer->*Function)(in_out);
-        };
-
-        void TakeBack(Vertex* product)
-        {
-            delete(product);
-        };
-
-        bool IsValidInput(Vertex* input)
-        {
-            return input->Is(LINK);
         };
 
     private:

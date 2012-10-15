@@ -40,8 +40,6 @@ class Persistence : public Factory
         virtual ~Persistence(){};
 
         bool Execute(Vertex* descriptor);
-        void TakeBack(Vertex* product);
-
         bool IsValidInput(Vertex* input);
 };
 

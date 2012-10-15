@@ -62,13 +62,6 @@ bool Persistence::Execute(Vertex* keys_tree)
 }
 
 
-
-void Persistence::TakeBack(Vertex* product)
-{
-    delete(product);
-}
-
-
 bool Persistence::IsValidInput(Vertex* keys_tree)
 {
     // Change name

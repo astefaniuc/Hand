@@ -63,7 +63,6 @@ class Layer : public VirtualSurface
         virtual bool Exit();
         // Insert "data" as layer of type layer_type at "position"
         virtual Layer* Insert(Vertex* data, std::string position);
-        virtual void Configure(Vertex* parent_layout) = 0;
         virtual void DrawChilds(bool forced);
 
         Layer*         ParentLayer;

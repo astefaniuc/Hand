@@ -57,8 +57,6 @@ class HandAppLoader : public Factory
         ~HandAppLoader(){};
 
         bool Execute(Vertex* descriptor);
-        void TakeBack(Vertex* product);
-
         bool IsValidInput(Vertex* input);
  };
 
