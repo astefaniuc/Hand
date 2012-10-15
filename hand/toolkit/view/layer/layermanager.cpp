@@ -303,7 +303,6 @@ Layer* LayerManager::CreateLayer(Vertex* content)
 {
     if(!Get(LAYER_FACTORIES)->Execute(content))
         return NULL;
-    string ot = content->Vertex::Get(OUTPUTTYPE)->Get()->Name();
     Layer* layer = dynamic_cast<Layer*>(
             content->Vertex::Get(
                     content->Vertex::Get(OUTPUTTYPE)->Get()->Name(), ANY));
