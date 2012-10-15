@@ -28,7 +28,6 @@ Layout::Layout(string name, string type) : List(name)
 {
     Type(LAYOUT);
     Vertex::Get(OUTPUTTYPE)->Set(new Vertex(type));
-    Set(new Rect(SIZEANDPOSITION, 0, 0, 1, 1));
     // Colours.Set(r[ed], g[reen], b[lue])
 /*    Color_Frame.Set(0, 3, 200);
     Color_Background.Set(0, 0, 0);

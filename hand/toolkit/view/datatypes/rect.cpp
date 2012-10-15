@@ -82,5 +82,13 @@ void Rect::MultiplyTo(SDL_Rect& abs_rect)
 
 Rect* GetRect(string name, Vertex* tree)
 {
-    return dynamic_cast<Rect*>(tree->Get(RECT, name));
+    Rect* ret = dynamic_cast<Rect*>(tree->Get(RECT, name));
+    if(!ret)
+    {
+        // Add a default Rect
+        ret = new Rect(SIZEANDPOSITION, 0, 0, 1, 1);
+        tree->Set(ret);
+    }
+
+    return ret;
 }
