@@ -25,7 +25,7 @@
 
 #define FACTORY "FACTORY"
 #define INPUTTYPE "Input type"
-#define OUTPUTTYPE "Output type"
+#define REQUEST "Output type"
 
 class Factory : public Vertex
 {

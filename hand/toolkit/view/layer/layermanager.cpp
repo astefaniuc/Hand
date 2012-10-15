@@ -145,7 +145,7 @@ void LayerManager::SetScreen(SDL_Surface* screen)
 
 bool LayerManager::GetCommand(Vertex* f, int level)
 {
-    f->Vertex::Get(OUTPUTTYPE)->Set(new Vertex(BUTTONLAYER));
+    f->Vertex::Get(REQUEST)->Set(new Vertex(BUTTONLAYER));
     Layer* l = CreateLayer(f);
     return GetCommand(l, level);
 }
@@ -209,7 +209,7 @@ bool LayerManager::Request(Vertex* request)
 
 bool LayerManager::LoadTheme(Vertex* f)
 {
-    f->Vertex::Get(OUTPUTTYPE)->Set(new Vertex(HANDAPP));
+    f->Vertex::Get(REQUEST)->Set(new Vertex(HANDAPP));
     if(!HandServer::GetInstance()->Execute(f))
         return false;
     Theme* theme = dynamic_cast<Theme*>(f->Vertex::Get(HANDAPP, ANY));
@@ -225,7 +225,7 @@ bool LayerManager::LoadTheme(Vertex* f)
 
 bool LayerManager::GetAllThemes(Vertex* themes_dir)
 {
-    themes_dir->Vertex::Get(OUTPUTTYPE)->Set(new Vertex(FILE));
+    themes_dir->Vertex::Get(REQUEST)->Set(new Vertex(FILE));
     // (Re-)read the list of available themes
     HandServer::GetInstance()->Execute(themes_dir);
     List* themes_list = dynamic_cast<List*>(themes_dir->Vertex::Get(FILE, ANY));
@@ -305,7 +305,7 @@ Layer* LayerManager::CreateLayer(Vertex* content)
         return NULL;
     Layer* layer = dynamic_cast<Layer*>(
             content->Vertex::Get(
-                    content->Vertex::Get(OUTPUTTYPE)->Get()->Name(), ANY));
+                    content->Vertex::Get(REQUEST)->Get()->Name(), ANY));
     if(!layer)
         return NULL;
     layer->Vertex::Get(LAYERMANAGER)->Set(this);

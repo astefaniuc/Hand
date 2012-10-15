@@ -67,7 +67,7 @@ class LayoutFactory : public Factory
         {
             if((Producer->*Function)(in_out))
             {
-//                in_out->Vertex::Get(OUTPUTTYPE)->Set(Get(OUTPUTTYPE)->Get());
+//                in_out->Vertex::Get(REQUEST)->Set(Get(REQUEST)->Get());
                 return true;
             }
             return false;
