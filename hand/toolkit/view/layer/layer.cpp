@@ -187,7 +187,7 @@ Layer* Layer::Insert(Vertex* data, string position)
     if(!layout)
         return NULL;
 
-    List* field = layout->GetField(position);
+    Vertex* field = layout->GetField(position);
     if(!field)
         return NULL;
 

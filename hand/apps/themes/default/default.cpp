@@ -84,7 +84,7 @@ bool Default::GetViewLayout(Vertex* out)
     layout->Get("Methods")->Get("DrawFunc")
             ->Vertex::Get(REQUEST)->Get(GUI_DRAWER_LIST);
 
-    List* field = layout->AddField("ListElement");
+    Vertex* field = layout->AddField("ListElement");
     // TODO: attach complete REQUEST folder (don't overwrite
     // existing settings)
     field->Get(REQUEST)->Get(ANY);
@@ -108,8 +108,8 @@ bool Default::GetListLayout(Vertex* out)
     layout->Get("Methods")->Get("DrawFunc")
             ->Vertex::Get(REQUEST)->Get(GUI_DRAWER_LIST);
 
-    List* field = layout->AddField("ListElement");
-    field->Get(REQUEST)->Get(BUTTONLAYER);
+    Vertex* field = layout->AddField("ListElement");
+    field->Get(REQUEST)->Get(ANY);
 
     return true;
 }
@@ -156,7 +156,7 @@ bool Default::GetButtonLayout(Vertex* out)
     upper->Attach(new Rect(ALIGNMENT, 1, 0, 0.5, 0));
     content->Get(CHILDREN)->Add(upper);
     upper->Get(PARENT)->Set(content);
-    List* field = upper->AddField(BTN_FIELD_ICON);
+    Vertex* field = upper->AddField(BTN_FIELD_ICON);
     field->Get(REQUEST)->Get(TEXTLAYER);
     field = upper->AddField(BTN_FIELD_NAME);
     field->Get(REQUEST)->Get(TEXTLAYER);

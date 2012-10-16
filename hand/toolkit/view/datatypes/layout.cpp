@@ -40,19 +40,22 @@ Layout::Layout(string name, string type) : List(name)
 }
 
 
-List* Layout::AddField(string name)
+Vertex* Layout::AddField(string name)
 {
-    List* field = new List(name);
+    Vertex* field = Get("Fields")->Get(LIST, name);
+    if(!field)
+    {
+        field = new List(name);
+        Get("Fields")->Add(field);
+    }
     field->Get(LAYOUT)->Set(this);
-    Get("Fields")->Add(field);
     return field;
 }
 
 
-List* Layout::GetField(string position)
+Vertex* Layout::GetField(string position)
 {
-    List* s = dynamic_cast<List*>(
-            Get("Fields")->Get(ANY, position));
+    Vertex* s = Get("Fields")->Get(LIST, position);
     if(s)
         return s;
     Vertex* childs = Get(LINK, CHILDREN);
