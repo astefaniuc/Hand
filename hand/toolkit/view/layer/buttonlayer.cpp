@@ -115,3 +115,11 @@ bool ButtonLayerFactory::Execute(Vertex* tree)
 {
     return tree->Vertex::Add(new ButtonLayer(BUTTONLAYER));
 }
+
+
+bool ButtonLayerFactory::IsValidInput(Vertex* input)
+{
+    if(input->Is(METHOD))
+        return true;
+    return false;
+}

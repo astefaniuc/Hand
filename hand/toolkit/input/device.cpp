@@ -19,7 +19,6 @@
 
 #include "input/device.h"
 #include "input/inputstate.h"
-#include "graph/data.h"
 #include "graph/method.h"
 
 
@@ -46,28 +45,7 @@ Device::~Device()
 
 bool Device::Init()
 {
-    // Two main entries: a keylist and the description
-    Add(new Note(DESCRIPTION, "Press 5 keys on the keyboard"));
-    Vertex* keys_tree = new List(DEVICE_KEYLIST);
-    Add(keys_tree);
-
-    // Load un-initialized keys
-    List* key;
-    Method<Device>* show_key = new Method<Device>("Show Key", this, &Device::ShowPressedKey);
-    string key_name = "";
-    for(int i=0; i < NUMBER_OF_BUTTONS; ++i)
-    {
-        // Set the callback method
-        key = new List(GetKeyName(i));
-        key->Add(show_key);
-        key->Add(new Note("Data", ""));
-        keys_tree->Add(key);
-    }
-/*}
-
-
-bool Device::Init()
-{*/
+    InitUI();
     string  key_str;
     SDLKey* key_sdl;
     Note* data;
@@ -75,7 +53,7 @@ bool Device::Init()
     for (uint i=0; i<numberOfKeys; i++)
     {
         // Do we have keys to load?
-        data = dynamic_cast<Note*>(GetKey(i)->Get("Data"));
+        data = GetKey(i);
         if(!data)
             return false;
         key_str = data->Get();
@@ -88,6 +66,27 @@ bool Device::Init()
     }
     keysEnd = Keys.end();
     return true;
+}
+
+
+void Device::InitUI()
+{
+    // Two main entries: a keylist and the description
+    Add(new Note(DESCRIPTION, "Press 5 keys on the keyboard"));
+    Vertex* keys_tree = new List(DEVICE_KEYLIST);
+    Add(keys_tree);
+
+    // Load un-initialized keys
+    Vertex* key;
+//    Method<Device>* show_key = new Method<Device>("Show Key", this, &Device::ShowPressedKey);
+    for(int i=0; i < NUMBER_OF_BUTTONS; ++i)
+    {
+        // Set the callback method
+        key = new Vertex(GetKeyName(i));
+//        key->Add(show_key);
+        key->Add(new Note("Data", ""));
+        keys_tree->Add(key);
+    }
 }
 
 
@@ -146,9 +145,12 @@ int Device::GetKeyIndex(SDLKey k)
 }
 
 
-List* Device::GetKey(uint pos)
+Note* Device::GetKey(uint pos)
 {
-    return dynamic_cast<List*>(Get(DEVICE_KEYLIST)->Get(GetKeyName(pos)));
+    Vertex* k = Get(LIST, DEVICE_KEYLIST)->Get(ANY, GetKeyName(pos));
+    if(!k)
+        return NULL;
+    return dynamic_cast<Note*>(k->Get(NOTE, "Data"));
 }
 
 
@@ -188,7 +190,7 @@ void Device::AddKey(SDLKey k)
     int index = GetKeyIndex(k);
     currentKey = Keys.begin() + index;
 
-    Note* data = dynamic_cast<Note*>(GetKey(index)->Get("Data"));
+    Note* data = GetKey(index);
     data->Set(SDL_GetKeyName(*(*currentKey)));
 }
 
@@ -201,7 +203,7 @@ void Device::DeleteCurrentKey()
     keysEnd = Keys.end();
     // Removes the key from the initialization screen
     // TODO: check this removal of last key (should be the one removed?)
-    Note* data = dynamic_cast<Note*>(GetKey(Keys.size())->Get("Data"));
+    Note* data = GetKey(Keys.size());
     data->Set("");
 }
 

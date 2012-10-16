@@ -78,3 +78,11 @@ bool ListLayerFactory::Execute(Vertex* tree)
 {
     return tree->Vertex::Add(new ListLayer(LISTLAYER));
 }
+
+
+bool ListLayerFactory::IsValidInput(Vertex* input)
+{
+    if(input->Is(LIST))
+        return true;
+    return false;
+}

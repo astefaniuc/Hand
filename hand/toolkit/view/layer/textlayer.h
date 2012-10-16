@@ -39,6 +39,7 @@ class TextLayerFactory : public Factory
         ~TextLayerFactory(){};
 
         bool Execute(Vertex* input);
+        bool IsValidInput(Vertex* input);
 };
 
 #endif /* VIEW_LAYER_TEXTLAYER_H */

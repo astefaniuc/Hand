@@ -21,6 +21,7 @@
 #define INPUT_DEVICE_H
 
 #include "base/handapp.h"
+#include "graph/data.h"
 
 #include <SDL/SDL.h>
 #include <vector>
@@ -37,6 +38,7 @@ class Device : public virtual HandApp
               ~Device();
         // Sets the key map
         bool   Init();
+        void   InitUI();
         //virtual void Register(void);
         void   AddKey(int);
         // Functions accessing the layer object (not possible from here)
@@ -48,7 +50,7 @@ class Device : public virtual HandApp
         InputState* GetInputState();
     protected:
         // Returns the Key symbol at specified position
-        List* GetKey(uint index);
+        Note*  GetKey(uint index);
         std::string GetKeyName(uint pos);
         void   AddKey(SDLKey);
         void   DeleteCurrentKey();

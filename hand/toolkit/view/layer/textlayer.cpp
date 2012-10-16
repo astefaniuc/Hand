@@ -39,3 +39,11 @@ bool TextLayerFactory::Execute(Vertex* tree)
 {
     return tree->Vertex::Add(new TextLayer(TEXTLAYER));
 }
+
+
+bool TextLayerFactory::IsValidInput(Vertex* input)
+{
+    if(input->Is(NOTE))
+        return true;
+    return false;
+}

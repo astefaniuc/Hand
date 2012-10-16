@@ -76,9 +76,15 @@ Vertex* Layout::GetField(string position)
 
 void Layout::AddForUpdate(Vertex* sublayout)
 {
-    if(!dynamic_cast<Layout*>(sublayout))
-        exit(12);
-    Get("Update")->Attach(sublayout);
+    Vertex* U = Get("Update");
+    // Add only once
+    uint i = 0;
+    Vertex* u;
+    while((u=U->Get(++i)) != NULL)
+        if(u == sublayout)
+            return;
+
+    U->Attach(sublayout);
 
     Layout* parent = dynamic_cast<Layout*>(Get(PARENT)->Get());
     if(parent)

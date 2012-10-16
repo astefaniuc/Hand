@@ -52,6 +52,7 @@ class ButtonLayerFactory : public Factory
         ~ButtonLayerFactory(){};
 
         bool Execute(Vertex* input);
+        bool IsValidInput(Vertex* input);
 };
 
 #endif /* VIEW_LAYER_BUTTONLAYER_H */

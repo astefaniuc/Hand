@@ -43,8 +43,8 @@ class ListLayerFactory : public Factory
                                      LIST, LISTLAYER){};
         ~ListLayerFactory(){};
 
-
         bool Execute(Vertex* input);
+        bool IsValidInput(Vertex* input);
 };
 
 #endif /* VIEW_LAYER_LISTLAYER_H */

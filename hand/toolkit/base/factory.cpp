@@ -70,24 +70,25 @@ bool FactoryMap::Execute(Vertex* input)
     if(!input)
         return NULL;
 
-    Vertex* ot = input->Vertex::Get(REQUEST)->Get();
-    if(!ot)
+    Vertex* req = input->Vertex::Get(REQUEST)->Get();
+    if(!req)
         return false;
-    if(ot->Name() == ANY)
+    if(req->Name() == ANY)
         return Resolve(input);
 
     // TODO: get list of factories for the output type and iterate through it
     // till we get a positive result
-    Factory* f = GetFactory(ot->Name());
+    Factory* f = GetFactory(req->Name());
     if(!f)
         return false;
     // Factory chain "top down"
-    if(f->IsValidInput(input))
+    Vertex* it = f->Get(INPUTTYPE)->Get();
+    if(!it || it->Name()==ANY || input->Is(it->Name()))
         // We have the right factory
         return f->Execute(input);
 
     // Change to the subsequent output type
-    input->Vertex::Get(REQUEST)->Set(f->Get(INPUTTYPE)->Get());
+    input->Vertex::Get(REQUEST)->Set(it);
 
     bool ret = Execute(input);
     if(ret)
@@ -95,7 +96,7 @@ bool FactoryMap::Execute(Vertex* input)
         Vertex* sub_prod = input->Get(f->Get(REQUEST)->Get()->Name(), ANY);
         if(sub_prod)
         {
-            sub_prod->Vertex::Get(REQUEST)->Set(ot);
+            sub_prod->Vertex::Get(REQUEST)->Set(req);
             // Resolve the intermediate product
             return Execute(sub_prod);
         }
