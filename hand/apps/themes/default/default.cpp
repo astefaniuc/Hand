@@ -71,7 +71,7 @@ bool Default::GetLMLayout(Vertex* out)
 {
     Layout* layout = dynamic_cast<Layout*>(out);
 
-    layout->AddField("MasterLayer")->Get(REQUEST)->Add(new Vertex(ANY));
+    layout->AddField("MasterLayer")->Get(REQUEST)->Get(ANY);
     return true;
 }
 
@@ -87,7 +87,7 @@ bool Default::GetViewLayout(Vertex* out)
     List* field = layout->AddField("ListElement");
     // TODO: attach complete REQUEST folder (don't overwrite
     // existing settings)
-    field->Get(REQUEST)->Add(new Vertex(ANY));
+    field->Get(REQUEST)->Get(ANY);
 
     Layout* controls = new Layout("Controls", LAYOUT_FRAMEDLIST);
     // Horizontal list alignment
