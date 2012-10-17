@@ -84,9 +84,6 @@ void Layer::SetContent(Vertex* data)
 {
     // ReleaseContent
     Get("Content")->Set(data);
-    string _old = Get("Layout")->Get()->Name();
-    string _new =  data->Name();
-    Get("Layout")->Get()->Name(data->Name());
     Changed = true;
 }
 
