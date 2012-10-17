@@ -121,7 +121,7 @@ bool Default::GetFramedListLayout(Vertex* out)
 
     layout->Set(new Rect(SIZEANDPOSITION, 0.1, 0.1, 0.8, 0.8));
 
-    Layout* frame = new Layout("Background", LAYOUT_BACKGROUND);
+    Layout* frame = new Layout("Frame", LAYOUT_FRAME);
     layout->Get(CHILDREN)->Add(frame);
     frame->Get(PARENT)->Set(layout);
 
@@ -352,18 +352,14 @@ bool Default::DrawText(Vertex* layout)
         return false;
 
     SDL_Rect size = vs->GetSize();
-    // Starting SDL font rendering:
-    uint font_height = size.h;
-    // Render the font once to check the size
-    Rgb* font_color = GetRgb("FontColor", layout);
-    SDL_Surface* source = RenderText(&text, font_height, font_color);
-    if(source->w > size.w)
-    {
-        // Calculate new height and re-render
-        font_height = (font_height*size.w)/source->w;
-        SDL_FreeSurface(source);
-        source = RenderText(&text, font_height, font_color);
-    }
+    // Calculate the fitting font size
+    int w, h = size.h*0.7;
+    TTF_SizeText(GetFont(h), text.c_str(), &w, &h);
+    if((w>size.w) || (h>size.h))
+        h *= double(size.w)*0.7/w;
+
+    SDL_Surface* source = RenderText(&text, h, GetRgb("FontColor", layout));
+
     Rect sub;
     PlaceCentered(source, size, sub);
     GetRect(SIZEANDPOSITION, layout)->Multiply(&sub);
@@ -437,7 +433,7 @@ string Default::GetString(Vertex* vs)
 {
     Vertex* content = vs->Get("Content")->Get();
     if(content)
-        return content->Name();
+        return content->GetAsString();
     return "";
 }
 
