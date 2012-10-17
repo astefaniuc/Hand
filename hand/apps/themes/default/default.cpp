@@ -353,12 +353,13 @@ bool Default::DrawText(Vertex* layout)
 
     SDL_Rect size = vs->GetSize();
     // Calculate the fitting font size
-    int w, h = size.h*0.7;
-    TTF_SizeText(GetFont(h), text.c_str(), &w, &h);
+    int w, h;
+    int fh = size.h*0.7;
+    TTF_SizeText(GetFont(fh), text.c_str(), &w, &h);
     if((w>size.w) || (h>size.h))
-        h *= double(size.w)*0.7/w;
+        fh = h*double(size.w)*0.7/w;
 
-    SDL_Surface* source = RenderText(&text, h, GetRgb("FontColor", layout));
+    SDL_Surface* source = RenderText(&text, fh, GetRgb("FontColor", layout));
 
     Rect sub;
     PlaceCentered(source, size, sub);
