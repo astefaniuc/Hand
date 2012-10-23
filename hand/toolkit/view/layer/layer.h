@@ -54,9 +54,7 @@ class Layer : public VirtualSurface
         virtual void NotifyChanged();
         virtual void Init(){};
 
-        virtual void SetTheme(Vertex* theme);
-        // Loads and stores from the layout library the layout for the current layer
-        virtual void SetLayout(Vertex* layouts_lib);
+        virtual void SetLayout(Vertex* layout);
         virtual void Draw(bool forced);
 
     protected:

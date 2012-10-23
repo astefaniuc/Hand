@@ -83,22 +83,7 @@ bool Vertex::Set(Vertex* child)
     if(!child)
         return false;
 
-    string s = child->Name();
-    VIterator curr = _Body->begin();
-    while(curr != _Body->end())
-    {
-        // TODO: is the Type relevant?
-        if((*curr)->Name() == s)
-        {
-            if(!(*curr)->Owner() || ((*curr)->Owner()==this))
-                delete(*curr);
-            else
-                _Body->erase(curr);
-        }
-        else
-            curr++;
-    }
-    _Body->push_back(child);
+    _Body->insert(_Body->begin(), child);
     child->_References->push_back(this);
 
     return true;
@@ -131,6 +116,8 @@ Vertex* Vertex::_Get()
 
 Vertex* Vertex::Get(string s)
 {
+    if(s == "")
+        return NULL;
     VIterator curr;
     VIterator _end = _Body->end();
     for(curr=_Body->begin(); curr!=_end; curr++)

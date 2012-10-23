@@ -179,69 +179,41 @@ bool Layer::Request(Vertex* req)
 
 Layer* Layer::Insert(Vertex* data, string position)
 {
-    // TODO: check if there is already a Layer at searched
-    // position and if it has the right type
-    // TODO: delete / (re)create layer if needed
-    Layout* layout = dynamic_cast<Layout*>(Get(LAYOUT)->Get());
-    // Is the layer type restricted by the current layout?
-    if(!layout)
-        return NULL;
+    Vertex* curr_layout = Get(LAYOUT, ANY);
+    // Get only a rump layout with size relative to the parent and the
+    // list of supported layer types
+    // This already connects all involved layouts and connects to the Theme
+    Vertex* child_layout = curr_layout->Get(LAYOUT, position);
+    Vertex* layer_factories = curr_layout->Get(FACTORYMAP, LAYER_FACTORIES);
 
-    Vertex* field = layout->GetField(position);
-    if(!field)
-        return NULL;
+    // For use further down the spiral
+    child_layout->Set(layer_factories);
+    child_layout->Set(curr_layout->Get("Theme"));
 
-    data->Vertex::Get(REQUEST)->Set(field->Get(REQUEST)->Get());
-    // TODO: generic factory
-    Layer* sub_layer = dynamic_cast<LayerManager*>(Vertex::Get(LAYERMANAGER)->Get())
-            ->CreateLayer(data);
+    data->Vertex::Set(child_layout);
+
+    // Create the Layer
+    layer_factories->Execute(data);
+    Layer* sub_layer = dynamic_cast<Layer*>(data->Vertex::Get(LAYER, ANY));
     if(!sub_layer)
         return NULL;
+
+    sub_layer->SetLayout(child_layout);
 
     // Connect the components
     // on Layer/VS level
     Get(CHILDREN)->Add(sub_layer);
     sub_layer->SetParent(this);
-    // on Layout level
-    Layout* field_layout = dynamic_cast<Layout*>(field->Get(LAYOUT)->Get());
-    if(field_layout)
-        field_layout->AddForUpdate(sub_layer->Get(LAYOUT)->Get());
+    sub_layer->SetContent(data);
 
     return sub_layer;
 }
 
 
-void Layer::SetTheme(Vertex* theme)
+void Layer::SetLayout(Vertex* layout)
 {
-    // TODO: generic recursive Set() on a sub-tree defined by a "relation"
-    // (possibly using Search() with MultipleFindings)
-    SetLayout(theme);
-    Vertex* children = Get(LINK, CHILDREN);
-    if(!children)
-        return;
-
-    Layer* layer;
-    Vertex* child;
-    uint i = 0;
-    while((child=children->Get(++i)) != NULL)
-    {
-        layer = dynamic_cast<Layer*>(child);
-        if(layer)
-            layer->SetTheme(theme);
-    }
-}
-
-
-void Layer::SetLayout(Vertex* drawer_lib)
-{
-    // Delete from the layout items owned by the previous theme
-    Vertex* layout = Get("Layout")->Get();
-    if(!layout)
-    {
-        layout = new Layout("Layout", Type()+"_Layout");
-        Get("Layout")->Set(layout);
-    }
-    drawer_lib->Execute(layout);
+    Set(layout);
+    layout->Get("Theme")->Get()->Execute(layout);
 }
 
 
@@ -256,7 +228,7 @@ void Layer::Draw(bool forced)
         Updated = true; // ?
     }*/
     // Call the Theme function for drawing with the current settings
-    Layout* layout = dynamic_cast<Layout*>(Get("Layout")->Get());
+    Layout* layout = dynamic_cast<Layout*>(Get(LAYOUT, ANY));
     if(!layout)
         return;
 

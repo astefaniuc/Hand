@@ -42,14 +42,6 @@ LayerManager::LayerManager() : ListLayer(LAYERMANAGER)
     MasterView = NULL;
     // TODO: still needed?
     BufferType = COLLECTOR;
-
-    // Register default layer types/factories. TODO: dynamic loading
-    // The last added factory has the highest relevance (HACK?)
-    FactoryMap* fm = new FactoryMap(LAYER_FACTORIES);
-    fm->Add(new TextLayerFactory());
-    fm->Add(new ButtonLayerFactory());
-    fm->Add(new ListLayerFactory());
-    Add(fm);
 }
 
 
@@ -63,6 +55,16 @@ LayerManager::~LayerManager()
 
 void LayerManager::Init()
 {
+    // Register default layer types/factories
+    FactoryMap* fm = new FactoryMap(LAYER_FACTORIES);
+    fm->Add(new TextLayerFactory());
+    fm->Add(new ButtonLayerFactory());
+    fm->Add(new ListLayerFactory());
+
+    Vertex* layout = new Layout("MasterLayer", LAYOUT_LIST);
+    Set(layout);
+    layout->Add(fm);
+
     // Theme menu
     List* theme_menu = new List(THEMES_MENU);
     // The path to the theme files
@@ -85,7 +87,7 @@ void LayerManager::Init()
     pub->Add(new Method<LayerManager>("Exit", this, &LayerManager::Exit));
     // Add the exit function to the tree of available funcs
     // Request command at highest level
-    GetCommand(pub->Get("Exit"), _InputState->GetNumberOfKeys());
+//    GetCommand(pub->Get("Exit"), _InputState->GetNumberOfKeys());
     // Start the focus handling layer
 /*    MasterView = CreateLayer(FOCUSLAYER);
     MasterView->Init();
@@ -146,8 +148,9 @@ void LayerManager::SetScreen(SDL_Surface* screen)
 bool LayerManager::GetCommand(Vertex* f, int level)
 {
     f->Vertex::Get(REQUEST)->Get(BUTTONLAYER);
-    Layer* l = CreateLayer(f);
-    return GetCommand(l, level);
+//    Layer* l = CreateLayer(f);
+//    return GetCommand(l, level);
+    return false;
 }
 
 
@@ -217,8 +220,10 @@ bool LayerManager::LoadTheme(Vertex* f)
     if(!theme)
         return false;
 
-    Get("Theme")->Set(theme);
-    SetTheme(theme);
+    Vertex* layout = Get(LAYOUT, ANY);
+    // Sets the theme for all sublayouts
+    layout->Get("Theme")->Set(theme);
+    theme->Execute(layout);
     return true;
 }
 
@@ -250,67 +255,8 @@ bool LayerManager::GetAllThemes(Vertex* themes_dir)
 
 bool LayerManager::Expand(Vertex* to_expand)
 {
-    /*// Does it have a Layer attached?
-    Layer* new_view = GetAttachedLayer(to_expand);
-    if(!new_view)
-    {
-        string type = GetContentType(to_expand);
-        if(type == "")
-            return false;
-        if(MasterView && MasterView->Is(type))
-        {
-            // In this case we re-use the layer
-            MasterView->SetContent(to_expand);
-            return true;
-        }
-        new_view = CreateLayer(to_expand, type);
-        if(!new_view)
-            return false;
-    }
-    new_view->SetSize(GetSize());
-
-    if(MasterView)
-    {
-        if(MasterView == new_view)
-            // Ever possible?
-            return false;
-
-        if(MasterView->Is("Expansive"))
-        {
-            // Insert() = Add() != SetContent()
-            MasterView->Set(CHILDREN)->Add(new_view);
-            return true;
-        }
-
-        Delete(MasterView);
-    }
-    MasterView = new_view;
-    MasterView->SetParent(this);
-
-    // TODO: ?
-    MasterView->IsExpanded = true;
-    Updated = true;
-
-    return true;*/
-    MasterView = Insert(to_expand, "MasterLayer");
+    MasterView = Insert(to_expand, "ListElement");
     if(MasterView)
         return true;
     return false;
-}
-
-
-Layer* LayerManager::CreateLayer(Vertex* content)
-{
-    if(!Get(LAYER_FACTORIES)->Execute(content))
-        return NULL;
-    Layer* layer = dynamic_cast<Layer*>(
-            content->Vertex::Get(
-                    content->Vertex::Get(REQUEST)->Get()->Name(), ANY));
-    if(!layer)
-        return NULL;
-    layer->Vertex::Get(LAYERMANAGER)->Set(this);
-    layer->SetLayout(Get("Theme")->Get());
-    layer->SetContent(content);
-
-    return layer;
 }

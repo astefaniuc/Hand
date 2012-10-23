@@ -70,9 +70,7 @@ void ButtonLayer::SetExpandable()
 bool ButtonLayer::ExpandList(Vertex* ignore)
 {
     if(ParentLayer->Request(GetContent()))
-    {
         return true;
-    }
     return false;
 }
 
@@ -113,13 +111,17 @@ void ButtonLayer::ReleaseGui()
 
 bool ButtonLayerFactory::Execute(Vertex* tree)
 {
-    return tree->Vertex::Add(new ButtonLayer(BUTTONLAYER));
+    Vertex* layout = tree->Vertex::Get(LAYOUT, ANY);
+    layout->Vertex::Delete(layout->Vertex::Get(REQUEST));
+    layout->Vertex::Get(REQUEST)->Get(LAYOUT_BUTTON);
+    return tree->Vertex::Set(new ButtonLayer(BUTTONLAYER));
 }
 
 
 bool ButtonLayerFactory::IsValidInput(Vertex* input)
 {
-    if(input->Is(METHOD))
+    if(input->Is(METHOD) &&
+            input->Vertex::Get(LAYOUT, ANY)->Vertex::Get(REQUEST)->Get(ANY, LAYOUT_BUTTON))
         return true;
     return false;
 }

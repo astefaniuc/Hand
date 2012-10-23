@@ -30,13 +30,6 @@ Link::Link(string name) : List(name)
 }
 
 
-bool Link::Set(Vertex* target)
-{
-    List::Reset();
-    return List::Set(target);
-}
-
-
 bool Link::IsOpen(Search* search)
 {
     if(!Vertex::IsOpen(search))

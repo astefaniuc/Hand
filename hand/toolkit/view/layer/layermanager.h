@@ -49,7 +49,6 @@ class LayerManager : public ListLayer
         // Called by HandApps to export their interface
         void    LoadAppInterface(Vertex* app,  bool make_default=false);
         bool    UnloadAppInterface(Vertex*);
-        Layer*  CreateLayer(Vertex* content);
 
     protected:
         void    Init();

@@ -17,8 +17,8 @@
  *  License along with Hand. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef THEME_DEFAULT_H
-#define THEME_DEFAULT_H
+#ifndef DEFAULT_DEFAULT_H
+#define DEFAULT_DEFAULT_H
 
 #include "include/theme.h"
 
@@ -31,7 +31,6 @@ class Default : public Theme
 
     protected:
         // Layout creators
-        bool GetLMLayout(Vertex* out);
         bool GetViewLayout(Vertex* out);
         bool GetFramedListLayout(Vertex* out);
         bool GetListLayout(Vertex* out);
@@ -71,4 +70,4 @@ class ZoomIn : public virtual Animation
 };
 */
 
-#endif /* THEME_DEFAULT_H */
+#endif /* DEFAULT_DEFAULT_H */

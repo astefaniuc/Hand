@@ -43,7 +43,7 @@ void ListLayer::SetContent(Vertex* data)
 
     uint nr_of_childs = data->Size();
     nr_of_childs--;
-    Data<uint>* max_c = dynamic_cast<Data<uint>*>(Get("Layout")->Get()->Get("MaxSize"));
+    Data<uint>* max_c = dynamic_cast<Data<uint>*>(Get(LAYOUT, ANY)->Get("MaxSize"));
     if(max_c)
     {
         uint max_size = max_c->Get();
@@ -76,13 +76,17 @@ void ListLayer::Configure(Vertex* sub_layout)
 
 bool ListLayerFactory::Execute(Vertex* tree)
 {
-    return tree->Vertex::Add(new ListLayer(LISTLAYER));
+    Vertex* layout = tree->Vertex::Get(LAYOUT, ANY);
+    layout->Vertex::Delete(layout->Vertex::Get(REQUEST));
+    layout->Vertex::Get(REQUEST)->Get(LAYOUT_LIST);
+    return tree->Vertex::Set(new ListLayer(LISTLAYER));
 }
 
 
 bool ListLayerFactory::IsValidInput(Vertex* input)
 {
-    if(input->Is(LIST))
+    if(input->Is(LIST) &&
+            input->Vertex::Get(LAYOUT, ANY)->Vertex::Get(REQUEST)->Get(ANY, LAYOUT_LIST))
         return true;
     return false;
 }

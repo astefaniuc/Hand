@@ -27,7 +27,8 @@ using namespace std;
 Layout::Layout(string name, string type) : List(name)
 {
     Type(LAYOUT);
-    Vertex::Get(REQUEST)->Get(type);
+    if(type != "")
+        Vertex::Get(REQUEST)->Get(type);
     // Colours.Set(r[ed], g[reen], b[lue])
 /*    Color_Frame.Set(0, 3, 200);
     Color_Background.Set(0, 0, 0);
@@ -40,55 +41,58 @@ Layout::Layout(string name, string type) : List(name)
 }
 
 
-Vertex* Layout::AddField(string name)
+bool Layout::Add(Vertex* child)
 {
-    Vertex* field = Get("Fields")->Get(LIST, name);
-    if(!field)
-    {
-        field = new List(name);
-        Get("Fields")->Add(field);
-    }
-    field->Get(LAYOUT)->Set(this);
-    return field;
+    if(!child->Is(LAYOUT))
+        return List::Add(child);
+
+    Get(CHILDREN)->Add(child);
+    return child->Get(PARENT)->Set(this);
 }
 
 
-Vertex* Layout::GetField(string position)
+Vertex* Layout::Get(string type, string name)
 {
-    Vertex* s = Get("Fields")->Get(LIST, position);
+    Vertex* ret = List::Get(type, name);
+    if(ret || (type!=LAYOUT))
+        return ret;
+
+    // Check if the requested layout is a field and has to be created
+    Vertex* s = Get("Fields")->Get(LIST, name);
     if(s)
-        return s;
-    Vertex* childs = Get(LINK, CHILDREN);
-    if(childs)
     {
-        Vertex* layout;
-        uint i = 0;
-        while((layout=childs->Get(++i)) != NULL)
+        // Creator mode
+        ret = new Layout("Created", "");
+        ret->Vertex::Attach(s->Get(REQUEST));
+        Get("Update")->Attach(ret);
+        return ret;
+    }
+
+    Vertex* children = Get(LINK, CHILDREN);
+    if(!children)
+        return NULL;
+
+    // "GetField" mode
+    ret = children->Get(type, name);
+    if(ret)
+    {
+        Get("Update")->Attach(ret);
+        return ret;
+    }
+
+    Vertex* child;
+    uint i = 0;
+    while((child=children->Get(++i)) != NULL)
+    {
+        ret = child->Get(type, name);
+        if(ret)
         {
-            s = ((Layout*)layout)->GetField(position);
-            if(s)
-                return s;
+            Get("Update")->Attach(child);
+            return ret;
         }
     }
+
     return NULL;
-}
-
-
-void Layout::AddForUpdate(Vertex* sublayout)
-{
-    Vertex* U = Get("Update");
-    // Add only once
-    uint i = 0;
-    Vertex* u;
-    while((u=U->Get(++i)) != NULL)
-        if(u == sublayout)
-            return;
-
-    U->Attach(sublayout);
-
-    Layout* parent = dynamic_cast<Layout*>(Get(PARENT)->Get());
-    if(parent)
-        parent->AddForUpdate(this);
 }
 
 

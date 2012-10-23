@@ -78,12 +78,12 @@ void Device::InitUI()
 
     // Load un-initialized keys
     Vertex* key;
-//    Method<Device>* show_key = new Method<Device>("Show Key", this, &Device::ShowPressedKey);
+    Method<Device>* show_key = new Method<Device>("Show Key", this, &Device::ShowPressedKey);
     for(int i=0; i < NUMBER_OF_BUTTONS; ++i)
     {
         // Set the callback method
-        key = new Vertex(GetKeyName(i));
-//        key->Add(show_key);
+        key = new List(GetKeyName(i));
+        key->Add(show_key);
         key->Add(new Note("Data", ""));
         keys_tree->Add(key);
     }
