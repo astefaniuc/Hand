@@ -34,8 +34,7 @@ class TextLayer : public virtual Layer
 class TextLayerFactory : public Factory
 {
     public:
-        TextLayerFactory() : Factory("TextLayerFactory",
-                                     "", TEXTLAYER){};
+        TextLayerFactory() : Factory("TextLayerFactory", DATA, TEXT){};
         ~TextLayerFactory(){};
 
         bool Execute(Vertex* input);

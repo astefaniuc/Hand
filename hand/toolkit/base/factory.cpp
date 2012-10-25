@@ -71,9 +71,7 @@ bool FactoryMap::Execute(Vertex* input)
         return NULL;
 
     Vertex* req = input->Vertex::Get(REQUEST);
-    if(req->Size() == 0)
-        return false;
-    if((req->Size()>1) || (req->Get()->Name()==ANY))
+    if((req->Size()==0) || (req->Size()>1) || (req->Get()->Name()==ANY))
         return Resolve(input);
 
     // TODO: get list of factories for the output type and iterate through it

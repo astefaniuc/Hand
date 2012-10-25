@@ -33,28 +33,21 @@
 
 
 #define VIRTUALSURFACE "VIRTUALSURFACE"
-// Layer types
+// Layout and layers
 #define LAYER "Layer"
 #define LAYERMANAGER "LayerManager"
-#define VIEWLAYER "ViewLayer"
-#define LISTLAYER "ListLayer"
-#define BUTTONLAYER "ButtonLayer"
-#define TEXTLAYER "TextLayer"
-#define FOCUSLAYER "FocusLayer"
+#define LAYOUT "Layout"
+#define VIEW "View"
+#define BUTTON "Button"
+#define TEXT "Text"
+#define FOCUS "Focus"
+
+#define FRAMEDLIST "Framed list"
+#define CONTROLID "Control ID"
+#define FRAME "Frame"
+#define BACKGROUND "Background"
 
 #define LAYER_FACTORIES "Layer Factories"
-
-// Layout types
-#define LAYOUT "Layout"
-#define LAYOUT_LAYERMANAGER "LayerManager_Layout"
-#define LAYOUT_VIEW "ViewLayer_Layout"
-#define LAYOUT_LIST "List_Layout"
-#define LAYOUT_FRAMEDLIST "ListLayer_Layout"
-#define LAYOUT_BUTTON "ButtonLayer_Layout"
-#define LAYOUT_CONTROLID "ControlID_Layout"
-#define LAYOUT_FRAME "Frame_Layout"
-#define LAYOUT_BACKGROUND "Background_Layout"
-#define LAYOUT_TEXT "TextLayer_Layout"
 
 // Drawer types
 #define GUI_DRAWER_LIST "GUI_DRAWER_LIST"

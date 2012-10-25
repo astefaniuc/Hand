@@ -39,8 +39,7 @@ class ListLayer : public Layer
 class ListLayerFactory : public Factory
 {
     public:
-        ListLayerFactory() : Factory("ListLayerFactory",
-                                     LIST, LISTLAYER){};
+        ListLayerFactory() : Factory("ListLayerFactory", LIST, LIST){};
         ~ListLayerFactory(){};
 
         bool Execute(Vertex* input);

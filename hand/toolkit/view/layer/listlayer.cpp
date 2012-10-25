@@ -27,7 +27,7 @@ using namespace std;
 ListLayer::ListLayer(string name) : Layer(name)
 {
     BufferType = OVERLAY;
-    Type(LISTLAYER);
+    Type(LIST);
 }
 
 
@@ -76,17 +76,17 @@ void ListLayer::Configure(Vertex* sub_layout)
 
 bool ListLayerFactory::Execute(Vertex* tree)
 {
-    Vertex* layout = tree->Vertex::Get(LAYOUT, ANY);
-    layout->Vertex::Delete(layout->Vertex::Get(REQUEST));
-    layout->Vertex::Get(REQUEST)->Get(LAYOUT_LIST);
-    return tree->Vertex::Set(new ListLayer(LISTLAYER));
+    Vertex* types = tree->Vertex::Get(LAYOUT, ANY)->Vertex::Get(REQUEST);
+    types->Reset();
+    types->Get(LIST);
+    return tree->Vertex::Set(new ListLayer(LIST));
 }
 
 
 bool ListLayerFactory::IsValidInput(Vertex* input)
 {
     if(input->Is(LIST) &&
-            input->Vertex::Get(LAYOUT, ANY)->Vertex::Get(REQUEST)->Get(ANY, LAYOUT_LIST))
+            input->Vertex::Get(LAYOUT, ANY)->Vertex::Get(REQUEST)->Get(ANY, LIST))
         return true;
     return false;
 }

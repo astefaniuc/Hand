@@ -61,7 +61,7 @@ void LayerManager::Init()
     fm->Add(new ButtonLayerFactory());
     fm->Add(new ListLayerFactory());
 
-    Vertex* layout = new Layout("MasterLayer", LAYOUT_LIST);
+    Vertex* layout = new Layout("MasterLayer", LIST);
     Set(layout);
     layout->Add(fm);
 
@@ -87,7 +87,7 @@ void LayerManager::Init()
     pub->Add(new Method<LayerManager>("Exit", this, &LayerManager::Exit));
     // Add the exit function to the tree of available funcs
     // Request command at highest level
-//    GetCommand(pub->Get("Exit"), _InputState->GetNumberOfKeys());
+    GetCommand(pub->Get("Exit"), _InputState->GetNumberOfKeys());
     // Start the focus handling layer
 /*    MasterView = CreateLayer(FOCUSLAYER);
     MasterView->Init();
@@ -147,10 +147,12 @@ void LayerManager::SetScreen(SDL_Surface* screen)
 
 bool LayerManager::GetCommand(Vertex* f, int level)
 {
-    f->Vertex::Get(REQUEST)->Get(BUTTONLAYER);
-//    Layer* l = CreateLayer(f);
-//    return GetCommand(l, level);
-    return false;
+    f->Vertex::Get(REQUEST)->Get(BUTTON);
+    Get(LAYOUT, ANY)->Get(FACTORYMAP, LAYER_FACTORIES)->Execute(f);
+    Layer* sub_layer = dynamic_cast<Layer*>(f->Vertex::Get(LAYER, ANY));
+    if(!sub_layer)
+        return false;
+    return GetCommand(sub_layer, level);
 }
 
 

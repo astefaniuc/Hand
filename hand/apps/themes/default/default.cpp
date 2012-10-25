@@ -45,14 +45,14 @@ Default::Default() : Theme("DefaultTheme")
     Register(new DrawerFactory(new Method<Default>(GUI_DRAWER_TEXT, this, &Default::DrawText)));
 
     // Layouts
-    Register(new LayoutFactory<Default>(LAYOUT_VIEW, this, &Default::GetViewLayout));
-    Register(new LayoutFactory<Default>(LAYOUT_FRAMEDLIST, this, &Default::GetFramedListLayout));
-    Register(new LayoutFactory<Default>(LAYOUT_LIST, this, &Default::GetListLayout));
-    Register(new LayoutFactory<Default>(LAYOUT_CONTROLID, this, &Default::GetControlLayout));
-    Register(new LayoutFactory<Default>(LAYOUT_BUTTON, this, &Default::GetButtonLayout));
-    Register(new LayoutFactory<Default>(LAYOUT_FRAME, this, &Default::GetFrameLayout));
-    Register(new LayoutFactory<Default>(LAYOUT_BACKGROUND, this, &Default::GetBackgroundLayout));
-    Register(new LayoutFactory<Default>(LAYOUT_TEXT, this, &Default::GetTextLayout));
+    Register(new LayoutFactory<Default>(VIEW, this, &Default::GetViewLayout));
+    Register(new LayoutFactory<Default>(FRAMEDLIST, this, &Default::GetFramedListLayout));
+    Register(new LayoutFactory<Default>(LIST, this, &Default::GetListLayout));
+    Register(new LayoutFactory<Default>(CONTROLID, this, &Default::GetControlLayout));
+    Register(new LayoutFactory<Default>(BUTTON, this, &Default::GetButtonLayout));
+    Register(new LayoutFactory<Default>(FRAME, this, &Default::GetFrameLayout));
+    Register(new LayoutFactory<Default>(BACKGROUND, this, &Default::GetBackgroundLayout));
+    Register(new LayoutFactory<Default>(TEXT, this, &Default::GetTextLayout));
 
     // Colors
     Register(new PropertyFactory<Default>(GUI_COLOR_FRAME, this, &Default::GetColorFrame));
@@ -73,19 +73,15 @@ bool Default::GetViewLayout(Vertex* out)
     layout->Attach(new Rect(ALIGNMENT, 0, 1, 0, 1));
     layout->Get("Methods")->Get("DrawFunc")
             ->Vertex::Get(REQUEST)->Get(GUI_DRAWER_LIST);
-/*
-    Vertex* field = layout->AddField("ListElement");
-    // TODO: attach complete REQUEST folder (don't overwrite
-    // existing settings)
-    field->Get(REQUEST)->Get(ANY);
 
-    Layout* controls = new Layout("Controls", LAYOUT_FRAMEDLIST);
+    layout->Get("Fields")->Get("ListElement")->Get(ANY);
+
+    Layout* controls = new Layout("Controls", FRAMEDLIST);
     // Horizontal list alignment
     controls->Attach(new Rect(ALIGNMENT, 1, 0, 1, 0));
-    layout->Get(CHILDREN)->Add(controls);
-    controls->Get(PARENT)->Attach(layout);
-    field = controls->AddField("ListElement");
-    field->Get(REQUEST)->Get(BUTTONLAYER);*/
+    layout->Add(controls);
+
+    controls->Get("Fields")->Get("ListElement")->Get(BUTTON);
     return true;
 }
 
@@ -99,9 +95,9 @@ bool Default::GetListLayout(Vertex* out)
             ->Vertex::Get(REQUEST)->Get(GUI_DRAWER_LIST);
 
     Vertex* content = layout->Get("Fields")->Get("ListElement");
-    content->Get(REQUEST)->Get(LAYOUT_BUTTON);
-    content->Get(REQUEST)->Get(LAYOUT_TEXT);
-    content->Get(REQUEST)->Get(LAYOUT_LIST);
+    content->Get(BUTTON);
+    content->Get(TEXT);
+    content->Get(LIST);
 
     return true;
 }
@@ -113,10 +109,10 @@ bool Default::GetFramedListLayout(Vertex* out)
 
     layout->Set(new Rect(SIZEANDPOSITION, 0.1, 0.1, 0.8, 0.8));
 
-    Layout* frame = new Layout("Frame", LAYOUT_FRAME);
+    Layout* frame = new Layout("Frame", FRAME);
     layout->Add(frame);
 
-    Layout* content = new Layout("Content", LAYOUT_LIST);
+    Layout* content = new Layout("Content", LIST);
     layout->Add(content);
 
     frame->Get("Update")->Attach(content);
@@ -133,34 +129,28 @@ bool Default::GetButtonLayout(Vertex* out)
             ->Vertex::Get(REQUEST)->Get(GUI_DRAWER_BUTTON);
     layout->Set(new Rect(SIZEANDPOSITION, 0.1, 0.1, 0.8, 0.8));
 
-    Layout* frame = new Layout("Frame", LAYOUT_FRAME);
+    Layout* frame = new Layout("Frame", FRAME);
     layout->Add(frame);
 
     // The Button container
-    Layout* content = new Layout("Button Content", LAYOUT_LIST);
+    Layout* content = new Layout("Button Content", LIST);
     content->Attach(new Rect(ALIGNMENT, 0, 1, 0, 1));
     layout->Add(content);
     frame->Get("Update")->Attach(content);
 
-    Layout* upper = new Layout("Upper", LAYOUT_LIST);
+    Layout* upper = new Layout("Upper", LIST);
     upper->Attach(new Rect(ALIGNMENT, 1, 0, 0.5, 0));
     content->Add(upper);
 
-    Vertex* field = upper->Get("Fields")->Get(BTN_FIELD_ICON);
-    field->Get(REQUEST)->Get(LAYOUT_TEXT);
-
-    field = upper->Get("Fields")->Get(BTN_FIELD_NAME);
-    field->Get(REQUEST)->Get(LAYOUT_TEXT);
-
-    Layout* lower = new Layout("Lower", LAYOUT_LIST);
+    Layout* lower = new Layout("Lower", LIST);
     lower->Attach(new Rect(ALIGNMENT, 1, 0, 0.5, 0));
     content->Add(lower);
 
-    field = lower->Get("Fields")->Get(BTN_FIELD_DESCRIPTION);
-    field->Get(REQUEST)->Get(LAYOUT_TEXT);
-
-    field = lower->Get("Fields")->Get(BTN_FIELD_CONTROL);
-    field->Get(REQUEST)->Get(LAYOUT_TEXT);
+    // Store the layer/layout types for the fields as simple nodes
+    upper->Get("Fields")->Get(BTN_FIELD_ICON)->Get(TEXT);
+    upper->Get("Fields")->Get(BTN_FIELD_NAME)->Get(TEXT);
+    lower->Get("Fields")->Get(BTN_FIELD_DESCRIPTION)->Get(TEXT);
+    lower->Get("Fields")->Get(BTN_FIELD_CONTROL)->Get(TEXT);
 
     return true;
 }
@@ -170,7 +160,7 @@ bool Default::GetControlLayout(Vertex* out)
 {
     Layout* layout = dynamic_cast<Layout*>(out);
 
-    Layout* frame = new Layout("Frame", LAYOUT_FRAME);
+    Layout* frame = new Layout("Frame", FRAME);
     layout->Add(frame);
     return true;
 }
@@ -185,7 +175,7 @@ bool Default::GetFrameLayout(Vertex* out)
             ->Vertex::Get(REQUEST)->Get(GUI_DRAWER_FRAME);
     layout->Get("Color")->Vertex::Get(REQUEST)->Get(GUI_COLOR_FRAME);
 
-    Layout* bgrd = new Layout("Background", LAYOUT_BACKGROUND);
+    Layout* bgrd = new Layout("Background", BACKGROUND);
     layout->Add(bgrd);
     layout->Get("Update")->Attach(bgrd);
 

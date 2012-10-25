@@ -28,7 +28,7 @@ using namespace std;
 ButtonLayer::ButtonLayer(string name) : Layer(name)
 {
     BufferType = COLLECTOR;
-    Type(BUTTONLAYER);
+    Type(BUTTON);
 
     VisibleItems = 0;
     // BTN_NAME, BTN_DESCRIPTION, BTN_ICON, BTN_CONTROL, BTN_PREVIEW
@@ -111,17 +111,17 @@ void ButtonLayer::ReleaseGui()
 
 bool ButtonLayerFactory::Execute(Vertex* tree)
 {
-    Vertex* layout = tree->Vertex::Get(LAYOUT, ANY);
-    layout->Vertex::Delete(layout->Vertex::Get(REQUEST));
-    layout->Vertex::Get(REQUEST)->Get(LAYOUT_BUTTON);
-    return tree->Vertex::Set(new ButtonLayer(BUTTONLAYER));
+    Vertex* types = tree->Vertex::Get(LAYOUT, ANY)->Vertex::Get(REQUEST);
+    types->Reset();
+    types->Get(BUTTON);
+    return tree->Vertex::Set(new ButtonLayer(BUTTON));
 }
 
 
 bool ButtonLayerFactory::IsValidInput(Vertex* input)
 {
     if(input->Is(METHOD) &&
-            input->Vertex::Get(LAYOUT, ANY)->Vertex::Get(REQUEST)->Get(ANY, LAYOUT_BUTTON))
+            input->Vertex::Get(LAYOUT, ANY)->Vertex::Get(REQUEST)->Get(ANY, BUTTON))
         return true;
     return false;
 }

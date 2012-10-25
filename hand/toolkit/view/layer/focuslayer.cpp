@@ -28,7 +28,7 @@ using namespace std;
 
 FocusLayer::FocusLayer() : ListLayer("FocusLayer")
 {
-    Type(FOCUSLAYER);
+    Type(FOCUS);
 //    DrawObject.BufferType = OVERLAY;
     KeyList = NULL;
 }

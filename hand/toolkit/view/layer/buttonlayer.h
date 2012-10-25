@@ -47,8 +47,7 @@ class ButtonLayer : public Layer
 class ButtonLayerFactory : public Factory
 {
     public:
-        ButtonLayerFactory() : Factory("ButtonLayerFactory",
-                                       "", BUTTONLAYER){};
+        ButtonLayerFactory() : Factory("ButtonLayerFactory", METHOD, BUTTON){};
         ~ButtonLayerFactory(){};
 
         bool Execute(Vertex* input);

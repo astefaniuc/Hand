@@ -58,12 +58,16 @@ Vertex* Layout::Get(string type, string name)
         return ret;
 
     // Check if the requested layout is a field and has to be created
-    Vertex* s = Get("Fields")->Get(LIST, name);
-    if(s)
+    Vertex* f = Get("Fields")->Get(LIST, name);
+    if(f)
     {
         // Creator mode
         ret = new Layout("Created", "");
-        ret->Vertex::Attach(s->Get(REQUEST));
+        Vertex* reqs = ret->Vertex::Get(REQUEST);
+        uint i = 0;
+        Vertex* sub_type;
+        while((sub_type=f->Get(++i)) != 0)
+            reqs->Attach(sub_type);
         Get("Update")->Attach(ret);
         return ret;
     }
