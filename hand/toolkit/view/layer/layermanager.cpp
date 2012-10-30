@@ -147,11 +147,9 @@ void LayerManager::SetScreen(SDL_Surface* screen)
 
 bool LayerManager::GetCommand(Vertex* f, int level)
 {
-    f->Vertex::Get(REQUEST)->Get(BUTTON);
-    Get(LAYOUT, ANY)->Get(FACTORYMAP, LAYER_FACTORIES)->Execute(f);
-    Layer* sub_layer = dynamic_cast<Layer*>(f->Vertex::Get(LAYER, ANY));
-    if(!sub_layer)
-        return false;
+    // HACK: create a Layer without Layout
+    Layer* sub_layer = new ButtonLayer("ButtonLayer");
+    sub_layer->Layer::SetContent(f);
     return GetCommand(sub_layer, level);
 }
 

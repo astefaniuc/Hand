@@ -51,7 +51,9 @@ void ButtonLayer::SetContent(Vertex* data)
         Insert(data, BTN_FIELD_PREVIEW);
     }*/
     // The button name
-    Insert(data, BTN_FIELD_NAME);
+    Vertex* name = new Vertex(data->Name());
+    Add(name);
+    Insert(name, BTN_FIELD_NAME);
     // The button description
     Vertex* test_descr = new Vertex("Description Test");
     Insert(test_descr, BTN_FIELD_DESCRIPTION);
@@ -111,17 +113,17 @@ void ButtonLayer::ReleaseGui()
 
 bool ButtonLayerFactory::Execute(Vertex* tree)
 {
-    Vertex* types = tree->Vertex::Get(LAYOUT, ANY)->Vertex::Get(REQUEST);
+    Vertex* types = tree->Vertex::Get(REQUEST);
     types->Reset();
     types->Get(BUTTON);
-    return tree->Vertex::Set(new ButtonLayer(BUTTON));
+    return tree->Get(TARGET)->Get()->Vertex::Set(new ButtonLayer(BUTTON));
 }
 
 
 bool ButtonLayerFactory::IsValidInput(Vertex* input)
 {
-    if(input->Is(METHOD) &&
-            input->Vertex::Get(LAYOUT, ANY)->Vertex::Get(REQUEST)->Get(ANY, BUTTON))
+    Vertex* tgt = input->Get(TARGET)->Get();
+    if(tgt && tgt->Is(METHOD) && input->Vertex::Get(REQUEST)->Get(ANY, BUTTON))
         return true;
     return false;
 }

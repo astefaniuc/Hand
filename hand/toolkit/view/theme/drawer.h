@@ -30,11 +30,9 @@ class DrawerFactory : public Factory
 {
     public:
         DrawerFactory(Vertex* draw_func);
-        ~DrawerFactory();
+        ~DrawerFactory(){};
 
         bool Execute(Vertex* in_out);
-    protected:
-        Vertex* DrawFunction;
 };
 
 #endif /* VIEW_THEME_DRAWER_H */

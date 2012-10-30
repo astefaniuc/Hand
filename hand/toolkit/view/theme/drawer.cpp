@@ -34,17 +34,11 @@ DrawerFactory::DrawerFactory
     // Basic implementation check
     if(!draw_func)
         exit(666);
-    DrawFunction = draw_func;
-}
-
-
-DrawerFactory::~DrawerFactory()
-{
-    delete(DrawFunction);
+    Get("DrawFunc")->Add(draw_func);
 }
 
 
 bool DrawerFactory::Execute(Vertex* tree)
 {
-    return tree->Attach(DrawFunction);
+    return tree->Attach(Get("DrawFunc")->Get());
 }

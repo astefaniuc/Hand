@@ -31,6 +31,7 @@
 #define THEMES_MENU "Themes"
 
 
+#define TARGET "Target"
 
 #define VIRTUALSURFACE "VIRTUALSURFACE"
 // Layout and layers
@@ -86,7 +87,6 @@
 
 // Name of the Vertex containing the Theme object and the drawing func
 #define DRAWOBJ_DRAWER "Drawer"
-
 
 
 enum button_string

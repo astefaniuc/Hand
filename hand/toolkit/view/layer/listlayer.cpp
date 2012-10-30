@@ -76,17 +76,17 @@ void ListLayer::Configure(Vertex* sub_layout)
 
 bool ListLayerFactory::Execute(Vertex* tree)
 {
-    Vertex* types = tree->Vertex::Get(LAYOUT, ANY)->Vertex::Get(REQUEST);
+    Vertex* types = tree->Vertex::Get(REQUEST);
     types->Reset();
     types->Get(LIST);
-    return tree->Vertex::Set(new ListLayer(LIST));
+    return tree->Get(TARGET)->Get()->Vertex::Set(new ListLayer(LIST));
 }
 
 
 bool ListLayerFactory::IsValidInput(Vertex* input)
 {
-    if(input->Is(LIST) &&
-            input->Vertex::Get(LAYOUT, ANY)->Vertex::Get(REQUEST)->Get(ANY, LIST))
+    Vertex* tgt = input->Get(TARGET)->Get();
+    if(tgt && tgt->Is(LIST) && input->Vertex::Get(REQUEST)->Get(ANY, LIST))
         return true;
     return false;
 }

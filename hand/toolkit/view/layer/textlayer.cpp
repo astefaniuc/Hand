@@ -37,17 +37,17 @@ TextLayer::TextLayer(string name) : Layer(name)
 
 bool TextLayerFactory::Execute(Vertex* tree)
 {
-    Vertex* types = tree->Vertex::Get(LAYOUT, ANY)->Vertex::Get(REQUEST);
+    Vertex* types = tree->Vertex::Get(REQUEST);
     types->Reset();
     types->Get(TEXT);
-    return tree->Vertex::Set(new TextLayer(TEXT));
+    return tree->Get(TARGET)->Get()->Vertex::Set(new TextLayer(TEXT));
 }
 
 
 bool TextLayerFactory::IsValidInput(Vertex* input)
 {
-    if(input->Is(NOTE) &&
-            input->Vertex::Get(LAYOUT, ANY)->Vertex::Get(REQUEST)->Get(ANY, TEXT))
+    Vertex* tgt = input->Get(TARGET)->Get();
+    if(tgt && tgt->Is(NOTE) && input->Vertex::Get(REQUEST)->Get(ANY, TEXT))
         return true;
     return false;
 }

@@ -191,9 +191,10 @@ Layer* Layer::Insert(Vertex* data, string position)
     child_layout->Set(curr_layout->Get("Theme"));
 
     data->Vertex::Set(child_layout);
+    child_layout->Get(TARGET)->Set(data);
 
     // Create the Layer
-    layer_factories->Execute(data);
+    layer_factories->Execute(child_layout);
     Layer* sub_layer = dynamic_cast<Layer*>(data->Vertex::Get(LAYER, ANY));
     if(!sub_layer)
         return NULL;
