@@ -36,14 +36,14 @@ class Vertex
         Vertex(std::string name);
         virtual ~Vertex();
 
-        // Inserts a sub-item to the current vertex and makes the current
-        // vertex the owner of it; allows multiple objects with same name
+        // Appends (if not already there) a sub-item to the current vertex
+        // and makes the current vertex the owner of it
          virtual bool Add(Vertex* child);
-        // Inserts a sub-item to the current vertex without changing
-        // the ownership of 'item'; it replaces any object with same name
+        // Inserts (or moves) a sub-item into the current vertex at first position
+        // ("default" value returned by Get()) without changing the ownership of 'sub'
         virtual bool Set(Vertex* sub);
-        // Appends a sub-item to the current vertex without changing
-        // the ownership of 'item'; allows multiple objects with same name
+        // Appends (if not already there) a sub-item to the current vertex
+        // without changing the ownership of 'sub'
         virtual bool Attach(Vertex* sub);
 
         // Return the default child/value which is NULL for a plain vertex

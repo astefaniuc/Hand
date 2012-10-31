@@ -184,6 +184,7 @@ Layer* Layer::Insert(Vertex* data, string position)
     // list of supported layer types
     // This already connects all involved layouts and connects to the Theme
     Vertex* child_layout = curr_layout->Get(LAYOUT, position);
+    child_layout->Name(data->Name());
     Vertex* layer_factories = curr_layout->Get(FACTORYMAP, LAYER_FACTORIES);
 
     // For use further down the spiral
@@ -214,6 +215,7 @@ Layer* Layer::Insert(Vertex* data, string position)
 void Layer::SetLayout(Vertex* layout)
 {
     Set(layout);
+    Add(layout);
     layout->Get("Theme")->Get()->Execute(layout);
 }
 

@@ -71,7 +71,8 @@ bool Vertex::Add(Vertex* child)
     if(!child)
         return false;
 
-    _Body->push_back(child);
+    if(_Body->Find(child)==_Body->end())
+        _Body->push_back(child);
     child->Owner(this);
 
     return true;
@@ -83,8 +84,22 @@ bool Vertex::Set(Vertex* child)
     if(!child)
         return false;
 
-    _Body->insert(_Body->begin(), child);
-    child->_References->push_back(this);
+    VIterator curr = _Body->Find(child);
+    if(curr == _Body->end())
+    {
+        // New sub-item
+        _Body->insert(_Body->begin(), child);
+        child->_References->push_back(this);
+    }
+    else
+    {
+        // Already here
+        if(curr != _Body->begin())
+        {
+            _Body->erase(curr);
+            _Body->insert(_Body->begin(), child);
+        }
+    }
 
     return true;
 }
@@ -92,7 +107,7 @@ bool Vertex::Set(Vertex* child)
 
 bool Vertex::Attach(Vertex* child)
 {
-    if(!child)
+    if(!child || (_Body->Find(child)!=_Body->end()))
         return false;
 
     _Body->push_back(child);
@@ -272,6 +287,13 @@ bool Vertex::Is(RegularExpression* se)
 
 void Vertex::Owner(Vertex* owner)
 {
+    VIterator curr = _References->Find(owner);
+    if(curr != _References->end())
+    {
+        if(curr == _References->begin())
+            return;
+        _References->erase(curr);
+    }
     _References->insert(_References->begin(), owner);
 }
 

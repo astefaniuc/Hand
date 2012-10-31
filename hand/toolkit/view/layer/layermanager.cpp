@@ -116,8 +116,16 @@ bool LayerManager::UnloadAppInterface(Vertex* vertex)
 
 bool LayerManager::Update(bool forced)
 {
-    if(NextRequest && Expand(NextRequest))
-        forced = true;
+    if(NextRequest)
+    {
+        if(MasterView)
+        {
+            delete(MasterView);
+            MasterView = NULL;
+        }
+        if(Expand(NextRequest))
+            forced = true;
+    }
     NextRequest = NULL;
     return Layer::Update(forced);
 }

@@ -35,15 +35,24 @@ class BaseList : public std::vector<Vertex*>
         using vector::erase;
         bool erase(Vertex* v)
         {
+            VIterator curr = Find(v);
+            if(curr != end())
+            {
+                erase(curr);
+                return true;
+            }
+
+            return false;
+        };
+
+        VIterator Find(Vertex* v)
+        {
             VIterator curr;
             for(curr=begin(); curr!=end(); curr++)
                 if((*curr) == v)
-                {
-                    erase(curr);
-                    return true;
-                }
+                    break;
 
-            return false;
+            return curr;
         };
 };
 
