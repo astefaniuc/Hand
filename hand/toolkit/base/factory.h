@@ -35,7 +35,7 @@ class Factory : public Vertex
                 std::string output_type);
         virtual ~Factory(){};
 
-        virtual bool Execute(Vertex* input) = 0;
+        virtual bool execute(Vertex* input) = 0;
         virtual bool IsValidInput(Vertex* input);
 };
 
@@ -48,7 +48,7 @@ class FactoryMap : public List
         FactoryMap(std::string name);
         virtual ~FactoryMap(){};
 
-        virtual bool Execute(Vertex* input);
+        virtual bool execute(Vertex* input);
         virtual bool Resolve(Vertex* input);
 
         Factory* GetFactory(Vertex* input);

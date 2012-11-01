@@ -40,11 +40,11 @@ AnimationsList::~AnimationsList()
         delete(to_delete);
     }while((to_delete=GetNextAnimation()) != NULL);
     */
-    Reset();
+    reset();
 }
 
 
-void AnimationsList::Reset()
+void AnimationsList::reset()
 {
 //    for(Current=Begin; Begin!=End; Current++)
     {
@@ -66,7 +66,7 @@ bool AnimationsList::Update(Vertex* layout)
     Animation* animation = GetFirstAnimation();
     while((GetNextAnimation()) != NULL)
     {
-        if(animation->Execute(layout))
+        if(animation->execute(layout))
         {
             changed = true;
         }
@@ -105,7 +105,7 @@ Animation* AnimationsList::GetCurrentAnimation()
 
 VirtualSurface::VirtualSurface(string name) : Vertex(name)
 {
-    Type(VIRTUALSURFACE);
+    type(VIRTUALSURFACE);
     Changed = true;
     Buffer = NULL;
     Parent = NULL;
@@ -133,7 +133,7 @@ void VirtualSurface::MapSurface(Rect* src_rect, SDL_Rect &tgt_rect, SDL_Surface*
     }
 
     // Get the next layers buffer and absolute position
-    Rect* sap = GetRect(SIZEANDPOSITION, Get(LAYOUT, ANY));
+    Rect* sap = GetRect(SIZEANDPOSITION, get(LAYOUT, ANY));
     src_rect->Multiply(sap);
     if(Parent)
         Parent->MapSurface(src_rect, tgt_rect, tgt_surface);
@@ -180,7 +180,7 @@ void VirtualSurface::BlitSurface
 void VirtualSurface::SetSize(SDL_Rect size)
 {
     // Store only the size, position from layout
-    Rect* sap = GetRect(SIZEANDPOSITION, Get(LAYOUT, ANY));
+    Rect* sap = GetRect(SIZEANDPOSITION, get(LAYOUT, ANY));
     if(sap)
         sap->MultiplyTo(size);
     if((size.w!=SizeAndPositionOnBuffer.w) || (size.h!=SizeAndPositionOnBuffer.h))

@@ -31,13 +31,13 @@ using namespace std;
 
 HandApp::HandApp(string name) : List(name)
 {
-    Type(HANDAPP);
+    type(HANDAPP);
 }
 
 
 Binary::Binary() : Vertex(NAME_NOT_INIT)
 {
-    Type(APPLOADER);
+    type(APPLOADER);
     LoadedLib = NULL;
     Create = NULL;
     Destroy = NULL;
@@ -46,13 +46,13 @@ Binary::Binary() : Vertex(NAME_NOT_INIT)
 
 Binary::~Binary()
 {
-    Reset();
+    reset();
 }
 
 
-bool Binary::Execute(Vertex* input)
+bool Binary::execute(Vertex* input)
 {
-    Reset();
+    reset();
     File* path_obj = dynamic_cast<File*>(input);
     if(!path_obj)
         return false;
@@ -63,7 +63,7 @@ bool Binary::Execute(Vertex* input)
         Create = (creator*) dlsym(LoadedLib, "Create");
         Destroy = (destroyer*) dlsym(LoadedLib, "Destroy");
         if(Create && Destroy)
-            return input->Vertex::Attach(Create());
+            return input->Vertex::attach(Create());
     }
 
     cout << dlerror() << endl;
@@ -71,11 +71,11 @@ bool Binary::Execute(Vertex* input)
 }
 
 
-void Binary::Reset()
+void Binary::reset()
 {
     if(LoadedLib)
     {
-        HandApp* casted = dynamic_cast<HandApp*>(Get(ANY, HANDAPP));
+        HandApp* casted = dynamic_cast<HandApp*>(get(ANY, HANDAPP));
         if(Destroy && casted)
             Destroy(casted);
         dlclose(LoadedLib);
@@ -95,7 +95,7 @@ HandAppLoader::HandAppLoader() : Factory("HandApp Loader",
                                          FILE,
                                          HANDAPP)
 {
-    Type(APPLOADERFACTORY);
+    type(APPLOADERFACTORY);
 }
 
 
@@ -112,16 +112,16 @@ bool HandAppLoader::IsValidInput(Vertex* entry)
 }
 
 
-bool HandAppLoader::Execute(Vertex* input)
+bool HandAppLoader::execute(Vertex* input)
 {
     Binary* bin = new Binary();
     // Open the library
-    if(!bin->Execute(input))
+    if(!bin->execute(input))
     {
         delete(bin);
         return false;
     }
-    input->Vertex::Add(bin);
-    input->Vertex::Get(REQUEST)->Set(Get(REQUEST)->Get());
+    input->Vertex::add(bin);
+    input->Vertex::get(REQUEST)->set(get(REQUEST)->get());
     return true;
 }

@@ -35,8 +35,8 @@ using namespace std;
 
 LayerManager::LayerManager() : ListLayer(LAYERMANAGER)
 {
-    Vertex::Get(LAYERMANAGER)->Set(this);
-    Type(LAYERMANAGER);
+    Vertex::get(LAYERMANAGER)->set(this);
+    type(LAYERMANAGER);
     NextRequest = NULL;
     _InputState = NULL;
     MasterView = NULL;
@@ -57,37 +57,37 @@ void LayerManager::Init()
 {
     // Register default layer types/factories
     FactoryMap* fm = new FactoryMap(LAYER_FACTORIES);
-    fm->Add(new TextLayerFactory());
-    fm->Add(new ButtonLayerFactory());
-    fm->Add(new ListLayerFactory());
+    fm->add(new TextLayerFactory());
+    fm->add(new ButtonLayerFactory());
+    fm->add(new ListLayerFactory());
 
     Vertex* layout = new Layout("MasterLayer", LIST);
-    Set(layout);
-    layout->Add(fm);
+    set(layout);
+    layout->add(fm);
 
     // Theme menu
     List* theme_menu = new List(THEMES_MENU);
     // The path to the theme files
     List* theme_dir = new File(THEMES_DIRECTORY);
-    theme_menu->Add(theme_dir);
+    theme_menu->add(theme_dir);
     // Add a method to create a menu with the themes one HD
-    theme_menu->Add(new Method<LayerManager>(THEMES_MENU, this, &LayerManager::GetAllThemes));
+    theme_menu->add(new Method<LayerManager>(THEMES_MENU, this, &LayerManager::GetAllThemes));
     // The default theme (to be loaded) (TODO: get this from persistent object)
     List* curr_theme = new File(DEFAULT_THEME);
     // Add the default theme to the theme folder (without scanning if it really is there)
-    theme_dir->Add(curr_theme);
-    curr_theme->Get(PATH)->Set(theme_dir);
+    theme_dir->add(curr_theme);
+    curr_theme->get(PATH)->set(theme_dir);
     // Load the theme
     LoadTheme(curr_theme);
 
     List* pub = new List("System");
-    Add(pub);
+    add(pub);
     Layer::SetContent(pub);
-    pub->Add(theme_menu);
-    pub->Add(new Method<LayerManager>("Exit", this, &LayerManager::Exit));
+    pub->add(theme_menu);
+    pub->add(new Method<LayerManager>("Exit", this, &LayerManager::Exit));
     // Add the exit function to the tree of available funcs
     // Request command at highest level
-    GetCommand(pub->Get("Exit"), _InputState->GetNumberOfKeys());
+    GetCommand(pub->get("Exit"), _InputState->GetNumberOfKeys());
     // Start the focus handling layer
 /*    MasterView = CreateLayer(FOCUSLAYER);
     MasterView->Init();
@@ -101,7 +101,7 @@ void LayerManager::LoadAppInterface(Vertex* tree, bool make_default)
         return;
 
     // Insert to the local Vertex tree
-    Add(tree); // or Attach()?
+    add(tree); // or attach()?
     if(make_default)
         Layer::SetContent(tree);
 }
@@ -135,9 +135,9 @@ Vertex* LayerManager::GetCommandList(Vertex* menu)
 {
     Vertex* child;
     uint i = 0;
-    while((child=menu->Get(++i)) != NULL)
+    while((child=menu->get(++i)) != NULL)
     {
-        if(child->Is(METHOD))
+        if(child->is(METHOD))
             return menu;
 
         else if((child=GetCommandList(child)) != NULL)
@@ -191,7 +191,7 @@ Device* LayerManager::GetDevice()
 
 void LayerManager::SetDevice(Device* device)
 {
-    device->Vertex::Get(LAYERMANAGER)->Set(this);
+    device->Vertex::get(LAYERMANAGER)->set(this);
     // Is the Device initialized?
     _InputState = device->GetInputState();
     // Delayed initialization of the LayerManager, needs _InputState ptr
@@ -204,7 +204,7 @@ void LayerManager::SetDevice(Device* device)
         Request(device);
     }
     else
-        Expand(device->Find(DEVICE_KEYLIST));
+        Expand(device->find(DEVICE_KEYLIST));
 }
 
 
@@ -213,35 +213,35 @@ bool LayerManager::Request(Vertex* request)
     NextRequest = request;
 
     // Removes animations
-//    DrawObject->Animations.Reset();
+//    DrawObject->Animations.reset();
     return true;
 }
 
 
 bool LayerManager::LoadTheme(Vertex* f)
 {
-    f->Vertex::Get(REQUEST)->Get(HANDAPP);
-    if(!HandServer::GetInstance()->Execute(f))
+    f->Vertex::get(REQUEST)->get(HANDAPP);
+    if(!HandServer::GetInstance()->execute(f))
         return false;
-    Theme* theme = dynamic_cast<Theme*>(f->Vertex::Get(HANDAPP, ANY));
+    Theme* theme = dynamic_cast<Theme*>(f->Vertex::get(HANDAPP, ANY));
 
     if(!theme)
         return false;
 
-    Vertex* layout = Get(LAYOUT, ANY);
+    Vertex* layout = get(LAYOUT, ANY);
     // Sets the theme for all sublayouts
-    layout->Get("Theme")->Set(theme);
-    theme->Execute(layout);
+    layout->get("Theme")->set(theme);
+    theme->execute(layout);
     return true;
 }
 
 
 bool LayerManager::GetAllThemes(Vertex* themes_dir)
 {
-    themes_dir->Vertex::Get(REQUEST)->Get(FILE);
+    themes_dir->Vertex::get(REQUEST)->get(FILE);
     // (Re-)read the list of available themes
-    HandServer::GetInstance()->Execute(themes_dir);
-    List* themes_list = dynamic_cast<List*>(themes_dir->Vertex::Get(FILE, ANY));
+    HandServer::GetInstance()->execute(themes_dir);
+    List* themes_list = dynamic_cast<List*>(themes_dir->Vertex::get(FILE, ANY));
     if(!themes_list)
         return false;
 
@@ -250,11 +250,11 @@ bool LayerManager::GetAllThemes(Vertex* themes_dir)
     File* file;
     Vertex* elem;
     uint i = 0;
-    while((elem=themes_list->Get(++i)) != NULL)
+    while((elem=themes_list->get(++i)) != NULL)
     {
         file = dynamic_cast<File*>(elem);
         if(file)
-            file->Add(loader);
+            file->add(loader);
     }
 
     return Request(themes_dir);

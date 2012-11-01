@@ -60,7 +60,7 @@ bool InputState::Press(int k)
     PressedKey = FollowerKey = FollowerKey->GetChild(k);
     if(PressedKey == NULL)
     {
-        Reset();
+        reset();
         return false;
     }
 
@@ -86,7 +86,7 @@ bool InputState::Release(int k)
         ((FollowerKey=FollowerKey->GetParent(k)) == NULL))
     {
         // Some events get lost, this command is corrupted
-        Reset();
+        reset();
         return false;
     }
 
@@ -99,7 +99,7 @@ bool InputState::Release(int k)
             // There is a GUI item mapped to this command
             layer->ReleaseGui();
 
-        Reset();
+        reset();
     }
     else
     {
@@ -110,7 +110,7 @@ bool InputState::Release(int k)
 }
 
 
-void InputState::Reset(void)
+void InputState::reset(void)
 {
     PressedKey = FollowerKey = NullKey;
 }

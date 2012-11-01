@@ -38,84 +38,84 @@ class Vertex
 
         // Appends (if not already there) a sub-item to the current vertex
         // and makes the current vertex the owner of it
-         virtual bool Add(Vertex* child);
+         virtual bool add(Vertex* child);
         // Inserts (or moves) a sub-item into the current vertex at first position
-        // ("default" value returned by Get()) without changing the ownership of 'sub'
-        virtual bool Set(Vertex* sub);
+        // ("default" value returned by get()) without changing the ownership of 'sub'
+        virtual bool set(Vertex* sub);
         // Appends (if not already there) a sub-item to the current vertex
         // without changing the ownership of 'sub'
-        virtual bool Attach(Vertex* sub);
+        virtual bool attach(Vertex* sub);
 
         // Return the default child/value which is NULL for a plain vertex
-        Vertex* Get();
+        Vertex* get();
         // Get the first sub-item by name.
         // If the item doesn't exist it returns a new Link vertex;
-        // use Get(ANY, name) to test if a vertex exists
-        virtual Vertex* Get(std::string name);
+        // use get(ANY, name) to test if a vertex exists
+        virtual Vertex* get(std::string name);
         // Get the first sub-item by name and type; if the item is not found
         // it returns NULL; the parameters can be set to ANY e.g.
-        // Get(ANY, ANY) returns the first stored item
-        virtual Vertex* Get(std::string type, std::string name);
+        // get(ANY, ANY) returns the first stored item
+        virtual Vertex* get(std::string type, std::string name);
         // Get the child by position, 1-based
-        virtual Vertex* Get(uint item);
+        virtual Vertex* get(uint item);
 
         // Get the number of elements
-        virtual uint Size();
+        virtual uint size();
 
         // Simple iterative deepening depth-first search.
         // Omits OWNER from the search but might fail with any other graph
         // cycles, use the Search engine in case of doubt.
-        virtual Vertex* Find(std::string name, int max_depth = 2);
+        virtual Vertex* find(std::string name, int max_depth = 2);
         // Flat search with support for (boost-typed) regular expressions
-        // TODO: make it iterative or rename to it "Get()"?
-        virtual Vertex* Find(RegularExpression* expression);
+        // TODO: make it iterative or rename to it "get()"?
+        virtual Vertex* find(RegularExpression* expression);
 
         // Set Vertex name
-        void Name(std::string name);
+        void name(std::string name);
         // Get the Vertex name
-        std::string& Name();
+        std::string& name();
 
         // Set the Vertex type/tag
-        void Type(std::string type);
+        void type(std::string type);
         // Returns the last set type
-        std::string Type();
-        bool Is(std::string type);
-        bool Is(RegularExpression* type);
+        std::string type();
+        bool is(std::string type);
+        bool is(RegularExpression* type);
 
         // Removes all sub-objects
-        virtual void Reset();
+        virtual void reset();
         // Removes child from Vertex. If Vertex is the owner of child it also
         // resets the ownership
-        virtual bool Detach(Vertex* child);
+        virtual bool detach(Vertex* child);
         // Removes the reference to 'item' and deletes the object if it
         // is the owner
-        virtual bool Delete(Vertex* child);
+        virtual bool remove(Vertex* child);
 
         // Returns the string to be visualized, here: the name
-        virtual std::string GetAsString();
+        virtual std::string getAsString();
 
         // Interface to methods defined in a derived class
-        virtual bool Execute(Vertex* func_param);
+        virtual bool execute(Vertex* func_param);
 
         // Helper method for the search engine
-        virtual bool IsOpen(Search* search);
+        virtual bool isOpen(Search* search);
 
     protected:
-        // Helper method allowing to virtualize the return value of Get(void);
+        // Helper method allowing to virtualize the return value of get(void);
         // overload this if you want to return a different default value
-        virtual Vertex* _Get();
-        virtual Vertex* _Find(std::string name, int depth);
+        virtual Vertex* _get();
+        virtual Vertex* _find(std::string name, int depth);
 
     private:
         // Set object owner (for memory management).
-        void Owner(Vertex* owner);
+        void owner(Vertex* owner);
         // Returns the pointer to the owner vertex
-        Vertex* Owner();
+        Vertex* owner();
 
-        std::string _Name;
-        BaseList* _Body;
-        BaseList* _References;
-        Vertex* _Type;
+        std::string Name;
+        BaseList* Body;
+        BaseList* References;
+        Vertex* Type;
 };
 
 #endif /* GRAPH_VERTEX_H */

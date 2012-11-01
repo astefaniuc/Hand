@@ -11,7 +11,7 @@ class FindTester : public HandApp
 {
     public:
         FindTester(void);
-        void TestDelete();
+        void Testremove();
         void TestFindBigTree();
     private:
         Vertex* Build(Vertex* entry,

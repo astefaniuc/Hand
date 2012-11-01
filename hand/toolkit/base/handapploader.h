@@ -38,8 +38,8 @@ class Binary : public Vertex
         Binary();
         ~Binary();
 
-        bool Execute(Vertex* ignore);
-        void Reset();
+        bool execute(Vertex* ignore);
+        void reset();
     private:
         // Shared library handle
         void* LoadedLib;
@@ -56,7 +56,7 @@ class HandAppLoader : public Factory
         HandAppLoader();
         ~HandAppLoader(){};
 
-        bool Execute(Vertex* descriptor);
+        bool execute(Vertex* descriptor);
         bool IsValidInput(Vertex* input);
  };
 

@@ -27,7 +27,7 @@ using namespace std;
 ListLayer::ListLayer(string name) : Layer(name)
 {
     BufferType = OVERLAY;
-    Type(LIST);
+    type(LIST);
 }
 
 
@@ -41,12 +41,12 @@ void ListLayer::SetContent(Vertex* data)
     // Connect list and layer
     Layer::SetContent(data);
 
-    uint nr_of_childs = data->Size();
+    uint nr_of_childs = data->size();
     nr_of_childs--;
-    Data<uint>* max_c = dynamic_cast<Data<uint>*>(Get(LAYOUT, ANY)->Get("MaxSize"));
+    Data<uint>* max_c = dynamic_cast<Data<uint>*>(get(LAYOUT, ANY)->get("MaxSize"));
     if(max_c)
     {
-        uint max_size = max_c->Get();
+        uint max_size = max_c->get();
         if(max_size < nr_of_childs)
             nr_of_childs = max_size;
     }
@@ -54,7 +54,7 @@ void ListLayer::SetContent(Vertex* data)
     Vertex* child;
     uint i = 0;
     // Now create layout
-    while((child=data->Get(++i)) != NULL)
+    while((child=data->get(++i)) != NULL)
         // Create the sub-objects
         // Check if the Layer supports insertion at position
         Insert(child, "ListElement");
@@ -74,19 +74,19 @@ void ListLayer::Configure(Vertex* sub_layout)
 // ----------------------------------------------------------------
 
 
-bool ListLayerFactory::Execute(Vertex* tree)
+bool ListLayerFactory::execute(Vertex* tree)
 {
-    Vertex* types = tree->Vertex::Get(REQUEST);
-    types->Reset();
-    types->Get(LIST);
-    return tree->Get(TARGET)->Get()->Vertex::Set(new ListLayer(LIST));
+    Vertex* types = tree->Vertex::get(REQUEST);
+    types->reset();
+    types->get(LIST);
+    return tree->get(TARGET)->get()->Vertex::set(new ListLayer(LIST));
 }
 
 
 bool ListLayerFactory::IsValidInput(Vertex* input)
 {
-    Vertex* tgt = input->Get(TARGET)->Get();
-    if(tgt && tgt->Is(LIST) && input->Vertex::Get(REQUEST)->Get(ANY, LIST))
+    Vertex* tgt = input->get(TARGET)->get();
+    if(tgt && tgt->is(LIST) && input->Vertex::get(REQUEST)->get(ANY, LIST))
         return true;
     return false;
 }

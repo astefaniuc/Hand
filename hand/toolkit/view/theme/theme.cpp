@@ -57,13 +57,13 @@ Theme::~Theme()
 
 void Theme::Register(Factory* f)
 {
-    Map->Add(f);
+    Map->add(f);
 }
 
 
-bool Theme::Execute(Vertex* request)
+bool Theme::execute(Vertex* request)
 {
-    Map->Execute(request);
+    Map->execute(request);
     return FillOut(request);
 }
 
@@ -79,15 +79,15 @@ bool Theme::FillOut(Vertex* input)
     string name;
     Vertex* child;
     uint i = 0;
-    while((child=layout->Get(++i)) != NULL)
+    while((child=layout->get(++i)) != NULL)
     {
-        name = child->Name();
+        name = child->name();
         if((name==CHILDREN) || (name=="Methods"))
             _FillOut(child);
         else if((name=="Fields") || (name=="Update"))
             continue;
         else
-            Execute(child);
+            execute(child);
     }
     return true;
 }
@@ -97,8 +97,8 @@ bool Theme::_FillOut(Vertex* input)
 {
     Vertex* child;
     uint i = 0;
-    while((child=input->Get(++i)) != NULL)
-        Execute(child);
+    while((child=input->get(++i)) != NULL)
+        execute(child);
 
     return true;
 }
@@ -126,12 +126,12 @@ TTF_Font* Theme::GetFont(int size)
 
 void Theme::GetFontHeight(Vertex* layout, uint& max_size)
 {
-    Vertex* pref = layout->Get(DIM_FONT_PREFERRED);
+    Vertex* pref = layout->get(DIM_FONT_PREFERRED);
     if(pref)
-        max_size = ((Data<uint>*)pref)->Get();
+        max_size = ((Data<uint>*)pref)->get();
     else
     {
-        uint max = ((Data<uint>*)layout->Get(DIM_FONT_MAX))->Get();
+        uint max = ((Data<uint>*)layout->get(DIM_FONT_MAX))->get();
         if(max_size >= max)
             max_size = max;
     }
@@ -142,7 +142,7 @@ VirtualSurface* Theme::GetSurface(Vertex* in)
 {
     Layout* layout = dynamic_cast<Layout*>(in);
     if(layout)
-        return dynamic_cast<VirtualSurface*>(layout->Get("Surface")->Get());
+        return dynamic_cast<VirtualSurface*>(layout->get("Surface")->get());
     return NULL;
 }
 

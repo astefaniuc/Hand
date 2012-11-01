@@ -38,7 +38,7 @@
 #define PUBLIC "Public"
 
 
-// Wildcard for Get(type, name)
+// Wildcard for get(type, name)
 #define ANY "*"
 // Arbitrary search depth (should be big enough to find everything
 // and small enough to return fast from circles)

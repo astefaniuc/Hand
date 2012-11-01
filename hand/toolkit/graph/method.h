@@ -33,25 +33,25 @@ class Method : public Vertex
         {
             Object = obj;
             Function = func;
-            Type(METHOD);
+            type(METHOD);
         };
         virtual ~Method(){};
 
         // Execute the Method
-        bool Execute(Vertex* param)
+        bool execute(Vertex* param)
         {
             if(Function)
                 return (Object->*Function)(param);
             return false;
         };
 
-        using Vertex::Set;
-        void Set(TFunction func)
+        using Vertex::set;
+        void set(TFunction func)
         {
             Function = func;
         };
-        using Vertex::Get;
-        virtual I* Get()
+        using Vertex::get;
+        virtual I* get()
         {
             // Only makes sense to return the object
             return Object;

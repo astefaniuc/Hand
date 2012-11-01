@@ -41,9 +41,9 @@ void Screen::Init()
 {
     // Add a func to toggle fullscreen <-> windowed mode
     List* button = new List("ToggleFullscreen");
-    button->Add(new Method<Screen>("Button", this, &Screen::ToggleFullscreen));
-    button->Add(new Note(DESCRIPTION, "Toggle full screen"));
-    Add(button);
+    button->add(new Method<Screen>("Button", this, &Screen::ToggleFullscreen));
+    button->add(new Note(DESCRIPTION, "Toggle full screen"));
+    add(button);
 }
 
 
@@ -115,8 +115,8 @@ SDL_Rect Screen::GetResolution()
 
 bool Screen::SetLayerManagerPositions()
 {
-    Vertex* all_lm = Vertex::Get(LAYERMANAGER);
-    if(all_lm->Size() < 1)
+    Vertex* all_lm = Vertex::get(LAYERMANAGER);
+    if(all_lm->size() < 1)
         return false;
 
     SDL_Rect screen = GetResolution();
@@ -124,9 +124,9 @@ bool Screen::SetLayerManagerPositions()
 
     Layer* lm;
     uint i = 0;
-    while((lm=dynamic_cast<Layer*>(all_lm->Get(++i))) != NULL)
+    while((lm=dynamic_cast<Layer*>(all_lm->get(++i))) != NULL)
     {
-        screen_tmp.w = screen.w/all_lm->Size();
+        screen_tmp.w = screen.w/all_lm->size();
         screen_tmp.x = screen_tmp.w*i;
         lm->SetSize(screen_tmp);
     }
@@ -145,10 +145,10 @@ bool Screen::ShowSurface(void)
     if(!SetLayerManagerPositions())
         return false;
 
-    Vertex* all_lm = Vertex::Get(LAYERMANAGER);
+    Vertex* all_lm = Vertex::get(LAYERMANAGER);
     Layer* layer;
     uint i = 0;
-    while((layer=dynamic_cast<Layer*>(all_lm->Get(++i))) != NULL)
+    while((layer=dynamic_cast<Layer*>(all_lm->get(++i))) != NULL)
         layer->Update(false);
 
     // Need to call this extra as BuildSurface is called recursively

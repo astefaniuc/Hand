@@ -28,7 +28,7 @@ using namespace std;
 ButtonLayer::ButtonLayer(string name) : Layer(name)
 {
     BufferType = COLLECTOR;
-    Type(BUTTON);
+    type(BUTTON);
 
     VisibleItems = 0;
     // BTN_NAME, BTN_DESCRIPTION, BTN_ICON, BTN_CONTROL, BTN_PREVIEW
@@ -44,15 +44,15 @@ void ButtonLayer::SetContent(Vertex* data)
 /*
     // Create the sub-elements of the button
     // The preview
-    if(Content->Is(LIST))
+    if(Content->is(LIST))
     {
         SetExpandable();
         // Add list as preview // or data->Children[i] ?
         Insert(data, BTN_FIELD_PREVIEW);
     }*/
     // The button name
-    Vertex* name = new Vertex(data->Name());
-    Add(name);
+    Vertex* name = new Vertex(data->name());
+    add(name);
     Insert(name, BTN_FIELD_NAME);
     // The button description
     Vertex* test_descr = new Vertex("Description Test");
@@ -100,7 +100,7 @@ void ButtonLayer::PressGui()
 void ButtonLayer::ReleaseGui()
 {
     // TODO: depends on the mode what we do now
-    GetContent()->Execute(this);
+    GetContent()->execute(this);
     // TODO: reset layout (IsPressed = false)
     Layer::ReleaseGui();
 }
@@ -111,19 +111,19 @@ void ButtonLayer::ReleaseGui()
 // ----------------------------------------------------------------
 
 
-bool ButtonLayerFactory::Execute(Vertex* tree)
+bool ButtonLayerFactory::execute(Vertex* tree)
 {
-    Vertex* types = tree->Vertex::Get(REQUEST);
-    types->Reset();
-    types->Get(BUTTON);
-    return tree->Get(TARGET)->Get()->Vertex::Set(new ButtonLayer(BUTTON));
+    Vertex* types = tree->Vertex::get(REQUEST);
+    types->reset();
+    types->get(BUTTON);
+    return tree->get(TARGET)->get()->Vertex::set(new ButtonLayer(BUTTON));
 }
 
 
 bool ButtonLayerFactory::IsValidInput(Vertex* input)
 {
-    Vertex* tgt = input->Get(TARGET)->Get();
-    if(tgt && tgt->Is(METHOD) && input->Vertex::Get(REQUEST)->Get(ANY, BUTTON))
+    Vertex* tgt = input->get(TARGET)->get();
+    if(tgt && tgt->is(METHOD) && input->Vertex::get(REQUEST)->get(ANY, BUTTON))
         return true;
     return false;
 }

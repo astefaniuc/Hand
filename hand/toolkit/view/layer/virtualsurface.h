@@ -32,7 +32,7 @@ class AnimationsList : public List
     public:
         AnimationsList();
         ~AnimationsList();
-        void Reset();
+        void reset();
         bool Update(Vertex* layout);
         void AppendAnimation(Animation* to_append);
         void RemoveCurrentAnimation();

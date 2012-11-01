@@ -42,7 +42,7 @@ class ListLayerFactory : public Factory
         ListLayerFactory() : Factory("ListLayerFactory", LIST, LIST){};
         ~ListLayerFactory(){};
 
-        bool Execute(Vertex* input);
+        bool execute(Vertex* input);
         bool IsValidInput(Vertex* input);
 };
 

@@ -41,11 +41,11 @@ class Layout : public List
         Layout(std::string name, std::string type);
         virtual ~Layout(){};
 
-        bool Add(Vertex* child);
-        using List::Get;
-        virtual Vertex* Get(std::string type, std::string name);
-        bool Execute(Vertex* surface);
-        void Reset();
+        bool add(Vertex* child);
+        using List::get;
+        virtual Vertex* get(std::string type, std::string name);
+        bool execute(Vertex* surface);
+        void reset();
 };
 
 
@@ -63,7 +63,7 @@ class LayoutFactory : public Factory
         };
         virtual ~LayoutFactory(){};
 
-        bool Execute(Vertex* in_out)
+        bool execute(Vertex* in_out)
         {
             if((Producer->*Function)(in_out))
                 return true;
@@ -90,7 +90,7 @@ class PropertyFactory : public Factory
         };
         virtual ~PropertyFactory(){};
 
-        bool Execute(Vertex* in_out)
+        bool execute(Vertex* in_out)
         {
             return (Producer->*Function)(in_out);
         };

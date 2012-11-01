@@ -26,17 +26,17 @@ using namespace std;
 
 Link::Link(string name) : List(name)
 {
-    Type(LINK);
+    type(LINK);
 }
 
 
-bool Link::IsOpen(Search* search)
+bool Link::isOpen(Search* search)
 {
-    if(!Vertex::IsOpen(search))
+    if(!Vertex::isOpen(search))
         return false;
     // Does it match in its role as relation
     RegularExpression* se = search->GetSearchLink();
-    if(se && !se->Matches(Name()))
+    if(se && !se->Matches(name()))
         // Don't look further if it's not the right relation
         return false;
     return true;

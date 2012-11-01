@@ -27,9 +27,9 @@ using namespace std;
 
 DataManager::DataManager() : FactoryMap("DefaultDataManager")
 {
-    Add(new HandAppLoader());
-    Add(new FileFactory());
-    Add(new Persistence());
+    add(new HandAppLoader());
+    add(new FileFactory());
+    add(new Persistence());
 }
 
 
@@ -44,11 +44,11 @@ DataManager::~DataManager()
 //----------------------------------------------------------------------------
 
 
-bool Persistence::Execute(Vertex* keys_tree)
+bool Persistence::execute(Vertex* keys_tree)
 {
     // Change name
-    keys_tree->Name("settings:Keyboard::1");
-    keys_tree = dynamic_cast<List*>(keys_tree->Get("Keylist"));
+    keys_tree->name("settings:Keyboard::1");
+    keys_tree = dynamic_cast<List*>(keys_tree->get("Keylist"));
 
     // TEMP:
     string key_ids[] = {"97", "119", "101"," 102", "32"};
@@ -56,7 +56,7 @@ bool Persistence::Execute(Vertex* keys_tree)
     for(uint i=0; i < (sizeof(key_ids)/sizeof(key_ids[0])); ++i)
     {
         // Init keys with SDLKey values
-//        keys_tree->List[i]->Set(key_ids[i]);
+//        keys_tree->List[i]->set(key_ids[i]);
     }
     return true;
 }
@@ -65,7 +65,7 @@ bool Persistence::Execute(Vertex* keys_tree)
 bool Persistence::IsValidInput(Vertex* keys_tree)
 {
     // Change name
-    if(keys_tree->Name() == "settings:Keyboard::0")
+    if(keys_tree->name() == "settings:Keyboard::0")
         return true;
     return false;
 }

@@ -26,7 +26,7 @@ using namespace std;
 TextLayer::TextLayer(string name) : Layer(name)
 {
     BufferType = OVERLAY;
-    Type(TEXT);
+    type(TEXT);
 }
 
 
@@ -35,19 +35,19 @@ TextLayer::TextLayer(string name) : Layer(name)
 // ----------------------------------------------------------------
 
 
-bool TextLayerFactory::Execute(Vertex* tree)
+bool TextLayerFactory::execute(Vertex* tree)
 {
-    Vertex* types = tree->Vertex::Get(REQUEST);
-    types->Reset();
-    types->Get(TEXT);
-    return tree->Get(TARGET)->Get()->Vertex::Set(new TextLayer(TEXT));
+    Vertex* types = tree->Vertex::get(REQUEST);
+    types->reset();
+    types->get(TEXT);
+    return tree->get(TARGET)->get()->Vertex::set(new TextLayer(TEXT));
 }
 
 
 bool TextLayerFactory::IsValidInput(Vertex* input)
 {
-    Vertex* tgt = input->Get(TARGET)->Get();
-    if(tgt && tgt->Is(NOTE) && input->Vertex::Get(REQUEST)->Get(ANY, TEXT))
+    Vertex* tgt = input->get(TARGET)->get();
+    if(tgt && tgt->is(NOTE) && input->Vertex::get(REQUEST)->get(ANY, TEXT))
         return true;
     return false;
 }

@@ -30,17 +30,17 @@ using namespace boost::filesystem;
 
 File::File(string file_name) : List(file_name)
 {
-    Type(FILE);
+    type(FILE);
     path file_path(file_name);
     if(is_regular_file(file_path))
     {
         if(file_path.has_parent_path())
-            Get(PATH)->Set(new File(file_path.parent_path().string()));
+            get(PATH)->set(new File(file_path.parent_path().string()));
 
-        Name(file_path.filename().string());
+        name(file_path.filename().string());
     }
     else // is directory
-        Name(file_name);
+        name(file_name);
 }
 
 
@@ -54,15 +54,15 @@ path File::GetPath()
 {
     path _path;
     // Get directory information from parent path
-    Vertex* dir_rel = Get(PATH);
+    Vertex* dir_rel = get(PATH);
     if(dir_rel)
     {
-        File* parent_path = dynamic_cast<File*>(dir_rel->Get());
+        File* parent_path = dynamic_cast<File*>(dir_rel->get());
         if(parent_path)
             _path = parent_path->GetPath();
     }
     // Check if it's still a relative path
-    _path /= Name();
+    _path /= name();
     if(_path.is_relative())
         system_complete(_path);
 
@@ -77,20 +77,20 @@ path File::GetPath()
 
 bool FileFactory::IsValidInput(Vertex* input)
 {
-    path file_path(input->Name());
+    path file_path(input->name());
     if(is_regular_file(file_path) || is_directory(file_path))
         return true;
     return false;
 }
 
 
-bool FileFactory::Execute(Vertex* tree)
+bool FileFactory::execute(Vertex* tree)
 {
     Note* d_path = dynamic_cast<Note*>(tree);
     if(!d_path)
         return false;
-    Vertex* ret =  new File(d_path->Get());
-    tree->Vertex::Add(ret);
+    Vertex* ret =  new File(d_path->get());
+    tree->Vertex::add(ret);
     return true;
 }
 
@@ -109,7 +109,7 @@ bool  DirectoryLoader::IsValidInput(Vertex* entry)
 }
 
 
-bool  DirectoryLoader::Execute(Vertex* tree)
+bool  DirectoryLoader::execute(Vertex* tree)
 {
     File* ff_dir = dynamic_cast<File*>(tree);
     if(!ff_dir)
@@ -120,7 +120,7 @@ bool  DirectoryLoader::Execute(Vertex* tree)
 
     directory_iterator end;
     // (Re-)read the themes in
-    ff_dir->Reset();
+    ff_dir->reset();
     File* file;
     for(directory_iterator dir_it(dir_path); dir_it!=end; dir_it++)
     {
@@ -129,8 +129,8 @@ bool  DirectoryLoader::Execute(Vertex* tree)
             if(dir_it->path().extension() == LIBRARY_FILE_EXTENSION)
             {
                 file = new File(dir_it->path().filename().string());
-                file->Get(PATH)->Set(ff_dir);
-                ff_dir->Add(file);
+                file->get(PATH)->set(ff_dir);
+                ff_dir->add(file);
             }
         }
         else if(is_directory(dir_it->status()))

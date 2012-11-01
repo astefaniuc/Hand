@@ -24,74 +24,74 @@
 using namespace std;
 
 
-Layout::Layout(string name, string type) : List(name)
+Layout::Layout(string name, string stype) : List(name)
 {
-    Type(LAYOUT);
-    if(type != "")
-        Vertex::Get(REQUEST)->Get(type);
-    // Colours.Set(r[ed], g[reen], b[lue])
-/*    Color_Frame.Set(0, 3, 200);
-    Color_Background.Set(0, 0, 0);
-    Color_Alt_Frame.Set(0, 3, 232);
-    Color_Alt_Background.Set(128, 128, 128);*/
+    type(LAYOUT);
+    if(stype != "")
+        Vertex::get(REQUEST)->get(stype);
+    // Colours.set(r[ed], g[reen], b[lue])
+/*    Color_Frame.set(0, 3, 200);
+    Color_Background.set(0, 0, 0);
+    Color_Alt_Frame.set(0, 3, 232);
+    Color_Alt_Background.set(128, 128, 128);*/
 
-//    SizeAndPosition.Set(0.0, 0.0, 1.0, 1.0);
+//    SizeAndPosition.set(0.0, 0.0, 1.0, 1.0);
 
 //    Background = SOLID_COLOR;
 }
 
 
-bool Layout::Add(Vertex* child)
+bool Layout::add(Vertex* child)
 {
-    if(!child->Is(LAYOUT))
-        return List::Add(child);
+    if(!child->is(LAYOUT))
+        return List::add(child);
 
-    Get(CHILDREN)->Add(child);
-    return child->Get(PARENT)->Set(this);
+    get(CHILDREN)->add(child);
+    return child->get(PARENT)->set(this);
 }
 
 
-Vertex* Layout::Get(string type, string name)
+Vertex* Layout::get(string type, string name)
 {
-    Vertex* ret = List::Get(type, name);
+    Vertex* ret = List::get(type, name);
     if(ret || (type!=LAYOUT))
         return ret;
 
     // Check if the requested layout is a field and has to be created
-    Vertex* f = Get("Fields")->Get(LIST, name);
+    Vertex* f = get("Fields")->get(LIST, name);
     if(f)
     {
         // Creator mode
         ret = new Layout("Created", "");
-        Vertex* reqs = ret->Vertex::Get(REQUEST);
+        Vertex* reqs = ret->Vertex::get(REQUEST);
         uint i = 0;
         Vertex* sub_type;
-        while((sub_type=f->Get(++i)) != 0)
-            reqs->Attach(sub_type);
-        Get("Update")->Attach(ret);
+        while((sub_type=f->get(++i)) != 0)
+            reqs->attach(sub_type);
+        get("Update")->attach(ret);
         return ret;
     }
 
-    Vertex* children = Get(LINK, CHILDREN);
+    Vertex* children = get(LINK, CHILDREN);
     if(!children)
         return NULL;
 
     // "GetField" mode
-    ret = children->Get(type, name);
+    ret = children->get(type, name);
     if(ret)
     {
-        Get("Update")->Attach(ret);
+        get("Update")->attach(ret);
         return ret;
     }
 
     Vertex* child;
     uint i = 0;
-    while((child=children->Get(++i)) != NULL)
+    while((child=children->get(++i)) != NULL)
     {
-        ret = child->Get(type, name);
+        ret = child->get(type, name);
         if(ret)
         {
-            Get("Update")->Attach(child);
+            get("Update")->attach(child);
             return ret;
         }
     }
@@ -100,38 +100,38 @@ Vertex* Layout::Get(string type, string name)
 }
 
 
-bool Layout::Execute(Vertex* vs)
+bool Layout::execute(Vertex* vs)
 {
     // Set the surface in the layout and use the layout
     // as parameter for the drawer
-    Get("Surface")->Set(vs);
-    Vertex* f = Get("Methods")->Get("DrawFunc")->Get();
+    get("Surface")->set(vs);
+    Vertex* f = get("Methods")->get("DrawFunc")->get();
     if(f)
         // Execute drawer on current layout
-        f->Execute(this);
-    f = Get(LINK, CHILDREN);
+        f->execute(this);
+    f = get(LINK, CHILDREN);
     if(f)
     {
         Vertex* layout;
         uint i = 0;
-        while((layout=f->Get(++i)) != NULL)
+        while((layout=f->get(++i)) != NULL)
             // Ignored parameter
-            layout->Execute(vs);
+            layout->execute(vs);
     }
     return true;
 }
 
 
-void Layout::Reset()
+void Layout::reset()
 {
-    Vertex* sub = Get(RECT, SIZEANDPOSITION);
+    Vertex* sub = get(RECT, SIZEANDPOSITION);
     if(sub)
-        sub->Reset();
-    Vertex* children = Get(LINK, CHILDREN);
+        sub->reset();
+    Vertex* children = get(LINK, CHILDREN);
     if(!children)
         return;
     Vertex* layout;
     uint i = 0;
-    while((layout=children->Get(++i)) != NULL)
-        layout->Reset();
+    while((layout=children->get(++i)) != NULL)
+        layout->reset();
 }

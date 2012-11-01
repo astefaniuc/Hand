@@ -30,87 +30,87 @@ List::List(string name) : Vertex(name)
        allows initialization with a customized list
     */
 
-    Type(LIST);
+    type(LIST);
 }
 
 
-bool List::Add(Vertex* child)
+bool List::add(Vertex* child)
 {
-    return List::Get(PUBLIC)->Add(child);
+    return List::get(PUBLIC)->add(child);
 }
 
 
-bool List::Set(Vertex* child)
+bool List::set(Vertex* child)
 {
-    return List::Get(PUBLIC)->Set(child);
+    return List::get(PUBLIC)->set(child);
 }
 
 
-bool List::Attach(Vertex* child)
+bool List::attach(Vertex* child)
 {
-    return List::Get(PUBLIC)->Attach(child);
+    return List::get(PUBLIC)->attach(child);
 }
 
 
-Vertex* List::_Get()
+Vertex* List::_get()
 {
-    return List::Get(1);
+    return List::get(1);
 }
 
 
-Vertex* List::Get(string s)
+Vertex* List::get(string s)
 {
     if(s == PUBLIC)
     {
         Vertex* child;
         uint i = 0;
-        while((child=Vertex::Get(++i)) != NULL)
-            if(child->Name() == s)
+        while((child=Vertex::get(++i)) != NULL)
+            if(child->name() == s)
                 return child;
 
         // Avoid endless recursion: Vertex + Attach
         child = new Vertex(s);
-        Vertex::Attach(child);
+        Vertex::attach(child);
         return child;
     }
 
-    return List::Get(PUBLIC)->Get(s);
+    return List::get(PUBLIC)->get(s);
 }
 
 
-Vertex* List::Get(uint i)
+Vertex* List::get(uint i)
 {
-    return List::Get(PUBLIC)->Get(i);
+    return List::get(PUBLIC)->get(i);
 }
 
 
-Vertex* List::Get(string type, string name)
+Vertex* List::get(string type, string name)
 {
-    return List::Get(PUBLIC)->Get(type, name);
+    return List::get(PUBLIC)->get(type, name);
 }
 
 
-uint List::Size()
+uint List::size()
 {
-    return List::Get(PUBLIC)->Size();
+    return List::get(PUBLIC)->size();
 }
 
 
-void List::Reset()
+void List::reset()
 {
-    Vertex* pl = Vertex::Get(ANY, PUBLIC);
+    Vertex* pl = Vertex::get(ANY, PUBLIC);
     if(pl)
-        pl->Vertex::Reset();
+        pl->Vertex::reset();
 }
 
 
-bool List::Delete(Vertex* child)
+bool List::remove(Vertex* child)
 {
-    return List::Get(PUBLIC)->Delete(child);
+    return List::get(PUBLIC)->remove(child);
 }
 
 
-bool List::Detach(Vertex* child)
+bool List::detach(Vertex* child)
 {
-    return List::Get(PUBLIC)->Detach(child);
+    return List::get(PUBLIC)->detach(child);
 }

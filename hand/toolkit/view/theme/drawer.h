@@ -32,7 +32,7 @@ class DrawerFactory : public Factory
         DrawerFactory(Vertex* draw_func);
         ~DrawerFactory(){};
 
-        bool Execute(Vertex* in_out);
+        bool execute(Vertex* in_out);
 };
 
 #endif /* VIEW_THEME_DRAWER_H */

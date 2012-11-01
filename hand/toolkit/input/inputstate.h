@@ -42,7 +42,7 @@ class InputState
         // Stores information about released keys by moving down the ReleasedKey ptr
         bool Release(int index);
         // Resets "pressed" and "released" information
-        void Reset();
+        void reset();
         // Returns the number of controls set
         uint  GetNumberOfKeys();
         Node* GetKey(key_pointer);

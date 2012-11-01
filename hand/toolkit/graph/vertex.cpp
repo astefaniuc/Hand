@@ -29,75 +29,75 @@ using namespace std;
 
 Vertex::Vertex(string name)
 {
-    _Type = NULL;
-    _Name = name;
-    _Body = new BaseList();
-    _References = new BaseList();
+    Type = NULL;
+    Name = name;
+    Body = new BaseList();
+    References = new BaseList();
 }
 
 
 Vertex::~Vertex()
 {
-    Reset();
-    delete(_Type);
+    reset();
+    delete(Type);
     // Remove references to this object
-    for(VIterator curr = _References->begin(); curr != _References->end(); curr++)
-        (*curr)->_Body->erase(this);
-    delete(_References);
-    delete(_Body);
+    for(VIterator curr = References->begin(); curr != References->end(); curr++)
+        (*curr)->Body->erase(this);
+    delete(References);
+    delete(Body);
 }
 
 
-void Vertex::Reset()
+void Vertex::reset()
 {
-    VIterator curr = _Body->begin();
-    while(curr != _Body->end())
+    VIterator curr = Body->begin();
+    while(curr != Body->end())
     {
         // Recursively delete all children
-        if(!(*curr)->Owner() || ((*curr)->Owner()==this))
+        if(!(*curr)->owner() || ((*curr)->owner()==this))
             delete((*curr));
         else
         {
             // Detach
-            (*curr)->_References->erase(this);
-            _Body->erase(curr);
+            (*curr)->References->erase(this);
+            Body->erase(curr);
         }
     }
 }
 
 
-bool Vertex::Add(Vertex* child)
+bool Vertex::add(Vertex* child)
 {
     if(!child)
         return false;
 
-    if(_Body->Find(child)==_Body->end())
-        _Body->push_back(child);
-    child->Owner(this);
+    if(Body->find(child)==Body->end())
+        Body->push_back(child);
+    child->owner(this);
 
     return true;
 }
 
 
-bool Vertex::Set(Vertex* child)
+bool Vertex::set(Vertex* child)
 {
     if(!child)
         return false;
 
-    VIterator curr = _Body->Find(child);
-    if(curr == _Body->end())
+    VIterator curr = Body->find(child);
+    if(curr == Body->end())
     {
         // New sub-item
-        _Body->insert(_Body->begin(), child);
-        child->_References->push_back(this);
+        Body->insert(Body->begin(), child);
+        child->References->push_back(this);
     }
     else
     {
         // Already here
-        if(curr != _Body->begin())
+        if(curr != Body->begin())
         {
-            _Body->erase(curr);
-            _Body->insert(_Body->begin(), child);
+            Body->erase(curr);
+            Body->insert(Body->begin(), child);
         }
     }
 
@@ -105,76 +105,76 @@ bool Vertex::Set(Vertex* child)
 }
 
 
-bool Vertex::Attach(Vertex* child)
+bool Vertex::attach(Vertex* child)
 {
-    if(!child || (_Body->Find(child)!=_Body->end()))
+    if(!child || (Body->find(child)!=Body->end()))
         return false;
 
-    _Body->push_back(child);
-    child->_References->push_back(this);
+    Body->push_back(child);
+    child->References->push_back(this);
 
     return true;
 }
 
 
-Vertex* Vertex::Get()
+Vertex* Vertex::get()
 {
-    return _Get();
+    return _get();
 }
 
 
-Vertex* Vertex::_Get()
+Vertex* Vertex::_get()
 {
     return NULL;
 }
 
 
-Vertex* Vertex::Get(string s)
+Vertex* Vertex::get(string s)
 {
     if(s == "")
         return NULL;
     VIterator curr;
-    VIterator _end = _Body->end();
-    for(curr=_Body->begin(); curr!=_end; curr++)
-        if((*curr)->Name() == s)
+    VIterator end = Body->end();
+    for(curr=Body->begin(); curr!=end; curr++)
+        if((*curr)->name() == s)
             return (*curr);
 
     Link* r = new Link(s);
-    Vertex::Add(r);
+    Vertex::add(r);
     return r;
 }
 
 
-Vertex* Vertex::Get(string type, string name)
+Vertex* Vertex::get(string type, string name)
 {
-    VIterator curr = _Body->begin();
-    VIterator _end = _Body->end();
+    VIterator curr = Body->begin();
+    VIterator end = Body->end();
 
     if(name == ANY)
     {
-        if((type==ANY) && (curr!=_end))
+        if((type==ANY) && (curr!=end))
             return (*curr);
         else
-            for(; curr!=_end; curr++)
-                if((*curr)->Is(type))
+            for(; curr!=end; curr++)
+                if((*curr)->is(type))
                     return (*curr);
     }
     else if(type == ANY)
     {
-        for(; curr!=_end; curr++)
-            if((*curr)->Name() == name)
+        for(; curr!=end; curr++)
+            if((*curr)->name() == name)
                 return (*curr);
     }
     else
-        for(; curr!=_end; curr++)
-            if(((*curr)->Name()==name) && (*curr)->Is(type))
+        for(; curr!=end; curr++)
+            if(((*curr)->name()==name) && (*curr)->is(type))
                 return (*curr);
 
     return NULL;
 }
 
 
-Vertex* Vertex::Get(uint i)
+Vertex* Vertex::get(uint i)
 {
     if(i == 0)
         return NULL;
@@ -182,17 +182,17 @@ Vertex* Vertex::Get(uint i)
     // 1-based
     --i;
 
-    if(i < _Body->size())
-        return _Body->at(i);
+    if(i < Body->size())
+        return Body->at(i);
 
     return NULL;
 }
 
 
-bool Vertex::Delete(Vertex* child)
+bool Vertex::remove(Vertex* child)
 {
-    Vertex::Detach(child);
-    if(!child->Owner() || (child->Owner()==this))
+    Vertex::detach(child);
+    if(!child->owner() || (child->owner()==this))
     {
         delete(child);
         return true;
@@ -201,142 +201,142 @@ bool Vertex::Delete(Vertex* child)
 }
 
 
-bool Vertex::Detach(Vertex* child)
+bool Vertex::detach(Vertex* child)
 {
     if(!child)
         return false;
 
-    child->_References->erase(this);
-    return _Body->erase(child);
+    child->References->erase(this);
+    return Body->erase(child);
 }
 
 
-uint Vertex::Size()
+uint Vertex::size()
 {
-    return _Body->size();
+    return Body->size();
 }
 
 
-void Vertex::Name(string name)
+void Vertex::name(string name)
 {
-    _Name = name;
+    Name = name;
 }
 
 
-string& Vertex::Name()
+string& Vertex::name()
 {
-    return _Name;
+    return Name;
 }
 
 
-void Vertex::Type(string type)
+void Vertex::type(string type)
 {
     if(type.empty())
         return;
 
-    if(!_Type)
-        _Type = new Vertex(TYPE);
+    if(!Type)
+        Type = new Vertex(TYPE);
 
-    _Type->Set(new Vertex(type));
+    Type->set(new Vertex(type));
 }
 
 
-string Vertex::Type()
+string Vertex::type()
 {
     // TODO: needs context sensitive type
-    if(_Type)
-        return _Type->_Body->back()->Name();
+    if(Type)
+        return Type->Body->back()->name();
 
     return VERTEX;
 }
 
 
-bool Vertex::Is(string type)
+bool Vertex::is(string type)
 {
     if(type.empty())
         return false;
 
-    if(!_Type)
+    if(!Type)
         return (type == VERTEX);
 
-    VIterator _end = _Type->_Body->end();
-    for(VIterator curr=_Type->_Body->begin(); curr!=_end; curr++)
-        if((*curr)->Name() == type)
+    VIterator end = Type->Body->end();
+    for(VIterator curr=Type->Body->begin(); curr!=end; curr++)
+        if((*curr)->name() == type)
             return true;
 
     return false;
 }
 
 
-bool Vertex::Is(RegularExpression* se)
+bool Vertex::is(RegularExpression* se)
 {
     if(!se)
         return false;
 
-    if(!_Type)
+    if(!Type)
         return se->Matches(VERTEX);
 
-    VIterator _end = _Type->_Body->end();
-    for(VIterator curr=_Type->_Body->begin(); curr!=_end; curr++)
-        if(se->Matches((*curr)->Name()))
+    VIterator end = Type->Body->end();
+    for(VIterator curr=Type->Body->begin(); curr!=end; curr++)
+        if(se->Matches((*curr)->name()))
             return true;
 
     return false;
 }
 
 
-void Vertex::Owner(Vertex* owner)
+void Vertex::owner(Vertex* owner)
 {
-    VIterator curr = _References->Find(owner);
-    if(curr != _References->end())
+    VIterator curr = References->find(owner);
+    if(curr != References->end())
     {
-        if(curr == _References->begin())
+        if(curr == References->begin())
             return;
-        _References->erase(curr);
+        References->erase(curr);
     }
-    _References->insert(_References->begin(), owner);
+    References->insert(References->begin(), owner);
 }
 
 
-Vertex* Vertex::Owner()
+Vertex* Vertex::owner()
 {
-    return _References->front();
+    return References->front();
 }
 
 
-string Vertex::GetAsString()
+string Vertex::getAsString()
 {
-    return _Name;
+    return Name;
 }
 
 
-bool Vertex::Execute(Vertex* func_param)
+bool Vertex::execute(Vertex* func_param)
 {
     return false;
 }
 
 
-bool Vertex::IsOpen(Search* search)
+bool Vertex::isOpen(Search* search)
 {
-    if(_Body->size() == 0)
+    if(Body->size() == 0)
         return true;
     // The search cookie should be the last element
-    Vertex* last = _Body->back();
-    if(last && (last->Name()==search->GetCookieName()))
+    Vertex* last = Body->back();
+    if(last && (last->name()==search->GetCookieName()))
         // Already searched from different branch
         return false;
     return true;
 }
 
 
-Vertex* Vertex::Find(string name, int max_depth)
+Vertex* Vertex::find(string name, int max_depth)
 {
     int depth = 0;
     Vertex* result = NULL;
     while(depth <= max_depth)
     {
         // Allow call of overloaded _Find
-        result = _Find(name, depth);
+        result = _find(name, depth);
 
         if(result)
             break;
@@ -346,23 +346,23 @@ Vertex* Vertex::Find(string name, int max_depth)
 }
 
 
-Vertex* Vertex::_Find(string name, int depth)
+Vertex* Vertex::_find(string name, int depth)
 {
     if(depth < 0)
         return NULL;
     if(depth == 0)
     {
-        if(_Name == name)
+        if(Name == name)
             return this;
         return NULL;
     }
 
     Vertex* ret = NULL;
-    uint s = _Body->size();
+    uint s = Body->size();
     --depth;
     for(uint i=0; i<s; i++)
     {
-        ret = _Body->at(i)->Vertex::_Find(name, depth);
+        ret = Body->at(i)->Vertex::_find(name, depth);
         if(ret != NULL)
             break;
     }
@@ -370,15 +370,15 @@ Vertex* Vertex::_Find(string name, int depth)
 }
 
 
-Vertex* Vertex::Find(RegularExpression* expression)
+Vertex* Vertex::find(RegularExpression* expression)
 {
     // "Plain" find, don't descend
-    uint s = _Body->size();
+    uint s = Body->size();
     Vertex* ret;
     for(uint i=0; i<s; i++)
     {
-        ret = _Body->at(i);
-        if(expression->Matches(ret->Name()))
+        ret = Body->at(i);
+        if(expression->Matches(ret->name()))
             return ret;
     }
     return NULL;

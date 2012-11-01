@@ -39,7 +39,7 @@ class Theme : public HandApp
         Theme(std::string name);
         virtual ~Theme();
 
-        bool Execute(Vertex* request);
+        bool execute(Vertex* request);
         void Register(Factory* f);
     protected:
         virtual TTF_Font* GetFont(int size);

@@ -29,13 +29,13 @@ using namespace std;
 DrawerFactory::DrawerFactory
 (
         Vertex* draw_func
-) : Factory(DRAWOBJ_DRAWER, LINK, draw_func->Name())
+) : Factory(DRAWOBJ_DRAWER, LINK, draw_func->name())
 {
-    Get("DrawFunc")->Add(draw_func);
+    get("DrawFunc")->add(draw_func);
 }
 
 
-bool DrawerFactory::Execute(Vertex* tree)
+bool DrawerFactory::execute(Vertex* tree)
 {
-    return tree->Attach(Get("DrawFunc")->Get());
+    return tree->attach(get("DrawFunc")->get());
 }

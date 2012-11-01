@@ -27,14 +27,14 @@ using namespace std;
 
 Rect::Rect(string name, double x_, double y_, double w_, double h_) : Vertex(name)
 {
-    Type(RECT);
+    type(RECT);
     Init(x_, y_, w_, h_);
 }
 
 
 Rect::Rect() : Vertex("No name")
 {
-    Type(RECT);
+    type(RECT);
     Init(0.0, 0.0, 1.0, 1.0);
 }
 
@@ -42,10 +42,10 @@ Rect::Rect() : Vertex("No name")
 void Rect::Init(double x_, double y_, double w_, double h_)
 {
     // For now add plain data directly
-    Set(new Data<double>("x", x_));
-    Set(new Data<double>("y", y_));
-    Set(new Data<double>("w", w_));
-    Set(new Data<double>("h", h_));
+    set(new Data<double>("x", x_));
+    set(new Data<double>("y", y_));
+    set(new Data<double>("w", w_));
+    set(new Data<double>("h", h_));
     x = x_;
     y = y_;
     w = w_;
@@ -53,12 +53,12 @@ void Rect::Init(double x_, double y_, double w_, double h_)
 }
 
 
-void Rect::Reset()
+void Rect::reset()
 {
-    x = ((Data<double>*)Get("x"))->Get();
-    y = ((Data<double>*)Get("y"))->Get();
-    w = ((Data<double>*)Get("w"))->Get();
-    h = ((Data<double>*)Get("h"))->Get();
+    x = ((Data<double>*)get("x"))->get();
+    y = ((Data<double>*)get("y"))->get();
+    w = ((Data<double>*)get("w"))->get();
+    h = ((Data<double>*)get("h"))->get();
 }
 
 
@@ -82,12 +82,12 @@ void Rect::MultiplyTo(SDL_Rect& abs_rect)
 
 Rect* GetRect(string name, Vertex* tree)
 {
-    Rect* ret = dynamic_cast<Rect*>(tree->Get(RECT, name));
+    Rect* ret = dynamic_cast<Rect*>(tree->get(RECT, name));
     if(!ret)
     {
         // Add a default Rect
         ret = new Rect(SIZEANDPOSITION, 0, 0, 1, 1);
-        tree->Set(ret);
+        tree->set(ret);
     }
 
     return ret;

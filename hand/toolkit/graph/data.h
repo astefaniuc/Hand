@@ -33,23 +33,23 @@ class Data : public Vertex
         Data(std::string name, I val) : Vertex(name)
         {
             Value = val;
-            Type(DATA);
-            Type(std::string(typeid(val).name()));
+            type(DATA);
+            type(std::string(typeid(val).name()));
         };
         virtual ~Data(){};
 
-        using Vertex::Set;
-        bool Set(I val)
+        using Vertex::set;
+        bool set(I val)
         {
             Value = val;
             return true;
         };
-        using Vertex::Get;
-        I Get()
+        using Vertex::get;
+        I get()
         {
             return Value;
         };
-        std::string GetAsString()
+        std::string getAsString()
         {
             std::ostringstream s;
             s << Value;

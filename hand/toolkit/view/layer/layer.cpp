@@ -36,7 +36,7 @@ Layer::Layer(string name) : VirtualSurface(name)
     IsVisible = true;
     IsExpanded = false;
     _Node = NULL;
-    Type(LAYER);
+    type(LAYER);
 }
 
 
@@ -83,14 +83,14 @@ bool Layer::Update(bool forced)
 void Layer::SetContent(Vertex* data)
 {
     // ReleaseContent
-    Get("Content")->Set(data);
+    get("Content")->set(data);
     Changed = true;
 }
 
 
 Vertex* Layer::GetContent()
 {
-    return Get("Content")->Get();
+    return get("Content")->get();
 }
 
 
@@ -118,12 +118,12 @@ void Layer::ReleaseCommand()
 
 void Layer::Collapse()
 {
-    Vertex* children = Get(LINK, CHILDREN);
+    Vertex* children = get(LINK, CHILDREN);
     if(!children)
         return;
 
     Vertex* child;
-    while((child=children->Get(1)) != NULL)
+    while((child=children->get(1)) != NULL)
         // Recursively deletes sub-layers
         delete child;
 
@@ -179,24 +179,24 @@ bool Layer::Request(Vertex* req)
 
 Layer* Layer::Insert(Vertex* data, string position)
 {
-    Vertex* curr_layout = Get(LAYOUT, ANY);
+    Vertex* curr_layout = get(LAYOUT, ANY);
     // Get only a rump layout with size relative to the parent and the
     // list of supported layer types
     // This already connects all involved layouts and connects to the Theme
-    Vertex* child_layout = curr_layout->Get(LAYOUT, position);
-    child_layout->Name(data->Name());
-    Vertex* layer_factories = curr_layout->Get(FACTORYMAP, LAYER_FACTORIES);
+    Vertex* child_layout = curr_layout->get(LAYOUT, position);
+    child_layout->name(data->name());
+    Vertex* layer_factories = curr_layout->get(FACTORYMAP, LAYER_FACTORIES);
 
     // For use further down the spiral
-    child_layout->Set(layer_factories);
-    child_layout->Set(curr_layout->Get("Theme"));
+    child_layout->set(layer_factories);
+    child_layout->set(curr_layout->get("Theme"));
 
-    data->Vertex::Set(child_layout);
-    child_layout->Get(TARGET)->Set(data);
+    data->Vertex::set(child_layout);
+    child_layout->get(TARGET)->set(data);
 
     // Create the Layer
-    layer_factories->Execute(child_layout);
-    Layer* sub_layer = dynamic_cast<Layer*>(data->Vertex::Get(LAYER, ANY));
+    layer_factories->execute(child_layout);
+    Layer* sub_layer = dynamic_cast<Layer*>(data->Vertex::get(LAYER, ANY));
     if(!sub_layer)
         return NULL;
 
@@ -204,7 +204,7 @@ Layer* Layer::Insert(Vertex* data, string position)
 
     // Connect the components
     // on Layer/VS level
-    Get(CHILDREN)->Add(sub_layer);
+    get(CHILDREN)->add(sub_layer);
     sub_layer->SetParent(this);
     sub_layer->SetContent(data);
 
@@ -214,9 +214,9 @@ Layer* Layer::Insert(Vertex* data, string position)
 
 void Layer::SetLayout(Vertex* layout)
 {
-    Set(layout);
-    Add(layout);
-    layout->Get("Theme")->Get()->Execute(layout);
+    set(layout);
+    add(layout);
+    layout->get("Theme")->get()->execute(layout);
 }
 
 
@@ -231,11 +231,11 @@ void Layer::Draw(bool forced)
         Updated = true; // ?
     }*/
     // Call the Theme function for drawing with the current settings
-    Vertex* layout = Get(LAYOUT, ANY);
+    Vertex* layout = get(LAYOUT, ANY);
     if(!layout)
         return;
 
-    layout->Execute(this);
+    layout->execute(this);
 
     if(BufferType == COLLECTOR)
         // Draw first the child on the buffer
@@ -255,20 +255,20 @@ void Layer::Draw(bool forced)
 //        Updated = true;
     }
     // Clean-up temporary size and position values
-    layout->Reset();
+    layout->reset();
 }
 
 
 void Layer::DrawChilds(bool forced)
 {
-    Vertex* children = Get(LINK, CHILDREN);
+    Vertex* children = get(LINK, CHILDREN);
     if(!children)
         return;
 
     Layer* layer;
     Vertex* child;
     uint i = 0;
-    while((child=children->Get(++i)) != NULL)
+    while((child=children->get(++i)) != NULL)
     {
         layer = dynamic_cast<Layer*>(child);
         if(!layer)

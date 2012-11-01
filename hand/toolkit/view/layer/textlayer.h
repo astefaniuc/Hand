@@ -37,7 +37,7 @@ class TextLayerFactory : public Factory
         TextLayerFactory() : Factory("TextLayerFactory", DATA, TEXT){};
         ~TextLayerFactory(){};
 
-        bool Execute(Vertex* input);
+        bool execute(Vertex* input);
         bool IsValidInput(Vertex* input);
 };
 

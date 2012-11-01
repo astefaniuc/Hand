@@ -33,11 +33,15 @@ class Search : public Vertex
     public:
         Search(std::string name);
         virtual ~Search();
+
     public:
-        void Reset();
+        // Overloaded base class methods
+        void reset();
+        bool execute(Vertex* target);
+
         // Search setters and getters
         // The setters are called from "outside", from the application code
-        void SetSearchName(std::string s, bool make_regex=false);
+        void SetSearchname(std::string s, bool make_regex=false);
         // The getters are called from inside, the Find methods
         RegularExpression* GetSearchName();
         void SetSearchType(std::string s, bool make_regex=false);
@@ -45,7 +49,6 @@ class Search : public Vertex
         void SetSearchLink(std::string s, bool make_regex=false);
         RegularExpression* GetSearchLink();
         std::string GetCookieName();
-        bool Execute(Vertex* target);
     protected:
         bool Matches(Vertex* target);
         bool Step(Vertex* path);

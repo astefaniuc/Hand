@@ -30,7 +30,7 @@ class Link : public List
         virtual ~Link(){};
 
         // Helper method for the search engine
-        bool IsOpen(Search* search);
+        bool isOpen(Search* search);
 };
 
 #endif /* GRAPH_LINK_H */

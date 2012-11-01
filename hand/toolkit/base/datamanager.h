@@ -39,7 +39,7 @@ class Persistence : public Factory
                                 LIST){};
         virtual ~Persistence(){};
 
-        bool Execute(Vertex* descriptor);
+        bool execute(Vertex* descriptor);
         bool IsValidInput(Vertex* input);
 };
 

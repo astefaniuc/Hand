@@ -32,7 +32,7 @@ class Rgb : public Vertex
     public:
         Rgb(std::string name, Uint8 r_, Uint8 g_, Uint8 b_);
         ~Rgb(){};
-        void Reset();
+        void reset();
 
         Uint8 r;
         Uint8 g;

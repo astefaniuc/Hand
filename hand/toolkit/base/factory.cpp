@@ -30,12 +30,12 @@ Factory::Factory(
         string output_type
 ) : Vertex(name)
 {
-    Type(FACTORY);
+    type(FACTORY);
 
     if(input_type == "")
         input_type = ANY;
-    Get(INPUTTYPE)->Get(input_type);
-    Get(REQUEST)->Get(output_type);
+    get(INPUTTYPE)->get(input_type);
+    get(REQUEST)->get(output_type);
 }
 
 
@@ -43,11 +43,11 @@ bool Factory::IsValidInput(Vertex* input)
 {
     if(!input)
         return false;
-    Vertex* itf = Get(INPUTTYPE);
+    Vertex* itf = get(INPUTTYPE);
     Vertex* it;
     uint i = 0;
-    while((it=itf->Get(++i)) != NULL)
-        if((it->Name()==ANY) || input->Is(it->Name()))
+    while((it=itf->get(++i)) != NULL)
+        if((it->name()==ANY) || input->is(it->name()))
             return true;
 
     return false;
@@ -61,42 +61,42 @@ bool Factory::IsValidInput(Vertex* input)
 
 FactoryMap::FactoryMap(string name) : List(name)
 {
-    Type(FACTORYMAP);
+    type(FACTORYMAP);
 }
 
 
-bool FactoryMap::Execute(Vertex* input)
+bool FactoryMap::execute(Vertex* input)
 {
     if(!input)
         return NULL;
 
-    Vertex* req = input->Vertex::Get(REQUEST);
-    if((req->Size()==0) || (req->Size()>1) || (req->Get()->Name()==ANY))
+    Vertex* req = input->Vertex::get(REQUEST);
+    if((req->size()==0) || (req->size()>1) || (req->get()->name()==ANY))
         return Resolve(input);
 
     // TODO: get list of factories for the output type and iterate through it
     // till we get a positive result
-    Factory* f = GetFactory(req->Get()->Name());
+    Factory* f = GetFactory(req->get()->name());
     if(!f)
         return false;
     // Factory chain "top down"
-    Vertex* it = f->Get(INPUTTYPE)->Get();
-    if(!it || it->Name()==ANY || input->Is(it->Name()))
+    Vertex* it = f->get(INPUTTYPE)->get();
+    if(!it || it->name()==ANY || input->is(it->name()))
         // We have the right factory
-        return f->Execute(input);
+        return f->execute(input);
 
     // Change to the subsequent output type
-    req->Set(it);
+    req->set(it);
 
-    bool ret = Execute(input);
+    bool ret = execute(input);
     if(ret)
     {
-        Vertex* sub_prod = input->Get(f->Get(REQUEST)->Get()->Name(), ANY);
+        Vertex* sub_prod = input->get(f->get(REQUEST)->get()->name(), ANY);
         if(sub_prod)
         {
-            sub_prod->Vertex::Get(REQUEST)->Set(req->Get());
+            sub_prod->Vertex::get(REQUEST)->set(req->get());
             // Resolve the intermediate product
-            return Execute(sub_prod);
+            return execute(sub_prod);
         }
     }
     return false;
@@ -111,9 +111,9 @@ bool FactoryMap::Resolve(Vertex* input)
         return false;
 
     // Set output type for caller
-    input->Vertex::Get(REQUEST)->Set(f->Get(REQUEST)->Get());
+    input->Vertex::get(REQUEST)->set(f->get(REQUEST)->get());
 
-    return f->Execute(input);
+    return f->execute(input);
 }
 
 
@@ -123,7 +123,7 @@ Factory* FactoryMap::GetFactory(Vertex* target)
     Factory* tmp = NULL;
     uint i = 0;
     Vertex* child;
-    while((child=Get(++i)) != NULL)
+    while((child=get(++i)) != NULL)
     {
         tmp = dynamic_cast<Factory*>(child);
         // Find factory with the biggest relevance, for now it is the last added one
@@ -144,10 +144,10 @@ Factory* FactoryMap::GetFactory(string output_type)
     Factory* ret;
     uint i = 0;
     Vertex* child;
-    while((child=Get(++i)) != NULL)
+    while((child=get(++i)) != NULL)
     {
         ret = dynamic_cast<Factory*>(child);
-        if(ret && ret->Get(REQUEST)->Get(ANY, output_type))
+        if(ret && ret->get(REQUEST)->get(ANY, output_type))
             return ret;
     }
 

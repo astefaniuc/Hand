@@ -27,29 +27,29 @@ using namespace std;
 
 Rgb::Rgb(string name, Uint8 r_, Uint8 g_, Uint8 b_) : Vertex(name)
 {
-    Type(RGB);
+    type(RGB);
     // For now add plain data directly
-    Add(new Data<Uint8>("r", r_));
-    Add(new Data<Uint8>("g", g_));
-    Add(new Data<Uint8>("b", b_));
+    add(new Data<Uint8>("r", r_));
+    add(new Data<Uint8>("g", g_));
+    add(new Data<Uint8>("b", b_));
     r = r_;
     g = g_;
     b = b_;
 }
 
 
-void Rgb::Reset()
+void Rgb::reset()
 {
-    r = ((Data<Uint8>*)Get("r"))->Get();
-    g = ((Data<Uint8>*)Get("g"))->Get();
-    b = ((Data<Uint8>*)Get("b"))->Get();
+    r = ((Data<Uint8>*)get("r"))->get();
+    g = ((Data<Uint8>*)get("g"))->get();
+    b = ((Data<Uint8>*)get("b"))->get();
 }
 
 
 Rgb* GetRgb(string name, Vertex* tree)
 {
-    Vertex* rgb = tree->Get(ANY, "Color");
+    Vertex* rgb = tree->get(ANY, "Color");
     if(rgb)
-        rgb = rgb->Get();
+        rgb = rgb->get();
     return dynamic_cast<Rgb*>(rgb);
 }

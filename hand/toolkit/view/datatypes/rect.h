@@ -35,7 +35,7 @@ class Rect : public Vertex
         ~Rect(){};
 
         void Init(double x_, double y_, double w_, double h_);
-        void Reset();
+        void reset();
         void Multiply(Rect* factor);
         void MultiplyTo(SDL_Rect& abs_rect);
         double x;

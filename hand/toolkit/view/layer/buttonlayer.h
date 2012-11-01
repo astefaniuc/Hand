@@ -50,7 +50,7 @@ class ButtonLayerFactory : public Factory
         ButtonLayerFactory() : Factory("ButtonLayerFactory", METHOD, BUTTON){};
         ~ButtonLayerFactory(){};
 
-        bool Execute(Vertex* input);
+        bool execute(Vertex* input);
         bool IsValidInput(Vertex* input);
 };
 

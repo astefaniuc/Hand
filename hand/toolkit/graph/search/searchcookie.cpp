@@ -34,30 +34,30 @@ SearchCookie::SearchCookie() : List(SEARCHCOOKIE)
 SearchCookie::~SearchCookie()
 {
     if(Target)
-        Target->Vertex::Detach(this);
+        Target->Vertex::detach(this);
 }
 
 
-bool SearchCookie::Attach(Vertex* target)
+bool SearchCookie::attach(Vertex* target)
 {
-    if(target->Size() == 0)
+    if(target->size() == 0)
     {
         IsDeadBranch = true;
         return false;
     }
     Target = target;
-    return Target->Vertex::Attach(this);
+    return Target->Vertex::attach(this);
 }
 
 
-Vertex* SearchCookie::Get(uint i)
+Vertex* SearchCookie::get(uint i)
 {
-    SearchCookie* branch = (SearchCookie*)List::Get(i);
+    SearchCookie* branch = (SearchCookie*)List::get(i);
     if(branch && branch->IsDeadBranch)
     {
-        Delete(branch);
+        remove(branch);
 
-        branch = (SearchCookie*)SearchCookie::Get(i);
+        branch = (SearchCookie*)SearchCookie::get(i);
         if(!branch && (i==1))
             IsDeadBranch = true;
     }
@@ -65,13 +65,13 @@ Vertex* SearchCookie::Get(uint i)
 }
 
 
-Vertex* SearchCookie::_Get()
+Vertex* SearchCookie::_get()
 {
     return Target;
 }
 
 
-bool SearchCookie::IsOpen(Search* search)
+bool SearchCookie::isOpen(Search* search)
 {
     return false;
 }

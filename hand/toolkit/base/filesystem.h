@@ -34,7 +34,7 @@ class DirectoryLoader : public Factory
         DirectoryLoader() : Factory("DirectoryLoader", FILE, FILE){};
         ~DirectoryLoader(){};
 
-        bool Execute(Vertex* descriptor);
+        bool execute(Vertex* descriptor);
         bool IsValidInput(Vertex* input);
 };
 
@@ -56,7 +56,7 @@ class FileFactory : public Factory
         FileFactory() : Factory("FileFactory", NOTE, FILE){};
         virtual ~FileFactory(){};
 
-        bool Execute(Vertex* input);
+        bool execute(Vertex* input);
         bool IsValidInput(Vertex* input);
 };
 

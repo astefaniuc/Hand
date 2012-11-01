@@ -27,10 +27,10 @@ using namespace std;
 
 Search::Search(string name) : Vertex(name)
 {
-    Type(METHOD);
-    Type(SEARCH);
+    type(METHOD);
+    type(SEARCH);
 
-    Findings = Get("Findings");
+    Findings = get("Findings");
     SearchName = NULL;
     SearchType = NULL;
     SearchLink = NULL;
@@ -41,20 +41,20 @@ Search::Search(string name) : Vertex(name)
 
 Search::~Search()
 {
-    Reset();
+    reset();
 }
 
 
-void Search::Reset()
+void Search::reset()
 {
     Vertex* child;
     uint i = 0;
-    while((child=Findings->Get(++i)) != NULL)
-        Findings->Detach(child);
+    while((child=Findings->get(++i)) != NULL)
+        Findings->detach(child);
 }
 
 
-bool Search::Execute(Vertex* target)
+bool Search::execute(Vertex* target)
 {
     if(!target)
         return false;
@@ -68,7 +68,7 @@ bool Search::Execute(Vertex* target)
     }
 
     Vertex* path = new SearchCookie();
-    path->Attach(target);
+    path->attach(target);
 
     uint depth;
     for(depth=0; depth<=MaxDepth; depth++)
@@ -80,7 +80,7 @@ bool Search::Execute(Vertex* target)
                 break;
         }
 
-        if(path->Size() == 0)
+        if(path->size() == 0)
             break;
     }
 
@@ -92,7 +92,7 @@ bool Search::Execute(Vertex* target)
 bool Search::Step(Vertex* path)
 {
     bool found = false;
-    if(path->Size() == 0)
+    if(path->size() == 0)
     {
         // Head of path
         found = SearchAllChilds(path);
@@ -103,7 +103,7 @@ bool Search::Step(Vertex* path)
     {
         Vertex* branch;
         uint i = 0;
-        while((branch=path->Get(++i)) != NULL)
+        while((branch=path->get(++i)) != NULL)
         {
             if(Step(branch))
             {
@@ -123,9 +123,9 @@ bool Search::SearchAllChilds(Vertex* path)
     Vertex* child;
     Vertex* path_extension;
     uint i = 0;
-    while((child=path->Get()->Get(++i)) != NULL)
+    while((child=path->get()->get(++i)) != NULL)
     {
-        if(!child->IsOpen(this))
+        if(!child->isOpen(this))
             continue;
         if(Matches(child))
         {
@@ -134,8 +134,8 @@ bool Search::SearchAllChilds(Vertex* path)
             found = true;
         }
         path_extension = new SearchCookie();
-        path_extension->Attach(child);
-        path->Add(path_extension);
+        path_extension->attach(child);
+        path->add(path_extension);
     }
 
     return found;
@@ -145,18 +145,18 @@ bool Search::SearchAllChilds(Vertex* path)
 bool Search::Matches(Vertex* target)
 {
     // Ignore relation_type here (it's checked in the "Link" Vertex)
-    if(SearchName && (!SearchName->Matches(target->Name())))
+    if(SearchName && (!SearchName->Matches(target->name())))
         return false;
 
-    if(SearchType && (!target->Is(SearchType)))
+    if(SearchType && (!target->is(SearchType)))
         return false;
 
-    Findings->Attach(target);
+    Findings->attach(target);
     return true;
 }
 
 
-void Search::SetSearchName(string s, bool make_regex)
+void Search::SetSearchname(string s, bool make_regex)
 {
     // Add a link to the own interface for the GUI
     SearchName = AddSearchRegex("SearchName", s, make_regex);
@@ -204,7 +204,7 @@ RegularExpression* Search::AddSearchRegex(string relation_name, string s, bool m
         se = new SearchString(s);
 
     // Add to the own interface for the GUI (only one entry allowed)
-    Get(relation_name)->Set(se);
+    get(relation_name)->set(se);
     return se;
 }
 

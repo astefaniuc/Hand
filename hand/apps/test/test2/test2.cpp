@@ -22,20 +22,20 @@ extern "C" void Destroy(HandApp* app)
 
 FindTester::FindTester(void) : HandApp("FindTester")
 {
-//    TestDelete();
+//    Testremove();
     TestFindBigTree();
     // For setting the breakpoint
     return;
 }
 
 
-void FindTester::TestDelete()
+void FindTester::Testremove()
 {
     string type = "TestDelete";
     Vertex* last_build;
     Vertex* root_node = new Vertex("RootNode");
     last_build = _Build(root_node, 8, 10, type);
-    string last_name = last_build->Name();
+    string last_name = last_build->name();
     delete(root_node);
     // Should print an error
     CheckFound(last_build, TestFind(last_name, LIST, false));
@@ -44,7 +44,7 @@ void FindTester::TestDelete()
         // Memory consumption shouldn't grow during this
         root_node = new Vertex("RootNode");
         last_build = _Build(root_node, 8, 10, type);
-        CheckFound(last_build, TestFind(last_build->Name(), LIST, false));
+        CheckFound(last_build, TestFind(last_build->name(), LIST, false));
         delete(root_node);
     }
 
@@ -58,7 +58,7 @@ void FindTester::TestFindBigTree()
     Vertex* found;
     // Search for the last one (depth 0 is the deepest)
     Vertex* last_build = Build(this, 8, 10, last_type);
-    found = TestFind(last_build->Name(), LIST, false);
+    found = TestFind(last_build->name(), LIST, false);
     CheckFound(last_build, found);
 
     // Only for building purposes
@@ -67,15 +67,15 @@ void FindTester::TestFindBigTree()
 
     // The second deep branch from the last element of last level
     last_build = Build(last_build, 490, 1, last_type);
-    found = TestFind(last_build->Name(), last_type, false);
+    found = TestFind(last_build->name(), last_type, false);
     CheckFound(last_build, found);
 
     last_build = Build(last_build, 2, 1000, last_type);
-    found = TestFind(last_build->Name(), "", false);
+    found = TestFind(last_build->name(), "", false);
     CheckFound(last_build, found);
-    found = TestFind(last_build->Name(), last_type, false);
+    found = TestFind(last_build->name(), last_type, false);
     CheckFound(last_build, found);
-    found = TestFind(last_build->Name(), last_type, true);
+    found = TestFind(last_build->name(), last_type, true);
     CheckFound(last_build, found);
 }
 
@@ -118,8 +118,8 @@ Vertex* FindTester::_Build
             string name = n.str();
             f = new List(name);
         }
-        f->Type(type);
-        entry->Get(CHILDREN)->Add(f);
+        f->type(type);
+        entry->get(CHILDREN)->add(f);
         if(depth > 1)
             f = _Build(f, depth-1, i, type);
     }
@@ -131,7 +131,7 @@ Vertex* FindTester::TestFind(string name, string type, bool relation)
 {
     double start_time = clock();
     Search search("Test search");
-    search.SetSearchName(name);
+    search.SetSearchname(name);
     cout << "Find(name " << name;
     if(type != "")
     {
@@ -144,11 +144,11 @@ Vertex* FindTester::TestFind(string name, string type, bool relation)
         }
     }
     cout << ") time: ";
-    bool found = search.Execute(this);
+    bool found = search.execute(this);
     cout << (clock()-start_time)/CLOCKS_PER_SEC << endl;
 
     if(found)
-        return search.Get("Findings")->Get();
+        return search.get("Findings")->get();
     return NULL;
 }
 

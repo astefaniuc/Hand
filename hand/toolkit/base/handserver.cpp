@@ -59,10 +59,10 @@ void HandServer::Present(string file)
     Vertex* app = new File(file);
     while(Resolve(app))
     {
-        Vertex* ot = app->Vertex::Get(REQUEST)->Get();
+        Vertex* ot = app->Vertex::get(REQUEST)->get();
         if(!ot)
             break;
-        app = app->Vertex::Get(ot->Name(), ANY);
+        app = app->Vertex::get(ot->name(), ANY);
     }
     GetLayerManager()->LoadAppInterface(app, true);
     // Start the timer driven (callback) execution and stop the current thread
@@ -74,12 +74,12 @@ LayerManager* HandServer::GetLayerManager()
 {
     // Start the layer manager
     LayerManager* layer_mgr = new LayerManager();
-    _Screen->Vertex::Get(LAYERMANAGER)->Add(layer_mgr);
+    _Screen->Vertex::get(LAYERMANAGER)->add(layer_mgr);
 
     // Create device object with input state
     Device* device = new Device();
     layer_mgr->SetDevice(device);
-    Get("Devices")->Add(device);
+    get("Devices")->add(device);
     layer_mgr->SetScreen(_Screen->GetSurface());
 
     return layer_mgr;
@@ -159,10 +159,10 @@ void HandServer::GetUserInput()
 
 void HandServer::Press(SDLKey k)
 {
-    Vertex* all_dev = Get("Devices");
+    Vertex* all_dev = get("Devices");
     Device* dev;
     uint i = 0;
-    while((dev=dynamic_cast<Device*>(all_dev->Get(++i))) != NULL)
+    while((dev=dynamic_cast<Device*>(all_dev->get(++i))) != NULL)
         if(dev->Press(k))
             return;
 
@@ -174,21 +174,21 @@ void HandServer::Press(SDLKey k)
 
 void HandServer::Release(SDLKey k)
 {
-    Vertex* lm = _Screen->Vertex::Get(LAYERMANAGER);
+    Vertex* lm = _Screen->Vertex::get(LAYERMANAGER);
     // Gets the device
-    Vertex* all_dev = Get("Devices");
+    Vertex* all_dev = get("Devices");
     Device* dev;
     uint i = 0;
-    while((dev=dynamic_cast<Device*>(all_dev->Get(++i))) != NULL)
+    while((dev=dynamic_cast<Device*>(all_dev->get(++i))) != NULL)
     {
         if(dev->Release(k))
         {
             if(DeleteDeviceIfEmpty
                && dev->IsUnused()
-               && (lm->Size() > 1))
+               && (lm->size() > 1))
             {
                 // Exit last layer
-                delete(lm->Get(lm->Size()));
+                delete(lm->get(lm->size()));
             }
             return;
         }

@@ -36,20 +36,20 @@ class List : public Vertex
 
         // Overloads of the public interface of the Vertex class
         // to operate on the list elements
-        virtual bool Add(Vertex* child);
-        virtual bool Set(Vertex* sub);
-        virtual bool Attach(Vertex* sub);
-        using Vertex::Get;
-        virtual Vertex* Get(std::string child);
-        virtual Vertex* Get(std::string type, std::string name);
-        virtual Vertex* Get(uint child);
-        virtual uint Size();
+        virtual bool add(Vertex* child);
+        virtual bool set(Vertex* sub);
+        virtual bool attach(Vertex* sub);
+        using Vertex::get;
+        virtual Vertex* get(std::string child);
+        virtual Vertex* get(std::string type, std::string name);
+        virtual Vertex* get(uint child);
+        virtual uint size();
         // Removes all entries from the PUBLIC sub-vertex
-        virtual void Reset();
-        virtual bool Detach(Vertex* item);
-        virtual bool Delete(Vertex* child);
+        virtual void reset();
+        virtual bool detach(Vertex* item);
+        virtual bool remove(Vertex* child);
     protected:
-        virtual Vertex* _Get();
+        virtual Vertex* _get();
 };
 
 #endif /* GRAPH_LIST_H */

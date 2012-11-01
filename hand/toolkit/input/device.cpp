@@ -56,7 +56,7 @@ bool Device::Init()
         data = GetKey(i);
         if(!data)
             return false;
-        key_str = data->Get();
+        key_str = data->get();
         if(key_str == "")
             return false;
         // Translate list entries to device keys
@@ -72,9 +72,9 @@ bool Device::Init()
 void Device::InitUI()
 {
     // Two main entries: a keylist and the description
-    Add(new Note(DESCRIPTION, "Press 5 keys on the keyboard"));
+    add(new Note(DESCRIPTION, "Press 5 keys on the keyboard"));
     Vertex* keys_tree = new List(DEVICE_KEYLIST);
-    Add(keys_tree);
+    add(keys_tree);
 
     // Load un-initialized keys
     Vertex* key;
@@ -83,9 +83,9 @@ void Device::InitUI()
     {
         // Set the callback method
         key = new List(GetKeyName(i));
-        key->Add(show_key);
-        key->Add(new Note("Data", ""));
-        keys_tree->Add(key);
+        key->add(show_key);
+        key->add(new Note("Data", ""));
+        keys_tree->add(key);
     }
 }
 
@@ -147,10 +147,10 @@ int Device::GetKeyIndex(SDLKey k)
 
 Note* Device::GetKey(uint pos)
 {
-    Vertex* k = Get(LIST, DEVICE_KEYLIST)->Get(ANY, GetKeyName(pos));
+    Vertex* k = get(LIST, DEVICE_KEYLIST)->get(ANY, GetKeyName(pos));
     if(!k)
         return NULL;
-    return dynamic_cast<Note*>(k->Get(NOTE, "Data"));
+    return dynamic_cast<Note*>(k->get(NOTE, "Data"));
 }
 
 
@@ -191,7 +191,7 @@ void Device::AddKey(SDLKey k)
     currentKey = Keys.begin() + index;
 
     Note* data = GetKey(index);
-    data->Set(SDL_GetKeyName(*(*currentKey)));
+    data->set(SDL_GetKeyName(*(*currentKey)));
 }
 
 
@@ -204,7 +204,7 @@ void Device::DeleteCurrentKey()
     // Removes the key from the initialization screen
     // TODO: check this removal of last key (should be the one removed?)
     Note* data = GetKey(Keys.size());
-    data->Set("");
+    data->set("");
 }
 
 
