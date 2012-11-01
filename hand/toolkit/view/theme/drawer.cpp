@@ -31,9 +31,6 @@ DrawerFactory::DrawerFactory
         Vertex* draw_func
 ) : Factory(DRAWOBJ_DRAWER, LINK, draw_func->Name())
 {
-    // Basic implementation check
-    if(!draw_func)
-        exit(666);
     Get("DrawFunc")->Add(draw_func);
 }
 

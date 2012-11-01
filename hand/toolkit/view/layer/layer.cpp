@@ -231,7 +231,7 @@ void Layer::Draw(bool forced)
         Updated = true; // ?
     }*/
     // Call the Theme function for drawing with the current settings
-    Layout* layout = dynamic_cast<Layout*>(Get(LAYOUT, ANY));
+    Vertex* layout = Get(LAYOUT, ANY);
     if(!layout)
         return;
 
