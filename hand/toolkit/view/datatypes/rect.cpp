@@ -25,70 +25,72 @@
 using namespace std;
 
 
-Rect::Rect(string name, double x_, double y_, double w_, double h_) : Vertex(name)
+Rect::Rect(string name, Rel_Rect* val) : Data<Rel_Rect*>(name, val)
 {
     type(RECT);
-    Init(x_, y_, w_, h_);
-}
-
-
-Rect::Rect() : Vertex("No name")
-{
-    type(RECT);
-    Init(0.0, 0.0, 1.0, 1.0);
-}
-
-
-void Rect::Init(double x_, double y_, double w_, double h_)
-{
     // For now add plain data directly
-    set(new Data<double>("x", x_));
-    set(new Data<double>("y", y_));
-    set(new Data<double>("w", w_));
-    set(new Data<double>("h", h_));
-    x = x_;
-    y = y_;
-    w = w_;
-    h = h_;
+    set(new Data<double>("x", Value->x));
+    set(new Data<double>("y", Value->y));
+    set(new Data<double>("w", Value->w));
+    set(new Data<double>("h", Value->h));
 }
 
 
-void Rect::reset()
+Rect::~Rect()
 {
-    x = ((Data<double>*)get("x"))->get();
-    y = ((Data<double>*)get("y"))->get();
-    w = ((Data<double>*)get("w"))->get();
-    h = ((Data<double>*)get("h"))->get();
+    delete(Value);
 }
 
 
-void Rect::Multiply(Rect* factor)
+bool Rect::set(Rel_Rect* val)
 {
-    x += (factor->x * w);
-    y += (factor->y * h);
-    w *= factor->w;
-    h *= factor->h;
+    Data<Rel_Rect*>::set(val);
+    // For now add plain data directly
+    ((Data<double>*)get("x"))->set(Value->x);
+    ((Data<double>*)get("y"))->set(Value->y);
+    ((Data<double>*)get("w"))->set(Value->w);
+    ((Data<double>*)get("h"))->set(Value->h);
+    return true;
 }
 
 
-void Rect::MultiplyTo(SDL_Rect& abs_rect)
+void Rect::Reset()
 {
-    abs_rect.x += (abs_rect.w * x);
-    abs_rect.y += (abs_rect.h * y);
-    abs_rect.w *= w;
-    abs_rect.h *= h;
+    if(!Value)
+        Value = new Rel_Rect();
+    Value->x = ((Data<double>*)get("x"))->get();
+    Value->y = ((Data<double>*)get("y"))->get();
+    Value->w = ((Data<double>*)get("w"))->get();
+    Value->h = ((Data<double>*)get("h"))->get();
 }
 
 
-Rect* GetRect(string name, Vertex* tree)
+void Multiply(Rel_Rect* src, Rel_Rect* tgt)
 {
-    Rect* ret = dynamic_cast<Rect*>(tree->get(RECT, name));
-    if(!ret)
-    {
-        // Add a default Rect
-        ret = new Rect(SIZEANDPOSITION, 0, 0, 1, 1);
-        tree->set(ret);
-    }
+    if(!src || !tgt)
+        return;
+    tgt->x += (src->x * tgt->w);
+    tgt->y += (src->y * tgt->h);
+    tgt->w *= src->w;
+    tgt->h *= src->h;
+}
 
-    return ret;
+
+void Multiply(Rel_Rect* src, SDL_Rect* tgt)
+{
+    if(!src || !tgt)
+        return;
+    tgt->x += (src->x * tgt->w);
+    tgt->y += (src->y * tgt->h);
+    tgt->w *= src->w;
+    tgt->h *= src->h;
+}
+
+
+Rel_Rect* GetRect(string name, Vertex* tree)
+{
+    Rect* container = dynamic_cast<Rect*>(tree->get(RECT, name));
+    if(container)
+        return container->get();
+    return NULL;
 }

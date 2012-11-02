@@ -38,27 +38,32 @@ extern "C" void Destroy(Theme* theme)
 Default::Default() : Theme("DefaultTheme")
 {
     // Drawer factories
-    Register(new DrawerFactory(new Method<Default>(GUI_DRAWER_LIST, this, &Default::DrawList)));
-    Register(new DrawerFactory(new Method<Default>(GUI_DRAWER_BUTTON, this, &Default::DrawButton)));
-    Register(new DrawerFactory(new Method<Default>(GUI_DRAWER_FRAME, this, &Default::DrawFrame)));
-    Register(new DrawerFactory(new Method<Default>(GUI_DRAWER_BACKGROUND, this, &Default::ColorSurface)));
-    Register(new DrawerFactory(new Method<Default>(GUI_DRAWER_TEXT, this, &Default::DrawText)));
+    Vertex* folder = Map->get(DRAWER);
+    folder->add(new Method<Default>(LIST, this, &Default::DrawList));
+    folder->add(new Method<Default>(BUTTON, this, &Default::DrawButton));
+    folder->add(new Method<Default>(FRAME, this, &Default::DrawFrame));
+    folder->add(new Method<Default>(BACKGROUND, this, &Default::ColorSurface));
+    folder->add(new Method<Default>(TEXT, this, &Default::DrawText));
 
     // Layouts
-    Register(new LayoutFactory<Default>(VIEW, this, &Default::GetViewLayout));
-    Register(new LayoutFactory<Default>(FRAMEDLIST, this, &Default::GetFramedListLayout));
-    Register(new LayoutFactory<Default>(LIST, this, &Default::GetListLayout));
-    Register(new LayoutFactory<Default>(CONTROLID, this, &Default::GetControlLayout));
-    Register(new LayoutFactory<Default>(BUTTON, this, &Default::GetButtonLayout));
-    Register(new LayoutFactory<Default>(FRAME, this, &Default::GetFrameLayout));
-    Register(new LayoutFactory<Default>(BACKGROUND, this, &Default::GetBackgroundLayout));
-    Register(new LayoutFactory<Default>(TEXT, this, &Default::GetTextLayout));
+    folder = Map->get(LAYOUT);
+    folder->add(new Method<Default>(VIEW, this, &Default::GetViewLayout));
+    folder->add(new Method<Default>(FRAMEDLIST, this, &Default::GetFramedListLayout));
+    folder->add(new Method<Default>(LIST, this, &Default::GetListLayout));
+    folder->add(new Method<Default>(CONTROLID, this, &Default::GetControlLayout));
+    folder->add(new Method<Default>(BUTTON, this, &Default::GetButtonLayout));
+    folder->add(new Method<Default>(FRAME, this, &Default::GetFrameLayout));
+    folder->add(new Method<Default>(BACKGROUND, this, &Default::GetBackgroundLayout));
+    folder->add(new Method<Default>(TEXT, this, &Default::GetTextLayout));
 
+    // Properties
     // Colors
+    folder = Map->get(COLOR);
     Register(new PropertyFactory<Default>(GUI_COLOR_FRAME, this, &Default::GetColorFrame));
     Register(new PropertyFactory<Default>(GUI_COLOR_BACKGR_LIST, this, &Default::GetColorBgrdList));
     Register(new PropertyFactory<Default>(GUI_COLOR_BACKGR_BUTTON, this, &Default::GetColorBgrdButton));
     Register(new PropertyFactory<Default>(GUI_COLOR_FONT, this, &Default::GetColorFont));
+    // Dimensions
 }
 
 // ----------------------------------------------------------------
@@ -66,19 +71,17 @@ Default::Default() : Theme("DefaultTheme")
 // ----------------------------------------------------------------
 
 
-bool Default::GetViewLayout(Vertex* out)
+bool Default::GetViewLayout(Vertex* layout)
 {
-    Layout* layout = dynamic_cast<Layout*>(out);
     // Vertical list alignment
-    layout->attach(new Rect(ALIGNMENT, 0, 1, 0, 1));
-    layout->get("Methods")->get("DrawFunc")
-            ->Vertex::get(REQUEST)->get(GUI_DRAWER_LIST);
+    layout->get(ALIGNMENT)->get(VERTICAL);
+    layout->get("DrawFunc")->Vertex::get(REQUEST)->get(DRAWER)->get(LIST);
 
     layout->get("Fields")->get("ListElement")->get(ANY);
 
     Layout* controls = new Layout("Controls", FRAMEDLIST);
     // Horizontal list alignment
-    controls->attach(new Rect(ALIGNMENT, 1, 0, 1, 0));
+    controls->get(ALIGNMENT)->get(HORIZONTAL);
     layout->add(controls);
 
     controls->get("Fields")->get("ListElement")->get(BUTTON);
@@ -86,13 +89,10 @@ bool Default::GetViewLayout(Vertex* out)
 }
 
 
-bool Default::GetListLayout(Vertex* out)
+bool Default::GetListLayout(Vertex* layout)
 {
-    Layout* layout = dynamic_cast<Layout*>(out);
-
-    layout->attach(new Rect(ALIGNMENT, 0, 1, 0, 1));
-    layout->get("Methods")->get("DrawFunc")
-            ->Vertex::get(REQUEST)->get(GUI_DRAWER_LIST);
+    layout->get(ALIGNMENT)->get(VERTICAL);
+    layout->get("DrawFunc")->Vertex::get(REQUEST)->get(DRAWER)->get(LIST);
 
     Vertex* content = layout->get("Fields")->get("ListElement");
     content->get(BUTTON);
@@ -103,11 +103,9 @@ bool Default::GetListLayout(Vertex* out)
 }
 
 
-bool Default::GetFramedListLayout(Vertex* out)
+bool Default::GetFramedListLayout(Vertex* layout)
 {
-    Layout* layout = dynamic_cast<Layout*>(out);
-
-    layout->set(new Rect(SIZEANDPOSITION, 0.1, 0.1, 0.8, 0.8));
+    layout->get(SIZEANDPOSITION)->get(SCALED);
 
     Layout* frame = new Layout("Frame", FRAME);
     layout->add(frame);
@@ -115,96 +113,80 @@ bool Default::GetFramedListLayout(Vertex* out)
     Layout* content = new Layout("Content", LIST);
     layout->add(content);
 
-    frame->get("Update")->attach(content);
+    frame->get(TOUPDATE)->attach(content);
 
     return true;
 }
 
 
-bool Default::GetButtonLayout(Vertex* out)
+bool Default::GetButtonLayout(Vertex* layout)
 {
-    Layout* layout = dynamic_cast<Layout*>(out);
-
-    layout->get("Methods")->get("DrawFunc")
-            ->Vertex::get(REQUEST)->get(GUI_DRAWER_BUTTON);
-    layout->set(new Rect(SIZEANDPOSITION, 0.1, 0.1, 0.8, 0.8));
+    layout->get("DrawFunc")->Vertex::get(REQUEST)->get(DRAWER)->get(BUTTON);
+    layout->get(SIZEANDPOSITION)->get(SCALED);
 
     Layout* frame = new Layout("Frame", FRAME);
     layout->add(frame);
 
     // The Button container
     Layout* content = new Layout("Button Content", LIST);
-    content->attach(new Rect(ALIGNMENT, 0, 1, 0, 1));
+    content->get(ALIGNMENT)->get(VERTICAL);
     layout->add(content);
-    frame->get("Update")->attach(content);
+    frame->get(TOUPDATE)->attach(content);
 
     Layout* upper = new Layout("Upper", LIST);
-    upper->attach(new Rect(ALIGNMENT, 1, 0, 0.5, 0));
+    upper->get(ALIGNMENT)->get(SCALEDHORIZONTAL);
     content->add(upper);
 
     Layout* lower = new Layout("Lower", LIST);
-    lower->attach(new Rect(ALIGNMENT, 1, 0, 0.5, 0));
+    lower->get(ALIGNMENT)->get(SCALEDHORIZONTAL);
     content->add(lower);
 
     // Store the layer/layout types for the fields as simple nodes
-    upper->get("Fields")->get(BTN_FIELD_ICON)->get(TEXT);
-    upper->get("Fields")->get(BTN_FIELD_NAME)->get(TEXT);
-    lower->get("Fields")->get(BTN_FIELD_DESCRIPTION)->get(TEXT);
-    lower->get("Fields")->get(BTN_FIELD_CONTROL)->get(TEXT);
+    upper->get("Fields")->get(ICON)->get(TEXT);
+    upper->get("Fields")->get(NAME)->get(TEXT);
+    lower->get("Fields")->get(DESCRIPTION)->get(TEXT);
+    lower->get("Fields")->get(CONTROLID)->get(TEXT);
 
     return true;
 }
 
 
-bool Default::GetControlLayout(Vertex* out)
+bool Default::GetControlLayout(Vertex* layout)
 {
-    Layout* layout = dynamic_cast<Layout*>(out);
-
     Layout* frame = new Layout("Frame", FRAME);
     layout->add(frame);
     return true;
 }
 
 
-bool Default::GetFrameLayout(Vertex* out)
+bool Default::GetFrameLayout(Vertex* layout)
 {
-    Layout* layout = dynamic_cast<Layout*>(out);
-
-    layout->attach(new Rect(SIZEANDPOSITION, 0.01, 0.03, 0.98, 0.94));
-    layout->get("Methods")->get("DrawFunc")
-            ->Vertex::get(REQUEST)->get(GUI_DRAWER_FRAME);
-    layout->get("Color")->Vertex::get(REQUEST)->get(GUI_COLOR_FRAME);
+    layout->get(SIZEANDPOSITION)->Vertex::get(REQUEST)->get(RECT)->get(FRAME);
+    layout->get("DrawFunc")->Vertex::get(REQUEST)->get(DRAWER)->get(FRAME);
+    layout->get("Color")->Vertex::get(REQUEST)->get(COLOR)->get(FRAME);
 
     Layout* bgrd = new Layout("Background", BACKGROUND);
     layout->add(bgrd);
-    layout->get("Update")->attach(bgrd);
+    layout->get(TOUPDATE)->attach(bgrd);
 
     return true;
 }
 
 
-bool Default::GetBackgroundLayout(Vertex* out)
+bool Default::GetBackgroundLayout(Vertex* layout)
 {
-    Layout* layout = dynamic_cast<Layout*>(out);
-    layout->name("Background Layout");
-
-    layout->get("Methods")->get("DrawFunc")
-            ->Vertex::get(REQUEST)->get(GUI_DRAWER_BACKGROUND);
-    layout->get("Color")->Vertex::get(REQUEST)->get(GUI_COLOR_BACKGR_LIST);
+    layout->get("DrawFunc")->Vertex::get(REQUEST)->get(DRAWER)->get(BACKGROUND);
+    layout->get("Color")->Vertex::get(REQUEST)->get(COLOR)->get(BACKGROUND)->get(LIST);
 
     return true;
 }
 
 
-bool Default::GetTextLayout(Vertex* out)
+bool Default::GetTextLayout(Vertex* layout)
 {
-    Layout* layout = dynamic_cast<Layout*>(out);
-    layout->name("Text Layout");
-
-    layout->attach(new Rect(SIZEANDPOSITION, 0.1, 0.1, 0.8, 0.8));
-    layout->get("Methods")->get("DrawFunc")
-            ->Vertex::get(REQUEST)->get(GUI_DRAWER_TEXT);
-    layout->get("Color")->Vertex::get(REQUEST)->get(GUI_COLOR_FONT);
+    layout->get(SIZEANDPOSITION)->get(SCALED);
+    layout->get("DrawFunc")->Vertex::get(REQUEST)->get(DRAWER)->get(TEXT);
+    layout->get("Color")->Vertex::get(REQUEST)->get(COLOR)->get(FONT);
 
     return true;
 }
@@ -236,6 +218,42 @@ bool Default::GetColorFont(Vertex* out)
 }
 
 
+bool Default::GetRectFull(Vertex* out)
+{
+    return out->set(new Rect(FULL, new Rel_Rect(0, 0, 1, 1)));
+}
+
+
+bool Default::GetRectScaled(Vertex* out)
+{
+    return out->set(new Rect(SCALED, new Rel_Rect(0.1, 0.1, 0.8, 0.8)));
+}
+
+
+bool Default::GetRectFrame(Vertex* out)
+{
+    return out->set(new Rect(FRAME, new Rel_Rect(0.01, 0.03, 0.98, 0.94)));
+}
+
+
+bool Default::GetAlignmentVertical(Vertex* out)
+{
+    return out->set(new Rect(VERTICAL, new Rel_Rect(0, 1, 0, 1)));
+}
+
+
+bool Default::GetAlignmentHorizontal(Vertex* out)
+{
+    return out->set(new Rect(HORIZONTAL, new Rel_Rect(1, 0, 1, 0)));
+}
+
+
+bool Default::GetAlignmentScaledHorizontal(Vertex* out)
+{
+    return out->set(new Rect(SCALEDHORIZONTAL, new Rel_Rect(1, 0, 0.5, 0)));
+}
+
+
 // ----------------------------------------------------------------
 // ------------------------- Drawers ------------------------------
 // ----------------------------------------------------------------
@@ -249,16 +267,16 @@ bool Default::DrawFrame(Vertex* layout)
 
     SDL_Rect total_size = vs->GetSize();
     SDL_Rect content_size = total_size;
-    Rect* sap = GetRect(SIZEANDPOSITION, layout);
-    sap->MultiplyTo(content_size);
+    Rel_Rect* sap = GetRect(SIZEANDPOSITION, layout);
+    Multiply(sap, &content_size);
 
-    Vertex* children = layout->get("Update");
+    Vertex* children = layout->get(TOUPDATE);
     if(children)
     {
         Vertex* to_update;
         uint i = 0;
         while((to_update=children->get(++i)) != NULL)
-            GetRect(SIZEANDPOSITION, to_update)->Multiply(sap);
+            Multiply(sap, GetRect(SIZEANDPOSITION, to_update));
     }
 
     // Draw each frame line separately
@@ -341,9 +359,9 @@ bool Default::DrawText(Vertex* layout)
 
     SDL_Surface* source = RenderText(&text, fh, GetRgb("FontColor", layout));
 
-    Rect sub;
+    Rel_Rect sub;
     PlaceCentered(source, size, sub);
-    GetRect(SIZEANDPOSITION, layout)->Multiply(&sub);
+    Multiply(&sub, GetRect(SIZEANDPOSITION, layout));
 
     vs->SetBuffer(source);
     return true;
@@ -352,7 +370,7 @@ bool Default::DrawText(Vertex* layout)
 
 bool Default::DrawList(Vertex* layout)
 {
-    Vertex* children = layout->get("Update");
+    Vertex* children = layout->get(TOUPDATE);
     if(!children)
         return false;
 
@@ -360,9 +378,9 @@ bool Default::DrawList(Vertex* layout)
     if(child_cnt < 1)
         return true;
 
-    Rect* align = GetRect(ALIGNMENT, layout);
-    Rect* size = GetRect(SIZEANDPOSITION, layout);
-    Rect calc;
+    Rel_Rect* align = GetRect(ALIGNMENT, layout);
+    Rel_Rect* size = GetRect(SIZEANDPOSITION, layout);
+    Rel_Rect calc;
 
     for(uint i=0; i<child_cnt; i++)
     {
@@ -370,9 +388,9 @@ bool Default::DrawList(Vertex* layout)
         calc.w = (1 - (c * align->w))*(1 - calc.x);
         calc.h = (1 - (c * align->h))*(1 - calc.y);
 
-        Rect* sub = GetRect(SIZEANDPOSITION, children->get(i+1));
-        sub->Multiply(size);
-        sub->Multiply(&calc);
+        Rel_Rect* sub = GetRect(SIZEANDPOSITION, children->get(i+1));
+        Multiply(size, sub);
+        Multiply(&calc, sub);
         // Set the coordinates for the next iteration
         calc.x += (calc.w*align->x);
         calc.y += (calc.h*align->y);
@@ -401,8 +419,8 @@ bool Default::ColorSurface(Vertex* layout)
     SDL_Surface* sf = vs->GetBuffer();
     SDL_Rect size = vs->GetSize();
 
-    Rect* csap = GetRect(SIZEANDPOSITION, layout);
-    csap->MultiplyTo(size);
+    Rel_Rect* csap = GetRect(SIZEANDPOSITION, layout);
+    Multiply(csap, &size);
     SDL_SetClipRect(sf, &size);
     FillRect(sf, &size, GetRgb("BackgroundColor", layout));
 

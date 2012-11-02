@@ -120,27 +120,27 @@ VirtualSurface::~VirtualSurface()
 }
 
 
-void VirtualSurface::MapSurface(Rect* src_rect, SDL_Rect &tgt_rect, SDL_Surface*& tgt_surface)
+void VirtualSurface::MapSurface(Rel_Rect* src_rect, SDL_Rect &tgt_rect, SDL_Surface*& tgt_surface)
 {
     if(BufferType == COLLECTOR)
     {
         // Get the absolute position on the current buffer
         tgt_rect = SizeAndPositionOnBuffer;
-        src_rect->MultiplyTo(tgt_rect);
+        Multiply(src_rect, &tgt_rect);
         tgt_surface = GetBuffer();
         // "Updated" must be true in this case
         return;
     }
 
     // Get the next layers buffer and absolute position
-    Rect* sap = GetRect(SIZEANDPOSITION, get(LAYOUT, ANY));
-    src_rect->Multiply(sap);
+    Rel_Rect* sap = GetRect(SIZEANDPOSITION, get(LAYOUT, ANY));
+    Multiply(src_rect, sap);
     if(Parent)
         Parent->MapSurface(src_rect, tgt_rect, tgt_surface);
 }
 
 
-void VirtualSurface::Show(SDL_Rect* rect_abs_on_buffer, Rect* rect_relative_to_parent)
+void VirtualSurface::Show(SDL_Rect* rect_abs_on_buffer, Rel_Rect* rect_relative_to_parent)
 {
     if(Updated || !Parent)
         return;
@@ -180,9 +180,9 @@ void VirtualSurface::BlitSurface
 void VirtualSurface::SetSize(SDL_Rect size)
 {
     // Store only the size, position from layout
-    Rect* sap = GetRect(SIZEANDPOSITION, get(LAYOUT, ANY));
+    Rel_Rect* sap = GetRect(SIZEANDPOSITION, get(LAYOUT, ANY));
     if(sap)
-        sap->MultiplyTo(size);
+        Multiply(sap, &size);
     if((size.w!=SizeAndPositionOnBuffer.w) || (size.h!=SizeAndPositionOnBuffer.h))
     {
         SizeAndPositionOnBuffer.w = size.w;

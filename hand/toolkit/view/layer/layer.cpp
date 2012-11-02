@@ -241,10 +241,11 @@ void Layer::Draw(bool forced)
         // Draw first the child on the buffer
         DrawChilds(forced);
 
-    Rect tmp;
-    Rect* sap = GetRect(SIZEANDPOSITION, layout);
+    Rel_Rect tmp;
+    Rel_Rect* sap = GetRect(SIZEANDPOSITION, layout);
     if(sap)
-        tmp.Init(sap->x, sap->y, sap->w, sap->h);
+        tmp = *sap;
+        //tmp.Init(sap->x, sap->y, sap->w, sap->h);
 
     Show(&SizeAndPositionOnBuffer, &tmp);
 

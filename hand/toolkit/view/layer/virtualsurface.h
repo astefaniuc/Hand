@@ -42,7 +42,7 @@ class AnimationsList : public List
 };
 
 
-class Rect;
+class Rel_Rect;
 
 class VirtualSurface : public Vertex
 {
@@ -50,14 +50,14 @@ class VirtualSurface : public Vertex
         VirtualSurface(std::string name);
         ~VirtualSurface();
         virtual void Show(SDL_Rect* rect_abs_on_buffer,
-                          Rect* rect_relative_to_parent);
+                          Rel_Rect* rect_relative_to_parent);
         // Set coordinates and size relative to the parent layer
         virtual void SetSize(SDL_Rect size);
         virtual SDL_Rect GetSize();
         virtual void SetBufferType(buffer_type bt);
         virtual SDL_Surface*& GetBuffer();
         virtual void SetBuffer(SDL_Surface* buffer);
-        virtual void MapSurface(Rect* src_rect,
+        virtual void MapSurface(Rel_Rect* src_rect,
                                 SDL_Rect& tgt_rect,
                                 SDL_Surface*& tgt_surface);
         void SetParent(VirtualSurface* parent);

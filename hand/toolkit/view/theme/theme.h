@@ -29,7 +29,7 @@
 
 
 class Rgb;
-class Rect;
+class Rel_Rect;
 class Layout;
 class VirtualSurface;
 
@@ -57,13 +57,14 @@ class Theme : public HandApp
         bool FillOut(Vertex* layout);
         bool _FillOut(Vertex* layout);
         // Drawer callbacks  & layout generators
+    protected:
         FactoryMap* Map;
 };
 
 //void SqueezeRect(SDL_Rect& rect, Rect factor);
 //void SqueezeRect(SDL_Rect& rect, double factor);
 // Changes x and y of source
-void PlaceCentered(SDL_Surface* source, SDL_Rect& target, Rect& out);
+void PlaceCentered(SDL_Surface* source, SDL_Rect& target, Rel_Rect& out);
 
 
 #endif /* VIEW_THEME_THEME_H */

@@ -48,17 +48,17 @@ void ButtonLayer::SetContent(Vertex* data)
     {
         SetExpandable();
         // Add list as preview // or data->Children[i] ?
-        Insert(data, BTN_FIELD_PREVIEW);
+        Insert(data, PREVIEW);
     }*/
     // The button name
     Vertex* name = new Vertex(data->name());
     add(name);
-    Insert(name, BTN_FIELD_NAME);
+    Insert(name, NAME);
     // The button description
     Vertex* test_descr = new Vertex("Description Test");
-    Insert(test_descr, BTN_FIELD_DESCRIPTION);
+    Insert(test_descr, DESCRIPTION);
     // The icon
-/*    Insert(data->Find(string("Icon")), DRAW_ITEM, BTN_FIELD_ICON);*/
+/*    Insert(data->Find(string("Icon")), DRAW_ITEM, ICON);*/
 }
 
 

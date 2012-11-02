@@ -82,9 +82,9 @@ bool Theme::FillOut(Vertex* input)
     while((child=layout->get(++i)) != NULL)
     {
         name = child->name();
-        if((name==CHILDREN) || (name=="Methods"))
+        if(name==CHILDREN)
             _FillOut(child);
-        else if((name=="Fields") || (name=="Update"))
+        else if((name=="Fields") || (name==TOUPDATE))
             continue;
         else
             execute(child);
@@ -166,29 +166,10 @@ SDL_Surface* Theme::RenderText(string* text, int size, Rgb* color)
 }
 
 
-void PlaceCentered(SDL_Surface* source, SDL_Rect& target, Rect& out)
+void PlaceCentered(SDL_Surface* source, SDL_Rect& target, Rel_Rect& out)
 {
     out.w = double(source->w)/double(target.w);
     out.h = double(source->h)/double(target.h);
     out.x = (1 - out.w)/2;
     out.y = (1 - out.h)/2;
 }
-
-/*
-void SqueezeRect(SDL_Rect& rect, Rect factor)
-{
-    SDL_Rect tmp = rect;
-    rect.w  = rect.w*factor.w;
-    rect.h  = rect.h*factor.h;
-    PlaceCentered(rect, tmp);
-}
-
-
-void SqueezeRect(SDL_Rect& rect, double factor)
-{
-    SDL_Rect tmp = rect;
-    rect.w  = rect.w*factor/100;
-    rect.h  = rect.h*factor/100;
-    PlaceCentered(rect, tmp);
-}
-*/

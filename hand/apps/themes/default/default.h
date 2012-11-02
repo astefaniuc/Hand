@@ -40,11 +40,18 @@ class Default : public Theme
         bool GetFrameLayout(Vertex* out);
         bool GetBackgroundLayout(Vertex* out);
         bool GetTextLayout(Vertex* out);
-       // Colors
+        // Colors
         bool GetColorFrame(Vertex* out);
         bool GetColorBgrdList(Vertex* out);
         bool GetColorBgrdButton(Vertex* out);
         bool GetColorFont(Vertex* out);
+        // Dimensions
+        bool GetRectFull(Vertex* out);
+        bool GetRectScaled(Vertex* out);
+        bool GetRectFrame(Vertex* out);
+        bool GetAlignmentVertical(Vertex* out);
+        bool GetAlignmentHorizontal(Vertex* out);
+        bool GetAlignmentScaledHorizontal(Vertex* out);
 
         // Drawing methods
         bool ColorSurface(Vertex* drawing);

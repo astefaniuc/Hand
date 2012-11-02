@@ -77,7 +77,7 @@ void FocusLayer::SetContent(Vertex* data)
             button = Content->Children[i];
             // Release old commands/controls
             Content->Children[i]->ReleaseNode();
-            button->GetLayer()->Insert(NULL, BTN_FIELD_CONTROL);
+            button->GetLayer()->Insert(NULL, CONTROLID);
         }
     }
     Content = data;
@@ -89,7 +89,7 @@ void FocusLayer::SetContent(Vertex* data)
         if((button->type() == METHOD) &&
             (_LayerManager->GetCommand(button, 1))) // Map command to button
         {
-            button->GetLayer()->Insert(GetControlSurface(j), BTN_FIELD_CONTROL);
+            button->GetLayer()->Insert(GetControlSurface(j), CONTROLID);
             j++;
         }
     }

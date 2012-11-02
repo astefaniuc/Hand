@@ -31,9 +31,10 @@
 #define THEMES_MENU "Themes"
 
 
-#define TARGET "Target"
+#define TARGET "target"
+#define TOUPDATE "to update"
 
-#define VIRTUALSURFACE "VIRTUALSURFACE"
+#define VIRTUALSURFACE "Virtualsurface"
 // Layout and layers
 #define LAYER "Layer"
 #define LAYERMANAGER "LayerManager"
@@ -43,50 +44,36 @@
 #define TEXT "Text"
 #define FOCUS "Focus"
 
+#define LAYER_FACTORIES "Layer Factories"
+
+
 #define FRAMEDLIST "Framed list"
 #define CONTROLID "Control ID"
 #define FRAME "Frame"
 #define BACKGROUND "Background"
+#define FONT "Font"
 
-#define LAYER_FACTORIES "Layer Factories"
+// Name of the Vertex containing the Theme object and the drawing func
+#define DRAWER "Drawer"
+#define COLOR "Color"
 
-// Drawer types
-#define GUI_DRAWER_LIST "GUI_DRAWER_LIST"
-#define GUI_DRAWER_BUTTON "GUI_DRAWER_BUTTON"
-#define GUI_DRAWER_FRAME "GUI_DRAWER_FRAME"
-#define GUI_DRAWER_BACKGROUND "GUI_DRAWER_BACKGROUND"
-#define GUI_DRAWER_TEXT "GUI_DRAWER_TEXT"
-
-// Data types
-// Colors
-#define GUI_COLOR_FRAME "GUI_COLOR_FRAME"
-#define GUI_COLOR_BACKGR_LIST "GUI_COLOR_BACKGR_LIST"
-#define GUI_COLOR_BACKGR_BUTTON "GUI_COLOR_BACKGR_BUTTON"
-#define GUI_COLOR_FONT "GUI_COLOR_FONT"
 // Positions
 #define SIZEANDPOSITION "SizeAndPosition"
-#define ALIGNMENT "ALIGNMENT"
-#define GUI_RECT_FULL "GUI_RECT_FULL"
+#define ALIGNMENT "alignment"
+#define VERTICAL "vertical"
+#define HORIZONTAL "horizontal"
+#define SCALED "scaled"
+#define SCALEDHORIZONTAL "scaled horizontal"
+#define FULL "full"
 // Font
 #define DIM_FONT_PREFERRED "DIM_FONT_PREFERRED"
 #define DIM_FONT_MAX "DIM_FONT_MAX"
 
-// TODO
-#define BGRD_SOLID_COLOR "BGRD_SOLID_COLOR"
-#define BGRD_IMAGE "BGRD_IMAGE"
-
 
 // Special Content (Layout) fields for lists and buttons
-#define LST_FIELD_NR "LST_FIELD_"
-#define BTN_FIELD_NAME "BTN_FIELD_NAME"
-#define BTN_FIELD_ICON "BTN_FIELD_ICON"
-#define BTN_FIELD_CONTROL "BTN_FIELD_CONTROL"
-#define BTN_FIELD_PREVIEW "BTN_FIELD_PREVIEW"
-#define BTN_FIELD_DESCRIPTION "BTN_FIELD_DESCRIPTION"
-
-
-// Name of the Vertex containing the Theme object and the drawing func
-#define DRAWOBJ_DRAWER "Drawer"
+#define NAME "Name"
+#define ICON "ICON"
+#define PREVIEW "Preview"
 
 
 enum button_string

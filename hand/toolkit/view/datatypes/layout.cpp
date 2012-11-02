@@ -68,7 +68,7 @@ Vertex* Layout::get(string type, string name)
         Vertex* sub_type;
         while((sub_type=f->get(++i)) != 0)
             reqs->attach(sub_type);
-        get("Update")->attach(ret);
+        get(TOUPDATE)->attach(ret);
         return ret;
     }
 
@@ -80,7 +80,7 @@ Vertex* Layout::get(string type, string name)
     ret = children->get(type, name);
     if(ret)
     {
-        get("Update")->attach(ret);
+        get(TOUPDATE)->attach(ret);
         return ret;
     }
 
@@ -91,7 +91,7 @@ Vertex* Layout::get(string type, string name)
         ret = child->get(type, name);
         if(ret)
         {
-            get("Update")->attach(child);
+            get(TOUPDATE)->attach(child);
             return ret;
         }
     }
@@ -105,7 +105,7 @@ bool Layout::execute(Vertex* vs)
     // Set the surface in the layout and use the layout
     // as parameter for the drawer
     get("Surface")->set(vs);
-    Vertex* f = get("Methods")->get("DrawFunc")->get();
+    Vertex* f = get("DrawFunc")->get();
     if(f)
         // Execute drawer on current layout
         f->execute(this);
