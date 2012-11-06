@@ -58,7 +58,7 @@ Vertex* Layout::get(string type, string name)
         return ret;
 
     // Check if the requested layout is a field and has to be created
-    Vertex* f = get("Fields")->get(LIST, name);
+    Vertex* f = get(FIELDS)->get(LIST, name);
     if(f)
     {
         // Creator mode
@@ -105,7 +105,7 @@ bool Layout::execute(Vertex* vs)
     // Set the surface in the layout and use the layout
     // as parameter for the drawer
     get("Surface")->set(vs);
-    Vertex* f = get("DrawFunc")->get();
+    Vertex* f = get(DRAWER)->get();
     if(f)
         // Execute drawer on current layout
         f->execute(this);

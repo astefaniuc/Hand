@@ -83,14 +83,14 @@ bool Layer::Update(bool forced)
 void Layer::SetContent(Vertex* data)
 {
     // ReleaseContent
-    get("Content")->set(data);
+    get(CONTENT)->set(data);
     Changed = true;
 }
 
 
 Vertex* Layer::GetContent()
 {
-    return get("Content")->get();
+    return get(CONTENT)->get();
 }
 
 

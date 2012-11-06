@@ -40,8 +40,10 @@ class Theme : public HandApp
         virtual ~Theme();
 
         bool execute(Vertex* request);
-        void Register(Factory* f);
     protected:
+        bool FillOut(Vertex* layout);
+
+        // Helper methods
         virtual TTF_Font* GetFont(int size);
         virtual void GetFontHeight(Vertex* layout, uint& max_size);
         VirtualSurface* GetSurface(Vertex* layout);
@@ -52,17 +54,8 @@ class Theme : public HandApp
 
         // Stores once rendered fonts
         std::map<int, TTF_Font*> Fonts;
-
-    private:
-        bool FillOut(Vertex* layout);
-        bool _FillOut(Vertex* layout);
-        // Drawer callbacks  & layout generators
-    protected:
-        FactoryMap* Map;
 };
 
-//void SqueezeRect(SDL_Rect& rect, Rect factor);
-//void SqueezeRect(SDL_Rect& rect, double factor);
 // Changes x and y of source
 void PlaceCentered(SDL_Surface* source, SDL_Rect& target, Rel_Rect& out);
 

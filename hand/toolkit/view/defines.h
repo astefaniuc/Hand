@@ -31,49 +31,40 @@
 #define THEMES_MENU "Themes"
 
 
-#define TARGET "target"
-#define TOUPDATE "to update"
 
-#define VIRTUALSURFACE "Virtualsurface"
-// Layout and layers
-#define LAYER "Layer"
-#define LAYERMANAGER "LayerManager"
-#define LAYOUT "Layout"
-#define VIEW "View"
-#define BUTTON "Button"
-#define TEXT "Text"
-#define FOCUS "Focus"
-
-#define LAYER_FACTORIES "Layer Factories"
-
-
-#define FRAMEDLIST "Framed list"
-#define CONTROLID "Control ID"
-#define FRAME "Frame"
-#define BACKGROUND "Background"
-#define FONT "Font"
-
-// Name of the Vertex containing the Theme object and the drawing func
-#define DRAWER "Drawer"
-#define COLOR "Color"
-
-// Positions
-#define SIZEANDPOSITION "SizeAndPosition"
-#define ALIGNMENT "alignment"
-#define VERTICAL "vertical"
-#define HORIZONTAL "horizontal"
-#define SCALED "scaled"
-#define SCALEDHORIZONTAL "scaled horizontal"
-#define FULL "full"
-// Font
+#define ALIGNMENT        "Alignment"
+#define BACKGROUND       "Background"
+#define BUTTON           "Button"
+#define COLOR            "Color"
+#define CONTENT          "Content"
+#define CONTROLID        "Control ID"
+#define DIM_FONT_MAX     "DIM_FONT_MAX"
 #define DIM_FONT_PREFERRED "DIM_FONT_PREFERRED"
-#define DIM_FONT_MAX "DIM_FONT_MAX"
-
-
-// Special Content (Layout) fields for lists and buttons
-#define NAME "Name"
-#define ICON "ICON"
-#define PREVIEW "Preview"
+#define DRAWER           "Drawer"
+#define ELEMENT          "Element"
+#define FIELDS           "Fields"
+#define FOCUS            "Focus"
+#define FONT             "Font"
+#define FRAME            "Frame"
+#define FRAMEDLIST       "Framed list"
+#define FULL             "full"
+#define HORIZONTAL       "horizontal"
+#define ICON             "Icon"
+#define LAYER            "Layer"
+#define LAYER_FACTORIES  "Layer Factories"
+#define LAYERMANAGER     "LayerManager"
+#define LAYOUT           "Layout"
+#define NAME             "Name"
+#define PREVIEW          "Preview"
+#define SCALED           "scaled"
+#define SCALEDHORIZONTAL "scaled horizontal"
+#define SIZEANDPOSITION  "SizeAndPosition"
+#define TARGET           "Target"
+#define TEXT             "Text"
+#define TOUPDATE         "to update"
+#define VERTICAL         "vertical"
+#define VIEW             "View"
+#define VIRTUALSURFACE   "Virtualsurface"
 
 
 enum button_string

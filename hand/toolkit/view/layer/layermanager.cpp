@@ -263,7 +263,7 @@ bool LayerManager::GetAllThemes(Vertex* themes_dir)
 
 bool LayerManager::Expand(Vertex* to_expand)
 {
-    MasterView = Insert(to_expand, "ListElement");
+    MasterView = Insert(to_expand, ELEMENT);
     if(MasterView)
         return true;
     return false;

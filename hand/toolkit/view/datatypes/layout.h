@@ -22,18 +22,8 @@
 
 #include "include/defines.h"
 #include "base/factory.h"
-#include "graph/data.h"
 #include "graph/link.h"
 
-
-enum alignment
-{
-    HORIZONTAL,
-    VERTICAL
-};
-
-class Rgb;
-class Rect;
 
 class Layout : public List
 {
@@ -46,58 +36,6 @@ class Layout : public List
         virtual Vertex* get(std::string type, std::string name);
         bool execute(Vertex* surface);
         void reset();
-};
-
-
-template <class I>
-class LayoutFactory : public Factory
-{
-    typedef bool (I::*Method)(Vertex*);
-
-    public:
-        LayoutFactory(std::string output_type, I* theme, Method func) :
-            Factory("LayoutFactory", LAYOUT, output_type)
-        {
-            Producer = theme;
-            Function = func;
-        };
-        virtual ~LayoutFactory(){};
-
-        bool execute(Vertex* in_out)
-        {
-            if((Producer->*Function)(in_out))
-                return true;
-            return false;
-        };
-
-    private:
-        Method Function;
-        I* Producer;
-};
-
-
-template <class I>
-class PropertyFactory : public Factory
-{
-    typedef bool (I::*Method)(Vertex*);
-
-    public:
-    PropertyFactory(std::string output_type, I* theme, Method func) :
-            Factory("PropertyFactory", LINK, output_type)
-        {
-            Producer = theme;
-            Function = func;
-        };
-        virtual ~PropertyFactory(){};
-
-        bool execute(Vertex* in_out)
-        {
-            return (Producer->*Function)(in_out);
-        };
-
-    private:
-        Method Function;
-        I* Producer;
 };
 
 #endif /* VIEW_DATATYPES_LAYOUT_H */

@@ -39,7 +39,6 @@ Theme::Theme(string name) : HandApp(name)
         cout << TTF_GetError() << endl;
         exit(22);
     }
-    Map = new FactoryMap("Map");
 }
 
 
@@ -51,56 +50,65 @@ Theme::~Theme()
         TTF_CloseFont((*curr).second);
         curr++;
     }
-    delete(Map);
 }
 
 
-void Theme::Register(Factory* f)
+bool Theme::execute(Vertex* input)
 {
-    Map->add(f);
-}
-
-
-bool Theme::execute(Vertex* request)
-{
-    Map->execute(request);
-    return FillOut(request);
-}
-
-
-bool Theme::FillOut(Vertex* input)
-{
-    if(!input)
+    if(!dynamic_cast<Layout*>(input))
         return false;
-    Layout* layout = dynamic_cast<Layout*>(input);
-    if(!layout)
-        return true;
+
+    // Get the layout factory
+    Vertex* req = input->Vertex::get(ANY, REQUEST);
+    if(req)
+    {
+        req = req->get();
+        if(req)
+            get("Repository")->get(LAYOUT)->get(req->name())->execute(input);
+    }
 
     string name;
     Vertex* child;
     uint i = 0;
-    while((child=layout->get(++i)) != NULL)
+    while((child=input->get(++i)) != NULL)
     {
         name = child->name();
-        if(name==CHILDREN)
-            _FillOut(child);
-        else if((name=="Fields") || (name==TOUPDATE))
+        if(name == CHILDREN)
+        {
+            uint j = 0;
+            while((child=input->get(++j)) != NULL)
+                execute(child);
+        }
+        else if((name==FIELDS) || (name==TOUPDATE) || (name==LAYER_FACTORIES))
             continue;
         else
-            execute(child);
+            FillOut(child);
     }
     return true;
 }
 
 
-bool Theme::_FillOut(Vertex* input)
+bool Theme::FillOut(Vertex* request)
 {
-    Vertex* child;
-    uint i = 0;
-    while((child=input->get(++i)) != NULL)
-        execute(child);
-
-    return true;
+    Vertex* req = request->Vertex::get(ANY, REQUEST);
+    if(req)
+        req = req->get();
+    if(!req)
+        // Nothing to do
+        return false;
+    if(request->get(req->name(), ANY))
+        // Already resolved
+        return false;
+    Vertex* repo = get("Repository")->get(ANY, req->name());
+    if(!repo)
+        return false;
+    while((req=req->get()) != NULL)
+    {
+        repo = repo->get(ANY, req->name());
+        if(!repo)
+            return false;
+    }
+    return request->set(repo);
 }
 
 

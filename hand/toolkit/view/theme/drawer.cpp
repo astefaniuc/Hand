@@ -31,11 +31,11 @@ DrawerFactory::DrawerFactory
         Vertex* draw_func
 ) : Factory(DRAWER, LINK, draw_func->name())
 {
-    get("DrawFunc")->add(draw_func);
+    get(DRAWER)->add(draw_func);
 }
 
 
 bool DrawerFactory::execute(Vertex* tree)
 {
-    return tree->attach(get("DrawFunc")->get());
+    return tree->attach(get(DRAWER)->get());
 }
