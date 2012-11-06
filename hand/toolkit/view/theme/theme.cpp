@@ -76,7 +76,7 @@ bool Theme::execute(Vertex* input)
         if(name == CHILDREN)
         {
             uint j = 0;
-            while((child=input->get(++j)) != NULL)
+            while((child=child->get(++j)) != NULL)
                 execute(child);
         }
         else if((name==FIELDS) || (name==TOUPDATE) || (name==LAYER_FACTORIES))

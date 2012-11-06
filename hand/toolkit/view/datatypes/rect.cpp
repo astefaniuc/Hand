@@ -89,8 +89,12 @@ void Multiply(Rel_Rect* src, SDL_Rect* tgt)
 
 Rel_Rect* GetRect(string name, Vertex* tree)
 {
-    Rect* container = dynamic_cast<Rect*>(tree->get(RECT, name));
-    if(container)
-        return container->get();
+    Vertex* named = tree->get(ANY, name);
+    if(named)
+    {
+        Rect* container = dynamic_cast<Rect*>(named->get());
+        if(container)
+            return container->get();
+    }
     return NULL;
 }

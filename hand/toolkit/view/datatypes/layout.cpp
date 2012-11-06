@@ -29,15 +29,6 @@ Layout::Layout(string name, string stype) : List(name)
     type(LAYOUT);
     if(stype != "")
         Vertex::get(REQUEST)->get(stype);
-    // Colours.set(r[ed], g[reen], b[lue])
-/*    Color_Frame.set(0, 3, 200);
-    Color_Background.set(0, 0, 0);
-    Color_Alt_Frame.set(0, 3, 232);
-    Color_Alt_Background.set(128, 128, 128);*/
-
-//    SizeAndPosition.set(0.0, 0.0, 1.0, 1.0);
-
-//    Background = SOLID_COLOR;
 }
 
 
@@ -62,7 +53,7 @@ Vertex* Layout::get(string type, string name)
     if(f)
     {
         // Creator mode
-        ret = new Layout("Created", "");
+        ret = new Layout(name, "");
         Vertex* reqs = ret->Vertex::get(REQUEST);
         uint i = 0;
         Vertex* sub_type;
