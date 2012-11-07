@@ -17,14 +17,13 @@
  *  License along with Hand. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <iostream>
+#include <dlfcn.h>
 #include "view/theme/theme.h"
 #include "view/datatypes/rgb.h"
 #include "view/datatypes/rect.h"
 #include "view/datatypes/layout.h"
 #include "view/layer/virtualsurface.h"
-
-#include <iostream>
-#include <dlfcn.h>
 
 
 using namespace std;

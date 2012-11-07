@@ -20,10 +20,9 @@
 #ifndef GRAPH_VERTEX_H
 #define GRAPH_VERTEX_H
 
-#include "include/defines.h"
-
 #include <string>
 #include <sstream>
+#include "include/defines.h"
 
 
 class BaseList;

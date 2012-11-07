@@ -20,11 +20,8 @@
 #ifndef HAND_RECT_H
 #define HAND_RECT_H
 
-#include "graph/data.h"
 #include <SDL/SDL.h>
-
-
-#define RECT "RECT"
+#include "graph/data.h"
 
 
 struct Rel_Rect

@@ -20,9 +20,7 @@
 #ifndef VIEW_DATATYPES_LAYOUT_H
 #define VIEW_DATATYPES_LAYOUT_H
 
-#include "include/defines.h"
-#include "base/factory.h"
-#include "graph/link.h"
+#include "graph/list.h"
 
 
 class Layout : public List

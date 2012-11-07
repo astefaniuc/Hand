@@ -20,16 +20,16 @@
 #ifndef INCLUDE_DEFINES_H
 #define INCLUDE_DEFINES_H
 
+#include "base/defines.h"
 #include "graph/defines.h"
 #include "view/defines.h"
 
 
+// Paths and file names
+#define DEFAULT_THEME "default.so"
+#define FONT_FILE "/usr/share/fonts/truetype/freefont/FreeSans.ttf"
 #define LIBRARY_FILE_EXTENSION ".so"
-
-// Content items
-#define DESCRIPTION "Description"
-#define PARENT "Parent"
-#define CHILDREN "Children"
+#define THEMES_DIRECTORY "./apps/themes/"
 
 
 enum default_number_of_items

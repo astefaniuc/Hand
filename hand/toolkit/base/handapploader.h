@@ -23,9 +23,6 @@
 #include "base/factory.h"
 
 
-#define APPLOADER "HandAppLoader"
-#define NAME_NOT_INIT "Not initialized"
-
 // Class factories for dynamic linking
 typedef List* creator();
 typedef void destroyer(void*);
@@ -47,8 +44,6 @@ class Binary : public Vertex
         destroyer* Destroy;
 };
 
-
-#define APPLOADERFACTORY "HandAppLoader_Factory"
 
 class HandAppLoader : public Factory
 {

@@ -17,11 +17,11 @@
  *  License along with Hand. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HAND_DRAWER_H
-#define HAND_DRAWER_H
+#ifndef VIEW_SCREEN_H
+#define VIEW_SCREEN_H
 
-#include "base/handapp.h"
 #include <SDL/SDL.h>
+#include "base/handapp.h"
 
 
 class Screen : public virtual HandApp
@@ -52,4 +52,4 @@ class Screen : public virtual HandApp
         bool IsFullscreen;
 };
 
-#endif /* HAND_DRAWER_H */
+#endif /* VIEW_SCREEN_H */

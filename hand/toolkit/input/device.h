@@ -20,11 +20,10 @@
 #ifndef INPUT_DEVICE_H
 #define INPUT_DEVICE_H
 
-#include "base/handapp.h"
-#include "graph/data.h"
-
 #include <SDL/SDL.h>
 #include <vector>
+#include "base/handapp.h"
+#include "graph/data.h"
 
 
 class InputState;

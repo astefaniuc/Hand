@@ -20,10 +20,8 @@
 #ifndef GRAPH_DATA_H
 #define GRAPH_DATA_H
 
-#include "graph/vertex.h"
-
-#include <sstream>
 #include <typeinfo>
+#include "graph/vertex.h"
 
 
 template <typename I>

@@ -20,11 +20,8 @@
 #ifndef HAND_RGB_H
 #define HAND_RGB_H
 
-#include "graph/list.h"
 #include <SDL/SDL.h>
-
-
-#define RGB "RGB"
+#include "graph/list.h"
 
 
 class Rgb : public Vertex

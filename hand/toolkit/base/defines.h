@@ -17,25 +17,20 @@
  *  License along with Hand. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "view/theme/drawer.h"
-#include "view/theme/theme.h"
-#include "view/layer/virtualsurface.h"
-#include "graph/link.h"
+#ifndef BASE_DEFINES_H
+#define BASE_DEFINES_H
 
 
-using namespace std;
+#define APPLOADER        "App loader"
+#define APPLOADERFACTORY "App loader factory"
+#define FACTORY          "Factory"
+#define FACTORYMAP       "Factory map"
+#define FILE_            "File"
+#define HANDAPP          "HandApp"
+#define INPUTTYPE        "Input type"
+#define PATH             "Path"
+#define REQUEST          "Request"
+#define NAME_NOT_INIT    "Not initialized"
 
 
-DrawerFactory::DrawerFactory
-(
-        Vertex* draw_func
-) : Factory(DRAWER, LINK, draw_func->name())
-{
-    get(DRAWER)->add(draw_func);
-}
-
-
-bool DrawerFactory::execute(Vertex* tree)
-{
-    return tree->attach(get(DRAWER)->get());
-}
+#endif /* BASE_DEFINES_H */

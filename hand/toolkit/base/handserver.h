@@ -20,8 +20,8 @@
 #ifndef BASE_HANDSERVER_H
 #define BASE_HANDSERVER_H
 
-#include "base/datamanager.h"
 #include <SDL/SDL.h>
+#include "base/datamanager.h"
 
 
 class LayerManager;

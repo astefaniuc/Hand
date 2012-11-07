@@ -25,9 +25,7 @@
 
 class Vertex;
 
-
 typedef std::vector<Vertex*>::iterator VIterator;
-
 
 class BaseList : public std::vector<Vertex*>
 {

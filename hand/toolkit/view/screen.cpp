@@ -17,12 +17,11 @@
  *  License along with Hand. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <iostream>
 #include "view/screen.h"
 #include "view/layer/layer.h"
 #include "graph/data.h"
 #include "graph/method.h"
-
-#include <iostream>
 
 
 using namespace std;

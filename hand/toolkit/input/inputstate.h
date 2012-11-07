@@ -20,10 +20,10 @@
 #ifndef INPUT_INPUTSTATE_H
 #define INPUT_INPUTSTATE_H
 
-#include "input/node.h"
-#include "include/defines.h"
 #include <vector>
 #include <string>
+#include "input/node.h"
+#include "include/defines.h"
 
 
 class Device;

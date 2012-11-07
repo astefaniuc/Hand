@@ -17,13 +17,12 @@
  *  License along with Hand. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "base/handapp.h"
-#include "base/handapploader.h"
-#include "base/filesystem.h"
-
 #include <dlfcn.h>
 #include <boost/filesystem/path.hpp>
 #include <boost/filesystem/operations.hpp>
+#include "base/handapp.h"
+#include "base/handapploader.h"
+#include "base/filesystem.h"
 
 
 using namespace std;
@@ -91,9 +90,7 @@ void Binary::reset()
 // ----------------------------------------------------------------
 
 
-HandAppLoader::HandAppLoader() : Factory("HandApp Loader",
-                                         FILE,
-                                         HANDAPP)
+HandAppLoader::HandAppLoader() : Factory("HandApp Loader", FILE_, HANDAPP)
 {
     type(APPLOADERFACTORY);
 }

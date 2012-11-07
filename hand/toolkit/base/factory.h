@@ -23,10 +23,6 @@
 #include "graph/list.h"
 
 
-#define FACTORY "FACTORY"
-#define INPUTTYPE "Input type"
-#define REQUEST "Output type"
-
 class Factory : public Vertex
 {
     public:
@@ -39,8 +35,6 @@ class Factory : public Vertex
         virtual bool IsValidInput(Vertex* input);
 };
 
-
-#define FACTORYMAP "FACTORYMAP"
 
 class FactoryMap : public List
 {

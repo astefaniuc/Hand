@@ -17,11 +17,9 @@
  *  License along with Hand. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <boost/filesystem/operations.hpp>
 #include "base/filesystem.h"
 #include "graph/data.h"
-
-#include <boost/filesystem/path.hpp>
-#include <boost/filesystem/operations.hpp>
 
 
 using namespace std;
@@ -30,7 +28,7 @@ using namespace boost::filesystem;
 
 File::File(string file_name) : List(file_name)
 {
-    type(FILE);
+    type(FILE_);
     path file_path(file_name);
     if(is_regular_file(file_path))
     {

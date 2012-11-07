@@ -18,12 +18,9 @@
  */
 
 #include "view/layer/layer.h"
-#include "view/theme/theme.h"
 #include "input/node.h"
 #include "view/datatypes/rect.h"
-#include "view/theme/drawer.h"
 #include "view/datatypes/layout.h"
-#include "view/layer/layermanager.h"
 
 
 using namespace std;

@@ -1,7 +1,5 @@
 #include "test1.h"
 
-#include <string>
-
 
 extern "C" Vertex* Create()
 {

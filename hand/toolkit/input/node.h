@@ -20,10 +20,9 @@
 #ifndef INPUT_NODE_H
 #define INPUT_NODE_H
 
-#include "include/defines.h"
-
 #include <string>
 #include <vector>
+#include "include/defines.h"
 
 
 class Layer;

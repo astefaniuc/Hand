@@ -20,9 +20,8 @@
 #ifndef VIEW_LAYER_VIRTUALSURFACE_H
 #define VIEW_LAYER_VIRTUALSURFACE_H
 
-#include "graph/list.h"
-
 #include <SDL/SDL.h>
+#include "graph/list.h"
 
 
 class Animation;

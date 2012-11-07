@@ -19,9 +19,7 @@
 
 #include "view/layer/virtualsurface.h"
 #include "view/theme/animations.h"
-#include "view/theme/theme.h"
 #include "view/datatypes/rect.h"
-#include "view/theme/drawer.h"
 
 
 using namespace std;

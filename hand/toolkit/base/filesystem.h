@@ -20,18 +20,14 @@
 #ifndef BASE_FILESYSTEM_H
 #define BASE_FILESYSTEM_H
 
+#include <boost/filesystem/path.hpp>
 #include "base/factory.h"
-#include "boost/filesystem/path.hpp"
-
-
-#define PATH "Path"
-#define FILE "File"
 
 
 class DirectoryLoader : public Factory
 {
     public:
-        DirectoryLoader() : Factory("DirectoryLoader", FILE, FILE){};
+        DirectoryLoader() : Factory("DirectoryLoader", FILE_, FILE_){};
         ~DirectoryLoader(){};
 
         bool execute(Vertex* descriptor);
@@ -53,7 +49,7 @@ class File : public List
 class FileFactory : public Factory
 {
     public:
-        FileFactory() : Factory("FileFactory", NOTE, FILE){};
+        FileFactory() : Factory("FileFactory", NOTE, FILE_){};
         virtual ~FileFactory(){};
 
         bool execute(Vertex* input);

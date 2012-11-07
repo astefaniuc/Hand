@@ -20,9 +20,8 @@
 #ifndef GRAPH_SEARCH_SEARCHSTRING_H
 #define GRAPH_SEARCH_SEARCHSTRING_H
 
-#include "graph/search/regularexpression.h"
-
 #include <regex>
+#include "graph/search/regularexpression.h"
 
 
 class SearchString : public RegularExpression

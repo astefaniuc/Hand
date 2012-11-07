@@ -20,12 +20,11 @@
 #ifndef VIEW_THEME_THEME_H
 #define VIEW_THEME_THEME_H
 
-#include "base/factory.h"
-#include "base/handapp.h"
-
 #include "SDL/SDL_ttf.h"
 // #include "SDL/SDL_Image.h"
 #include <map>
+#include "base/factory.h"
+#include "base/handapp.h"
 
 
 class Rgb;

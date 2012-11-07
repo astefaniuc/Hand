@@ -18,8 +18,6 @@
  */
 
 #include "view/datatypes/rect.h"
-#include "graph/search/search.h"
-#include "graph/data.h"
 
 
 using namespace std;

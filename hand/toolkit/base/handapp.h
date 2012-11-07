@@ -23,9 +23,6 @@
 #include "graph/list.h"
 
 
-#define HANDAPP "HandApp"
-
-
 class HandApp : public List
 {
     public:

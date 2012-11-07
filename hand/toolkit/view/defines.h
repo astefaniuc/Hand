@@ -21,23 +21,15 @@
 #define VIEW_DEFINES_H
 
 
-// TODO: font engine
-#define FONT_FILE "/usr/share/fonts/truetype/freefont/FreeSans.ttf"
-
-// Themes strings
-#define THEMES_DIRECTORY "./apps/themes/"
-#define DEFAULT_THEME "default.so"
-// Menu names
-#define THEMES_MENU "Themes"
-
-
-
+// Tags
 #define ALIGNMENT        "Alignment"
 #define BACKGROUND       "Background"
 #define BUTTON           "Button"
+#define CHILDREN         "Children"
 #define COLOR            "Color"
 #define CONTENT          "Content"
 #define CONTROLID        "Control ID"
+#define DESCRIPTION      "Description"
 #define DIM_FONT_MAX     "DIM_FONT_MAX"
 #define DIM_FONT_PREFERRED "DIM_FONT_PREFERRED"
 #define DRAWER           "Drawer"
@@ -55,12 +47,16 @@
 #define LAYERMANAGER     "LayerManager"
 #define LAYOUT           "Layout"
 #define NAME             "Name"
+#define PARENT           "Parent"
 #define PREVIEW          "Preview"
+#define RECT             "Rect"
+#define RGB              "RGB"
 #define SCALED           "scaled"
 #define SCALEDHORIZONTAL "scaled horizontal"
 #define SIZEANDPOSITION  "SizeAndPosition"
 #define TARGET           "Target"
 #define TEXT             "Text"
+#define THEMES           "Themes"
 #define TOUPDATE         "to update"
 #define VERTICAL         "vertical"
 #define VIEW             "View"
@@ -82,12 +78,6 @@ enum buffer_type
     NONE,
     OVERLAY,
     COLLECTOR
-};
-
-
-enum maximum_number_of_buttons
-{
-    MAX_NUMBER_OF_BUTTONS = 5
 };
 
 #endif /* VIEW_DEFINES_H */
