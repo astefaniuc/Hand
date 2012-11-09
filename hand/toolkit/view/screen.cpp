@@ -39,10 +39,7 @@ Screen::Screen() : HandApp("Screen")
 void Screen::Init()
 {
     // Add a func to toggle fullscreen <-> windowed mode
-    List* button = new List("ToggleFullscreen");
-    button->add(new Method<Screen>("Button", this, &Screen::ToggleFullscreen));
-    button->add(new Note(DESCRIPTION, "Toggle full screen"));
-    add(button);
+    add(new Method<Screen>("Toggle full screen", this, &Screen::ToggleFullscreen));
 }
 
 

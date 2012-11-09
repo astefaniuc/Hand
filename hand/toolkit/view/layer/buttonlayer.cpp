@@ -30,25 +30,19 @@ ButtonLayer::ButtonLayer(string name) : Layer(name)
 {
     BufferType = COLLECTOR;
     type(BUTTON);
-
-    VisibleItems = 0;
-    // BTN_NAME, BTN_DESCRIPTION, BTN_ICON, BTN_CONTROL, BTN_PREVIEW
-    VisibleItems |= BTN_DESCRIPTION;
-//    VisibleItems |= BTN_CONTROL;
-    VisibleItems |= BTN_PREVIEW;
 }
 
 
 void ButtonLayer::SetContent(Vertex* data)
 {
     Layer::SetContent(data);
-/*
+
     // Create the sub-elements of the button
     // The preview
-    if(Content->is(LIST))
+/*    if(data->is(LIST))
     {
         SetExpandable();
-        // Add list as preview // or data->Children[i] ?
+        // Add list as preview
         Insert(data, PREVIEW);
     }*/
 
@@ -58,19 +52,20 @@ void ButtonLayer::SetContent(Vertex* data)
         delete(tmp);
 
     // The button description
-    tmp = new Note(DESCRIPTION, "Description Test");
-    if(!Insert(tmp, DESCRIPTION))
-        delete(tmp);
+    tmp = data->Vertex::get(NOTE, DESCRIPTION);
+    if(tmp)
+        Insert(tmp, DESCRIPTION);
 
     // The icon
-/*    Insert(data->Find(string("Icon")), DRAW_ITEM, ICON);*/
+    tmp = data->Vertex::get(ANY, ICON);
+    if(tmp)
+        Insert(tmp, ICON);
 }
 
 
 void ButtonLayer::SetExpandable()
 {
-    Method<ButtonLayer>* tmp_cb = new Method<ButtonLayer>("ExpandList", this, &ButtonLayer::ExpandList);
-    FunctionBox = tmp_cb;
+    FunctionBox = new Method<ButtonLayer>("ExpandList", this, &ButtonLayer::ExpandList);
 }
 
 

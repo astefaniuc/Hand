@@ -39,7 +39,6 @@ class ButtonLayer : public Layer
         void SetExpandable(void);
         bool ExpandList(Vertex* ignore);
 
-        uint VisibleItems;
         Vertex* FunctionBox;
 };
 

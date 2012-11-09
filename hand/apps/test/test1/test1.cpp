@@ -16,55 +16,45 @@ extern "C" void Destroy(HandApp* app)
 
 void App::Init()
 {
-    Vertex* folder;
 
     // The one and only view
     Output = new Note("Output field name", "<< Empty >>");
     add(Output);
     // Add controls
-    folder = new List("Level 1");
-    add(folder);
+    Vertex* folder = get("Level 1");
 
     // Set the dummy callback methods
-    List* func_folder = new List("button 1");
-    func_folder->add(new Method<App>("button 1", this, &App::PrintSelf));
-    func_folder->add(new Note(DESCRIPTION, "l1b1: prints this to Output"));
-    folder->add(func_folder);
+    Vertex* button = new Method<App>("button 1", this, &App::PrintSelf);
+    button->add(new Note(DESCRIPTION, "l1b1: prints this to Output"));
+    folder->add(button);
 
-    func_folder = new List("button 2");
-    func_folder->add(new Method<App>("button 2", this, &App::PrintSelf));
-    func_folder->add(new Note(DESCRIPTION, "l1b2: prints this to Output,\n with newline"));
-    folder->add(func_folder);
+    button = new Method<App>("button 2", this, &App::PrintSelf);
+    button->add(new Note(DESCRIPTION, "l1b2: prints this to Output,\n with newline"));
+    folder->add(button);
 
     // Create sub-menu folder
-    List* sub_menu = new List("Level 2");
-    sub_menu->add(new Note(DESCRIPTION, "l1b3: calls sub-menu"));
-    folder->add(sub_menu);
+    folder = folder->get("Level 2");
+    folder->add(new Note(DESCRIPTION, "l1b3: calls sub-menu"));
     // Set the dummy callback methods
-    func_folder = new List("button 1");
-    func_folder->add(new Method<App>("button 1", this, &App::PrintSelf));
-    func_folder->add(new Note(DESCRIPTION, "l2b1: Func C bug"));
-    sub_menu->add(func_folder);
+    button = new Method<App>("button 1", this, &App::PrintSelf);
+    button->add(new Note(DESCRIPTION, "l2b1: Func C bug"));
+    folder->add(button);
 
-    func_folder = new List("button 2");
-    func_folder->add(new Method<App>("button 2", this, &App::PrintSelf));
-    func_folder->add(new Note(DESCRIPTION, "l2b2: prints this to Output"));
-    sub_menu->add(func_folder);
+    button = new Method<App>("button 2", this, &App::PrintSelf);
+    button->add(new Note(DESCRIPTION, "l2b2: prints this to Output"));
+    folder->add(button);
 
-    func_folder = new List("button 3");
-    func_folder->add(new Method<App>("button 3", this, &App::PrintSelf));
-    func_folder->add(new Note(DESCRIPTION, "l2b3: prints this to Output"));
-    sub_menu->add(func_folder);
+    button = new Method<App>("button 3", this, &App::PrintSelf);
+    button->add(new Note(DESCRIPTION, "l2b3: prints this to Output"));
+    folder->add(button);
 
-    func_folder = new List("button 4");
-    func_folder->add(new Method<App>("button 4", this, &App::PrintSelf));
-    func_folder->add(new Note(DESCRIPTION, "l2b4: prints this to Output"));
-    sub_menu->add(func_folder);
+    button = new Method<App>("button 4", this, &App::PrintSelf);
+    button->add(new Note(DESCRIPTION, "l2b4: prints this to Output"));
+    folder->add(button);
 
-    func_folder = new List("button 5");
-    func_folder->add(new Method<App>("button 5", this, &App::PrintSelf));
-    func_folder->add(new Note(DESCRIPTION, "l2b5: prints this to Output"));
-    sub_menu->add(func_folder);
+    button = new Method<App>("button 5", this, &App::PrintSelf);
+    button->add(new Note(DESCRIPTION, "l2b5: prints this to Output"));
+    folder->add(button);
 }
 
 

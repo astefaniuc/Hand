@@ -64,21 +64,4 @@
 #define VIRTUALSURFACE   "Virtualsurface"
 
 
-enum button_string
-{
-    BTN_NAME = 1,
-    BTN_DESCRIPTION = 2,
-    BTN_ICON = 4,
-    BTN_CONTROL = 8,
-    BTN_PREVIEW = 16
-};
-
-
-enum buffer_type
-{
-    NONE,
-    OVERLAY,
-    COLLECTOR
-};
-
 #endif /* VIEW_DEFINES_H */

@@ -41,6 +41,14 @@ class AnimationsList : public List
 };
 
 
+enum buffer_type
+{
+    NONE,
+    OVERLAY,
+    COLLECTOR
+};
+
+
 class Rel_Rect;
 
 class VirtualSurface : public Vertex
