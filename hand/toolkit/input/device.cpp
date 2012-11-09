@@ -125,7 +125,8 @@ bool Device::Release(SDLKey k)
         {
             // Device is during initialization
             index = GetInitializationIndex(k);
-            DeleteCurrentKey();
+            if(index != -1)
+                DeleteCurrentKey();
         }
         StateMachine->Release(index);
         return true;

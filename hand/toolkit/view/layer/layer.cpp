@@ -181,6 +181,9 @@ Layer* Layer::Insert(Vertex* data, string position)
     // list of supported layer types
     // This already connects all involved layouts and connects to the Theme
     Vertex* child_layout = curr_layout->get(LAYOUT, position);
+    if(!child_layout)
+        return NULL;
+
     child_layout->name(data->name());
     Vertex* layer_factories = curr_layout->get(FACTORYMAP, LAYER_FACTORIES);
 

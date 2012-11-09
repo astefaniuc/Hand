@@ -51,10 +51,17 @@ void ButtonLayer::SetContent(Vertex* data)
         // Add list as preview // or data->Children[i] ?
         Insert(data, PREVIEW);
     }*/
+
     // The button name
-    Insert(new Note(NAME, data->name()), NAME);
+    Vertex* tmp = new Note(NAME, data->name());
+    if(!Insert(tmp, NAME))
+        delete(tmp);
+
     // The button description
-    Insert(new Note(DESCRIPTION, "Description Test"), DESCRIPTION);
+    tmp = new Note(DESCRIPTION, "Description Test");
+    if(!Insert(tmp, DESCRIPTION))
+        delete(tmp);
+
     // The icon
 /*    Insert(data->Find(string("Icon")), DRAW_ITEM, ICON);*/
 }
