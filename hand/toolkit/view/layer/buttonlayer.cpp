@@ -20,6 +20,7 @@
 #include "view/layer/buttonlayer.h"
 #include "view/layer/textlayer.h"
 #include "graph/method.h"
+#include "graph/data.h"
 
 
 using namespace std;
@@ -51,12 +52,9 @@ void ButtonLayer::SetContent(Vertex* data)
         Insert(data, PREVIEW);
     }*/
     // The button name
-    Vertex* name = new Vertex(data->name());
-    add(name);
-    Insert(name, NAME);
+    Insert(new Note(NAME, data->name()), NAME);
     // The button description
-    Vertex* test_descr = new Vertex("Description Test");
-    Insert(test_descr, DESCRIPTION);
+    Insert(new Note(DESCRIPTION, "Description Test"), DESCRIPTION);
     // The icon
 /*    Insert(data->Find(string("Icon")), DRAW_ITEM, ICON);*/
 }
