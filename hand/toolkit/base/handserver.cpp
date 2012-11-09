@@ -64,7 +64,7 @@ void HandServer::Present(string file)
             break;
         app = app->Vertex::get(ot->name(), ANY);
     }
-    GetLayerManager()->LoadAppInterface(app, true);
+    GetLayerManager()->Layer::SetContent(app);
     // Start the timer driven (callback) execution and stop the current thread
     Beat();
 }

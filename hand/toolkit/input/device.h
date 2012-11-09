@@ -37,7 +37,7 @@ class Device : public virtual HandApp
               ~Device();
         // Sets the key map
         bool   Init();
-        void   InitUI();
+        bool   execute(Vertex* init_screen);
         //virtual void Register(void);
         void   AddKey(int);
         // Functions accessing the layer object (not possible from here)
@@ -50,7 +50,6 @@ class Device : public virtual HandApp
     protected:
         // Returns the Key symbol at specified position
         Note*  GetKey(uint index);
-        std::string GetKeyName(uint pos);
         void   AddKey(SDLKey);
         void   DeleteCurrentKey();
         // Returns the key number

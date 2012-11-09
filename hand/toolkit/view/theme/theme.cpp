@@ -67,21 +67,24 @@ bool Theme::execute(Vertex* input)
     }
 
     string name;
-    Vertex* child;
+    Vertex* sub;
     uint i = 0;
-    while((child=input->get(++i)) != NULL)
+    while((sub=input->get(++i)) != NULL)
     {
-        name = child->name();
+        name = sub->name();
+        if((name==FIELDS) || (name==TOUPDATE) ||
+                (name==LAYER_FACTORIES) || (name==TARGET) || (name==THEME))
+            continue;
+
         if(name == CHILDREN)
         {
             uint j = 0;
-            while((child=child->get(++j)) != NULL)
+            Vertex* child;
+            while((child=sub->get(++j)) != NULL)
                 execute(child);
         }
-        else if((name==FIELDS) || (name==TOUPDATE) || (name==LAYER_FACTORIES))
-            continue;
         else
-            FillOut(child);
+            FillOut(sub);
     }
     return true;
 }
@@ -107,6 +110,8 @@ bool Theme::FillOut(Vertex* request)
         if(!repo)
             return false;
     }
+    if(repo->is(FACTORY))
+        return request->set(repo->get());
     return request->set(repo);
 }
 

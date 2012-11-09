@@ -44,10 +44,20 @@ class Rect : public Data<Rel_Rect*>
         ~Rect();
 
         using Data::set;
-        using Data::get;
         bool set(Rel_Rect*);
         void Reset();
 };
+
+
+class RectFactory : public Rect
+{
+    public:
+        RectFactory(std::string name, double x_, double y_, double w_, double h_);
+        ~RectFactory(){};
+        using Data::get;
+        Vertex* _get();
+};
+
 
 void Multiply(Rel_Rect* src, Rel_Rect* tgt);
 void Multiply(Rel_Rect* src, SDL_Rect* tgt);

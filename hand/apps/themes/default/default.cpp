@@ -62,12 +62,12 @@ Default::Default() : Theme("DefaultTheme")
     // Properties
     // Dimensions
     folder = get("Repository")->get(RECT);
-    folder->set(new Rect(FRAME,            new Rel_Rect(.01, .03, .98, .94)));
-    folder->set(new Rect(FULL,             new Rel_Rect(  0,   0,   1,   1)));
-    folder->set(new Rect(HORIZONTAL,       new Rel_Rect(  1,   0,   1,   0)));
-    folder->set(new Rect(SCALED,           new Rel_Rect( .1,  .1,  .8,  .8)));
-    folder->set(new Rect(SCALEDHORIZONTAL, new Rel_Rect(  1,   0,  .5,   0)));
-    folder->set(new Rect(VERTICAL,         new Rel_Rect(  0,   1,   0,   1)));
+    folder->set(new RectFactory(FRAME,            .01, .03, .98, .94));
+    folder->set(new RectFactory(FULL,               0,   0,   1,   1));
+    folder->set(new RectFactory(HORIZONTAL,         1,   0,   1,   0));
+    folder->set(new RectFactory(SCALED,            .1,  .1,  .8,  .8));
+    folder->set(new RectFactory(SCALEDHORIZONTAL,   1,   0,  .5,   0));
+    folder->set(new RectFactory(VERTICAL,           0,   1,   0,   1));
     // Colors
     folder = get("Repository")->get(COLOR);
     folder->get(BACKGROUND)->set(new Rgb(BUTTON,  40,  40,  40));
@@ -83,6 +83,7 @@ Default::Default() : Theme("DefaultTheme")
 
 bool Default::GetViewLayout(Vertex* layout)
 {
+    layout->get(SIZEANDPOSITION)->Vertex::get(REQUEST)->get(RECT)->get(FULL);
     // Vertical list alignment
     layout->get(ALIGNMENT)->Vertex::get(REQUEST)->get(RECT)->get(VERTICAL);
     layout->get(DRAWER)->Vertex::get(REQUEST)->get(DRAWER)->get(LIST);
@@ -101,6 +102,7 @@ bool Default::GetViewLayout(Vertex* layout)
 
 bool Default::GetListLayout(Vertex* layout)
 {
+    layout->get(SIZEANDPOSITION)->Vertex::get(REQUEST)->get(RECT)->get(FULL);
     layout->get(ALIGNMENT)->Vertex::get(REQUEST)->get(RECT)->get(VERTICAL);
     layout->get(DRAWER)->Vertex::get(REQUEST)->get(DRAWER)->get(LIST);
 
@@ -185,6 +187,7 @@ bool Default::GetFrameLayout(Vertex* layout)
 
 bool Default::GetBackgroundLayout(Vertex* layout)
 {
+    layout->get(SIZEANDPOSITION)->Vertex::get(REQUEST)->get(RECT)->get(FULL);
     layout->get(DRAWER)->Vertex::get(REQUEST)->get(DRAWER)->get(BACKGROUND);
     layout->get(COLOR)->Vertex::get(REQUEST)->get(COLOR)->get(BACKGROUND)->get(LIST);
 
@@ -218,13 +221,13 @@ bool Default::DrawFrame(Vertex* layout)
     Rel_Rect* sap = GetRect(SIZEANDPOSITION, layout);
     Multiply(sap, &content_size);
 
-    Vertex* children = layout->get(TOUPDATE);
-    if(children)
+    Vertex* to_update = layout->get(TOUPDATE);
+    if(to_update)
     {
-        Vertex* to_update;
+        Vertex* child;
         uint i = 0;
-        while((to_update=children->get(++i)) != NULL)
-            Multiply(sap, GetRect(SIZEANDPOSITION, to_update));
+        while((child=to_update->get(++i)) != NULL)
+            Multiply(sap, GetRect(SIZEANDPOSITION, child));
     }
 
     // Draw each frame line separately

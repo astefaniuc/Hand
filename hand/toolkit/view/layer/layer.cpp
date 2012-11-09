@@ -186,7 +186,7 @@ Layer* Layer::Insert(Vertex* data, string position)
 
     // For use further down the spiral
     child_layout->set(layer_factories);
-    child_layout->set(curr_layout->get("Theme"));
+    child_layout->set(curr_layout->get(THEME));
 
     data->Vertex::set(child_layout);
     child_layout->get(TARGET)->set(data);
@@ -213,7 +213,7 @@ void Layer::SetLayout(Vertex* layout)
 {
     set(layout);
     add(layout);
-    layout->get("Theme")->get()->execute(layout);
+    layout->get(THEME)->get()->execute(layout);
 }
 
 

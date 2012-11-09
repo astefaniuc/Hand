@@ -95,25 +95,6 @@ void LayerManager::Init()
 }
 
 
-void LayerManager::LoadAppInterface(Vertex* tree, bool make_default)
-{
-    if(tree == NULL)
-        return;
-
-    // Insert to the local Vertex tree
-    add(tree); // or attach()?
-    if(make_default)
-        Layer::SetContent(tree);
-}
-
-
-bool LayerManager::UnloadAppInterface(Vertex* vertex)
-{
-    delete(vertex);
-    return true;
-}
-
-
 bool LayerManager::Update(bool forced)
 {
     if(NextRequest)
@@ -200,11 +181,13 @@ void LayerManager::SetDevice(Device* device)
     if(!device->Init())
     {
         // No, show init screen
-        LoadAppInterface(device);
-        Request(device);
+        Vertex* init_screen = new List("Init screen");
+        device->execute(init_screen);
+        Request(init_screen);
     }
     else
-        Expand(device->find(DEVICE_KEYLIST));
+        // TODO: load controls vertices also with the init screen
+        Expand(device->Vertex::get(DEVICE_KEYLIST));
 }
 
 
@@ -230,7 +213,7 @@ bool LayerManager::LoadTheme(Vertex* f)
 
     Vertex* layout = get(LAYOUT, ANY);
     // Sets the theme for all sublayouts
-    layout->get("Theme")->set(theme);
+    layout->get(THEME)->set(theme);
     theme->execute(layout);
     return true;
 }

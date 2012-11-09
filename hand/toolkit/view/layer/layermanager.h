@@ -46,9 +46,6 @@ class LayerManager : public ListLayer
 
         // Stores the pointer to the (SDL) drawing object
         bool    Request(Vertex* request);
-        // Called by HandApps to export their interface
-        void    LoadAppInterface(Vertex* app,  bool make_default=false);
-        bool    UnloadAppInterface(Vertex*);
 
     protected:
         void    Init();

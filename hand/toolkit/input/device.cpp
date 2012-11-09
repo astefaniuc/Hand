@@ -45,12 +45,11 @@ Device::~Device()
 
 bool Device::Init()
 {
-    InitUI();
     string  key_str;
     SDLKey* key_sdl;
     Note* data;
 
-    for (uint i=0; i<numberOfKeys; i++)
+    for (uint i=1; i<=numberOfKeys; i++)
     {
         // Do we have keys to load?
         data = GetKey(i);
@@ -69,24 +68,28 @@ bool Device::Init()
 }
 
 
-void Device::InitUI()
+bool Device::execute(Vertex* init_screen)
 {
     // Two main entries: a keylist and the description
-    add(new Note(DESCRIPTION, "Press 5 keys on the keyboard"));
-    Vertex* keys_tree = new List(DEVICE_KEYLIST);
-    add(keys_tree);
+    init_screen->add(new Note(DESCRIPTION, "Press 5 keys on the keyboard"));
+    Vertex* keys_button_tree = init_screen->get(DEVICE_KEYLIST);
+
+    Vertex* keys_data_tree = Vertex::get(DEVICE_KEYLIST);
 
     // Load un-initialized keys
     Vertex* key;
-    Method<Device>* show_key = new Method<Device>("Show Key", this, &Device::ShowPressedKey);
+    Vertex* id;
     for(int i=0; i < NUMBER_OF_BUTTONS; ++i)
     {
-        // Set the callback method
-        key = new List(GetKeyName(i));
-        key->add(show_key);
-        key->add(new Note("Data", ""));
-        keys_tree->add(key);
+        key = new Method<Device>("Show Key", this, &Device::ShowPressedKey);
+        id = new Note("Keydata", "");
+
+        keys_button_tree->add(key);
+        keys_data_tree->add(id);
+
+        key->Vertex::attach(id);
     }
+    return true;
 }
 
 
@@ -134,31 +137,17 @@ bool Device::Release(SDLKey k)
 int Device::GetKeyIndex(SDLKey k)
 {
     int i = 0;
-    for(currentKey=Keys.begin(); currentKey!=keysEnd; currentKey++)
-    {
+    for(currentKey=Keys.begin(); currentKey!=keysEnd; currentKey++, i++)
         if(*(*currentKey) == k)
             return i;
 
-        i++;
-    }
-    return -1;
+    return 0;
 }
 
 
 Note* Device::GetKey(uint pos)
 {
-    Vertex* k = get(LIST, DEVICE_KEYLIST)->get(ANY, GetKeyName(pos));
-    if(!k)
-        return NULL;
-    return dynamic_cast<Note*>(k->get(NOTE, "Data"));
-}
-
-
-string Device::GetKeyName(uint pos)
-{
-    stringstream key_name;
-    key_name << "Keyboard::Key" << pos;
-    return key_name.str();
+    return dynamic_cast<Note*>(Vertex::get(DEVICE_KEYLIST)->get(pos));
 }
 
 
@@ -190,8 +179,7 @@ void Device::AddKey(SDLKey k)
     int index = GetKeyIndex(k);
     currentKey = Keys.begin() + index;
 
-    Note* data = GetKey(index);
-    data->set(SDL_GetKeyName(*(*currentKey)));
+    GetKey(index+1)->set(SDL_GetKeyName(*(*currentKey)));
 }
 
 
@@ -203,8 +191,7 @@ void Device::DeleteCurrentKey()
     keysEnd = Keys.end();
     // Removes the key from the initialization screen
     // TODO: check this removal of last key (should be the one removed?)
-    Note* data = GetKey(Keys.size());
-    data->set("");
+    GetKey(Keys.size()+1)->set("");
 }
 
 
@@ -213,13 +200,10 @@ int Device::GetInitializationIndex(SDLKey key)
     keygroup::iterator k;
     keygroup::iterator k_end = KeysInit.end();
     int i = 0;
-    for(k=KeysInit.begin(); k!=k_end; k++)
-    {
+    for(k=KeysInit.begin(); k!=k_end; k++, i++)
         if(*(*k) == key)
             return i;
 
-        i++;
-    }
     return -1;
 }
 

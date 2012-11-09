@@ -56,6 +56,7 @@
 #define SIZEANDPOSITION  "SizeAndPosition"
 #define TARGET           "Target"
 #define TEXT             "Text"
+#define THEME            "Theme"
 #define THEMES           "Themes"
 #define TOUPDATE         "to update"
 #define VERTICAL         "vertical"
