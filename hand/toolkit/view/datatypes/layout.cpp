@@ -95,7 +95,7 @@ bool Layout::execute(Vertex* vs)
 {
     // Set the surface in the layout and use the layout
     // as parameter for the drawer
-    get("Surface")->set(vs);
+    set(vs);
     Vertex* f = get(DRAWER)->get();
     if(f)
         // Execute drawer on current layout

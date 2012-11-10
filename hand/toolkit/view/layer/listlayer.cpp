@@ -78,7 +78,7 @@ bool ListLayerFactory::execute(Vertex* tree)
 {
     Vertex* types = tree->Vertex::get(REQUEST);
     types->reset();
-    types->get(LIST);
+    types->get(FRAMEDLIST);
     return tree->get(TARGET)->get()->Vertex::set(new ListLayer(LIST));
 }
 

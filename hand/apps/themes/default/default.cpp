@@ -43,7 +43,6 @@ Default::Default() : Theme("DefaultTheme")
     // Drawers
     Vertex* folder = get("Repository")->get(DRAWER);
     folder->set(new Functoid(BACKGROUND, this, &Default::ColorSurface));
-    folder->set(new Functoid(BUTTON,     this, &Default::DrawButton));
     folder->set(new Functoid(FRAME,      this, &Default::DrawFrame));
     folder->set(new Functoid(LIST,       this, &Default::DrawList));
     folder->set(new Functoid(TEXT,       this, &Default::DrawText));
@@ -65,12 +64,12 @@ Default::Default() : Theme("DefaultTheme")
     folder->set(new RectFactory(FRAME,            .01, .03, .98, .94));
     folder->set(new RectFactory(FULL,               0,   0,   1,   1));
     folder->set(new RectFactory(HORIZONTAL,         1,   0,   1,   0));
-    folder->set(new RectFactory(SCALED,            .1,  .1,  .8,  .8));
+    folder->set(new RectFactory(SCALED,           .05, .05,  .9,  .9));
     folder->set(new RectFactory(SCALEDHORIZONTAL,   1,   0,  .5,   0));
     folder->set(new RectFactory(VERTICAL,           0,   1,   0,   1));
     // Colors
     folder = get("Repository")->get(COLOR);
-    folder->get(BACKGROUND)->set(new Rgb(BUTTON,  40,  40,  40));
+    folder->get(BACKGROUND)->set(new Rgb(BUTTON,  40,  40, 100));
     folder->get(BACKGROUND)->set(new Rgb(LIST,    20,  20,  50));
     folder                 ->set(new Rgb(FONT,   200, 200, 200));
     folder                 ->set(new Rgb(FRAME,    0,   0, 200));
@@ -117,15 +116,16 @@ bool Default::GetListLayout(Vertex* layout)
 
 bool Default::GetFramedListLayout(Vertex* layout)
 {
-    layout->get(SIZEANDPOSITION)->Vertex::get(REQUEST)->get(RECT)->get(FULL);
+    layout->get(SIZEANDPOSITION)->Vertex::get(REQUEST)->get(RECT)->get(SCALED);
 
-    Layout* frame = new Layout(FRAME, FRAME);
-    layout->add(frame);
+    Layout* bgrd = new Layout(BACKGROUND, BACKGROUND);
+    layout->add(bgrd);
+    bgrd->get(COLOR)->Vertex::get(REQUEST)->get(COLOR)->get(BACKGROUND)->get(LIST);
 
     Layout* content = new Layout(CONTENT, LIST);
     layout->add(content);
 
-    frame->get(TOUPDATE)->attach(content);
+    bgrd->get(TOUPDATE)->attach(content);
 
     return true;
 }
@@ -133,11 +133,14 @@ bool Default::GetFramedListLayout(Vertex* layout)
 
 bool Default::GetButtonLayout(Vertex* layout)
 {
-    layout->get(DRAWER)->Vertex::get(REQUEST)->get(DRAWER)->get(BUTTON);
     layout->get(SIZEANDPOSITION)->Vertex::get(REQUEST)->get(RECT)->get(SCALED);
 
     Layout* frame = new Layout(FRAME, FRAME);
     layout->add(frame);
+
+    Layout* bgrd = new Layout(BACKGROUND, BACKGROUND);
+    frame->add(bgrd);
+    frame->get(TOUPDATE)->attach(bgrd);
 
     // The Button container
     Layout* content = new Layout("Button Content", LIST);
@@ -177,10 +180,6 @@ bool Default::GetFrameLayout(Vertex* layout)
     layout->get(DRAWER)->Vertex::get(REQUEST)->get(DRAWER)->get(FRAME);
     layout->get(COLOR)->Vertex::get(REQUEST)->get(COLOR)->get(FRAME);
 
-    Layout* bgrd = new Layout(BACKGROUND, BACKGROUND);
-    layout->add(bgrd);
-    layout->get(TOUPDATE)->attach(bgrd);
-
     return true;
 }
 
@@ -189,7 +188,7 @@ bool Default::GetBackgroundLayout(Vertex* layout)
 {
     layout->get(SIZEANDPOSITION)->Vertex::get(REQUEST)->get(RECT)->get(FULL);
     layout->get(DRAWER)->Vertex::get(REQUEST)->get(DRAWER)->get(BACKGROUND);
-    layout->get(COLOR)->Vertex::get(REQUEST)->get(COLOR)->get(BACKGROUND)->get(LIST);
+    layout->get(COLOR)->Vertex::get(REQUEST)->get(COLOR)->get(BACKGROUND)->get(BUTTON);
 
     return true;
 }
@@ -269,23 +268,6 @@ bool Default::DrawView(Vertex* layout)
     VirtualSurface* vs = GetSurface(layout);
     if(!vs)
         return false;
-
-/*    if(!drawing || !drawing->is(GUI_DRAWER_VIEW) ||
-            !drawing->is(VIRTUALSURFACE))
-        return false;
-
-    // A View has three possible components, 1. the frame
-    Vertex* sub = drawing->get(LAYOUT_COMPONENT_FRAME);
-    if(sub && sub->is(VIRTUALSURFACE))
-        ((VirtualSurface*)sub)->Draw(true);
-    // 2. the background
-    sub = drawing->get(LAYOUT_COMPONENT_FRAME);
-    if(sub && sub->is(VIRTUALSURFACE))
-        ((VirtualSurface*)sub)->Draw(true);
-    // 3. the content
-    sub = drawing->get(LAYOUT_COMPONENT_CONTENT);
-    if(sub && sub->is(VIRTUALSURFACE))
-        ((VirtualSurface*)sub)->Draw(true);*/
     return true;
 }
 
@@ -296,7 +278,7 @@ bool Default::DrawText(Vertex* layout)
     if(!vs)
         return false;
 
-    string text = GetString(vs);
+    string text = GetString(layout);
     if(text.empty())
         return false;
 
@@ -351,16 +333,6 @@ bool Default::DrawList(Vertex* layout)
 }
 
 
-bool Default::DrawButton(Vertex* layout)
-{
-    VirtualSurface* vs = GetSurface(layout);
-    if(!vs)
-        return false;
-
-    return false;
-}
-
-
 bool Default::ColorSurface(Vertex* layout)
 {
     VirtualSurface* vs = GetSurface(layout);
@@ -379,9 +351,9 @@ bool Default::ColorSurface(Vertex* layout)
 }
 
 
-string Default::GetString(Vertex* vs)
+string Default::GetString(Vertex* layout)
 {
-    Vertex* content = vs->get(CONTENT)->get();
+    Vertex* content = layout->get(TARGET)->get();
     if(content)
         return content->getAsString();
     return "";

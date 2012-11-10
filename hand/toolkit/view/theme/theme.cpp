@@ -152,10 +152,7 @@ void Theme::GetFontHeight(Vertex* layout, uint& max_size)
 
 VirtualSurface* Theme::GetSurface(Vertex* in)
 {
-    Layout* layout = dynamic_cast<Layout*>(in);
-    if(layout)
-        return dynamic_cast<VirtualSurface*>(layout->get("Surface")->get());
-    return NULL;
+    return dynamic_cast<VirtualSurface*>(in->get(LAYER, ANY));
 }
 
 

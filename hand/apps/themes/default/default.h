@@ -45,7 +45,6 @@ class Default : public Theme
         bool ColorSurface(Vertex* drawing);
         bool DrawFrame(Vertex* drawing);
         bool DrawList(Vertex* drawing);
-        bool DrawButton(Vertex* drawing);
         bool DrawText(Vertex* drawing);
 
         bool DrawView(Vertex* drawing);

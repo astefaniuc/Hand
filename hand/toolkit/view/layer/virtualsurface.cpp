@@ -56,8 +56,6 @@ void AnimationsList::AppendAnimation(Animation* a)
 }
 
 
-
-
 bool AnimationsList::Update(Vertex* layout)
 {
     bool changed = false;
