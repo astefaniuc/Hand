@@ -26,7 +26,7 @@ using namespace std;
 
 ListLayer::ListLayer(string name) : Layer(name)
 {
-    BufferType = OVERLAY;
+    BufferType = COLLECTOR;
     type(LIST);
 }
 

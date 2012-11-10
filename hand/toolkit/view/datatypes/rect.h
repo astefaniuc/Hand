@@ -45,7 +45,7 @@ class Rect : public Data<Rel_Rect*>
 
         using Data::set;
         bool set(Rel_Rect*);
-        void Reset();
+        void reset();
 };
 
 

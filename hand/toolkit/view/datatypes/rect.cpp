@@ -52,7 +52,7 @@ bool Rect::set(Rel_Rect* val)
 }
 
 
-void Rect::Reset()
+void Rect::reset()
 {
     if(!Value)
         Value = new Rel_Rect();

@@ -117,7 +117,7 @@ bool Default::GetListLayout(Vertex* layout)
 
 bool Default::GetFramedListLayout(Vertex* layout)
 {
-    layout->get(SIZEANDPOSITION)->Vertex::get(REQUEST)->get(RECT)->get(SCALED);
+    layout->get(SIZEANDPOSITION)->Vertex::get(REQUEST)->get(RECT)->get(FULL);
 
     Layout* frame = new Layout(FRAME, FRAME);
     layout->add(frame);

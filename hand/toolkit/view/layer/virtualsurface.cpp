@@ -130,6 +130,8 @@ void VirtualSurface::MapSurface(Rel_Rect* src_rect, SDL_Rect &tgt_rect, SDL_Surf
         return;
     }
 
+    // TODO: surface mapped incorrectly for List having BufferType OVERLAY
+
     // Get the next layers buffer and absolute position
     Rel_Rect* sap = GetRect(SIZEANDPOSITION, get(LAYOUT, ANY));
     Multiply(src_rect, sap);
