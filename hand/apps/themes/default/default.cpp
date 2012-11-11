@@ -312,17 +312,15 @@ bool Default::DrawList(Vertex* layout)
         return true;
 
     Rel_Rect* align = GetRect(ALIGNMENT, layout);
-    Rel_Rect* size = GetRect(SIZEANDPOSITION, layout);
-    Rel_Rect calc;
+    Rel_Rect calc = *GetRect(SIZEANDPOSITION, layout);
 
-    for(uint i=0; i<child_cnt; i++)
+    for(uint i=1; i<=child_cnt; i++)
     {
-        double c = double(child_cnt-i-1)/double(child_cnt-i);
+        double c = double(child_cnt-i)/double(child_cnt-i+1);
         calc.w = (1 - (c * align->w))*(1 - calc.x);
         calc.h = (1 - (c * align->h))*(1 - calc.y);
 
-        Rel_Rect* sub = GetRect(SIZEANDPOSITION, children->get(i+1));
-        Multiply(size, sub);
+        Rel_Rect* sub = GetRect(SIZEANDPOSITION, children->get(i));
         Multiply(&calc, sub);
         // Set the coordinates for the next iteration
         calc.x += (calc.w*align->x);
