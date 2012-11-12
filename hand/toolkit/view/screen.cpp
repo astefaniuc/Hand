@@ -79,7 +79,7 @@ bool Screen::SetFullscreen()
 
 bool Screen::SetWindowed()
 {
-    Surface = SDL_SetVideoMode(800, 600, 32,
+    Surface = SDL_SetVideoMode(1280, 1024, 32,
                                SDL_DOUBLEBUF|SDL_HWSURFACE);
     if(!Surface)
     {

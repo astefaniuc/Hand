@@ -313,7 +313,7 @@ bool Default::DrawList(Vertex* layout)
 
     Rel_Rect* align = GetRect(ALIGNMENT, layout);
     Rel_Rect* size = GetRect(SIZEANDPOSITION, layout);
-    Rel_Rect  calc;
+    Rel_Rect calc;
 
     for(uint i=1; i<=child_cnt; i++)
     {
@@ -322,8 +322,13 @@ bool Default::DrawList(Vertex* layout)
         calc.h = (1 - (c * align->h))*(1 - calc.y);
 
         Rel_Rect* sub = GetRect(SIZEANDPOSITION, children->get(i));
+
+        // The Rect multiplication is NOT commutative, the order is important
+        Rel_Rect tmp = calc;
+        Multiply(sub, &tmp);
+        *sub = tmp;
         Multiply(size, sub);
-        Multiply(&calc, sub);
+
         // Set the coordinates for the next iteration
         calc.x += (calc.w*align->x);
         calc.y += (calc.h*align->y);
