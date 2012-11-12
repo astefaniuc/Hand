@@ -47,9 +47,7 @@ Node::~Node()
 {
     vector<NodeVector*>::iterator kv;
     for(kv = TreeNodes.begin(); kv!=TreeNodes.end(); kv++)
-    {
         delete (*kv);
-    }
 }
 
 
@@ -72,9 +70,8 @@ Node* Node::GetParent(int k_nr)
 {
     vector<NodeVector*>::iterator kv = TreeNodes.begin() + k_nr;
     if((*kv)->Parent)
-    {
         return (*kv)->Associate;
-    }
+
     return NULL;
 }
 
@@ -83,9 +80,8 @@ Node* Node::GetChild(int k_nr)
 {
     vector<NodeVector*>::iterator kv = TreeNodes.begin() + k_nr;
     if(!(*kv)->Parent)
-    {
         return (*kv)->Associate;
-    }
+
     return NULL;
 }
 
@@ -100,9 +96,8 @@ bool Node::SetLayer(Layer* l)
 {
     // Protect submitted cmds but allow resetting StateMachine
     if((l != NULL) && (AssocLayer != NULL))
-    {
         return false;
-    }
+
     AssocLayer = l;
     return true;
 }

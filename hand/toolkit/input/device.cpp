@@ -34,10 +34,9 @@ Device::Device() : HandApp("settings:Keyboard::0")
 
 Device::~Device()
 {
-    currentKey = Keys.begin();
-    // Recursively deletes sub-layers
-    while(currentKey!=Keys.end())
-        DeleteCurrentKey();
+    // Deletes keys
+    for(currentKey=Keys.begin(); currentKey!=Keys.end(); currentKey++)
+        delete(*currentKey);
 
     delete StateMachine;
 }
@@ -63,7 +62,6 @@ bool Device::Init()
         *key_sdl = (SDLKey)atoi(key_str.c_str());
         Keys.push_back(key_sdl);
     }
-    keysEnd = Keys.end();
     return true;
 }
 
@@ -112,8 +110,9 @@ bool Device::Release(SDLKey k)
         {
             // Device is during initialization
             index = GetInitializationIndex(k);
-            if(index != -1)
-                DeleteCurrentKey();
+            if(index == -1)
+                return false;
+            DeleteKey(index);
         }
         StateMachine->Release(index);
         return true;
@@ -125,7 +124,7 @@ bool Device::Release(SDLKey k)
 int Device::GetKeyIndex(SDLKey k)
 {
     int i = 0;
-    for(currentKey=Keys.begin(); currentKey!=keysEnd; currentKey++, i++)
+    for(currentKey=Keys.begin(); currentKey!=Keys.end(); currentKey++, i++)
         if(*(*currentKey) == k)
             return i;
 
@@ -152,7 +151,6 @@ void Device::AddKey(SDLKey k)
     SDLKey* tmp = new SDLKey();
     *tmp = k;
     Keys.push_back(tmp);
-    keysEnd = Keys.end();
     KeysInit = Keys;
     // Display the key on the initialization screen
     int index = GetKeyIndex(k);
@@ -162,17 +160,27 @@ void Device::AddKey(SDLKey k)
 }
 
 
-void Device::DeleteCurrentKey()
+void Device::DeleteKey(uint index)
 {
+    Note* curr;
+    Note* next;
+    uint i = index;
+    string key;
+    while((curr=GetKey(++i)) != NULL)
+    {
+        next = GetKey(i+1);
+        if(next)
+            key = next->get();
+        else
+            key = "";
+        curr->set(key);
+    }
+
+    currentKey = Keys.begin() + index;
     SDLKey* tmp = (*currentKey);
     currentKey = Keys.erase(currentKey);
     delete tmp;
-    keysEnd = Keys.end();
-    // Removes the key from the initialization screen
-    // TODO: check this removal of last key (should be the one removed?)
-    GetKey(Keys.size()+1)->set("");
 }
-
 
 int Device::GetInitializationIndex(SDLKey key)
 {

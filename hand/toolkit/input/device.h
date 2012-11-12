@@ -49,7 +49,7 @@ class Device : public virtual HandApp
         // Returns the Key symbol at specified position
         Note*  GetKey(uint index);
         void   AddKey(SDLKey);
-        void   DeleteCurrentKey();
+        void   DeleteKey(uint index);
         // Returns the key number
         int    GetKeyIndex(SDLKey);
         int    GetInitializationIndex(SDLKey);
@@ -61,7 +61,6 @@ class Device : public virtual HandApp
         keygroup Keys;
         keygroup KeysInit;
         keygroup::iterator currentKey;
-        keygroup::iterator keysEnd;
 };
 
 #define DEVICE_KEYLIST "Keylist"
