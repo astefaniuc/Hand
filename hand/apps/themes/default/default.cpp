@@ -72,7 +72,7 @@ Default::Default() : Theme("DefaultTheme")
     folder->get(BACKGROUND)->set(new Rgb(BUTTON,  40,  40, 100));
     folder->get(BACKGROUND)->set(new Rgb(LIST,    20,  20,  50));
     folder                 ->set(new Rgb(FONT,   200, 200, 200));
-    folder                 ->set(new Rgb(FRAME,    0,   0, 200));
+    folder                 ->set(new Rgb(FRAME,   30,  30,  75));
 }
 
 // ----------------------------------------------------------------
@@ -312,7 +312,8 @@ bool Default::DrawList(Vertex* layout)
         return true;
 
     Rel_Rect* align = GetRect(ALIGNMENT, layout);
-    Rel_Rect calc = *GetRect(SIZEANDPOSITION, layout);
+    Rel_Rect* size = GetRect(SIZEANDPOSITION, layout);
+    Rel_Rect  calc;
 
     for(uint i=1; i<=child_cnt; i++)
     {
@@ -321,6 +322,7 @@ bool Default::DrawList(Vertex* layout)
         calc.h = (1 - (c * align->h))*(1 - calc.y);
 
         Rel_Rect* sub = GetRect(SIZEANDPOSITION, children->get(i));
+        Multiply(size, sub);
         Multiply(&calc, sub);
         // Set the coordinates for the next iteration
         calc.x += (calc.w*align->x);
