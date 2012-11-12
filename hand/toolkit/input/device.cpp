@@ -72,31 +72,18 @@ bool Device::execute(Vertex* init_screen)
 {
     // Two main entries: a keylist and the description
     init_screen->add(new Note(DESCRIPTION, "Press 5 keys on the keyboard"));
-    Vertex* keys_button_tree = init_screen->get(DEVICE_KEYLIST);
 
     Vertex* keys_data_tree = Vertex::get(DEVICE_KEYLIST);
+    init_screen->attach(keys_data_tree);
 
     // Load un-initialized keys
-    Vertex* key;
     Vertex* id;
     for(int i=0; i < NUMBER_OF_BUTTONS; ++i)
     {
-        key = new Method<Device>("Show Key", this, &Device::ShowPressedKey);
         id = new Note("Keydata", "");
 
-        keys_button_tree->add(key);
         keys_data_tree->add(id);
-
-        key->Vertex::attach(id);
     }
-    return true;
-}
-
-
-bool Device::ShowPressedKey(Vertex* ignore)
-{
-    // Do nothing: this method is added always at first level but
-    // initializing the key will inquire vertices at increasing level
     return true;
 }
 
@@ -157,15 +144,6 @@ bool Device::IsUnused()
     if(Keys.size() == 0)
         return true;
     return false;
-}
-
-
-void Device::AddKey(int k)
-{
-    SDLKey* tmp = new SDLKey();
-    *tmp = (SDLKey)k;
-    Keys.push_back(tmp);
-    keysEnd = Keys.end();
 }
 
 

@@ -38,8 +38,6 @@ class Device : public virtual HandApp
         // Sets the key map
         bool   Init();
         bool   execute(Vertex* init_screen);
-        //virtual void Register(void);
-        void   AddKey(int);
         // Functions accessing the layer object (not possible from here)
         bool   Press(SDLKey);
         bool   Release(SDLKey);
@@ -55,8 +53,6 @@ class Device : public virtual HandApp
         // Returns the key number
         int    GetKeyIndex(SDLKey);
         int    GetInitializationIndex(SDLKey);
-
-        bool   ShowPressedKey(Vertex*);
 
         // Members:
         InputState* StateMachine;
