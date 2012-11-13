@@ -80,7 +80,7 @@ LayerManager* HandServer::GetLayerManager()
     Device* device = new Device();
     layer_mgr->SetDevice(device);
     get("Devices")->add(device);
-    layer_mgr->SetScreen(_Screen->GetSurface());
+    layer_mgr->SetBuffer(_Screen->GetSurface());
 
     return layer_mgr;
 }

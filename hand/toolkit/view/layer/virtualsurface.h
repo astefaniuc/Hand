@@ -55,24 +55,24 @@ class VirtualSurface : public Vertex
 {
     public:
         VirtualSurface(std::string name);
-        ~VirtualSurface();
-        virtual void Show(SDL_Rect* rect_abs_on_buffer,
+        virtual ~VirtualSurface();
+        void Show(SDL_Rect* rect_abs_on_buffer,
                           Rel_Rect* rect_relative_to_parent);
         // Set coordinates and size relative to the parent layer
         virtual void SetSize(SDL_Rect size);
-        virtual SDL_Rect GetSize();
+        SDL_Rect GetSize();
         virtual void SetBufferType(buffer_type bt);
-        virtual SDL_Surface*& GetBuffer();
+        SDL_Surface*& GetBuffer();
         virtual void SetBuffer(SDL_Surface* buffer);
-        virtual void MapSurface(Rel_Rect* src_rect,
-                                SDL_Rect& tgt_rect,
-                                SDL_Surface*& tgt_surface);
+        void MapSurface(Rel_Rect* src_rect,
+                        SDL_Rect& tgt_rect,
+                        SDL_Surface*& tgt_surface);
         void SetParent(VirtualSurface* parent);
     protected:
-        virtual void BlitSurface(SDL_Surface* source,
-                                 SDL_Rect* source_pos,
-                                 SDL_Surface* target,
-                                 SDL_Rect* target_pos);
+        void BlitSurface(SDL_Surface* source,
+                         SDL_Rect* source_pos,
+                         SDL_Surface* target,
+                         SDL_Rect* target_pos);
 
     public:
         AnimationsList Animations;

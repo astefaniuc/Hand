@@ -280,7 +280,10 @@ bool Default::DrawText(Vertex* layout)
 
     string text = GetString(layout);
     if(text.empty())
+    {
+        vs->SetBuffer(NULL);
         return false;
+    }
 
     SDL_Rect size = vs->GetSize();
     // Calculate the fitting font size

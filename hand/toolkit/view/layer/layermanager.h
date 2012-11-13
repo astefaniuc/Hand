@@ -34,7 +34,6 @@ class LayerManager : public ListLayer
         virtual ~LayerManager();
 
         bool    Update(bool force);
-        void    SetScreen(SDL_Surface* screen);
 
         bool    GetCommand(Vertex* func, int level);
         bool    GetCommand(Layer* func, int level);
@@ -44,8 +43,13 @@ class LayerManager : public ListLayer
         Device* GetDevice();
         void    SetDevice(Device*);
 
-        // Stores the pointer to the (SDL) drawing object
+        // Stores the pointer to the object to be displayed next
         bool    Request(Vertex* request);
+
+        // VirtualSurface overloads
+        void SetSize(SDL_Rect size);
+        void SetBufferType(buffer_type bt);
+        void SetBuffer(SDL_Surface* buffer);
 
     protected:
         void    Init();
@@ -60,7 +64,6 @@ class LayerManager : public ListLayer
         // Contains the only pointer to the Device
         InputState*  _InputState;
         Vertex*    NextRequest;
-        SDL_Surface* Screen;
         Layer*       MasterView;
 };
 

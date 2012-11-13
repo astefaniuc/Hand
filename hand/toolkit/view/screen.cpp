@@ -123,7 +123,7 @@ bool Screen::SetLayerManagerPositions()
     while((lm=dynamic_cast<Layer*>(all_lm->get(++i))) != NULL)
     {
         screen_tmp.w = screen.w/all_lm->size();
-        screen_tmp.x = screen_tmp.w*i;
+        screen_tmp.x = screen_tmp.w*(i-1);
         lm->SetSize(screen_tmp);
     }
     return true;

@@ -123,7 +123,7 @@ void VirtualSurface::MapSurface(Rel_Rect* src_rect, SDL_Rect &tgt_rect, SDL_Surf
         // Get the absolute position on the current buffer
         tgt_rect = SizeAndPositionOnBuffer;
         Multiply(src_rect, &tgt_rect);
-        tgt_surface = GetBuffer();
+        tgt_surface = Buffer;
         // "Updated" must be true in this case
         return;
     }
@@ -152,7 +152,7 @@ void VirtualSurface::Show(SDL_Rect* rect_abs_on_buffer, Rel_Rect* rect_relative_
         Parent->Show(&tgt_rect, rect_relative_to_parent);
 
     // DrawObject as parameter for positioning and alpha values
-    BlitSurface(GetBuffer(), rect_abs_on_buffer, tgt_surface, &tgt_rect);
+    BlitSurface(Buffer, rect_abs_on_buffer, tgt_surface, &tgt_rect);
 }
 
 
@@ -201,9 +201,8 @@ SDL_Rect VirtualSurface::GetSize()
 void VirtualSurface::SetBufferType(buffer_type bt)
 {
     if((BufferType != NONE) && (bt == NONE))
-    {
         SDL_FreeSurface(Buffer);
-    }
+
     BufferType = bt;
 }
 

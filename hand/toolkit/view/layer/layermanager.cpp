@@ -48,6 +48,8 @@ LayerManager::LayerManager() : ListLayer(LAYERMANAGER)
 LayerManager::~LayerManager()
 {
     delete(GetDevice());
+    // Don't delete screen
+    Buffer = NULL;
     // TODO: unregister (DataManager + Server)
     // UnloadTheme();
 }
@@ -125,12 +127,6 @@ Vertex* LayerManager::GetCommandList(Vertex* menu)
             return child;
     }
     return NULL;
-}
-
-
-void LayerManager::SetScreen(SDL_Surface* screen)
-{
-    Screen = screen;
 }
 
 
@@ -251,3 +247,22 @@ bool LayerManager::Expand(Vertex* to_expand)
         return true;
     return false;
 }
+
+
+void LayerManager::SetSize(SDL_Rect size)
+{
+    SizeAndPositionOnBuffer = size;
+}
+
+
+void LayerManager::SetBufferType(buffer_type bt)
+{
+    BufferType = bt;
+}
+
+
+void LayerManager::SetBuffer(SDL_Surface* buffer)
+{
+    Buffer = buffer;
+}
+
