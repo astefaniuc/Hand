@@ -104,20 +104,19 @@ bool Device::Press(SDLKey k)
 bool Device::Release(SDLKey k)
 {
     int index = GetKeyIndex(k);
-    if(index != -1)
+    if(index == -1)
+        return false;
+
+    if(Keys.size() < numberOfKeys)
     {
-        if(Keys.size() < numberOfKeys)
-        {
-            // Device is during initialization
-            index = GetInitializationIndex(k);
-            if(index == -1)
-                return false;
-            DeleteKey(index);
-        }
-        StateMachine->Release(index);
+        // Device is during initialization
+        DeleteKey(index);
+        StateMachine->reset();
+        for(uint i=0; i<Keys.size(); ++i)
+            StateMachine->Press(i);
         return true;
     }
-    return false;
+    return StateMachine->Release(index);
 }
 
 
@@ -128,7 +127,7 @@ int Device::GetKeyIndex(SDLKey k)
         if(*(*currentKey) == k)
             return i;
 
-    return 0;
+    return -1;
 }
 
 
@@ -151,7 +150,6 @@ void Device::AddKey(SDLKey k)
     SDLKey* tmp = new SDLKey();
     *tmp = k;
     Keys.push_back(tmp);
-    KeysInit = Keys;
     // Display the key on the initialization screen
     int index = GetKeyIndex(k);
     currentKey = Keys.begin() + index;
@@ -177,21 +175,12 @@ void Device::DeleteKey(uint index)
     }
 
     currentKey = Keys.begin() + index;
+    if(currentKey == Keys.end())
+        return;
+
     SDLKey* tmp = (*currentKey);
     currentKey = Keys.erase(currentKey);
     delete tmp;
-}
-
-int Device::GetInitializationIndex(SDLKey key)
-{
-    keygroup::iterator k;
-    keygroup::iterator k_end = KeysInit.end();
-    int i = 0;
-    for(k=KeysInit.begin(); k!=k_end; k++, i++)
-        if(*(*k) == key)
-            return i;
-
-    return -1;
 }
 
 

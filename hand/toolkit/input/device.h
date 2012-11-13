@@ -52,14 +52,12 @@ class Device : public virtual HandApp
         void   DeleteKey(uint index);
         // Returns the key number
         int    GetKeyIndex(SDLKey);
-        int    GetInitializationIndex(SDLKey);
 
         // Members:
         InputState* StateMachine;
         // Number of controls
         uint numberOfKeys;
         keygroup Keys;
-        keygroup KeysInit;
         keygroup::iterator currentKey;
 };
 
