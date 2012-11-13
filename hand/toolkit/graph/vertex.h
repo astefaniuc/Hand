@@ -52,8 +52,8 @@ class Vertex
         // use get(ANY, name) to test if a vertex exists
         virtual Vertex* get(std::string name);
         // Get the first sub-item by name and type; if the item is not found
-        // it returns NULL; the parameters can be set to ANY e.g.
-        // get(ANY, ANY) returns the first stored item
+        // it returns NULL; the parameters can be set to ANY to ignore that value;
+        // get(ANY, ANY) ignores the type but does search for item named ANY ("*")
         virtual Vertex* get(std::string type, std::string name);
         // Get the child by position, 1-based
         virtual Vertex* get(uint item);

@@ -20,6 +20,7 @@
 #include "input/device.h"
 #include "input/inputstate.h"
 #include "graph/method.h"
+#include "view/datatypes/layout.h"
 
 
 using namespace std;
@@ -79,7 +80,7 @@ bool Device::execute(Vertex* init_screen)
     for(int i=0; i < NUMBER_OF_BUTTONS; ++i)
     {
         id = new Note("Keydata", "");
-
+        id->Vertex::set(new Layout("Control", CONTROLID));
         keys_data_tree->add(id);
     }
     return true;

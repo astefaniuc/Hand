@@ -105,10 +105,7 @@ bool Default::GetListLayout(Vertex* layout)
     layout->get(ALIGNMENT)->Vertex::get(REQUEST)->get(RECT)->get(VERTICAL);
     layout->get(DRAWER)->Vertex::get(REQUEST)->get(DRAWER)->get(LIST);
 
-    Vertex* content = layout->get(FIELDS)->get(ELEMENT);
-    content->get(BUTTON);
-    content->get(TEXT);
-    content->get(LIST);
+    layout->get(FIELDS)->get(ELEMENT)->get(ANY);
 
     return true;
 }
@@ -160,7 +157,7 @@ bool Default::GetButtonLayout(Vertex* layout)
     upper->get(FIELDS)->get(ICON)->get(TEXT);
     upper->get(FIELDS)->get(NAME)->get(TEXT);
     lower->get(FIELDS)->get(DESCRIPTION)->get(TEXT);
-    lower->get(FIELDS)->get(CONTROLID)->get(TEXT);
+    lower->get(FIELDS)->get(CONTROLID)->get(CONTROLID);
 
     return true;
 }
@@ -168,8 +165,20 @@ bool Default::GetButtonLayout(Vertex* layout)
 
 bool Default::GetControlLayout(Vertex* layout)
 {
+    layout->get(SIZEANDPOSITION)->Vertex::get(REQUEST)->get(RECT)->get(SCALED);
+
     Layout* frame = new Layout(FRAME, FRAME);
     layout->add(frame);
+
+    Layout* bgrd = new Layout(BACKGROUND, BACKGROUND);
+    frame->add(bgrd);
+    frame->get(TOUPDATE)->attach(bgrd);
+
+    // The Button container
+    Layout* content = new Layout("Control field", TEXT);
+    layout->add(content);
+    frame->get(TOUPDATE)->attach(content);
+
     return true;
 }
 

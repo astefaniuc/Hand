@@ -47,7 +47,8 @@ bool TextLayerFactory::execute(Vertex* tree)
 bool TextLayerFactory::IsValidInput(Vertex* input)
 {
     Vertex* tgt = input->get(TARGET)->get();
-    if(tgt && tgt->is(NOTE) && input->Vertex::get(REQUEST)->get(ANY, TEXT))
+    Vertex* req = input->Vertex::get(REQUEST);
+    if(tgt && tgt->is(NOTE) && (req->get(ANY, TEXT) || req->get(ANY, ANY)))
         return true;
     return false;
 }

@@ -86,7 +86,8 @@ bool ListLayerFactory::execute(Vertex* tree)
 bool ListLayerFactory::IsValidInput(Vertex* input)
 {
     Vertex* tgt = input->get(TARGET)->get();
-    if(tgt && tgt->is(LIST) && input->Vertex::get(REQUEST)->get(ANY, LIST))
+    Vertex* req = input->Vertex::get(REQUEST);
+    if(tgt && tgt->is(LIST) && (req->get(ANY, LIST) || req->get(ANY, ANY)))
         return true;
     return false;
 }

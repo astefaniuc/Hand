@@ -57,7 +57,7 @@ Vertex* Layout::get(string type, string name)
         Vertex* reqs = ret->Vertex::get(REQUEST);
         uint i = 0;
         Vertex* sub_type;
-        while((sub_type=f->get(++i)) != 0)
+        while((sub_type=f->get(++i)) != NULL)
             reqs->attach(sub_type);
         get(TOUPDATE)->attach(ret);
         return ret;

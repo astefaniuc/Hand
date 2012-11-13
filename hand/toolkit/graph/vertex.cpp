@@ -150,19 +150,16 @@ Vertex* Vertex::get(string type, string name)
     VIterator curr = Body->begin();
     VIterator end = Body->end();
 
-    if(name == ANY)
-    {
-        if((type==ANY) && (curr!=end))
-            return (*curr);
-        else
-            for(; curr!=end; curr++)
-                if((*curr)->is(type))
-                    return (*curr);
-    }
-    else if(type == ANY)
+    if(type == ANY)
     {
         for(; curr!=end; curr++)
             if((*curr)->name() == name)
+                return (*curr);
+    }
+    else if(name == ANY)
+    {
+        for(; curr!=end; curr++)
+            if((*curr)->is(type))
                 return (*curr);
     }
     else

@@ -123,7 +123,8 @@ bool ButtonLayerFactory::execute(Vertex* tree)
 bool ButtonLayerFactory::IsValidInput(Vertex* input)
 {
     Vertex* tgt = input->get(TARGET)->get();
-    if(tgt && tgt->is(METHOD) && input->Vertex::get(REQUEST)->get(ANY, BUTTON))
+    Vertex* req = input->Vertex::get(REQUEST);
+    if(tgt && tgt->is(METHOD) && (req->get(ANY, BUTTON) || req->get(ANY, ANY)))
         return true;
     return false;
 }
