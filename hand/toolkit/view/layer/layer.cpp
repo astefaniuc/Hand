@@ -193,10 +193,11 @@ Layer* Layer::Insert(Vertex* data, string position)
         // Are they for the same type?
         if(req_c->get(ANY, ANY) || (req_d && req_c->get(ANY, req_d->name())))
         {
+            req_c->set(req_d);
             Vertex* cp;
             uint i = 0;
             // Copy content
-            while((cp=data_layout->Vertex::get(++i)) != NULL)
+            while((cp=data_layout->get(++i)) != NULL)
                 child_layout->set(cp);
         }
     }
@@ -207,7 +208,6 @@ Layer* Layer::Insert(Vertex* data, string position)
     child_layout->set(layer_factories);
     child_layout->set(curr_layout->get(THEME));
 
-    data->Vertex::set(child_layout);
     child_layout->get(TARGET)->set(data);
 
     // Create the Layer
