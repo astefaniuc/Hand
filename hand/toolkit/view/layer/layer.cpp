@@ -180,7 +180,7 @@ Layer* Layer::Insert(Vertex* data, string position)
     // Get only a rump layout with size relative to the parent and the
     // list of supported layer types
     // This already connects all involved layouts and connects to the Theme
-    Vertex* child_layout = curr_layout->get(LAYOUT, position);
+    Vertex* child_layout = curr_layout->get(FIELD, position);
     if(!child_layout)
         return NULL;
 

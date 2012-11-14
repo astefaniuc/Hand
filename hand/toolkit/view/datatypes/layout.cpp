@@ -45,45 +45,64 @@ bool Layout::add(Vertex* child)
 Vertex* Layout::get(string type, string name)
 {
     Vertex* ret = List::get(type, name);
-    if(ret || (type!=LAYOUT))
-        return ret;
-
-    // Check if the requested layout is a field and has to be created
-    Vertex* f = get(FIELDS)->get(LIST, name);
-    if(f)
-    {
-        // Creator mode
-        ret = new Layout(name, "");
-        Vertex* reqs = ret->Vertex::get(REQUEST);
-        uint i = 0;
-        Vertex* sub_type;
-        while((sub_type=f->get(++i)) != NULL)
-            reqs->attach(sub_type);
-        get(TOUPDATE)->attach(ret);
-        return ret;
-    }
-
-    Vertex* children = get(LINK, CHILDREN);
-    if(!children)
-        return NULL;
-
-    // "GetField" mode
-    ret = children->get(type, name);
     if(ret)
+        return ret;
+
+    Vertex* children;
+    if(type == LAYOUT)
     {
-        get(TOUPDATE)->attach(ret);
+        children = get(LINK, CHILDREN);
+        if(children && ((ret=children->get(type, name))!=NULL))
+            return ret;
+        ret = new Layout(name, name);
+        add(ret);
         return ret;
     }
 
-    Vertex* child;
-    uint i = 0;
-    while((child=children->get(++i)) != NULL)
+    if(type == FIELD)
     {
-        ret = child->get(type, name);
+        // Check if the requested layout is a field and has to be created
+        Vertex* f = get(FIELDS)->get(ANY, name);
+        if(f)
+        {
+            if(f->is(LAYOUT))
+                ret = f;
+            else
+            {
+                // Creator mode
+                ret = new Layout(name, "");
+                Vertex* reqs = ret->Vertex::get(REQUEST);
+                uint i = 0;
+                Vertex* sub_type;
+                while((sub_type=f->get(++i)) != NULL)
+                    reqs->attach(sub_type);
+            }
+            get(TOUPDATE)->attach(ret);
+            return ret;
+        }
+
+        children = get(LINK, CHILDREN);
+        if(!children)
+            return NULL;
+
+        // "GetField" mode
+        ret = children->get(type, name);
         if(ret)
         {
-            get(TOUPDATE)->attach(child);
+            get(TOUPDATE)->attach(ret);
             return ret;
+        }
+
+        Vertex* child;
+        uint i = 0;
+        while((child=children->get(++i)) != NULL)
+        {
+            ret = child->get(type, name);
+            if(ret)
+            {
+                get(TOUPDATE)->attach(child);
+                return ret;
+            }
         }
     }
 
