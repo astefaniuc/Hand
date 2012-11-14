@@ -184,7 +184,23 @@ Layer* Layer::Insert(Vertex* data, string position)
     if(!child_layout)
         return NULL;
 
-    child_layout->name(data->name());
+    // Check if there is a layout attached
+    Vertex* data_layout = data->Vertex::get(LAYOUT, ANY);
+    if(data_layout)
+    {
+        Vertex* req_c = child_layout->Vertex::get(REQUEST);
+        Vertex* req_d = data_layout->Vertex::get(REQUEST)->get();
+        // Are they for the same type?
+        if(req_c->get(ANY, ANY) || (req_d && req_c->get(ANY, req_d->name())))
+        {
+            Vertex* cp;
+            uint i = 0;
+            // Copy content
+            while((cp=data_layout->Vertex::get(++i)) != NULL)
+                child_layout->set(cp);
+        }
+    }
+
     Vertex* layer_factories = curr_layout->get(FACTORYMAP, LAYER_FACTORIES);
 
     // For use further down the spiral
@@ -201,6 +217,13 @@ Layer* Layer::Insert(Vertex* data, string position)
         return NULL;
 
     sub_layer->SetLayout(child_layout);
+    Vertex* parent_layout;
+    while((parent_layout=child_layout->get(PARENT)->get()) != NULL)
+    {
+        if(!parent_layout->get(TOUPDATE)->attach(child_layout))
+            break;
+        child_layout = parent_layout;
+    }
 
     // Connect the components
     // on Layer/VS level

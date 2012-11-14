@@ -22,14 +22,14 @@ extern "C" void Destroy(HandApp* app)
 
 FindTester::FindTester(void) : HandApp("FindTester")
 {
-//    Testremove();
+//    TestRemove();
     TestFindBigTree();
     // For setting the breakpoint
     return;
 }
 
 
-void FindTester::Testremove()
+void FindTester::TestRemove()
 {
     string type = "TestDelete";
     Vertex* last_build;

@@ -48,12 +48,8 @@ Vertex* Layout::get(string type, string name)
     if(ret)
         return ret;
 
-    Vertex* children;
     if(type == LAYOUT)
     {
-        children = get(LINK, CHILDREN);
-        if(children && ((ret=children->get(type, name))!=NULL))
-            return ret;
         ret = new Layout(name, name);
         add(ret);
         return ret;
@@ -61,7 +57,7 @@ Vertex* Layout::get(string type, string name)
 
     if(type == FIELD)
     {
-        // Check if the requested layout is a field and has to be created
+        // "GetField" mode
         Vertex* f = get(FIELDS)->get(ANY, name);
         if(f)
         {
@@ -71,27 +67,23 @@ Vertex* Layout::get(string type, string name)
             {
                 // Creator mode
                 ret = new Layout(name, "");
+                ret->get(PARENT)->set(this);
                 Vertex* reqs = ret->Vertex::get(REQUEST);
                 uint i = 0;
                 Vertex* sub_type;
                 while((sub_type=f->get(++i)) != NULL)
                     reqs->attach(sub_type);
             }
-            get(TOUPDATE)->attach(ret);
             return ret;
         }
 
-        children = get(LINK, CHILDREN);
+        Vertex* children = get(LINK, CHILDREN);
         if(!children)
             return NULL;
 
-        // "GetField" mode
         ret = children->get(type, name);
         if(ret)
-        {
-            get(TOUPDATE)->attach(ret);
             return ret;
-        }
 
         Vertex* child;
         uint i = 0;
@@ -99,10 +91,7 @@ Vertex* Layout::get(string type, string name)
         {
             ret = child->get(type, name);
             if(ret)
-            {
-                get(TOUPDATE)->attach(child);
                 return ret;
-            }
         }
     }
 

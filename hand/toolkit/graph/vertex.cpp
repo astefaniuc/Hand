@@ -188,13 +188,12 @@ Vertex* Vertex::get(uint i)
 
 bool Vertex::remove(Vertex* child)
 {
-    Vertex::detach(child);
     if(!child->owner() || (child->owner()==this))
     {
         delete(child);
         return true;
     }
-    return false;
+    return Vertex::detach(child);
 }
 
 

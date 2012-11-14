@@ -11,17 +11,17 @@ class FindTester : public HandApp
 {
     public:
         FindTester(void);
-        void Testremove();
+        void TestRemove();
         void TestFindBigTree();
     private:
         Vertex* Build(Vertex* entry,
-                   int depth,
-                   int width,
-                   string& last_type);
+                      int depth,
+                      int width,
+                      string& last_type);
         Vertex* _Build(Vertex* entry,
-                    int depth,
-                    int width,
-                    string type);
+                       int depth,
+                       int width,
+                       string type);
         Vertex* TestFind(string name, string type, bool relation);
         bool CheckFound(Vertex* expected, Vertex* found);
 };
