@@ -41,14 +41,14 @@ typedef Method<Default> Functoid;
 Default::Default() : Theme("DefaultTheme")
 {
     // Drawers
-    Vertex* folder = get("Repository")->get(DRAWER);
+    Vertex* folder = get(DRAWER);
     folder->set(new Functoid(BACKGROUND, this, &Default::ColorSurface));
     folder->set(new Functoid(FRAME,      this, &Default::DrawFrame));
     folder->set(new Functoid(LIST,       this, &Default::DrawList));
     folder->set(new Functoid(TEXT,       this, &Default::DrawText));
 
     // Layouts
-    folder = get("Repository")->get(LAYOUT);
+    folder = get(LAYOUT);
     folder->set(new Functoid(BACKGROUND, this, &Default::GetBackgroundLayout));
     folder->set(new Functoid(BUTTON,     this, &Default::GetButtonLayout));
     folder->set(new Functoid(CONTROLID,  this, &Default::GetControlLayout));
@@ -60,7 +60,7 @@ Default::Default() : Theme("DefaultTheme")
 
     // Properties
     // Dimensions
-    folder = get("Repository")->get(RECT);
+    folder = get(RECT);
     folder->set(new RectFactory(FRAME,            .01, .03, .98, .94));
     folder->set(new RectFactory(FULL,               0,   0,   1,   1));
     folder->set(new RectFactory(HORIZONTAL,         1,   0,   1,   0));
@@ -68,7 +68,7 @@ Default::Default() : Theme("DefaultTheme")
     folder->set(new RectFactory(SCALEDHORIZONTAL,   1,   0,  .5,   0));
     folder->set(new RectFactory(VERTICAL,           0,   1,   0,   1));
     // Colors
-    folder = get("Repository")->get(COLOR);
+    folder = get(COLOR);
     folder->get(BACKGROUND)->set(new Rgb(BUTTON,  40,  40, 100));
     folder->get(BACKGROUND)->set(new Rgb(LIST,    20,  20,  50));
     folder                 ->set(new Rgb(FONT,   200, 200, 200));

@@ -17,11 +17,11 @@
  *  License along with Hand. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HAND_RGB_H
-#define HAND_RGB_H
+#ifndef VIEW_DATATYPES_RGB_H
+#define VIEW_DATATYPES_RGB_H
 
 #include <SDL/SDL.h>
-#include "graph/list.h"
+#include "graph/vertex.h"
 
 
 class Rgb : public Vertex
@@ -41,4 +41,4 @@ class Rgb : public Vertex
 Rgb* GetRgb(std::string rgb_name, Vertex* from_tree);
 
 
-#endif /* HAND_RGB_H */
+#endif /* VIEW_DATATYPES_RGB_H */

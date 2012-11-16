@@ -63,7 +63,7 @@ bool Theme::execute(Vertex* input)
     {
         req = req->get();
         if(req)
-            get("Repository")->get(LAYOUT)->get(req->name())->execute(input);
+            get(LAYOUT)->get(req->name())->execute(input);
     }
 
     string name;
@@ -101,7 +101,7 @@ bool Theme::FillOut(Vertex* request)
     if(request->get(req->name(), ANY))
         // Already resolved
         return false;
-    Vertex* repo = get("Repository")->get(ANY, req->name());
+    Vertex* repo = get(ANY, req->name());
     if(!repo)
         return false;
     while((req=req->get()) != NULL)

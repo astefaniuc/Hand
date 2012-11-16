@@ -17,8 +17,8 @@
  *  License along with Hand. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HAND_RECT_H
-#define HAND_RECT_H
+#ifndef VIEW_DATATYPES_RECT_H
+#define VIEW_DATATYPES_RECT_H
 
 #include <SDL/SDL.h>
 #include "graph/data.h"
@@ -64,4 +64,4 @@ void Multiply(Rel_Rect* src, SDL_Rect* tgt);
 // Helper func for extracting a Rect from a Vertex tree
 Rel_Rect* GetRect(std::string rect_name, Vertex* from_tree);
 
-#endif /* HAND_RECT_H */
+#endif /* VIEW_DATATYPES_RECT_H */
