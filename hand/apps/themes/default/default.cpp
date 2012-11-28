@@ -120,6 +120,7 @@ bool Default::GetFramedListLayout(Vertex* layout)
     bgrd->get(TOUPDATE)->attach(get(LAYOUT)->get(LIST));
     layout->add(bgrd);
 
+    GetListLayout(layout);
     return true;
 }
 
@@ -164,7 +165,7 @@ bool Default::GetButtonLayout(Vertex* layout)
 
 bool Default::GetControlLayout(Vertex* layout)
 {
-    layout->get(SIZEANDPOSITION)->Vertex::get(REQUEST)->get(RECT)->get(SCALED);
+    GetTextLayout(layout);
 
     Vertex* frame = get(LAYOUT)->get(FRAME)->get();
     layout->add(frame);
@@ -172,11 +173,6 @@ bool Default::GetControlLayout(Vertex* layout)
     Vertex* bgrd = get(LAYOUT)->get(BACKGROUND)->get();
     frame->add(bgrd);
     frame->get(TOUPDATE)->attach(bgrd);
-
-    // The Button container
-    Vertex* content = get(LAYOUT)->get(TEXT)->get();
-    layout->add(content);
-    frame->get(TOUPDATE)->attach(content);
 
     return true;
 }
@@ -289,7 +285,7 @@ bool Default::DrawText(Vertex* layout)
     string text = GetString(layout);
     if(text.empty())
     {
-//        vs->SetBuffer(NULL);
+        vs->SetBuffer(NULL);
         return false;
     }
 

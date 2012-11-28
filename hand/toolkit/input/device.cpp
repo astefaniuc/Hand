@@ -73,17 +73,22 @@ bool Device::execute(Vertex* init_screen)
     init_screen->add(new Note(DESCRIPTION, "Press 5 keys on the keyboard"));
 
     Vertex* keys_data_tree = Vertex::get(DEVICE_KEYLIST);
-    init_screen->attach(keys_data_tree);
+    Vertex* keys_view_tree = new List(DEVICE_KEYLIST);
+    init_screen->add(keys_view_tree);
 
     // Load un-initialized keys
-    Vertex* layout = Vertex::get(THEMES)->get(DEFAULT)->get(LAYOUT)->get(TEXT)->get(CONTROLID);
+    Vertex* layout = Vertex::get(THEMES)->get(DEFAULT)->get(LAYOUT)->get(LIST)->get(FRAMEDLIST);
     Vertex* id;
+    Vertex* frame;
     for(int i=0; i < NUMBER_OF_BUTTONS; ++i)
     {
         id = new Note("Keydata", "");
         keys_data_tree->add(id);
 
-        id->Vertex::get(LAYOUT)->get(TEXT)->set(layout->get());
+        frame = new List("");
+        frame->Vertex::get(LAYOUT)->get(LIST)->set(layout->get());
+        frame->add(id);
+        keys_view_tree->add(frame);
     }
     return true;
 }
