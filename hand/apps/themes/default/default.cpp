@@ -117,7 +117,7 @@ bool Default::GetFramedListLayout(Vertex* layout)
     Vertex* bgrd = get(LAYOUT)->get(BACKGROUND)->get();
     bgrd->get(COLOR)->Vertex::get(REQUEST)->get(COLOR)->get(BACKGROUND)->get(LIST);
     // The content
-    bgrd->get(TOUPDATE)->attach(get(LAYOUT)->get(LIST));
+    bgrd->get(TOUPDATE)->attach(layout);
     layout->add(bgrd);
 
     GetListLayout(layout);
