@@ -119,6 +119,6 @@ bool HandAppLoader::execute(Vertex* input)
         return false;
     }
     input->Vertex::add(bin);
-    input->Vertex::get(REQUEST)->set(get(REQUEST)->get());
+    input->Vertex::get(REQUEST)->set(get(OUTPUTTYPE)->get());
     return true;
 }

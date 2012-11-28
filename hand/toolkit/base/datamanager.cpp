@@ -20,23 +20,19 @@
 #include "base/datamanager.h"
 #include "base/filesystem.h"
 #include "base/handapploader.h"
+#include "view/theme/theme.h"
 
 
 using namespace std;
 
 
-DataManager::DataManager() : FactoryMap("DefaultDataManager")
+void DataManager::Init()
 {
     add(new HandAppLoader());
     add(new FileFactory());
+    add(new DirectoryLoader());
+    add(new ThemeManager());
     add(new Persistence());
-}
-
-
-DataManager::~DataManager()
-{
-    // TODO: delete owned resolvers
-    //delete();
 }
 
 

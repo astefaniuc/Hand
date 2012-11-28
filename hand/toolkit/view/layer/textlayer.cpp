@@ -35,20 +35,15 @@ TextLayer::TextLayer(string name) : Layer(name)
 // ----------------------------------------------------------------
 
 
-bool TextLayerFactory::execute(Vertex* tree)
+bool TextLayerFactory::execute(Vertex* input)
 {
-    Vertex* types = tree->Vertex::get(REQUEST);
-    types->reset();
-    types->get(TEXT);
-    return tree->get(TARGET)->get()->Vertex::set(new TextLayer(TEXT));
+    return input->Vertex::set(new TextLayer(TEXT));
 }
 
 
 bool TextLayerFactory::IsValidInput(Vertex* input)
 {
-    Vertex* tgt = input->get(TARGET)->get();
-    Vertex* req = input->Vertex::get(REQUEST);
-    if(tgt && tgt->is(NOTE) && (req->get(ANY, TEXT) || req->get(ANY, ANY)))
+    if(input && input->is(NOTE))
         return true;
     return false;
 }

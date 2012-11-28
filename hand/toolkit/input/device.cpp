@@ -76,12 +76,14 @@ bool Device::execute(Vertex* init_screen)
     init_screen->attach(keys_data_tree);
 
     // Load un-initialized keys
+    Vertex* layout = Vertex::get(THEMES)->get(DEFAULT)->get(LAYOUT)->get(TEXT)->get(CONTROLID);
     Vertex* id;
     for(int i=0; i < NUMBER_OF_BUTTONS; ++i)
     {
         id = new Note("Keydata", "");
-        id->Vertex::set(new Layout("Control", CONTROLID));
         keys_data_tree->add(id);
+
+        id->Vertex::get(LAYOUT)->get(TEXT)->set(layout->get());
     }
     return true;
 }

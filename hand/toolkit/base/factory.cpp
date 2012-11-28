@@ -35,7 +35,7 @@ Factory::Factory(
     if(input_type == "")
         input_type = ANY;
     get(INPUTTYPE)->get(input_type);
-    get(REQUEST)->get(output_type);
+    get(OUTPUTTYPE)->get(output_type);
 }
 
 
@@ -91,7 +91,7 @@ bool FactoryMap::execute(Vertex* input)
     bool ret = execute(input);
     if(ret)
     {
-        Vertex* sub_prod = input->get(f->get(REQUEST)->get()->name(), ANY);
+        Vertex* sub_prod = input->get(f->get(OUTPUTTYPE)->get()->name(), ANY);
         if(sub_prod)
         {
             sub_prod->Vertex::get(REQUEST)->set(req->get());
@@ -111,7 +111,7 @@ bool FactoryMap::Resolve(Vertex* input)
         return false;
 
     // Set output type for caller
-    input->Vertex::get(REQUEST)->set(f->get(REQUEST)->get());
+    input->Vertex::get(REQUEST)->set(f->get(OUTPUTTYPE)->get());
 
     return f->execute(input);
 }
@@ -147,7 +147,7 @@ Factory* FactoryMap::GetFactory(string output_type)
     while((child=get(++i)) != NULL)
     {
         ret = dynamic_cast<Factory*>(child);
-        if(ret && ret->get(REQUEST)->get(ANY, output_type))
+        if(ret && ret->get(OUTPUTTYPE)->get(ANY, output_type))
             return ret;
     }
 

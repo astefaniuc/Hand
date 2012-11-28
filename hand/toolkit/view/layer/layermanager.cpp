@@ -62,18 +62,10 @@ void LayerManager::Init()
     fm->add(new TextLayerFactory());
     fm->add(new ButtonLayerFactory());
     fm->add(new ListLayerFactory());
+    Vertex::add(fm);
 
-    Vertex* layout = new Layout("MasterLayer", LIST);
-    set(layout);
-    layout->add(fm);
-
-    // Theme menu
-    List* theme_menu = new List(THEMES);
     // The path to the theme files
     List* theme_dir = new File(THEMES_DIRECTORY);
-    theme_menu->add(theme_dir);
-    // Add a method to create a menu with the themes one HD
-    theme_menu->add(new Method<LayerManager>(THEMES, this, &LayerManager::GetAllThemes));
     // The default theme (to be loaded) (TODO: get this from persistent object)
     List* curr_theme = new File(DEFAULT_THEME);
     // Add the default theme to the theme folder (without scanning if it really is there)
@@ -85,7 +77,6 @@ void LayerManager::Init()
     List* pub = new List("System");
     add(pub);
     Layer::SetContent(pub);
-    pub->add(theme_menu);
     pub->add(new Method<LayerManager>("Exit", this, &LayerManager::Exit));
     // Add the exit function to the tree of available funcs
     // Request command at highest level
@@ -208,8 +199,16 @@ bool LayerManager::LoadTheme(Vertex* f)
         return false;
 
     Vertex* layout = get(LAYOUT, ANY);
-    // Sets the theme for all sublayouts
-    layout->get(THEME)->set(theme);
+    if(!layout)
+    {
+
+        layout = theme->get(LAYOUT)->get(LIST)->get();
+        layout->name("MasterLayer");
+        set(layout);
+
+    }
+    // Sets the theme for all sub-layers
+    get(THEME)->set(theme);
     theme->execute(layout);
     return true;
 }
@@ -217,6 +216,8 @@ bool LayerManager::LoadTheme(Vertex* f)
 
 bool LayerManager::GetAllThemes(Vertex* themes_dir)
 {
+    // The path to the theme files
+    themes_dir = new File(THEMES_DIRECTORY);
     themes_dir->Vertex::get(REQUEST)->get(FILE_);
     // (Re-)read the list of available themes
     HandServer::GetInstance()->execute(themes_dir);

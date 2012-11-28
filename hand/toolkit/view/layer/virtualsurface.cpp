@@ -123,7 +123,7 @@ void VirtualSurface::MapSurface(Rel_Rect* src_rect, SDL_Rect &tgt_rect, SDL_Surf
         // Get the absolute position on the current buffer
         tgt_rect = SizeAndPositionOnBuffer;
         Multiply(src_rect, &tgt_rect);
-        tgt_surface = Buffer;
+        tgt_surface = GetBuffer();
         // "Updated" must be true in this case
         return;
     }
@@ -207,7 +207,7 @@ void VirtualSurface::SetBufferType(buffer_type bt)
 }
 
 
-SDL_Surface*& VirtualSurface::GetBuffer()
+SDL_Surface* VirtualSurface::GetBuffer()
 {
     if(Buffer == NULL)
     {

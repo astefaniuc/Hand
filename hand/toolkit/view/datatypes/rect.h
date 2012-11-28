@@ -54,7 +54,6 @@ class RectFactory : public Rect
     public:
         RectFactory(std::string name, double x_, double y_, double w_, double h_);
         ~RectFactory(){};
-        using Data::get;
         Vertex* _get();
 };
 

@@ -35,28 +35,29 @@ extern "C" void Destroy(Theme* theme)
 }
 
 
-typedef Method<Default> Functoid;
+typedef Method<Default> Drawer;
+typedef LayoutFactory<Default> LayoutF;
 
 
-Default::Default() : Theme("DefaultTheme")
+Default::Default() : Theme(DEFAULT)
 {
     // Drawers
     Vertex* folder = get(DRAWER);
-    folder->set(new Functoid(BACKGROUND, this, &Default::ColorSurface));
-    folder->set(new Functoid(FRAME,      this, &Default::DrawFrame));
-    folder->set(new Functoid(LIST,       this, &Default::DrawList));
-    folder->set(new Functoid(TEXT,       this, &Default::DrawText));
+    folder->set(new Drawer(BACKGROUND, this, &Default::ColorSurface));
+    folder->set(new Drawer(FRAME,      this, &Default::DrawFrame));
+    folder->set(new Drawer(LIST,       this, &Default::DrawList));
+    folder->set(new Drawer(TEXT,       this, &Default::DrawText));
 
     // Layouts
     folder = get(LAYOUT);
-    folder->set(new Functoid(BACKGROUND, this, &Default::GetBackgroundLayout));
-    folder->set(new Functoid(BUTTON,     this, &Default::GetButtonLayout));
-    folder->set(new Functoid(CONTROLID,  this, &Default::GetControlLayout));
-    folder->set(new Functoid(FRAME,      this, &Default::GetFrameLayout));
-    folder->set(new Functoid(FRAMEDLIST, this, &Default::GetFramedListLayout));
-    folder->set(new Functoid(LIST,       this, &Default::GetListLayout));
-    folder->set(new Functoid(TEXT,       this, &Default::GetTextLayout));
-    folder->set(new Functoid(VIEW,       this, &Default::GetViewLayout));
+    folder->set(new LayoutF(BACKGROUND, this, &Default::GetBackgroundLayout));
+    folder->set(new LayoutF(BUTTON,     this, &Default::GetButtonLayout));
+    folder->set(new LayoutF(FRAME,      this, &Default::GetFrameLayout));
+    folder->set(new LayoutF(LIST,       this, &Default::GetListLayout));
+    folder->get(LIST)->set(new LayoutF(FRAMEDLIST, this, &Default::GetFramedListLayout));
+    folder->get(LIST)->set(new LayoutF(VIEW,       this, &Default::GetViewLayout));
+    folder->set(new LayoutF(TEXT,       this, &Default::GetTextLayout));
+    folder->get(TEXT)->set(new LayoutF(CONTROLID,  this, &Default::GetControlLayout));
 
     // Properties
     // Dimensions
@@ -86,12 +87,13 @@ bool Default::GetViewLayout(Vertex* layout)
     layout->get(ALIGNMENT)->Vertex::get(REQUEST)->get(RECT)->get(VERTICAL);
     layout->get(DRAWER)->Vertex::get(REQUEST)->get(DRAWER)->get(LIST);
 
-    layout->get(FIELDS)->get(ELEMENT)->get(ANY);
+    layout->get(CHILDREN)->get(ELEMENT)->Vertex::get(REQUEST)->get(LAYOUT)->get(ANY);
 
-    Vertex* controls = layout->get(LAYOUT, FRAMEDLIST);
+    Vertex* controls = get(LAYOUT)->get(LIST)->get(FRAMEDLIST)->get();
     controls->get(ALIGNMENT)->Vertex::get(REQUEST)->get(RECT)->get(HORIZONTAL);
+    controls->get(CHILDREN)->get(ELEMENT)->Vertex::get(REQUEST)->get(LAYOUT)->get(BUTTON);
+    layout->add(controls);
 
-    controls->get(FIELDS)->get(ELEMENT)->get(BUTTON);
     return true;
 }
 
@@ -102,7 +104,7 @@ bool Default::GetListLayout(Vertex* layout)
     layout->get(ALIGNMENT)->Vertex::get(REQUEST)->get(RECT)->get(VERTICAL);
     layout->get(DRAWER)->Vertex::get(REQUEST)->get(DRAWER)->get(LIST);
 
-    layout->get(FIELDS)->get(ELEMENT)->get(ANY);
+    layout->get(CHILDREN)->get(ELEMENT)->Vertex::get(REQUEST)->get(LAYOUT)->get(ANY);
 
     return true;
 }
@@ -112,12 +114,11 @@ bool Default::GetFramedListLayout(Vertex* layout)
 {
     layout->get(SIZEANDPOSITION)->Vertex::get(REQUEST)->get(RECT)->get(SCALED);
 
-    Vertex* bgrd = layout->get(LAYOUT, BACKGROUND);
+    Vertex* bgrd = get(LAYOUT)->get(BACKGROUND)->get();
     bgrd->get(COLOR)->Vertex::get(REQUEST)->get(COLOR)->get(BACKGROUND)->get(LIST);
-
     // The content
-    Vertex* content = layout->get(LAYOUT, LIST);
-    bgrd->get(TOUPDATE)->attach(content);
+    bgrd->get(TOUPDATE)->attach(get(LAYOUT)->get(LIST));
+    layout->add(bgrd);
 
     return true;
 }
@@ -127,30 +128,35 @@ bool Default::GetButtonLayout(Vertex* layout)
 {
     layout->get(SIZEANDPOSITION)->Vertex::get(REQUEST)->get(RECT)->get(SCALED);
 
-    Vertex* frame = layout->get(LAYOUT, FRAME);
+    Vertex* frame = get(LAYOUT)->get(FRAME)->get();
+    layout->add(frame);
 
-    Vertex* bgrd = frame->get(LAYOUT, BACKGROUND);
+    Vertex* bgrd = get(LAYOUT)->get(BACKGROUND)->get();
+    frame->add(bgrd);
     frame->get(TOUPDATE)->attach(bgrd);
 
     // The Button container
-    Vertex* content = layout->get(LAYOUT, LIST);
+    Vertex* content = get(LAYOUT)->get(LIST)->get();
+    layout->add(content);
     content->get(ALIGNMENT)->Vertex::get(REQUEST)->get(RECT)->get(VERTICAL);
     frame->get(TOUPDATE)->attach(content);
 
-    Vertex* upper = content->get(LAYOUT, LIST);
+    Vertex* upper = get(LAYOUT)->get(LIST)->get();
+    content->add(upper);
     // The next call of content->get(LAYOUT, LIST) should return a new object
     upper->name("Upper");
     upper->get(ALIGNMENT)->Vertex::get(REQUEST)->get(RECT)->get(SCALEDHORIZONTAL);
 
-    Vertex* lower =content->get(LAYOUT, LIST);
+    Vertex* lower = get(LAYOUT)->get(LIST)->get();
+    content->add(lower);
     lower->name("Lower");
     lower->get(ALIGNMENT)->Vertex::get(REQUEST)->get(RECT)->get(SCALEDHORIZONTAL);
 
-    // The fields for the next level of layers
-    upper->get(FIELDS)->set(new Layout(ICON, TEXT));
-    upper->get(FIELDS)->set(new Layout(NAME, TEXT));
-    lower->get(FIELDS)->set(new Layout(DESCRIPTION, TEXT));
-    lower->get(FIELDS)->set(new Layout(CONTROLID, LIST));
+    // Store the layer/layout types for the fields as simple nodes
+    upper->get(CHILDREN)->get(ICON)->Vertex::get(REQUEST)->get(LAYOUT)->get(TEXT);
+    upper->get(CHILDREN)->get(NAME)->Vertex::get(REQUEST)->get(LAYOUT)->get(TEXT);
+    lower->get(CHILDREN)->get(DESCRIPTION)->Vertex::get(REQUEST)->get(LAYOUT)->get(TEXT);
+    lower->get(CHILDREN)->get(CONTROLID)->Vertex::get(REQUEST)->get(LAYOUT)->get(TEXT)->get(CONTROLID);
 
     return true;
 }
@@ -160,13 +166,16 @@ bool Default::GetControlLayout(Vertex* layout)
 {
     layout->get(SIZEANDPOSITION)->Vertex::get(REQUEST)->get(RECT)->get(SCALED);
 
-    Vertex* frame = layout->get(LAYOUT, FRAME);
+    Vertex* frame = get(LAYOUT)->get(FRAME)->get();
+    layout->add(frame);
 
-    Vertex* bgrd = frame->get(LAYOUT, BACKGROUND);
+    Vertex* bgrd = get(LAYOUT)->get(BACKGROUND)->get();
+    frame->add(bgrd);
     frame->get(TOUPDATE)->attach(bgrd);
 
     // The Button container
-    Vertex* content = layout->get(LAYOUT, TEXT);
+    Vertex* content = get(LAYOUT)->get(TEXT)->get();
+    layout->add(content);
     frame->get(TOUPDATE)->attach(content);
 
     return true;
@@ -280,7 +289,7 @@ bool Default::DrawText(Vertex* layout)
     string text = GetString(layout);
     if(text.empty())
     {
-        vs->SetBuffer(NULL);
+//        vs->SetBuffer(NULL);
         return false;
     }
 

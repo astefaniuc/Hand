@@ -51,12 +51,19 @@ class Theme : public HandApp
         virtual void FillRect(SDL_Surface* sf, SDL_Rect* r, Rgb* c);
         virtual SDL_Surface* RenderText(std::string* text, int size, Rgb* color);
 
+        // Changes x and y of source
+        void PlaceCentered(SDL_Surface* source, SDL_Rect& target, Rel_Rect& out);
+
         // Stores once rendered fonts
         std::map<int, TTF_Font*> Fonts;
 };
 
-// Changes x and y of source
-void PlaceCentered(SDL_Surface* source, SDL_Rect& target, Rel_Rect& out);
 
+class ThemeManager : public List
+{
+    public:
+        ThemeManager();
+        virtual ~ThemeManager(){};
+};
 
 #endif /* VIEW_THEME_THEME_H */

@@ -24,6 +24,8 @@
 #include "view/datatypes/rect.h"
 #include "view/datatypes/layout.h"
 #include "view/layer/virtualsurface.h"
+#include "base/filesystem.h"
+#include "base/handserver.h"
 
 
 using namespace std;
@@ -72,8 +74,8 @@ bool Theme::execute(Vertex* input)
     while((sub=input->get(++i)) != NULL)
     {
         name = sub->name();
-        if((name==FIELDS) || (name==TOUPDATE) ||
-                (name==LAYER_FACTORIES) || (name==TARGET) || (name==THEME))
+        if((name==TOUPDATE) || (name==LAYER_FACTORIES)
+                || (name==TARGET) || (name==THEME))
             continue;
 
         if(name == CHILDREN)
@@ -101,6 +103,7 @@ bool Theme::FillOut(Vertex* request)
     if(request->get(req->name(), ANY))
         // Already resolved
         return false;
+    // TODO: Vertex::get(Vertex* path)
     Vertex* repo = get(ANY, req->name());
     if(!repo)
         return false;
@@ -175,10 +178,38 @@ SDL_Surface* Theme::RenderText(string* text, int size, Rgb* color)
 }
 
 
-void PlaceCentered(SDL_Surface* source, SDL_Rect& target, Rel_Rect& out)
+void Theme::PlaceCentered(SDL_Surface* source, SDL_Rect& target, Rel_Rect& out)
 {
     out.w = double(source->w)/double(target.w);
     out.h = double(source->h)/double(target.h);
     out.x = (1 - out.w)/2;
     out.y = (1 - out.h)/2;
+}
+
+
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
+
+
+ThemeManager::ThemeManager() : List(THEMES)
+{
+    type(FACTORY);
+    // The path to the theme files
+    Vertex* themes_dir = new File(THEMES_DIRECTORY);
+    // Add hidden
+    Vertex::get("Directories")->add(themes_dir);
+    // (Re-)read the list of available themes
+    themes_dir->Vertex::get(REQUEST)->get(FILE_);
+    HandServer::GetInstance()->execute(themes_dir);
+    // Load all themes once
+    uint i = 0;
+    Vertex* theme_file;
+    while((theme_file=themes_dir->get(++i)) != NULL)
+    {
+        theme_file->Vertex::get(REQUEST)->get(HANDAPP);
+        HandServer::GetInstance()->execute(theme_file);
+        // Add the theme under its internal name
+        attach(theme_file->Vertex::get(HANDAPP, ANY));
+    }
 }

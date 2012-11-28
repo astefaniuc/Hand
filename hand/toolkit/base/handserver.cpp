@@ -49,7 +49,10 @@ HandServer* HandServer::Instance = NULL;
 HandServer* HandServer::GetInstance()
 {
     if(Instance == NULL)
+    {
         Instance = new HandServer();
+        Instance->Init();
+    }
     return Instance;
 }
 

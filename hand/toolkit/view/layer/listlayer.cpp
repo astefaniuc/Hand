@@ -74,20 +74,15 @@ void ListLayer::Configure(Vertex* sub_layout)
 // ----------------------------------------------------------------
 
 
-bool ListLayerFactory::execute(Vertex* tree)
+bool ListLayerFactory::execute(Vertex* input)
 {
-    Vertex* types = tree->Vertex::get(REQUEST);
-    types->reset();
-    types->get(FRAMEDLIST);
-    return tree->get(TARGET)->get()->Vertex::set(new ListLayer(LIST));
+    return input->Vertex::set(new ListLayer(LIST));
 }
 
 
 bool ListLayerFactory::IsValidInput(Vertex* input)
 {
-    Vertex* tgt = input->get(TARGET)->get();
-    Vertex* req = input->Vertex::get(REQUEST);
-    if(tgt && tgt->is(LIST) && (req->get(ANY, LIST) || req->get(ANY, ANY)))
+    if(input && input->is(LIST))
         return true;
     return false;
 }

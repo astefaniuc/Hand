@@ -62,13 +62,12 @@ class VirtualSurface : public Vertex
         virtual void SetSize(SDL_Rect size);
         SDL_Rect GetSize();
         virtual void SetBufferType(buffer_type bt);
-        SDL_Surface*& GetBuffer();
+        SDL_Surface* GetBuffer();
         virtual void SetBuffer(SDL_Surface* buffer);
         void MapSurface(Rel_Rect* src_rect,
                         SDL_Rect& tgt_rect,
                         SDL_Surface*& tgt_surface);
         void SetParent(VirtualSurface* parent);
-    protected:
         void BlitSurface(SDL_Surface* source,
                          SDL_Rect* source_pos,
                          SDL_Surface* target,

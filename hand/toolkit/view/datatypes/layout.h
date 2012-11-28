@@ -21,12 +21,13 @@
 #define VIEW_DATATYPES_LAYOUT_H
 
 #include "graph/list.h"
+#include "graph/method.h"
 
 
 class Layout : public List
 {
     public:
-        Layout(std::string name, std::string type);
+        Layout(std::string name);
         virtual ~Layout(){};
 
         bool add(Vertex* child);
@@ -34,6 +35,28 @@ class Layout : public List
         virtual Vertex* get(std::string type, std::string name);
         bool execute(Vertex* surface);
         void reset();
+};
+
+
+template <class I>
+class LayoutFactory : public Method<I>
+{
+    typedef bool (I::*TFunction)(Vertex*);
+
+    public:
+        LayoutFactory(std::string name, I* obj, TFunction func) : Method<I>(name, obj, func)
+        {
+            Vertex::type(FACTORY);
+        };
+        virtual ~LayoutFactory(){};
+
+        Vertex* _get()
+        {
+            Vertex* ret = new Layout(Vertex::name());
+            Vertex::add(ret);
+            Method<I>::execute(ret);
+            return ret;
+        };
 };
 
 #endif /* VIEW_DATATYPES_LAYOUT_H */

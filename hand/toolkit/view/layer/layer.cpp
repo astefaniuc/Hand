@@ -180,56 +180,108 @@ Layer* Layer::Insert(Vertex* data, string position)
     // Get only a rump layout with size relative to the parent and the
     // list of supported layer types
     // This already connects all involved layouts and connects to the Theme
-    Vertex* child_layout = curr_layout->get(FIELD, position);
-    if(!child_layout)
+    Vertex* child_layout;
+    Vertex* field = curr_layout->get(FIELD, position);
+    if(!field)
         return NULL;
 
-    // Check if there is a layout attached
-    Vertex* data_layout = data->Vertex::get(LAYOUT, ANY);
-    if(data_layout)
+    FactoryMap* layer_factories = dynamic_cast<FactoryMap*>(get(FACTORYMAP, LAYER_FACTORIES));
+    Factory* factory = NULL;
+
+
+    // Get the Layer and basic Layout type
+    Vertex* req = field->Vertex::get(REQUEST)->get();
+    Vertex* repo = get(THEME)->get()->get(ANY, LAYOUT);
+    if(req->get()->name() == ANY)
     {
-        Vertex* req_c = child_layout->Vertex::get(REQUEST);
-        Vertex* req_d = data_layout->Vertex::get(REQUEST)->get();
-        // Are they for the same type?
-        if(req_c->get(ANY, ANY) || (req_d && req_c->get(ANY, req_d->name())))
+        factory = layer_factories->GetFactory(data);
+        if(!factory)
+            factory = dynamic_cast<Factory*>(layer_factories->get(FACTORY, ANY));
+        req = req->get(factory->get(OUTPUTTYPE)->get()->name());
+    }
+    else if(req->size() > 1)
+    {
+        Vertex* tmp_req;
+        uint i = 0;
+        while((tmp_req=req->get(++i)) != NULL)
         {
-            req_c->set(req_d);
-            Vertex* cp;
-            uint i = 0;
-            // Copy content
-            while((cp=data_layout->get(++i)) != NULL)
-                child_layout->set(cp);
+            factory = layer_factories->GetFactory(tmp_req->name());
+            if(factory && factory->IsValidInput(data))
+            {
+                req = tmp_req;
+                break;
+            }
+            else
+                factory = NULL;
         }
     }
 
-    Vertex* layer_factories = curr_layout->get(FACTORYMAP, LAYER_FACTORIES);
+    if(!factory)
+    {
+        req = req->get();
+        factory = layer_factories->GetFactory(req->name());
+        if(!factory)
+            return NULL;
+    }
 
-    // For use further down the spiral
-    child_layout->set(layer_factories);
-    child_layout->set(curr_layout->get(THEME));
 
+    // Get the detailed Layout type
+    // Check if there is a layout or layout request attached to the data
+    Vertex* data_layout = data->Vertex::get(ANY, LAYOUT);
+    if(data_layout)
+    {
+        data_layout = data_layout->get(ANY, req->name());
+        if(data_layout)
+        {
+            data_layout = data_layout->get();
+        }
+    }
+
+    repo = repo->get(factory->get(OUTPUTTYPE)->get()->name());
+    // TODO: Vertex::get(Vertex* path)
+    Vertex* tmp_repo;
+    while((req=req->get()) != NULL)
+    {
+        if(data_layout)
+            data_layout = data_layout->get(ANY, req->name());
+        tmp_repo = repo->get(ANY, req->name());
+        if(!tmp_repo)
+            break;
+        repo = tmp_repo;
+    }
+    if(data_layout)
+        repo = data_layout;
+
+    if(repo->is(FACTORY))
+        child_layout = repo->get();
+    else
+        child_layout = repo;
     child_layout->get(TARGET)->set(data);
 
+
     // Create the Layer
-    layer_factories->execute(child_layout);
+    factory->execute(data);
     Layer* sub_layer = dynamic_cast<Layer*>(data->Vertex::get(LAYER, ANY));
     if(!sub_layer)
         return NULL;
 
+    sub_layer->set(get(THEME));
     sub_layer->SetLayout(child_layout);
-    Vertex* parent_layout;
-    while((parent_layout=child_layout->get(PARENT)->get()) != NULL)
-    {
-        if(!parent_layout->get(TOUPDATE)->attach(child_layout))
-            break;
-        child_layout = parent_layout;
-    }
-
-    // Connect the components
-    // on Layer/VS level
     get(CHILDREN)->add(sub_layer);
     sub_layer->SetParent(this);
+    sub_layer->set(layer_factories);
     sub_layer->SetContent(data);
+
+    // ...
+    Vertex* parent_layout = field->get(PARENT)->get();
+    parent_layout->get(TOUPDATE)->attach(child_layout);
+    field = parent_layout;
+    while((parent_layout=field->get(PARENT)->get()) != NULL)
+    {
+        if(!parent_layout->get(TOUPDATE)->attach(field))
+            break;
+        field = parent_layout;
+    }
 
     return sub_layer;
 }
@@ -239,7 +291,7 @@ void Layer::SetLayout(Vertex* layout)
 {
     set(layout);
     add(layout);
-    layout->get(THEME)->get()->execute(layout);
+    get(THEME)->get()->execute(layout);
 }
 
 

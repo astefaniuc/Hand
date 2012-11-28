@@ -24,11 +24,9 @@
 using namespace std;
 
 
-Layout::Layout(string name, string stype) : List(name)
+Layout::Layout(string name) : List(name)
 {
     type(LAYOUT);
-    if(stype != "")
-        Vertex::get(REQUEST)->get(stype);
 }
 
 
@@ -48,51 +46,28 @@ Vertex* Layout::get(string type, string name)
     if(ret)
         return ret;
 
-    if(type == LAYOUT)
+    if(type != FIELD)
+        return NULL;
+
+    // "GetField" mode
+    Vertex* children = get(LINK, CHILDREN);
+    if(!children)
+        return NULL;
+
+    ret = children->get(ANY, name);
+    if(ret)
     {
-        ret = new Layout(name, name);
-        add(ret);
+        ret->get(PARENT)->set(this);
         return ret;
     }
 
-    if(type == FIELD)
+    Vertex* child;
+    uint i = 0;
+    while((child=children->get(++i)) != NULL)
     {
-        // "GetField" mode
-        Vertex* f = get(FIELDS)->get(ANY, name);
-        if(f)
-        {
-            if(f->is(LAYOUT))
-                ret = f;
-            else
-            {
-                // Creator mode
-                ret = new Layout(name, "");
-                ret->get(PARENT)->set(this);
-                Vertex* reqs = ret->Vertex::get(REQUEST);
-                uint i = 0;
-                Vertex* sub_type;
-                while((sub_type=f->get(++i)) != NULL)
-                    reqs->attach(sub_type);
-            }
-            return ret;
-        }
-
-        Vertex* children = get(LINK, CHILDREN);
-        if(!children)
-            return NULL;
-
-        ret = children->get(type, name);
+        ret = child->get(type, name);
         if(ret)
             return ret;
-
-        Vertex* child;
-        uint i = 0;
-        while((child=children->get(++i)) != NULL)
-        {
-            ret = child->get(type, name);
-            if(ret)
-                return ret;
-        }
     }
 
     return NULL;

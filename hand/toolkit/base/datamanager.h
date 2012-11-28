@@ -26,8 +26,11 @@
 class DataManager : public FactoryMap
 {
     public:
-        DataManager();
-        virtual ~DataManager();
+        DataManager() : FactoryMap("DefaultDataManager"){};
+        virtual ~DataManager(){};
+
+    protected:
+        void Init();
 };
 
 

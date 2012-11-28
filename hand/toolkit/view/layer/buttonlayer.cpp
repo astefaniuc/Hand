@@ -111,20 +111,15 @@ void ButtonLayer::ReleaseGui()
 // ----------------------------------------------------------------
 
 
-bool ButtonLayerFactory::execute(Vertex* tree)
+bool ButtonLayerFactory::execute(Vertex* input)
 {
-    Vertex* types = tree->Vertex::get(REQUEST);
-    types->reset();
-    types->get(BUTTON);
-    return tree->get(TARGET)->get()->Vertex::set(new ButtonLayer(BUTTON));
+    return input->Vertex::set(new ButtonLayer(BUTTON));
 }
 
 
 bool ButtonLayerFactory::IsValidInput(Vertex* input)
 {
-    Vertex* tgt = input->get(TARGET)->get();
-    Vertex* req = input->Vertex::get(REQUEST);
-    if(tgt && tgt->is(METHOD) && (req->get(ANY, BUTTON) || req->get(ANY, ANY)))
+    if(input && input->is(METHOD))
         return true;
     return false;
 }

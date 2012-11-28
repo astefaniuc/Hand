@@ -22,6 +22,7 @@
 #include "graph/link.h"
 #include "graph/search/regularexpression.h"
 #include "graph/search/search.h"
+#include "base/handserver.h"
 
 
 using namespace std;
@@ -138,6 +139,9 @@ Vertex* Vertex::get(string s)
     for(curr=Body->begin(); curr!=end; curr++)
         if((*curr)->name() == s)
             return (*curr);
+
+    if(s == THEMES)
+        return HandServer::GetInstance()->get(FACTORY, THEMES);
 
     Link* r = new Link(s);
     Vertex::add(r);
