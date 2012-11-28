@@ -57,7 +57,6 @@ Default::Default() : Theme(DEFAULT)
     folder->get(LIST)->set(new LayoutF(FRAMEDLIST, this, &Default::GetFramedListLayout));
     folder->get(LIST)->set(new LayoutF(VIEW,       this, &Default::GetViewLayout));
     folder->set(new LayoutF(TEXT,       this, &Default::GetTextLayout));
-    folder->get(TEXT)->set(new LayoutF(CONTROLID,  this, &Default::GetControlLayout));
 
     // Properties
     // Dimensions
@@ -114,11 +113,13 @@ bool Default::GetFramedListLayout(Vertex* layout)
 {
     layout->get(SIZEANDPOSITION)->Vertex::get(REQUEST)->get(RECT)->get(SCALED);
 
+    Vertex* frame = get(LAYOUT)->get(FRAME)->get();
+    layout->add(frame);
+
     Vertex* bgrd = get(LAYOUT)->get(BACKGROUND)->get();
-    bgrd->get(COLOR)->Vertex::get(REQUEST)->get(COLOR)->get(BACKGROUND)->get(LIST);
-    // The content
-    bgrd->get(TOUPDATE)->attach(layout);
-    layout->add(bgrd);
+    bgrd->get(COLOR)->Vertex::get(REQUEST)->get(COLOR)->get(BACKGROUND)->get()->name(LIST);
+    frame->add(bgrd);
+    frame->get(TOUPDATE)->attach(bgrd);
 
     GetListLayout(layout);
     return true;
@@ -157,22 +158,7 @@ bool Default::GetButtonLayout(Vertex* layout)
     upper->get(CHILDREN)->get(ICON)->Vertex::get(REQUEST)->get(LAYOUT)->get(TEXT);
     upper->get(CHILDREN)->get(NAME)->Vertex::get(REQUEST)->get(LAYOUT)->get(TEXT);
     lower->get(CHILDREN)->get(DESCRIPTION)->Vertex::get(REQUEST)->get(LAYOUT)->get(TEXT);
-    lower->get(CHILDREN)->get(CONTROLID)->Vertex::get(REQUEST)->get(LAYOUT)->get(TEXT)->get(CONTROLID);
-
-    return true;
-}
-
-
-bool Default::GetControlLayout(Vertex* layout)
-{
-    GetTextLayout(layout);
-
-    Vertex* frame = get(LAYOUT)->get(FRAME)->get();
-    layout->add(frame);
-
-    Vertex* bgrd = get(LAYOUT)->get(BACKGROUND)->get();
-    frame->add(bgrd);
-    frame->get(TOUPDATE)->attach(bgrd);
+    lower->get(CHILDREN)->get(CONTROLID)->Vertex::get(REQUEST)->get(LAYOUT)->get(LIST);
 
     return true;
 }

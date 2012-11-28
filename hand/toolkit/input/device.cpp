@@ -76,8 +76,13 @@ bool Device::execute(Vertex* init_screen)
     Vertex* keys_view_tree = new List(DEVICE_KEYLIST);
     init_screen->add(keys_view_tree);
 
+    Vertex* layout = Vertex::get(THEMES)->get(DEFAULT)->get(LAYOUT)->get(LIST)->get();
+    layout->get(SIZEANDPOSITION)->Vertex::get(REQUEST)->get(RECT)->get()->name(SCALED);
+    layout->get(ALIGNMENT)->Vertex::get(REQUEST)->get(RECT)->get()->name(HORIZONTAL);
+    keys_view_tree->Vertex::get(LAYOUT)->get(LIST)->set(layout);
+
     // Load un-initialized keys
-    Vertex* layout = Vertex::get(THEMES)->get(DEFAULT)->get(LAYOUT)->get(LIST)->get(FRAMEDLIST);
+    Vertex* factory = Vertex::get(THEMES)->get(DEFAULT)->get(LAYOUT)->get(LIST)->get(FRAMEDLIST);
     Vertex* id;
     Vertex* frame;
     for(int i=0; i < NUMBER_OF_BUTTONS; ++i)
@@ -86,7 +91,7 @@ bool Device::execute(Vertex* init_screen)
         keys_data_tree->add(id);
 
         frame = new List("");
-        frame->Vertex::get(LAYOUT)->get(LIST)->set(layout->get());
+        frame->Vertex::get(LAYOUT)->get(LIST)->set(factory->get());
         frame->add(id);
         keys_view_tree->add(frame);
     }

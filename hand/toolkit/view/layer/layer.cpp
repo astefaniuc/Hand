@@ -238,6 +238,7 @@ Layer* Layer::Insert(Vertex* data, string position)
     }
 
     repo = repo->get(factory->get(OUTPUTTYPE)->get()->name());
+
     // TODO: Vertex::get(Vertex* path)
     Vertex* tmp_repo;
     while((req=req->get()) != NULL)
@@ -259,6 +260,16 @@ Layer* Layer::Insert(Vertex* data, string position)
     child_layout->get(TARGET)->set(data);
 
 
+    if(factory->get(OUTPUTTYPE)->get()->name() == LIST)
+    {
+        // The LIST needs two different SIZEANDPOSITION rects: one for the blit
+        // on the parent surface and one to calculate the children
+        Vertex* buffer_layout = new Layout("Buffer");
+        buffer_layout->get(SIZEANDPOSITION)->Vertex::get(REQUEST)->get(RECT)->get(FULL);
+        buffer_layout->add(child_layout);
+        child_layout = buffer_layout;
+    }
+
     // Create the Layer
     factory->execute(data);
     Layer* sub_layer = dynamic_cast<Layer*>(data->Vertex::get(LAYER, ANY));
@@ -272,10 +283,11 @@ Layer* Layer::Insert(Vertex* data, string position)
     sub_layer->set(layer_factories);
     sub_layer->SetContent(data);
 
-    // ...
+    // Add to the update tree
     Vertex* parent_layout = field->get(PARENT)->get();
     parent_layout->get(TOUPDATE)->attach(child_layout);
     field = parent_layout;
+    // Bridge also any intermediate lists
     while((parent_layout=field->get(PARENT)->get()) != NULL)
     {
         if(!parent_layout->get(TOUPDATE)->attach(field))
@@ -320,7 +332,6 @@ void Layer::Draw(bool forced)
     Rel_Rect* sap = GetRect(SIZEANDPOSITION, layout);
     if(sap)
         tmp = *sap;
-        //tmp.Init(sap->x, sap->y, sap->w, sap->h);
 
     Show(&SizeAndPositionOnBuffer, &tmp);
 

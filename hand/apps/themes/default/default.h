@@ -35,7 +35,6 @@ class Default : public Theme
         bool GetFramedListLayout(Vertex* out);
         bool GetListLayout(Vertex* out);
         bool GetButtonLayout(Vertex* out);
-        bool GetControlLayout(Vertex* drawing);
         bool GetContainerLayout(Vertex* out);
         bool GetFrameLayout(Vertex* out);
         bool GetBackgroundLayout(Vertex* out);
