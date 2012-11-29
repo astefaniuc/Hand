@@ -36,6 +36,7 @@ class Binary : public Vertex
         ~Binary();
 
         bool execute(Vertex* ignore);
+        Vertex* _get();
         void reset();
     private:
         // Shared library handle

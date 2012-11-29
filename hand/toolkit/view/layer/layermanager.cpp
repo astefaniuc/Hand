@@ -50,8 +50,6 @@ LayerManager::~LayerManager()
     delete(GetDevice());
     // Don't delete screen
     Buffer = NULL;
-    // TODO: unregister (DataManager + Server)
-    // UnloadTheme();
 }
 
 
@@ -64,15 +62,8 @@ void LayerManager::Init()
     fm->add(new ListLayerFactory());
     Vertex::add(fm);
 
-    // The path to the theme files
-    List* theme_dir = new File(THEMES_DIRECTORY);
-    // The default theme (to be loaded) (TODO: get this from persistent object)
-    List* curr_theme = new File(DEFAULT_THEME);
-    // Add the default theme to the theme folder (without scanning if it really is there)
-    theme_dir->add(curr_theme);
-    curr_theme->get(PATH)->set(theme_dir);
     // Load the theme
-    LoadTheme(curr_theme);
+    LoadTheme(Vertex::get(THEMES)->get(DEFAULT));
 
     List* pub = new List("System");
     add(pub);
@@ -190,10 +181,11 @@ bool LayerManager::Request(Vertex* request)
 
 bool LayerManager::LoadTheme(Vertex* f)
 {
-    f->Vertex::get(REQUEST)->get(HANDAPP);
-    if(!HandServer::GetInstance()->execute(f))
+    Vertex* bin = f->Vertex::get(APPLOADER, ANY);
+    if(!bin)
         return false;
-    Theme* theme = dynamic_cast<Theme*>(f->Vertex::get(HANDAPP, ANY));
+
+    Theme* theme = dynamic_cast<Theme*>(bin->get());
 
     if(!theme)
         return false;

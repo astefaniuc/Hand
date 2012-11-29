@@ -26,7 +26,6 @@
 
 
 // Paths and file names
-#define DEFAULT_THEME "default.so"
 #define FONT_FILE "/usr/share/fonts/truetype/freefont/FreeSans.ttf"
 #define LIBRARY_FILE_EXTENSION ".so"
 #define THEMES_DIRECTORY "./apps/themes/"

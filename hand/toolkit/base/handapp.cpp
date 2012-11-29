@@ -62,11 +62,17 @@ bool Binary::execute(Vertex* input)
         Create = (creator*) dlsym(LoadedLib, "Create");
         Destroy = (destroyer*) dlsym(LoadedLib, "Destroy");
         if(Create && Destroy)
-            return input->Vertex::attach(Create());
+            return true;
     }
 
     cout << dlerror() << endl;
     return false;
+}
+
+
+Vertex* Binary::_get()
+{
+    return Create();
 }
 
 
@@ -118,7 +124,9 @@ bool HandAppLoader::execute(Vertex* input)
         delete(bin);
         return false;
     }
-    input->Vertex::add(bin);
+    Vertex* prod = bin->get();
+    input->Vertex::add(prod);
+    prod->Vertex::add(bin);
     input->Vertex::get(REQUEST)->set(get(OUTPUTTYPE)->get());
     return true;
 }
