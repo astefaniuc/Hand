@@ -191,7 +191,7 @@ Layer* Layer::Insert(Vertex* data, string position)
 
     // Get the Layer and basic Layout type
     Vertex* req = field->Vertex::get(REQUEST)->get();
-    Vertex* repo = get(THEME)->get()->get(ANY, LAYOUT);
+    Vertex* repo = get(THEME)->get(THEME, ANY)->get(ANY, LAYOUT);
     if(req->get()->name() == ANY)
     {
         factory = layer_factories->GetFactory(data);
@@ -303,7 +303,7 @@ void Layer::SetLayout(Vertex* layout)
 {
     set(layout);
     add(layout);
-    get(THEME)->get()->execute(layout);
+    get(THEME)->get(THEME, ANY)->execute(layout);
 }
 
 

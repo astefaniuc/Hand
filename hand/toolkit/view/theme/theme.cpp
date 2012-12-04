@@ -40,6 +40,7 @@ Theme::Theme(string name) : HandApp(name)
         cout << TTF_GetError() << endl;
         exit(22);
     }
+    type(THEME);
 }
 
 

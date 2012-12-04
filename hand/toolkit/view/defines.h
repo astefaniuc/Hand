@@ -47,6 +47,7 @@
 #define LAYER_FACTORIES  "Layer Factories"
 #define LAYERMANAGER     "LayerManager"
 #define LAYOUT           "Layout"
+#define LOADER           "Loader"
 #define NAME             "Name"
 #define PARENT           "Parent"
 #define PREVIEW          "Preview"

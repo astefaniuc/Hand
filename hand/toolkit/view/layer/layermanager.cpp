@@ -62,6 +62,7 @@ void LayerManager::Init()
     fm->add(new ListLayerFactory());
     Vertex::add(fm);
 
+    get(THEME)->add(new Method<LayerManager>(LOADER, this, &LayerManager::LoadTheme));
     // Load the theme
     LoadTheme(Vertex::get(THEMES)->get(DEFAULT));
 
@@ -199,37 +200,28 @@ bool LayerManager::LoadTheme(Vertex* f)
         set(layout);
 
     }
-    // Sets the theme for all sub-layers
+    // (Re-)sets the theme for all sub-layers
+    Vertex* prev = get(THEME)->get(THEME, ANY);
+    if(prev)
+        delete(prev);
     get(THEME)->set(theme);
     theme->execute(layout);
     return true;
 }
 
 
-bool LayerManager::GetAllThemes(Vertex* themes_dir)
+bool LayerManager::GetAllThemes(Vertex* themes_list)
 {
-    // The path to the theme files
-    themes_dir = new File(THEMES_DIRECTORY);
-    themes_dir->Vertex::get(REQUEST)->get(FILE_);
-    // (Re-)read the list of available themes
-    HandServer::GetInstance()->execute(themes_dir);
-    List* themes_list = dynamic_cast<List*>(themes_dir->Vertex::get(FILE_, ANY));
-    if(!themes_list)
-        return false;
+    themes_list = Vertex::get(THEMES);
 
     // Set switching theme callback to all found themes
-    Vertex* loader = new Method<LayerManager>(THEMES, this, &LayerManager::LoadTheme);
-    File* file;
-    Vertex* elem;
+    Vertex* loader = get(THEME)->get(METHOD, LOADER);
+    Vertex* theme;
     uint i = 0;
-    while((elem=themes_list->get(++i)) != NULL)
-    {
-        file = dynamic_cast<File*>(elem);
-        if(file)
-            file->add(loader);
-    }
+    while((theme=themes_list->get(++i)) != NULL)
+        theme->add(loader);
 
-    return Request(themes_dir);
+    return Request(themes_list);
 }
 
 
