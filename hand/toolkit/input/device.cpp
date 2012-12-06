@@ -35,10 +35,6 @@ Device::Device() : HandApp("settings:Keyboard::0")
 
 Device::~Device()
 {
-    // Deletes keys
-    for(currentKey=Keys.begin(); currentKey!=Keys.end(); currentKey++)
-        delete(*currentKey);
-
     delete StateMachine;
 }
 
@@ -46,7 +42,6 @@ Device::~Device()
 bool Device::Init()
 {
     string  key_str;
-    SDLKey* key_sdl;
     Note* data;
 
     for (uint i=1; i<=numberOfKeys; i++)
@@ -59,9 +54,7 @@ bool Device::Init()
         if(key_str == "")
             return false;
         // Translate list entries to device keys
-        key_sdl = new SDLKey();
-        *key_sdl = (SDLKey)atoi(key_str.c_str());
-        Keys.push_back(key_sdl);
+        Keys.push_back((SDLKey)atoi(key_str.c_str()));
     }
     return true;
 }
@@ -137,7 +130,7 @@ int Device::GetKeyIndex(SDLKey k)
 {
     int i = 1;
     for(currentKey=Keys.begin(); currentKey!=Keys.end(); currentKey++, i++)
-        if(*(*currentKey) == k)
+        if((*currentKey) == k)
             return i;
 
     return -1;
@@ -160,14 +153,12 @@ bool Device::IsUnused()
 
 void Device::AddKey(SDLKey k)
 {
-    SDLKey* tmp = new SDLKey();
-    *tmp = k;
-    Keys.push_back(tmp);
+    Keys.push_back(k);
     // Display the key on the initialization screen
     int index = GetKeyIndex(k);
     currentKey = Keys.begin() + index - 1;
 
-    GetKey(index)->set(SDL_GetKeyName(*(*currentKey)));
+    GetKey(index)->set(SDL_GetKeyName((*currentKey)));
 }
 
 
@@ -188,12 +179,8 @@ void Device::DeleteKey(uint index)
     }
 
     currentKey = Keys.begin() + index - 1;
-    if(currentKey == Keys.end())
-        return;
-
-    SDLKey* tmp = (*currentKey);
-    currentKey = Keys.erase(currentKey);
-    delete tmp;
+    if(currentKey != Keys.end())
+        currentKey = Keys.erase(currentKey);
 }
 
 
