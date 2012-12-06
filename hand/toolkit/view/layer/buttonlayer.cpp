@@ -90,22 +90,6 @@ void ButtonLayer::Configure(Vertex* sub_layout)
 }
 
 
-void ButtonLayer::PressGui()
-{
-    // TODO: modify layout (IsPressed = true)
-    Layer::PressGui();
-}
-
-
-void ButtonLayer::ReleaseGui()
-{
-    // TODO: depends on the mode what we do now
-    GetContent()->execute(this);
-    // TODO: reset layout (IsPressed = false)
-    Layer::ReleaseGui();
-}
-
-
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------
 // ----------------------------------------------------------------

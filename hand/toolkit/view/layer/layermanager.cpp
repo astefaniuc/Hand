@@ -38,7 +38,7 @@ LayerManager::LayerManager() : ListLayer(LAYERMANAGER)
     Vertex::get(LAYERMANAGER)->set(this);
     type(LAYERMANAGER);
     NextRequest = NULL;
-    _InputState = NULL;
+    _Device = NULL;
     MasterView = NULL;
     // TODO: still needed?
     BufferType = COLLECTOR;
@@ -47,7 +47,7 @@ LayerManager::LayerManager() : ListLayer(LAYERMANAGER)
 
 LayerManager::~LayerManager()
 {
-    delete(GetDevice());
+    delete(_Device);
     // Don't delete screen
     Buffer = NULL;
 }
@@ -72,7 +72,7 @@ void LayerManager::Init()
     pub->add(new Method<LayerManager>("Exit", this, &LayerManager::Exit));
     // Add the exit function to the tree of available funcs
     // Request command at highest level
-    GetCommand(pub->get("Exit"), _InputState->GetNumberOfKeys());
+    GetCommand(pub->get("Exit"), _Device->GetNumberOfKeys());
     // Start the focus handling layer
 /*    MasterView = CreateLayer(FOCUSLAYER);
     MasterView->Init();
@@ -115,17 +115,8 @@ Vertex* LayerManager::GetCommandList(Vertex* menu)
 
 bool LayerManager::GetCommand(Vertex* f, int level)
 {
-    // HACK: create a Layer without Layout
-    Layer* sub_layer = new ButtonLayer("ButtonLayer");
-    sub_layer->Layer::SetContent(f);
-    return GetCommand(sub_layer, level);
-}
-
-
-bool LayerManager::GetCommand(Layer* l, int level)
-{
-    if(l)
-        return _InputState->GetCommand(l, level);
+    if(f)
+        return _Device->GetInputState()->GetCommand(f, level);
     return false;
 }
 
@@ -145,16 +136,15 @@ bool LayerManager::Exit(Vertex* content)
 
 Device* LayerManager::GetDevice()
 {
-    return _InputState->GetDevice();
+    return _Device;
 }
 
 
 void LayerManager::SetDevice(Device* device)
 {
+    _Device = device;
     device->Vertex::get(LAYERMANAGER)->set(this);
-    // Is the Device initialized?
-    _InputState = device->GetInputState();
-    // Delayed initialization of the LayerManager, needs _InputState ptr
+    // Delayed initialization of the LayerManager, needs device ptr
     // TODO: handle switching devices
     Init();
     if(!device->Init())
@@ -166,7 +156,7 @@ void LayerManager::SetDevice(Device* device)
     }
     else
         // TODO: load controls vertices also with the init screen
-        Expand(device->Vertex::get(DEVICE_KEYLIST));
+        Expand(device->Vertex::get(KEYLIST));
 }
 
 

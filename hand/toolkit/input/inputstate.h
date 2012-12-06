@@ -27,8 +27,8 @@
 
 
 class Device;
+class LayerManager;
 class StateTree;
-class Layer;
 
 class InputState
 {
@@ -38,23 +38,18 @@ class InputState
         InputState(Device*);
         ~InputState();
         // Stores information about pressed keys by moving up the PressedKey ptr
-        bool Press(int index);
+        bool Press(uint index);
         // Stores information about released keys by moving down the ReleasedKey ptr
-        bool Release(int index);
+        bool Release(uint index);
         // Resets "pressed" and "released" information
         void reset();
-        // Returns the number of controls set
-        uint  GetNumberOfKeys();
         Node* GetKey(key_pointer);
-        std::vector<Node*>* GetLevelVector(int);
-        // Returns the pointer to the associated device
-        Device* GetDevice();
-        void SetDevice(Device*);
+        Vertex* GetPeers(uint level);
         // Maps a command node to the given list
-        bool GetCommand(Layer*, int);
+        bool GetCommand(Vertex* method, uint level);
 
     protected:
-        Device* InputDevice;
+        LayerManager* LM;
         // Stores the root node as entry point
         StateTree* STree;
 

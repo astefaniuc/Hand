@@ -29,9 +29,6 @@ class ButtonLayer : public Layer
         ButtonLayer(std::string name);
         ~ButtonLayer(void){};
         void SetContent(Vertex*);
-        // Reacting on user input
-        void PressGui(void);
-        void ReleaseGui(void);
     protected:
         virtual void Configure(Vertex* parent_layout);
 

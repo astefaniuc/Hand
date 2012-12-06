@@ -61,6 +61,4 @@ class Device : public virtual HandApp
         keygroup::iterator currentKey;
 };
 
-#define DEVICE_KEYLIST "Keylist"
-
 #endif /* INPUT_DEVICE_H */

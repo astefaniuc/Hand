@@ -20,46 +20,18 @@
 #ifndef INPUT_NODE_H
 #define INPUT_NODE_H
 
-#include <string>
-#include <vector>
-#include "include/defines.h"
+#include "graph/list.h"
 
 
-class Layer;
-
-class Node
+class Node : public List
 {
     public:
-        Node(int, int, std::vector<Node*>*);
-        ~Node();
-        void SetNode(Node*, int, bool);
-        // Returns the sub-node at given position
-        Node* GetNode(int);
+        Node(int size, int level, Vertex* peers);
+        ~Node(){};
         // Returns the sub-node at given position if it's a parent
-        Node* GetParent(int);
+        Node* GetParent(uint pos);
         // Returns the sub-node at given position if it's a child
-        Node* GetChild(int);
-        // Returns the size of the tree node vector (nr. of keys)
-        int GetSize(void);
-        // Target Layer setter and getter
-        bool SetLayer(Layer* cmd_target);
-        Layer* GetLayer();
-
-        std::vector<Node*>* GetPeerNodes(void);
-
-    private:
-        struct NodeVector
-        {
-            Node* Associate;
-            bool Parent;
-        };
-
-        int Level;
-        std::vector<NodeVector*> TreeNodes;
-        // TEMP:
-        friend class StateTree;
-        std::vector<Node*>* PeerNodes;
-        Layer* AssocLayer;
+        Node* GetChild(uint pos);
 };
 
 

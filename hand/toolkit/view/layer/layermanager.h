@@ -36,7 +36,6 @@ class LayerManager : public ListLayer
         bool    Update(bool force);
 
         bool    GetCommand(Vertex* func, int level);
-        bool    GetCommand(Layer* func, int level);
         // Returns the list which should be mapped to the InputState
         // TODO: better move it to the "view" layer or to base layer?
         Vertex* GetCommandList(Vertex* base);
@@ -62,9 +61,9 @@ class LayerManager : public ListLayer
         bool    Expand(Vertex* list);
 
         // Contains the only pointer to the Device
-        InputState*  _InputState;
-        Vertex*    NextRequest;
-        Layer*       MasterView;
+        Device*  _Device;
+        Vertex*  NextRequest;
+        Layer*   MasterView;
 };
 
 #endif /* VIEW_LAYER_LAYERMANAGER_H */

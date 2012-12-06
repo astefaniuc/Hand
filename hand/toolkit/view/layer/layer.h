@@ -41,16 +41,11 @@ class Layer : public VirtualSurface
         // Set pointer to a data tree node
         virtual void SetContent(Vertex*);
         Vertex*      GetContent();
-        void         SetCommand(Node* cmd);
-        void         ReleaseCommand();
         void         Collapse();
 
         // Reacting on user input
-        virtual void PressGui();
-        virtual void ReleaseGui();
         virtual bool Request(Vertex* request);
 
-        virtual uint GetLevel();
         virtual void NotifyChanged();
         virtual void Init(){};
 

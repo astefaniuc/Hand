@@ -72,8 +72,8 @@ bool Device::execute(Vertex* init_screen)
     // Two main entries: a keylist and the description
     init_screen->add(new Note(DESCRIPTION, "Press 5 keys on the keyboard"));
 
-    Vertex* keys_data_tree = Vertex::get(DEVICE_KEYLIST);
-    Vertex* keys_view_tree = new List(DEVICE_KEYLIST);
+    Vertex* keys_data_tree = Vertex::get(KEYLIST);
+    Vertex* keys_view_tree = new List(KEYLIST);
     init_screen->add(keys_view_tree);
 
     Vertex* layout = Vertex::get(THEMES)->get(DEFAULT)->get(LAYOUT)->get(LIST)->get();
@@ -135,7 +135,7 @@ bool Device::Release(SDLKey k)
 
 int Device::GetKeyIndex(SDLKey k)
 {
-    int i = 0;
+    int i = 1;
     for(currentKey=Keys.begin(); currentKey!=Keys.end(); currentKey++, i++)
         if(*(*currentKey) == k)
             return i;
@@ -146,7 +146,7 @@ int Device::GetKeyIndex(SDLKey k)
 
 Note* Device::GetKey(uint pos)
 {
-    return dynamic_cast<Note*>(Vertex::get(DEVICE_KEYLIST)->get(pos));
+    return dynamic_cast<Note*>(Vertex::get(KEYLIST)->get(pos));
 }
 
 
@@ -165,9 +165,9 @@ void Device::AddKey(SDLKey k)
     Keys.push_back(tmp);
     // Display the key on the initialization screen
     int index = GetKeyIndex(k);
-    currentKey = Keys.begin() + index;
+    currentKey = Keys.begin() + index - 1;
 
-    GetKey(index+1)->set(SDL_GetKeyName(*(*currentKey)));
+    GetKey(index)->set(SDL_GetKeyName(*(*currentKey)));
 }
 
 
@@ -177,9 +177,9 @@ void Device::DeleteKey(uint index)
     Note* next;
     uint i = index;
     string key;
-    while((curr=GetKey(++i)) != NULL)
+    while((curr=GetKey(i)) != NULL)
     {
-        next = GetKey(i+1);
+        next = GetKey(++i);
         if(next)
             key = next->get();
         else
@@ -187,7 +187,7 @@ void Device::DeleteKey(uint index)
         curr->set(key);
     }
 
-    currentKey = Keys.begin() + index;
+    currentKey = Keys.begin() + index - 1;
     if(currentKey == Keys.end())
         return;
 

@@ -43,7 +43,7 @@ void FocusLayer::Init()
 {
     name("FocusLayer");
 
-    KeyList = Vertex::get(LAYERMANAGER)->get()->find(DEVICE_KEYLIST);
+    KeyList = Vertex::get(LAYERMANAGER)->get()->find(KEYLIST);
 }
 
 

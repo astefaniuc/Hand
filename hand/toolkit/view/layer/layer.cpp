@@ -39,7 +39,6 @@ Layer::Layer(string name) : VirtualSurface(name)
 
 Layer::~Layer()
 {
-    ReleaseCommand();
     Collapse();
 }
 
@@ -50,20 +49,6 @@ bool Layer::Exit()
     return ParentLayer->Exit();
 }
 
-/*
-bool Layer::Update(bool forced)
-{
-    if(!IsVisible)
-    {
-        return false;
-    }
-    if(_Layout->Update(forced))
-    {
-        forced = true;
-    }
-    return forced;
-}
-*/
 
 bool Layer::Update(bool forced)
 {
@@ -88,28 +73,6 @@ void Layer::SetContent(Vertex* data)
 Vertex* Layer::GetContent()
 {
     return get(CONTENT)->get();
-}
-
-
-void Layer::SetCommand(Node* cmd)
-{
-    ReleaseCommand();
-    if(cmd != NULL)
-    {
-        _Node = cmd;
-        _Node->SetLayer(this);
-    }
-}
-
-
-void Layer::ReleaseCommand()
-{
-    if(_Node != NULL)
-    {
-        //_Node_->ReleaseList();
-        _Node->SetLayer(NULL);
-        _Node = NULL;
-    }
 }
 
 
@@ -141,30 +104,9 @@ Layer* Layer::GetParentLayer()
 }
 
 
-void Layer::PressGui()
-{
-    // TODO: modify layout (IsPressed = true)
-    //Draw();
-}
-
-void Layer::ReleaseGui()
-{
-    // TODO: reset layout (IsPressed = false)
-    //Draw();
-}
-
-
 void Layer::NotifyChanged()
 {
     Changed = true;
-}
-
-
-uint Layer::GetLevel()
-{
-    if(ParentLayer != NULL)
-        return (1 + ParentLayer->GetLevel());
-    return 0;
 }
 
 

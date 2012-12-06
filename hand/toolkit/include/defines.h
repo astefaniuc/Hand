@@ -23,6 +23,7 @@
 #include "base/defines.h"
 #include "graph/defines.h"
 #include "view/defines.h"
+#include "input/defines.h"
 
 
 // Paths and file names

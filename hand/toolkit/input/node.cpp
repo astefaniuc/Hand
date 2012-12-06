@@ -18,97 +18,39 @@
  */
 
 #include "input/node.h"
-#include "view/layer/layer.h"
+#include "graph/vertex.h"
 
 
 using namespace std;
 
 
-Node::Node(int size, int level, vector<Node*>* peers_vector)
+Node::Node(int size, int level, Vertex* peers) : List("Node")
 {
-    NodeVector* kv;
     // Init the related Nodes container with "empty" objects
-    for(int i=0; i<=size; i++)
-    {
-        kv = new NodeVector;
-        kv->Associate = NULL;
-        kv->Parent = false;
-        TreeNodes.push_back(kv);
-    }
-    Level = level;
-    PeerNodes = peers_vector;
+    for(int i=1; i<=size; i++)
+        add(new List(CHILD));
+
+    Vertex::attach(peers);
     // Adds itself to the peers list
-    PeerNodes->push_back(this);
-    AssocLayer = NULL;
+    peers->add(this);
 }
 
 
-Node::~Node()
+Node* Node::GetParent(uint k_nr)
 {
-    vector<NodeVector*>::iterator kv;
-    for(kv = TreeNodes.begin(); kv!=TreeNodes.end(); kv++)
-        delete (*kv);
-}
-
-
-Node* Node::GetNode(int k_nr)
-{
-    vector<NodeVector*>::iterator kv = TreeNodes.begin() + k_nr;
-    return (*kv)->Associate;
-}
-
-
-void Node::SetNode(Node* k_ptr, int k_nr, bool rel)
-{
-    vector<NodeVector*>::iterator kv = TreeNodes.begin() + k_nr;
-    (*kv)->Associate = k_ptr;
-    (*kv)->Parent = rel;
-}
-
-
-Node* Node::GetParent(int k_nr)
-{
-    vector<NodeVector*>::iterator kv = TreeNodes.begin() + k_nr;
-    if((*kv)->Parent)
-        return (*kv)->Associate;
+    Vertex* ret = get(k_nr);
+    if(ret && (ret->name() == PARENT))
+        return dynamic_cast<Node*>(ret->get());
 
     return NULL;
 }
 
 
-Node* Node::GetChild(int k_nr)
+Node* Node::GetChild(uint k_nr)
 {
-    vector<NodeVector*>::iterator kv = TreeNodes.begin() + k_nr;
-    if(!(*kv)->Parent)
-        return (*kv)->Associate;
+    Vertex* ret = get(k_nr);
+    if(ret && (ret->name() == CHILD))
+        return dynamic_cast<Node*>(ret->get());
 
     return NULL;
-}
-
-
-int Node::GetSize()
-{
-    return TreeNodes.size();
-}
-
-
-bool Node::SetLayer(Layer* l)
-{
-    // Protect submitted cmds but allow resetting StateMachine
-    if((l != NULL) && (AssocLayer != NULL))
-        return false;
-
-    AssocLayer = l;
-    return true;
-}
-
-Layer* Node::GetLayer()
-{
-    return AssocLayer;
-}
-
-
-vector<Node*>* Node::GetPeerNodes()
-{
-    return PeerNodes;
 }

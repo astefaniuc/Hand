@@ -26,14 +26,14 @@
 class StateTree
 {
     public:
-        StateTree(int);
-        ~StateTree();
+        StateTree(uint);
+        ~StateTree(){};
         Node* GetEntryPoint();
     private:
-        void AddNodes(int, int);
-        void ConnectNodes(Node*, Node*, int);
-        Node* GetParentNode(int, int, int);
-        std::vector<Node*>* GetCreateLevelVector(int);
+        void AddNodes(uint level, uint key_nr);
+        void ConnectNodes(Vertex* parent, Vertex* child, uint pos);
+        Vertex* GetParentNode(uint level, uint pos);
+        Vertex* GetPeers(uint level);
         Node* RootKey;
 };
 

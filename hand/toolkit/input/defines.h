@@ -17,26 +17,13 @@
  *  License along with Hand. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef VIEW_THEME_ANIMATIONS_H
-#define VIEW_THEME_ANIMATIONS_H
-
-#include "base/handapp.h"
+#ifndef INPUT_DEFINES_H
+#define INPUT_DEFINES_H
 
 
-class Animation : public virtual HandApp
-{
-    public:
-        Animation() : HandApp("Animation"){};
-        virtual ~Animation(){};
-//        void SizeAndPosition(SDL_Rect& current_size);
-        virtual bool execute(Vertex* tgt) = 0;
+#define CHILD            "Child"
+#define COMMAND          "Command"
+#define KEYLIST          "Keylist"
+#define PEERS            "Peers"
 
-    protected:
-        virtual bool GetNextProgress() = 0;
-        double Progress;
-        double AnimationRate;
-        int Repeat;
-};
-
-
-#endif /* VIEW_THEME_ANIMATIONS_H */
+#endif /* INPUT_DEFINES_H */

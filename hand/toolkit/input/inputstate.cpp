@@ -21,7 +21,7 @@
 #include "input/statetree.h"
 #include "input/device.h"
 #include "graph/vertex.h"
-#include "view/layer/layer.h"
+#include "view/layer/layermanager.h"
 
 
 using namespace std;
@@ -29,10 +29,10 @@ using namespace std;
 
 InputState::InputState(Device* d)
 {
-    SetDevice(d);
+    LM = dynamic_cast<LayerManager*>(d->Vertex::get(LAYERMANAGER)->get());
     // TODO: check the size of the existing tree, if it doesn't matches
     // create a new one and store it in a vector in the server
-    STree = new StateTree(InputDevice->GetNumberOfKeys());
+    STree = new StateTree(d->GetNumberOfKeys());
     NullKey = PressedKey = FollowerKey = STree->GetEntryPoint();
 }
 
@@ -43,19 +43,7 @@ InputState::~InputState()
 }
 
 
-Device* InputState::GetDevice()
-{
-    return InputDevice;
-}
-
-
-void InputState::SetDevice(Device* d)
-{
-    InputDevice = d;
-}
-
-
-bool InputState::Press(int k)
+bool InputState::Press(uint k)
 {
     PressedKey = FollowerKey = FollowerKey->GetChild(k);
     if(PressedKey == NULL)
@@ -64,21 +52,11 @@ bool InputState::Press(int k)
         return false;
     }
 
-    // Inform the GUI
-    Layer* layer = PressedKey->GetLayer();
-    if(layer)
-        // There is a GUI item mapped to this command
-        layer->PressGui();
-    else
-    {
-        // Inform the LayerManager
-        //ShowAvailableCommands();
-    }
     return true;
 }
 
 
-bool InputState::Release(int k)
+bool InputState::Release(uint k)
 {
     // Move the ReleasedKey up the the three
     // and the FollowerKey down to the current key combination node
@@ -94,17 +72,11 @@ bool InputState::Release(int k)
     if(FollowerKey == NullKey)
     {
         // Inform the GUI
-        Layer* layer = PressedKey->GetLayer();
-        if(layer)
-            // There is a GUI item mapped to this command
-            layer->ReleaseGui();
+        Vertex* method = PressedKey->Vertex::get(METHOD)->get();
+        if(method)
+            method->execute(method);
 
         reset();
-    }
-    else
-    {
-        // Inform the LayerManager
-        //ShowAvailableCommands();
     }
     return true;
 }
@@ -132,22 +104,24 @@ Node* InputState::GetKey(key_pointer key)
 }
 
 
-bool InputState::GetCommand(Layer* target, int level)
+bool InputState::GetCommand(Vertex* target, uint level)
 {
     if(NullKey == NULL)
         // Not initialized
         return false;
 
     // Get the list of available commands
-    vector<Node*>* free_cmds = GetLevelVector(level);
-    vector<Node*>::iterator f_cmd;
-    for(f_cmd=free_cmds->begin(); f_cmd!=free_cmds->end(); f_cmd++)
+    Vertex* free_cmds = GetPeers(level);
+    Vertex* f_cmd;
+    uint i = 0;
+    while((f_cmd=free_cmds->get(++i)) != NULL)
     {
         // Bind the functional list to the statetree (command) node,
         // bidirectional
-        if((*f_cmd)->SetLayer(target))
+        if(f_cmd->Vertex::get(METHOD)->set(target))
         {
-            target->SetCommand((*f_cmd));
+            target->get(COMMAND)->set(f_cmd);
+
             return true;
         }
     }
@@ -155,23 +129,15 @@ bool InputState::GetCommand(Layer* target, int level)
 }
 
 
-vector<Node*>* InputState::GetLevelVector(int level)
+Vertex* InputState::GetPeers(uint level)
 {
-    if(level > NullKey->GetSize())
+    if(level > NullKey->size())
         return NULL;
 
     // Search from bottom up
     Node* tmp_node = NullKey;
-    for(int i=0; i<level; i++)
+    for(uint i=1; i<=level; i++)
         tmp_node = tmp_node->GetChild(i);
 
-    return tmp_node->GetPeerNodes();
-}
-
-
-uint InputState::GetNumberOfKeys()
-{
-    if(InputDevice != NULL)
-        return InputDevice->GetNumberOfKeys();
-    return 0;
+    return tmp_node->Vertex::get(PEERS);
 }
