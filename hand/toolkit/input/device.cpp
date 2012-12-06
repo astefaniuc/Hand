@@ -125,7 +125,7 @@ bool Device::Release(SDLKey k)
         // Device is during initialization
         DeleteKey(index);
         StateMachine->reset();
-        for(uint i=0; i<Keys.size(); ++i)
+        for(uint i=1; i<=Keys.size(); ++i)
             StateMachine->Press(i);
         return true;
     }
