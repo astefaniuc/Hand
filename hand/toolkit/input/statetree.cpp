@@ -18,23 +18,36 @@
  */
 
 #include "input/statetree.h"
+#include "input/node.h"
 
 
 using namespace std;
 
 
-StateTree::StateTree(uint size)
+StateGraph::StateGraph() : Vertex(STATEGRAPH)
 {
+    type(FACTORY);
+}
+
+
+bool StateGraph::execute(Vertex* device)
+{
+    uint size = device->Vertex::get(KEYLIST)->size();
+    if((size==0) || (size>MAX_NUMBER_OF_BUTTONS))
+        return false;
     // Create the root/null key
-    RootKey = new Node(size, 0, new List(PEERS));
+    Root = new StateNode(size, new List(PEERS));
     // Build the key tree on top
     for(uint i=1; i<=size; i++)
         // Build the key tree bellow
         AddNodes(1, i);
+
+    device->Vertex::add(Root);
+    return true;
 }
 
 
-void StateTree::AddNodes(uint level, uint key_nr)
+void StateGraph::AddNodes(uint level, uint key_nr)
 {
     Vertex* tmp_node;
     Vertex* new_node;
@@ -54,7 +67,7 @@ void StateTree::AddNodes(uint level, uint key_nr)
             continue;
 
         // Appends also the new node to c_nodes
-        new_node = new Node(RootKey->size(), level, c_nodes);
+        new_node = new StateNode(Root->size(), c_nodes);
         // Connect new and old node at key number position
         ConnectNodes(parent_node, new_node, key_nr);
         // The new node inherits from the old one the position of the parents
@@ -75,12 +88,12 @@ void StateTree::AddNodes(uint level, uint key_nr)
 }
 
 
-Vertex* StateTree::GetParentNode(uint level, uint pos)
+Vertex* StateGraph::GetParentNode(uint level, uint pos)
 {
-    Vertex* level_vector = GetPeers(level);
+    Vertex* peers = GetPeers(level);
     Vertex* node;
     uint i = 0;
-    while((node=level_vector->get(++i)) != NULL)
+    while((node=peers->get(++i)) != NULL)
         if(node->get(pos)->get() == NULL)
             return node;
 
@@ -88,13 +101,13 @@ Vertex* StateTree::GetParentNode(uint level, uint pos)
 }
 
 
-Vertex* StateTree::GetPeers(uint level)
+Vertex* StateGraph::GetPeers(uint level)
 {
-    if(level > RootKey->size())
+    if(level > Root->size())
         return NULL;
 
     // Search from bottom up
-    Node* tmp_node = RootKey;
+    StateNode* tmp_node = Root;
     for(uint i=1; i<=level; i++)
     {
         if(tmp_node->get(i)->get() == NULL)
@@ -106,17 +119,11 @@ Vertex* StateTree::GetPeers(uint level)
 }
 
 
-void StateTree::ConnectNodes(Vertex* p, Vertex* c, uint i)
+void StateGraph::ConnectNodes(Vertex* p, Vertex* c, uint i)
 {
     p->get(i)->attach(c);
 
     Vertex* v = c->get(i);
     v->name(PARENT);
     v->attach(p);
-}
-
-
-Node* StateTree::GetEntryPoint()
-{
-    return RootKey;
 }

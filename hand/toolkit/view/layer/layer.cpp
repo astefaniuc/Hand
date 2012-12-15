@@ -32,7 +32,6 @@ Layer::Layer(string name) : VirtualSurface(name)
     Updated = false;
     IsVisible = true;
     IsExpanded = false;
-    _Node = NULL;
     type(LAYER);
 }
 

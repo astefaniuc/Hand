@@ -25,8 +25,6 @@
 #include "base/factory.h"
 
 
-class Node;
-
 class Layer : public VirtualSurface
 {
     public:
@@ -64,8 +62,6 @@ class Layer : public VirtualSurface
     public:
         bool IsVisible;
         bool IsExpanded;
-    private:
-        Node* _Node;
 };
 
 

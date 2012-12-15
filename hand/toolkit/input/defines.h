@@ -21,9 +21,11 @@
 #define INPUT_DEFINES_H
 
 
-#define CHILD            "Child"
-#define COMMAND          "Command"
-#define KEYLIST          "Keylist"
-#define PEERS            "Peers"
+#define CHILD             "Child"
+#define COMMAND           "Command"
+#define KEYLIST           "Keylist"
+#define PEERS             "Peers"
+#define STATEGRAPH        "StateGraph"
+#define STATENODE         "StateNode"
 
 #endif /* INPUT_DEFINES_H */

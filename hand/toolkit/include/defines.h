@@ -34,7 +34,8 @@
 
 enum default_number_of_items
 {
-    NUMBER_OF_BUTTONS = 5
+    NUMBER_OF_BUTTONS = 5,
+    MAX_NUMBER_OF_BUTTONS = 10
 };
 
 
@@ -42,8 +43,7 @@ enum key_pointer
 {
     ROOT,
     PRESSED,
-    RELEASED,
-    FOLLOWER
+    RELEASED
 };
 
 

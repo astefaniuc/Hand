@@ -18,8 +18,6 @@
  */
 
 #include "input/inputstate.h"
-#include "input/statetree.h"
-#include "input/device.h"
 #include "graph/vertex.h"
 #include "view/layer/layermanager.h"
 
@@ -27,25 +25,18 @@
 using namespace std;
 
 
-InputState::InputState(Device* d)
+InputState::InputState(Vertex* dev)
 {
-    LM = dynamic_cast<LayerManager*>(d->Vertex::get(LAYERMANAGER)->get());
-    // TODO: check the size of the existing tree, if it doesn't matches
-    // create a new one and store it in a vector in the server
-    STree = new StateTree(d->GetNumberOfKeys());
-    NullKey = PressedKey = FollowerKey = STree->GetEntryPoint();
-}
+    LM = dynamic_cast<LayerManager*>(dev->Vertex::get(LAYERMANAGER)->get());
+    dev->get(FACTORY, STATEGRAPH)->execute(dev);
+    NullKey = PressedKey = ReleasedKey = dynamic_cast<StateNode*>(dev->Vertex::get(STATENODE, ANY));
 
-
-InputState::~InputState()
-{
-    delete(STree);
 }
 
 
 bool InputState::Press(uint k)
 {
-    PressedKey = FollowerKey = FollowerKey->GetChild(k);
+    PressedKey = ReleasedKey = ReleasedKey->GetChild(k);
     if(PressedKey == NULL)
     {
         reset();
@@ -59,9 +50,9 @@ bool InputState::Press(uint k)
 bool InputState::Release(uint k)
 {
     // Move the ReleasedKey up the the three
-    // and the FollowerKey down to the current key combination node
+    // and the ReleasedKey down to the current key combination node
     if((PressedKey==NullKey) ||
-        ((FollowerKey=FollowerKey->GetParent(k)) == NULL))
+        ((ReleasedKey=ReleasedKey->GetParent(k)) == NULL))
     {
         // Some events get lost, this command is corrupted
         reset();
@@ -69,7 +60,7 @@ bool InputState::Release(uint k)
     }
 
     // Execute command when all pressed keys have been released
-    if(FollowerKey == NullKey)
+    if(ReleasedKey == NullKey)
     {
         // Inform the GUI
         Vertex* method = PressedKey->Vertex::get(METHOD)->get();
@@ -84,11 +75,11 @@ bool InputState::Release(uint k)
 
 void InputState::reset(void)
 {
-    PressedKey = FollowerKey = NullKey;
+    PressedKey = ReleasedKey = NullKey;
 }
 
 
-Node* InputState::GetKey(key_pointer key)
+StateNode* InputState::GetKey(key_pointer key)
 {
     switch(key)
     {
@@ -96,8 +87,8 @@ Node* InputState::GetKey(key_pointer key)
             return NullKey;
         case PRESSED:
             return PressedKey;
-        case FOLLOWER:
-            return FollowerKey;
+        case RELEASED:
+            return ReleasedKey;
         default:
             return NULL;
     }
@@ -116,7 +107,7 @@ bool InputState::GetCommand(Vertex* target, uint level)
     uint i = 0;
     while((f_cmd=free_cmds->get(++i)) != NULL)
     {
-        // Bind the functional list to the statetree (command) node,
+        // Bind the functional list to the state graph (command) node,
         // bidirectional
         if(f_cmd->Vertex::get(METHOD)->set(target))
         {
@@ -135,7 +126,7 @@ Vertex* InputState::GetPeers(uint level)
         return NULL;
 
     // Search from bottom up
-    Node* tmp_node = NullKey;
+    StateNode* tmp_node = NullKey;
     for(uint i=1; i<=level; i++)
         tmp_node = tmp_node->GetChild(i);
 

@@ -20,21 +20,25 @@
 #ifndef INPUT_STATETREE_H
 #define INPUT_STATETREE_H
 
-#include "input/node.h"
+#include "graph/vertex.h"
 
 
-class StateTree
+class StateNode;
+
+class StateGraph : public Vertex
 {
     public:
-        StateTree(uint);
-        ~StateTree(){};
-        Node* GetEntryPoint();
+        StateGraph();
+        ~StateGraph(){};
+
+        bool execute(Vertex* device);
+
     private:
         void AddNodes(uint level, uint key_nr);
         void ConnectNodes(Vertex* parent, Vertex* child, uint pos);
         Vertex* GetParentNode(uint level, uint pos);
         Vertex* GetPeers(uint level);
-        Node* RootKey;
+        StateNode* Root;
 };
 
 

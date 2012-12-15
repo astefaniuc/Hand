@@ -28,36 +28,31 @@
 
 class Device;
 class LayerManager;
-class StateTree;
 
 class InputState
 {
 
     public:
         // Link to the parent object, the main server
-        InputState(Device*);
-        ~InputState();
+        InputState(Vertex* device);
+        virtual ~InputState(){};
         // Stores information about pressed keys by moving up the PressedKey ptr
         bool Press(uint index);
         // Stores information about released keys by moving down the ReleasedKey ptr
         bool Release(uint index);
         // Resets "pressed" and "released" information
         void reset();
-        Node* GetKey(key_pointer);
+        StateNode* GetKey(key_pointer);
         Vertex* GetPeers(uint level);
         // Maps a command node to the given list
         bool GetCommand(Vertex* method, uint level);
 
     protected:
         LayerManager* LM;
-        // Stores the root node as entry point
-        StateTree* STree;
 
-    private:
-        // Members:
-        Node* NullKey;
-        Node* PressedKey;
-        Node* FollowerKey;
+        StateNode* NullKey;
+        StateNode* PressedKey;
+        StateNode* ReleasedKey;
 };
 
 #endif /* INPUT_INPUTSTATE_H */

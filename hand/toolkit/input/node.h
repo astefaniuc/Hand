@@ -23,15 +23,15 @@
 #include "graph/list.h"
 
 
-class Node : public List
+class StateNode : public List
 {
     public:
-        Node(int size, int level, Vertex* peers);
-        ~Node(){};
+        StateNode(uint size, Vertex* peers);
+        ~StateNode(){};
         // Returns the sub-node at given position if it's a parent
-        Node* GetParent(uint pos);
+        StateNode* GetParent(uint pos);
         // Returns the sub-node at given position if it's a child
-        Node* GetChild(uint pos);
+        StateNode* GetChild(uint pos);
 };
 
 

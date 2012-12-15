@@ -21,6 +21,7 @@
 #include "base/filesystem.h"
 #include "base/handapploader.h"
 #include "view/theme/theme.h"
+#include "input/statetree.h"
 
 
 using namespace std;
@@ -32,6 +33,7 @@ void DataManager::Init()
     add(new FileFactory());
     add(new DirectoryLoader());
     add(new ThemeManager());
+    add(new StateGraph());
     add(new Persistence());
 }
 

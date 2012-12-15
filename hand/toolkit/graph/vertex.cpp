@@ -140,9 +140,6 @@ Vertex* Vertex::get(string s)
         if((*curr)->name() == s)
             return (*curr);
 
-    if(s == THEMES)
-        return HandServer::GetInstance()->get(FACTORY, THEMES);
-
     Link* r = new Link(s);
     Vertex::add(r);
     return r;
@@ -167,9 +164,13 @@ Vertex* Vertex::get(string type, string name)
                 return (*curr);
     }
     else
+    {
         for(; curr!=end; curr++)
             if(((*curr)->name()==name) && (*curr)->is(type))
                 return (*curr);
+        if(type == FACTORY)
+            return HandServer::GetInstance()->get(FACTORY, name);
+    }
 
     return NULL;
 }

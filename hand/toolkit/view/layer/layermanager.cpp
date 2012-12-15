@@ -64,7 +64,7 @@ void LayerManager::Init()
 
     get(THEME)->add(new Method<LayerManager>(LOADER, this, &LayerManager::LoadTheme));
     // Load the theme
-    LoadTheme(Vertex::get(THEMES)->get(DEFAULT));
+    LoadTheme(Vertex::get(FACTORY, THEMES)->get(DEFAULT));
 
     List* pub = new List("System");
     add(pub);
@@ -144,9 +144,6 @@ void LayerManager::SetDevice(Device* device)
 {
     _Device = device;
     device->Vertex::get(LAYERMANAGER)->set(this);
-    // Delayed initialization of the LayerManager, needs device ptr
-    // TODO: handle switching devices
-    Init();
     if(!device->Init())
     {
         // No, show init screen
@@ -157,6 +154,9 @@ void LayerManager::SetDevice(Device* device)
     else
         // TODO: load controls vertices also with the init screen
         Expand(device->Vertex::get(KEYLIST));
+    // Delayed initialization of the LayerManager, needs device ptr
+    // TODO: handle switching devices
+    Init();
 }
 
 
@@ -202,7 +202,7 @@ bool LayerManager::LoadTheme(Vertex* f)
 
 bool LayerManager::GetAllThemes(Vertex* themes_list)
 {
-    themes_list = Vertex::get(THEMES);
+    themes_list = Vertex::get(FACTORY, THEMES);
 
     // Set switching theme callback to all found themes
     Vertex* loader = get(THEME)->get(METHOD, LOADER);

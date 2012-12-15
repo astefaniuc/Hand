@@ -18,16 +18,16 @@
  */
 
 #include "input/node.h"
-#include "graph/vertex.h"
 
 
 using namespace std;
 
 
-Node::Node(int size, int level, Vertex* peers) : List("Node")
+StateNode::StateNode(uint size, Vertex* peers) : List(STATENODE)
 {
+    type(STATENODE);
     // Init the related Nodes container with "empty" objects
-    for(int i=1; i<=size; i++)
+    for(uint i=1; i<=size; i++)
         add(new List(CHILD));
 
     Vertex::attach(peers);
@@ -36,21 +36,21 @@ Node::Node(int size, int level, Vertex* peers) : List("Node")
 }
 
 
-Node* Node::GetParent(uint k_nr)
+StateNode* StateNode::GetParent(uint k_nr)
 {
     Vertex* ret = get(k_nr);
     if(ret && (ret->name() == PARENT))
-        return dynamic_cast<Node*>(ret->get());
+        return dynamic_cast<StateNode*>(ret->get());
 
     return NULL;
 }
 
 
-Node* Node::GetChild(uint k_nr)
+StateNode* StateNode::GetChild(uint k_nr)
 {
     Vertex* ret = get(k_nr);
     if(ret && (ret->name() == CHILD))
-        return dynamic_cast<Node*>(ret->get());
+        return dynamic_cast<StateNode*>(ret->get());
 
     return NULL;
 }
