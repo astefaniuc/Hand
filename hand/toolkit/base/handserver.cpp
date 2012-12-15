@@ -67,15 +67,15 @@ void HandServer::Present(string file)
             break;
         app = app->Vertex::get(ot->name(), ANY);
     }
-    GetLayerManager()->Layer::SetContent(app);
+    GetUser()->Layer::SetContent(app);
     // Start the timer driven (callback) execution and stop the current thread
     Beat();
 }
 
 
-LayerManager* HandServer::GetLayerManager()
+LayerManager* HandServer::GetUser()
 {
-    // Start the layer manager
+    // TODO: rename LayerManager to User, or additional User class?
     LayerManager* layer_mgr = new LayerManager();
     _Screen->Vertex::get(LAYERMANAGER)->add(layer_mgr);
 
@@ -170,8 +170,11 @@ void HandServer::Press(SDLKey k)
             return;
 
     if(CreateNewUserOnOrphanKeyPress)
+    {
         // Create a new device if the pressed key doesn't fits to an existing one
-        GetLayerManager()->GetDevice()->Press(k);
+        GetUser();
+        Press(k);
+    }
 }
 
 

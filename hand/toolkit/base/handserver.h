@@ -41,7 +41,7 @@ class HandServer : public DataManager
         void Present(std::string file);
     private:
         // Initializes all subsystems:
-        LayerManager* GetLayerManager();
+        LayerManager* GetUser();
         // Starts timer (infinite loop)
         void Beat();
     public:

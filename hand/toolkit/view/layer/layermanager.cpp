@@ -130,12 +130,6 @@ bool LayerManager::Exit(Vertex* content)
 }
 
 
-Device* LayerManager::GetDevice()
-{
-    return _Device;
-}
-
-
 void LayerManager::SetDevice(Device* device)
 {
     _Device = device;

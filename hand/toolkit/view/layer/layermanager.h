@@ -39,7 +39,6 @@ class LayerManager : public ListLayer
         // Returns the list which should be mapped to the InputState
         // TODO: better move it to the "view" layer or to base layer?
         Vertex* GetCommandList(Vertex* base);
-        Device* GetDevice();
         void    SetDevice(Device*);
 
         // Stores the pointer to the object to be displayed next
