@@ -73,10 +73,6 @@ void LayerManager::Init()
     // Add the exit function to the tree of available funcs
     // Request command at highest level
     GetCommand(pub->get("Exit"), _Device->GetNumberOfKeys());
-    // Start the focus handling layer
-/*    MasterView = CreateLayer(FOCUSLAYER);
-    MasterView->Init();
-    SubLayers.push_back(MasterView);*/
 }
 
 

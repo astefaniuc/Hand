@@ -55,6 +55,7 @@ class Layer : public VirtualSurface
         // Insert "data" as layer of type layer_type at "position"
         virtual Layer* Insert(Vertex* data, std::string position);
         virtual void DrawChilds(bool forced);
+        Vertex* GetLayout(Vertex* data, Vertex* request, std::string layer_type);
 
         Layer*         ParentLayer;
 

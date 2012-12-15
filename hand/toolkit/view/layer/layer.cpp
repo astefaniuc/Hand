@@ -118,21 +118,16 @@ bool Layer::Request(Vertex* req)
 Layer* Layer::Insert(Vertex* data, string position)
 {
     Vertex* curr_layout = get(LAYOUT, ANY);
-    // Get only a rump layout with size relative to the parent and the
-    // list of supported layer types
-    // This already connects all involved layouts and connects to the Theme
-    Vertex* child_layout;
     Vertex* field = curr_layout->get(FIELD, position);
     if(!field)
         return NULL;
 
+
     FactoryMap* layer_factories = dynamic_cast<FactoryMap*>(get(FACTORYMAP, LAYER_FACTORIES));
     Factory* factory = NULL;
 
-
     // Get the Layer and basic Layout type
     Vertex* req = field->Vertex::get(REQUEST)->get();
-    Vertex* repo = get(THEME)->get(THEME, ANY)->get(ANY, LAYOUT);
     if(req->get()->name() == ANY)
     {
         factory = layer_factories->GetFactory(data);
@@ -166,49 +161,19 @@ Layer* Layer::Insert(Vertex* data, string position)
     }
 
 
-    // Get the detailed Layout type
-    // Check if there is a layout or layout request attached to the data
-    Vertex* data_layout = data->Vertex::get(ANY, LAYOUT);
-    if(data_layout)
-    {
-        data_layout = data_layout->get(ANY, req->name());
-        if(data_layout)
-        {
-            data_layout = data_layout->get();
-        }
-    }
-
-    repo = repo->get(factory->get(OUTPUTTYPE)->get()->name());
-
-    // TODO: Vertex::get(Vertex* path)
-    Vertex* tmp_repo;
-    while((req=req->get()) != NULL)
-    {
-        if(data_layout)
-            data_layout = data_layout->get(ANY, req->name());
-        tmp_repo = repo->get(ANY, req->name());
-        if(!tmp_repo)
-            break;
-        repo = tmp_repo;
-    }
-    if(data_layout)
-        repo = data_layout;
-
-    if(repo->is(FACTORY))
-        child_layout = repo->get();
-    else
-        child_layout = repo;
-    child_layout->get(TARGET)->set(data);
+    string layer_type = factory->get(OUTPUTTYPE)->get()->name();
+    Vertex* layout = GetLayout(data, req, layer_type);
+    layout->get(TARGET)->set(data);
 
 
-    if(factory->get(OUTPUTTYPE)->get()->name() == LIST)
+    if(layer_type == LIST)
     {
         // The LIST needs two different SIZEANDPOSITION rects: one for the blit
         // on the parent surface and one to calculate the children
         Vertex* buffer_layout = new Layout("Buffer");
         buffer_layout->get(SIZEANDPOSITION)->Vertex::get(REQUEST)->get(RECT)->get(FULL);
-        buffer_layout->add(child_layout);
-        child_layout = buffer_layout;
+        buffer_layout->add(layout);
+        layout = buffer_layout;
     }
 
     // Create the Layer
@@ -218,7 +183,7 @@ Layer* Layer::Insert(Vertex* data, string position)
         return NULL;
 
     sub_layer->set(get(THEME));
-    sub_layer->SetLayout(child_layout);
+    sub_layer->SetLayout(layout);
     get(CHILDREN)->add(sub_layer);
     sub_layer->SetParent(this);
     sub_layer->set(layer_factories);
@@ -226,7 +191,7 @@ Layer* Layer::Insert(Vertex* data, string position)
 
     // Add to the update tree
     Vertex* parent_layout = field->get(PARENT)->get();
-    parent_layout->get(TOUPDATE)->attach(child_layout);
+    parent_layout->get(TOUPDATE)->attach(layout);
     field = parent_layout;
     // Bridge also any intermediate lists
     while((parent_layout=field->get(PARENT)->get()) != NULL)
@@ -237,6 +202,42 @@ Layer* Layer::Insert(Vertex* data, string position)
     }
 
     return sub_layer;
+}
+
+
+Vertex* Layer::GetLayout(Vertex* data, Vertex* req, string layer_type)
+{
+    // Get the detailed Layout type
+    // Check if there is a layout or layout request attached to the data
+    Vertex* layout_data = data->Vertex::get(ANY, LAYOUT);
+    if(layout_data)
+    {
+        layout_data = layout_data->get(ANY, req->name());
+        if(layout_data)
+        {
+            layout_data = layout_data->get();
+        }
+    }
+
+    Vertex* repo = get(THEME)->get(THEME, ANY)->get(ANY, LAYOUT)->get(layer_type);
+
+    // TODO: Vertex::get(Vertex* path)
+    Vertex* tmp_repo;
+    while((req=req->get()) != NULL)
+    {
+        if(layout_data)
+            layout_data = layout_data->get(ANY, req->name());
+        tmp_repo = repo->get(ANY, req->name());
+        if(!tmp_repo)
+            break;
+        repo = tmp_repo;
+    }
+    if(layout_data)
+        repo = layout_data;
+
+    if(repo->is(FACTORY))
+        return repo->get();
+    return repo;
 }
 
 
