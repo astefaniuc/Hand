@@ -56,4 +56,12 @@ class HandAppLoader : public Factory
         bool IsValidInput(Vertex* input);
  };
 
+
+class BinaryManager : public List
+{
+    public:
+        BinaryManager(std::string name, std::string dir);
+        virtual ~BinaryManager(){};
+};
+
 #endif /* HANDAPPLOADER_H */

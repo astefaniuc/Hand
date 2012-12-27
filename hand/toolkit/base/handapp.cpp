@@ -23,6 +23,7 @@
 #include "base/handapp.h"
 #include "base/handapploader.h"
 #include "base/filesystem.h"
+#include "base/handserver.h"
 
 
 using namespace std;
@@ -129,4 +130,32 @@ bool HandAppLoader::execute(Vertex* input)
     prod->Vertex::add(bin);
     input->Vertex::get(REQUEST)->set(get(OUTPUTTYPE)->get());
     return true;
+}
+
+
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
+
+
+BinaryManager::BinaryManager(string n, string d) : List(n)
+{
+    type(FACTORY);
+    // The path to the theme files
+    Vertex* dir = new File(d);
+    // Add hidden
+    Vertex::get("Directories")->add(dir);
+    // (Re-)read the list of available themes
+    dir->Vertex::get(REQUEST)->get(FILE_);
+    HandServer::GetInstance()->execute(dir);
+    // Load all themes once
+    uint i = 0;
+    Vertex* file;
+    while((file=dir->get(++i)) != NULL)
+    {
+        file->Vertex::get(REQUEST)->get(HANDAPP);
+        HandServer::GetInstance()->execute(file);
+        // Add the theme under its internal name
+        attach(file->Vertex::get(HANDAPP, ANY));
+    }
 }

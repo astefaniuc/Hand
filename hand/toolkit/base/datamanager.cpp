@@ -32,7 +32,7 @@ void DataManager::Init()
     add(new HandAppLoader());
     add(new FileFactory());
     add(new DirectoryLoader());
-    add(new ThemeManager());
+    add(new BinaryManager(THEMES, THEMES_DIRECTORY));
     add(new StateGraph());
     add(new Persistence());
 }

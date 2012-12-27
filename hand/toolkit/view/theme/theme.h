@@ -23,13 +23,12 @@
 #include "SDL/SDL_ttf.h"
 // #include "SDL/SDL_Image.h"
 #include <map>
-#include "base/factory.h"
 #include "base/handapp.h"
 
 
+class Layout;
 class Rgb;
 class Rel_Rect;
-class Layout;
 class VirtualSurface;
 
 class Theme : public HandApp
@@ -56,14 +55,6 @@ class Theme : public HandApp
 
         // Stores once rendered fonts
         std::map<int, TTF_Font*> Fonts;
-};
-
-
-class ThemeManager : public List
-{
-    public:
-        ThemeManager();
-        virtual ~ThemeManager(){};
 };
 
 #endif /* VIEW_THEME_THEME_H */
