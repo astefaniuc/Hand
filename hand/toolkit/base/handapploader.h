@@ -40,8 +40,8 @@ class Binary : public Vertex
         void reset();
     private:
         // Shared library handle
-        void* LoadedLib;
-        creator*   Create;
+        void* Library;
+        creator* Create;
         destroyer* Destroy;
 };
 

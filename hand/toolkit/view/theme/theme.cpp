@@ -18,7 +18,6 @@
  */
 
 #include <iostream>
-#include <dlfcn.h>
 #include "view/theme/theme.h"
 #include "view/datatypes/rgb.h"
 #include "view/datatypes/rect.h"
@@ -33,8 +32,6 @@ using namespace std;
 
 Theme::Theme(string name) : HandApp(name)
 {
-    // This opens the value for the main application TODO: needed?
-    dlopen(NULL, RTLD_LAZY | RTLD_GLOBAL);
     if(TTF_Init() == -1)
     {
         cout << TTF_GetError() << endl;

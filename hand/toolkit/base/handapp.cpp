@@ -37,7 +37,7 @@ HandApp::HandApp(string name) : List(name)
 Binary::Binary() : Vertex(NAME_NOT_INIT)
 {
     type(APPLOADER);
-    LoadedLib = NULL;
+    Library = NULL;
     Create = NULL;
     Destroy = NULL;
 }
@@ -56,11 +56,11 @@ bool Binary::execute(Vertex* input)
     if(!path_obj)
         return false;
 
-    LoadedLib = dlopen(path_obj->GetFullPath().c_str(), RTLD_LAZY | RTLD_GLOBAL);
-    if(LoadedLib)
+    Library = dlopen(path_obj->GetFullPath().c_str(), RTLD_LAZY | RTLD_GLOBAL);
+    if(Library)
     {
-        Create = (creator*) dlsym(LoadedLib, "Create");
-        Destroy = (destroyer*) dlsym(LoadedLib, "Destroy");
+        Create = (creator*) dlsym(Library, "Create");
+        Destroy = (destroyer*) dlsym(Library, "Destroy");
         if(Create && Destroy)
             return true;
     }
@@ -78,14 +78,14 @@ Vertex* Binary::_get()
 
 void Binary::reset()
 {
-    if(LoadedLib)
+    if(Library)
     {
         HandApp* casted = dynamic_cast<HandApp*>(get(ANY, HANDAPP));
         if(Destroy && casted)
             Destroy(casted);
-        dlclose(LoadedLib);
+        dlclose(Library);
     }
-    LoadedLib = NULL;
+    Library = NULL;
     Create = NULL;
     Destroy = NULL;
 }
