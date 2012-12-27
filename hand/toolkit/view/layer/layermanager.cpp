@@ -23,9 +23,6 @@
 #include "view/layer/textlayer.h"
 #include "input/device.h"
 #include "input/inputstate.h"
-#include "base/handserver.h"
-#include "view/theme/theme.h"
-#include "base/filesystem.h"
 #include "view/datatypes/layout.h"
 #include "graph/method.h"
 
@@ -166,8 +163,7 @@ bool LayerManager::LoadTheme(Vertex* f)
     if(!bin)
         return false;
 
-    Theme* theme = dynamic_cast<Theme*>(bin->get());
-
+    Vertex* theme = bin->get();
     if(!theme)
         return false;
 
