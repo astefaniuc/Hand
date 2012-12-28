@@ -35,7 +35,7 @@ Device::Device() : HandApp("settings:Keyboard::0")
 
 Device::~Device()
 {
-    delete StateMachine;
+    delete(StateMachine);
 }
 
 
@@ -44,7 +44,7 @@ bool Device::Init()
     string  key_str;
     Note* data;
 
-    for (uint i=1; i<=numberOfKeys; i++)
+    for(uint i=1; i<=numberOfKeys; i++)
     {
         // Do we have keys to load?
         data = GetKey(i);
@@ -78,7 +78,7 @@ bool Device::execute(Vertex* init_screen)
     Vertex* factory = Vertex::get(FACTORY, THEMES)->get(DEFAULT)->get(LAYOUT)->get(LIST)->get(FRAMEDLIST);
     Vertex* id;
     Vertex* frame;
-    for(int i=0; i < NUMBER_OF_BUTTONS; ++i)
+    for(int i=0; i < numberOfKeys; ++i)
     {
         id = new Note("Keydata", "");
         keys_data_tree->add(id);
