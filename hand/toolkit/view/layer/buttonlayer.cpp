@@ -75,35 +75,3 @@ bool ButtonLayer::ExpandList(Vertex* ignore)
         return true;
     return false;
 }
-
-
-void ButtonLayer::Configure(Vertex* sub_layout)
-{
-/*    SetMap(VisibleItems);
-    // Inherit parent settings
-    GetSubRect(sub_layout->Position, sub_layout->SizeAndPosition);
-    sub_layout->Alignment = Alignment;
-    if(sub_layout->Position & BTN_CONTROL)
-    {
-        sub_layout->Show_Frame = true;
-    }*/
-}
-
-
-// ----------------------------------------------------------------
-// ----------------------------------------------------------------
-// ----------------------------------------------------------------
-
-
-bool ButtonLayerFactory::execute(Vertex* input)
-{
-    return input->Vertex::set(new ButtonLayer(BUTTON));
-}
-
-
-bool ButtonLayerFactory::IsValidInput(Vertex* input)
-{
-    if(input && input->is(METHOD))
-        return true;
-    return false;
-}

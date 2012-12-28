@@ -30,15 +30,4 @@ class TextLayer : public virtual Layer
         ~TextLayer(){};
 };
 
-
-class TextLayerFactory : public Factory
-{
-    public:
-        TextLayerFactory() : Factory("TextLayerFactory", DATA, TEXT){};
-        ~TextLayerFactory(){};
-
-        bool execute(Vertex* input);
-        bool IsValidInput(Vertex* input);
-};
-
 #endif /* VIEW_LAYER_TEXTLAYER_H */

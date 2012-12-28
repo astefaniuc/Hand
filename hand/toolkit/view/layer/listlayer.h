@@ -31,19 +31,6 @@ class ListLayer : public Layer
 
         // Set pointer to a data tree node
         void SetContent(Vertex* focus);
-    protected:
-        virtual void Configure(Vertex* parent_layout);
-};
-
-
-class ListLayerFactory : public Factory
-{
-    public:
-        ListLayerFactory() : Factory("ListLayerFactory", LIST, LIST){};
-        ~ListLayerFactory(){};
-
-        bool execute(Vertex* input);
-        bool IsValidInput(Vertex* input);
 };
 
 #endif /* VIEW_LAYER_LISTLAYER_H */

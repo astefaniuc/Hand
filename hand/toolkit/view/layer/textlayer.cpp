@@ -28,22 +28,3 @@ TextLayer::TextLayer(string name) : Layer(name)
     BufferType = OVERLAY;
     type(TEXT);
 }
-
-
-// ----------------------------------------------------------------
-// ----------------------------------------------------------------
-// ----------------------------------------------------------------
-
-
-bool TextLayerFactory::execute(Vertex* input)
-{
-    return input->Vertex::set(new TextLayer(TEXT));
-}
-
-
-bool TextLayerFactory::IsValidInput(Vertex* input)
-{
-    if(input && input->is(NOTE))
-        return true;
-    return false;
-}

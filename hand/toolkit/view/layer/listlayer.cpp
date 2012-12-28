@@ -59,30 +59,3 @@ void ListLayer::SetContent(Vertex* data)
         // Check if the Layer supports insertion at position
         Insert(child, ELEMENT);
 }
-
-
-void ListLayer::Configure(Vertex* sub_layout)
-{
-    // Inherit parent settings
-/*    GetSubRect(sub_layout->Position, sub_layout->SizeAndPosition);
-    FlipAlignment(sub_layout->Alignment);*/
-}
-
-
-// ----------------------------------------------------------------
-// ----------------------------------------------------------------
-// ----------------------------------------------------------------
-
-
-bool ListLayerFactory::execute(Vertex* input)
-{
-    return input->Vertex::set(new ListLayer(LIST));
-}
-
-
-bool ListLayerFactory::IsValidInput(Vertex* input)
-{
-    if(input && input->is(LIST))
-        return true;
-    return false;
-}

@@ -18,9 +18,9 @@
  */
 
 #include "view/layer/layer.h"
-#include "input/node.h"
 #include "view/datatypes/rect.h"
 #include "view/datatypes/layout.h"
+#include "base/factory.h"
 
 
 using namespace std;
@@ -187,7 +187,6 @@ Layer* Layer::Insert(Vertex* data, string position)
     sub_layer->SetLayout(layout);
     get(CHILDREN)->add(sub_layer);
     sub_layer->SetParent(this);
-    sub_layer->set(layer_factories);
     sub_layer->SetContent(data);
 
     // Add to the update tree

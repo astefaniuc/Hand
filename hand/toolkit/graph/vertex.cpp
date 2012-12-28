@@ -168,8 +168,8 @@ Vertex* Vertex::get(string type, string name)
         for(; curr!=end; curr++)
             if(((*curr)->name()==name) && (*curr)->is(type))
                 return (*curr);
-        if(type == FACTORY)
-            return HandServer::GetInstance()->get(FACTORY, name);
+        if((type==FACTORY) || (type==FACTORYMAP))
+            return HandServer::GetInstance()->get(type, name);
     }
 
     return NULL;

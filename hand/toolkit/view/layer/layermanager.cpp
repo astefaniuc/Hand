@@ -18,9 +18,6 @@
  */
 
 #include "view/layer/layermanager.h"
-#include "view/layer/focuslayer.h"
-#include "view/layer/buttonlayer.h"
-#include "view/layer/textlayer.h"
 #include "input/device.h"
 #include "input/inputstate.h"
 #include "view/datatypes/layout.h"
@@ -52,13 +49,6 @@ LayerManager::~LayerManager()
 
 void LayerManager::Init()
 {
-    // Register default layer types/factories
-    FactoryMap* fm = new FactoryMap(LAYER_FACTORIES);
-    fm->add(new TextLayerFactory());
-    fm->add(new ButtonLayerFactory());
-    fm->add(new ListLayerFactory());
-    Vertex::add(fm);
-
     get(THEME)->add(new Method<LayerManager>(LOADER, this, &LayerManager::LoadTheme));
     // Load the theme
     LoadTheme(Vertex::get(FACTORY, THEMES)->get(DEFAULT));

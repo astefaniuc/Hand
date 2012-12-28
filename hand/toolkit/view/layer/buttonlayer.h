@@ -29,25 +29,12 @@ class ButtonLayer : public Layer
         ButtonLayer(std::string name);
         ~ButtonLayer(void){};
         void SetContent(Vertex*);
-    protected:
-        virtual void Configure(Vertex* parent_layout);
 
     private:
         void SetExpandable(void);
         bool ExpandList(Vertex* ignore);
 
         Vertex* FunctionBox;
-};
-
-
-class ButtonLayerFactory : public Factory
-{
-    public:
-        ButtonLayerFactory() : Factory("ButtonLayerFactory", METHOD, BUTTON){};
-        ~ButtonLayerFactory(){};
-
-        bool execute(Vertex* input);
-        bool IsValidInput(Vertex* input);
 };
 
 #endif /* VIEW_LAYER_BUTTONLAYER_H */

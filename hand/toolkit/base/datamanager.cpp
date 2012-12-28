@@ -22,6 +22,7 @@
 #include "base/handapploader.h"
 #include "view/theme/theme.h"
 #include "input/statetree.h"
+#include "view/layer/factories.h"
 
 
 using namespace std;
@@ -35,6 +36,13 @@ void DataManager::Init()
     add(new BinaryManager(THEMES, THEMES_DIRECTORY));
     add(new StateGraph());
     add(new Persistence());
+
+    // Register default layer types/factories
+    FactoryMap* layers = new FactoryMap(LAYER_FACTORIES);
+    layers->add(new TextLayerFactory());
+    layers->add(new ButtonLayerFactory());
+    layers->add(new ListLayerFactory());
+    add(layers);
 }
 
 

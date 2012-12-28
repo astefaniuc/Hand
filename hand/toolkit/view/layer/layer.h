@@ -22,7 +22,6 @@
 #define VIEW_LAYER_LAYER_H
 
 #include "view/layer/virtualsurface.h"
-#include "base/factory.h"
 
 
 class Layer : public VirtualSurface
