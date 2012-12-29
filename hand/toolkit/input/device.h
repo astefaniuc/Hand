@@ -20,7 +20,6 @@
 #ifndef INPUT_DEVICE_H
 #define INPUT_DEVICE_H
 
-#include <SDL/SDL.h>
 #include <vector>
 #include "base/handapp.h"
 #include "graph/data.h"
@@ -30,8 +29,6 @@ class InputState;
 
 class Device : public virtual HandApp
 {
-    typedef std::vector<SDLKey> keygroup;
-
     public:
                Device();
               ~Device();
@@ -39,8 +36,8 @@ class Device : public virtual HandApp
         bool   Init();
         bool   execute(Vertex* init_screen);
         // Functions accessing the layer object (not possible from here)
-        bool   Press(SDLKey);
-        bool   Release(SDLKey);
+        bool   Press(int key_id);
+        bool   Release(int key_id);
         bool   IsUnused();
         uint   GetNumberOfKeys();
         // Return the input state machine
@@ -48,17 +45,17 @@ class Device : public virtual HandApp
     protected:
         // Returns the Key symbol at specified position
         Note*  GetKey(uint index);
-        void   AddKey(SDLKey);
+        void   AddKey(int key_id);
         void   DeleteKey(uint index);
         // Returns the key number
-        int    GetKeyIndex(SDLKey);
+        int    GetKeyIndex(int key_id);
 
         // Members:
         InputState* StateMachine;
         // Number of controls
         uint numberOfKeys;
-        keygroup Keys;
-        keygroup::iterator currentKey;
+        std::vector<int> Keys;
+        std::vector<int>::iterator currentKey;
 };
 
 #endif /* INPUT_DEVICE_H */

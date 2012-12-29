@@ -17,6 +17,7 @@
  *  License along with Hand. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <SDL/SDL.h>
 #include "input/device.h"
 #include "input/inputstate.h"
 #include "graph/method.h"
@@ -54,7 +55,7 @@ bool Device::Init()
         if(key_str == "")
             return false;
         // Translate list entries to device keys
-        Keys.push_back((SDLKey)atoi(key_str.c_str()));
+        Keys.push_back(atoi(key_str.c_str()));
     }
     return true;
 }
@@ -78,7 +79,7 @@ bool Device::execute(Vertex* init_screen)
     Vertex* factory = Vertex::get(FACTORY, THEMES)->get(DEFAULT)->get(LAYOUT)->get(LIST)->get(FRAMEDLIST);
     Vertex* id;
     Vertex* frame;
-    for(int i=0; i < numberOfKeys; ++i)
+    for(uint i=0; i < numberOfKeys; ++i)
     {
         id = new Note("Keydata", "");
         keys_data_tree->add(id);
@@ -92,7 +93,7 @@ bool Device::execute(Vertex* init_screen)
 }
 
 
-bool Device::Press(SDLKey k)
+bool Device::Press(int k)
 {
     if(Keys.size() < numberOfKeys)
         // Device is during initialization
@@ -107,7 +108,7 @@ bool Device::Press(SDLKey k)
 }
 
 
-bool Device::Release(SDLKey k)
+bool Device::Release(int k)
 {
     int index = GetKeyIndex(k);
     if(index == -1)
@@ -126,7 +127,7 @@ bool Device::Release(SDLKey k)
 }
 
 
-int Device::GetKeyIndex(SDLKey k)
+int Device::GetKeyIndex(int k)
 {
     int i = 1;
     for(currentKey=Keys.begin(); currentKey!=Keys.end(); currentKey++, i++)
@@ -151,14 +152,14 @@ bool Device::IsUnused()
 }
 
 
-void Device::AddKey(SDLKey k)
+void Device::AddKey(int k)
 {
     Keys.push_back(k);
     // Display the key on the initialization screen
     int index = GetKeyIndex(k);
     currentKey = Keys.begin() + index - 1;
 
-    GetKey(index)->set(SDL_GetKeyName((*currentKey)));
+    GetKey(index)->set(SDL_GetKeyName((SDLKey)(*currentKey)));
 }
 
 
