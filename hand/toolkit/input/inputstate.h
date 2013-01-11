@@ -43,7 +43,7 @@ class InputState
         // Resets "pressed" and "released" information
         void reset();
         StateNode* GetKey(key_pointer);
-        Vertex* GetPeers(uint level);
+        Vertex* GetCommands(uint level);
         // Maps a command node to the given list
         bool GetCommand(Vertex* method, uint level);
 

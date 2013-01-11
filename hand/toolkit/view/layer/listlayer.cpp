@@ -18,6 +18,7 @@
  */
 
 #include "view/layer/listlayer.h"
+#include "graph/method.h"
 #include "graph/data.h"
 
 
@@ -26,8 +27,9 @@ using namespace std;
 
 ListLayer::ListLayer(string name) : Layer(name)
 {
-    BufferType = COLLECTOR;
     type(LIST);
+    BufferType = COLLECTOR;
+    add(new Method<ListLayer>(EXECUTE, this, &ListLayer::execute));
 }
 
 
@@ -58,4 +60,24 @@ void ListLayer::SetContent(Vertex* data)
         // Create the sub-objects
         // Check if the Layer supports insertion at position
         Insert(child, ELEMENT);
+}
+
+
+void ListLayer::SetCommand(Vertex* cmd)
+{
+    Vertex* children = get(LINK, CHILDREN);
+    if(!children)
+        return;
+
+    Layer* child;
+    uint i = 0;
+    while((child=dynamic_cast<Layer*>(children->get(++i))) != NULL)
+        child->Layer::SetCommand(cmd->get(i));
+}
+
+
+bool ListLayer::execute(Vertex* param)
+{
+    SetCommand(Vertex::get(LAYERMANAGER)->get()->get(ANY, COMMANDS));
+    return true;
 }

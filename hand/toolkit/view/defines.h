@@ -35,6 +35,7 @@
 #define DIM_FONT_PREFERRED "DIM_FONT_PREFERRED"
 #define DRAWER           "Drawer"
 #define ELEMENT          "Element"
+#define EXECUTE          "execute"
 #define FIELD            "Field"
 #define FOCUS            "Focus"
 #define FONT             "Font"

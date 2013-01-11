@@ -91,6 +91,16 @@ void Layer::Collapse()
 }
 
 
+void Layer::SetCommand(Vertex* cmd)
+{
+    Vertex* target = get(METHOD, EXECUTE);
+    if(!target)
+        return;
+    if(cmd->Vertex::get(METHOD)->set(target))
+        target->get(COMMAND)->set(cmd);
+}
+
+
 // --- Getter and setter for external objects ---
 void Layer::SetParentLayer(Layer* l)
 {
@@ -183,6 +193,7 @@ Layer* Layer::Insert(Vertex* data, string position)
     if(!sub_layer)
         return NULL;
 
+    sub_layer->Vertex::get(LAYERMANAGER)->set(Vertex::get(LAYERMANAGER)->get());
     sub_layer->set(get(THEME));
     sub_layer->SetLayout(layout);
     get(CHILDREN)->add(sub_layer);

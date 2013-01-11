@@ -24,7 +24,7 @@
 #define CHILD             "Child"
 #define COMMAND           "Command"
 #define KEYLIST           "Keylist"
-#define PEERS             "Peers"
+#define COMMANDS          "Commands"
 #define STATEGRAPH        "StateGraph"
 #define STATENODE         "StateNode"
 

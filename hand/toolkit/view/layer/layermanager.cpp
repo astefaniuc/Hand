@@ -194,9 +194,10 @@ bool LayerManager::GetAllThemes(Vertex* themes_list)
 bool LayerManager::Expand(Vertex* to_expand)
 {
     MasterView = Insert(to_expand, ELEMENT);
-    if(MasterView)
-        return true;
-    return false;
+    if(!MasterView)
+        return false;
+    MasterView->SetCommand(get(COMMANDS));
+    return true;
 }
 
 

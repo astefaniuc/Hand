@@ -30,7 +30,7 @@ InputState::InputState(Vertex* dev)
     LM = dynamic_cast<LayerManager*>(dev->Vertex::get(LAYERMANAGER)->get());
     dev->get(FACTORY, STATEGRAPH)->execute(dev);
     NullKey = PressedKey = ReleasedKey = dynamic_cast<StateNode*>(dev->Vertex::get(STATENODE, ANY));
-
+    LM->set(GetCommands(1));
 }
 
 
@@ -102,7 +102,7 @@ bool InputState::GetCommand(Vertex* target, uint level)
         return false;
 
     // Get the list of available commands
-    Vertex* free_cmds = GetPeers(level);
+    Vertex* free_cmds = GetCommands(level);
     Vertex* f_cmd;
     uint i = 0;
     while((f_cmd=free_cmds->get(++i)) != NULL)
@@ -120,7 +120,7 @@ bool InputState::GetCommand(Vertex* target, uint level)
 }
 
 
-Vertex* InputState::GetPeers(uint level)
+Vertex* InputState::GetCommands(uint level)
 {
     if(level > NullKey->size())
         return NULL;
@@ -130,5 +130,5 @@ Vertex* InputState::GetPeers(uint level)
     for(uint i=1; i<=level; i++)
         tmp_node = tmp_node->GetChild(i);
 
-    return tmp_node->Vertex::get(PEERS);
+    return tmp_node->Vertex::get(COMMANDS);
 }

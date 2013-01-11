@@ -36,9 +36,11 @@ class Layer : public VirtualSurface
         void         SetParentLayer(Layer* parent);
         Layer*       GetParentLayer();
         // Set pointer to a data tree node
-        virtual void SetContent(Vertex*);
+        virtual void SetContent(Vertex* content);
         Vertex*      GetContent();
         void         Collapse();
+
+        virtual void SetCommand(Vertex* cmd);
 
         // Reacting on user input
         virtual bool Request(Vertex* request);

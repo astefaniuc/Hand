@@ -37,7 +37,7 @@ class StateGraph : public Vertex
         void AddNodes(uint level, uint key_nr);
         void ConnectNodes(Vertex* parent, Vertex* child, uint pos);
         Vertex* GetParentNode(uint level, uint pos);
-        Vertex* GetPeers(uint level);
+        Vertex* GetCommands(uint level);
         StateNode* Root;
 };
 
