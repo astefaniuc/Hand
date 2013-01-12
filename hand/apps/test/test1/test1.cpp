@@ -19,7 +19,13 @@ void App::Init()
 
     // The one and only view
     Output = new Note("Output field name", "<< Empty >>");
-    add(Output);
+
+    // HACK bug fix: use an intermediate list with frames list layout for clearing
+    // the content before drawing new text
+    Vertex* frame = get("Output");
+    frame->Vertex::get(LAYOUT)->get(LIST)->set(
+            Vertex::get(FACTORY, THEMES)->get(DEFAULT)->get(LAYOUT)->get(LIST)->get(FRAMEDLIST)->get());
+    frame->add(Output);
     // Add controls
     Vertex* folder = get("Level 1");
 
@@ -34,7 +40,7 @@ void App::Init()
 
     // Create sub-menu folder
     folder = folder->get("Level 2");
-    folder->add(new Note(DESCRIPTION, "l1b3: calls sub-menu"));
+    folder->Vertex::add(new Note(DESCRIPTION, "l1b3: calls sub-menu"));
     // Set the dummy callback methods
     button = new Method<App>("button 1", this, &App::PrintSelf);
     button->add(new Note(DESCRIPTION, "l2b1: Func C bug"));
