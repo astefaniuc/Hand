@@ -52,13 +52,17 @@ class Layer : public VirtualSurface
         virtual void Draw(bool forced);
 
     protected:
-        virtual bool Exit();
         // Insert "data" as layer of type layer_type at "position"
         virtual Layer* Insert(Vertex* data, std::string position);
-        virtual void DrawChilds(bool forced);
-        Vertex* GetLayout(Vertex* data, Vertex* request, std::string layer_type);
+        Vertex* GetLayerFactory(Vertex* data, std::string position);
+        virtual Vertex* GetLayout(Vertex* data, Vertex* layer_factory);
+        bool AddToUpdate(Vertex* layout, std::string position);
 
-        Layer*         ParentLayer;
+        virtual void DrawChilds(bool forced);
+
+        virtual bool Exit();
+
+        Layer* ParentLayer;
 
 //        bool Updated;
     public:

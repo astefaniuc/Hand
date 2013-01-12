@@ -134,6 +134,36 @@ Layer* Layer::Insert(Vertex* data, string position)
     if(!data)
         return NULL;
 
+    Vertex* factory = GetLayerFactory(data, position);
+    if(!factory)
+        return NULL;
+
+    Vertex* layout = GetLayout(data, factory);
+
+    // Create the Layer
+    factory->execute(data);
+    Layer* sub_layer = dynamic_cast<Layer*>(data->Vertex::get(LAYER, ANY));
+    if(!sub_layer)
+        return NULL;
+
+    sub_layer->Vertex::get(LAYERMANAGER)->set(Vertex::get(LAYERMANAGER)->get());
+    sub_layer->set(get(THEME));
+    sub_layer->SetLayout(layout);
+    get(CHILDREN)->add(sub_layer);
+    sub_layer->SetParent(this);
+    sub_layer->SetContent(data);
+
+    AddToUpdate(layout, position);
+
+    return sub_layer;
+}
+
+
+Vertex* Layer::GetLayerFactory(Vertex* data, string position)
+{
+    if(!data)
+        return NULL;
+
     Vertex* curr_layout = get(LAYOUT, ANY);
     Vertex* field = curr_layout->get(FIELD, position);
     if(!field)
@@ -170,18 +200,47 @@ Layer* Layer::Insert(Vertex* data, string position)
     }
 
     if(!factory)
+        factory = layer_factories->GetFactory(req->get()->name());
+
+    return factory;
+}
+
+
+Vertex* Layer::GetLayout(Vertex* data, Vertex* layer_factory)
+{
+    // Get the detailed Layout type
+    // Check if there is a layout or layout request attached to the data
+    Vertex* layout_data = data->Vertex::get(ANY, LAYOUT);
+    string layer_type = layer_factory->get(OUTPUTTYPE)->get()->name();
+    Vertex* req = get(layer_type);
+    if(layout_data)
     {
-        req = req->get();
-        factory = layer_factories->GetFactory(req->name());
-        if(!factory)
-            return NULL;
+        layout_data = layout_data->get(ANY, req->name());
+        if(layout_data)
+        {
+            layout_data = layout_data->get();
+        }
     }
 
+    Vertex* layout = get(THEME)->get(THEME, ANY)->get(ANY, LAYOUT)->get(layer_type);
 
-    string layer_type = factory->get(OUTPUTTYPE)->get()->name();
-    Vertex* layout = GetLayout(data, req, layer_type);
+    // TODO: Vertex::get(Vertex* path)
+    Vertex* tmp_repo;
+    while((req=req->get()) != NULL)
+    {
+        if(layout_data)
+            layout_data = layout_data->get(ANY, req->name());
+        tmp_repo = layout->get(ANY, req->name());
+        if(!tmp_repo)
+            break;
+        layout = tmp_repo;
+    }
+    if(layout_data)
+        layout = layout_data;
+
+    if(layout->is(FACTORY))
+        layout = layout->get();
     layout->get(TARGET)->set(data);
-
 
     if(layer_type == LIST)
     {
@@ -193,19 +252,16 @@ Layer* Layer::Insert(Vertex* data, string position)
         layout = buffer_layout;
     }
 
-    // Create the Layer
-    factory->execute(data);
-    Layer* sub_layer = dynamic_cast<Layer*>(data->Vertex::get(LAYER, ANY));
-    if(!sub_layer)
-        return NULL;
+    return layout;
+}
 
-    sub_layer->Vertex::get(LAYERMANAGER)->set(Vertex::get(LAYERMANAGER)->get());
-    sub_layer->set(get(THEME));
-    sub_layer->SetLayout(layout);
-    get(CHILDREN)->add(sub_layer);
-    sub_layer->SetParent(this);
-    sub_layer->SetContent(data);
 
+bool Layer::AddToUpdate(Vertex* layout, std::string position)
+{
+    Vertex* curr_layout = get(LAYOUT, ANY);
+    Vertex* field = curr_layout->get(FIELD, position);
+    if(!field)
+        return false;
     // Add to the update tree
     Vertex* parent_layout = field->get(PARENT)->get();
     parent_layout->get(TOUPDATE)->attach(layout);
@@ -217,44 +273,7 @@ Layer* Layer::Insert(Vertex* data, string position)
             break;
         field = parent_layout;
     }
-
-    return sub_layer;
-}
-
-
-Vertex* Layer::GetLayout(Vertex* data, Vertex* req, string layer_type)
-{
-    // Get the detailed Layout type
-    // Check if there is a layout or layout request attached to the data
-    Vertex* layout_data = data->Vertex::get(ANY, LAYOUT);
-    if(layout_data)
-    {
-        layout_data = layout_data->get(ANY, req->name());
-        if(layout_data)
-        {
-            layout_data = layout_data->get();
-        }
-    }
-
-    Vertex* repo = get(THEME)->get(THEME, ANY)->get(ANY, LAYOUT)->get(layer_type);
-
-    // TODO: Vertex::get(Vertex* path)
-    Vertex* tmp_repo;
-    while((req=req->get()) != NULL)
-    {
-        if(layout_data)
-            layout_data = layout_data->get(ANY, req->name());
-        tmp_repo = repo->get(ANY, req->name());
-        if(!tmp_repo)
-            break;
-        repo = tmp_repo;
-    }
-    if(layout_data)
-        repo = layout_data;
-
-    if(repo->is(FACTORY))
-        return repo->get();
-    return repo;
+    return true;
 }
 
 
