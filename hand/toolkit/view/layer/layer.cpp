@@ -91,13 +91,16 @@ void Layer::Collapse()
 }
 
 
-void Layer::SetCommand(Vertex* cmd)
+bool Layer::SetCommand(Vertex* cmd)
 {
-    Vertex* target = get(METHOD, EXECUTE);
+    if(!cmd)
+        return false;
+    Vertex* target = get(EXECUTE)->get();
     if(!target)
-        return;
+        return false;
     if(cmd->Vertex::get(METHOD)->set(target))
         target->get(COMMAND)->set(cmd);
+    return true;
 }
 
 
@@ -128,6 +131,9 @@ bool Layer::Request(Vertex* req)
 
 Layer* Layer::Insert(Vertex* data, string position)
 {
+    if(!data)
+        return NULL;
+
     Vertex* curr_layout = get(LAYOUT, ANY);
     Vertex* field = curr_layout->get(FIELD, position);
     if(!field)

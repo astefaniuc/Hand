@@ -40,7 +40,7 @@ class Layer : public VirtualSurface
         Vertex*      GetContent();
         void         Collapse();
 
-        virtual void SetCommand(Vertex* cmd);
+        virtual bool SetCommand(Vertex* cmd);
 
         // Reacting on user input
         virtual bool Request(Vertex* request);

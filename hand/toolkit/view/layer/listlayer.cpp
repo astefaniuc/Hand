@@ -29,7 +29,7 @@ ListLayer::ListLayer(string name) : Layer(name)
 {
     type(LIST);
     BufferType = COLLECTOR;
-    add(new Method<ListLayer>(EXECUTE, this, &ListLayer::execute));
+    get(EXECUTE)->add(new Method<ListLayer>("SetCommand", this, &ListLayer::execute));
 }
 
 
@@ -63,16 +63,17 @@ void ListLayer::SetContent(Vertex* data)
 }
 
 
-void ListLayer::SetCommand(Vertex* cmd)
+bool ListLayer::SetCommand(Vertex* cmd)
 {
     Vertex* children = get(LINK, CHILDREN);
     if(!children)
-        return;
+        return false;
 
     Layer* child;
     uint i = 0;
     while((child=dynamic_cast<Layer*>(children->get(++i))) != NULL)
         child->Layer::SetCommand(cmd->get(i));
+    return true;
 }
 
 

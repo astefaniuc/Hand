@@ -36,6 +36,7 @@ ButtonLayer::ButtonLayer(string name) : Layer(name)
 void ButtonLayer::SetContent(Vertex* data)
 {
     Layer::SetContent(data);
+    get(EXECUTE)->set(data);
 
     // Create the sub-elements of the button
     // The preview
@@ -46,20 +47,9 @@ void ButtonLayer::SetContent(Vertex* data)
         Insert(data, PREVIEW);
     }*/
 
-    // The button name
-    Vertex* tmp = new Note(NAME, data->name());
-    if(!Insert(tmp, NAME))
-        delete(tmp);
-
-    // The button description
-    tmp = data->Vertex::get(NOTE, DESCRIPTION);
-    if(tmp)
-        Insert(tmp, DESCRIPTION);
-
-    // The icon
-    tmp = data->Vertex::get(ANY, ICON);
-    if(tmp)
-        Insert(tmp, ICON);
+    Insert(data, NAME);
+    Insert(data->Vertex::get(NOTE, DESCRIPTION), DESCRIPTION);
+    Insert(data->Vertex::get(ANY, ICON), ICON);
 }
 
 

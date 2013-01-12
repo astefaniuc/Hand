@@ -44,8 +44,8 @@ void App::Init()
     button->add(new Note(DESCRIPTION, "l2b2: prints this to Output"));
     folder->add(button);
 
-    button = new Method<App>("button 3", this, &App::PrintSelf);
-    button->add(new Note(DESCRIPTION, "l2b3: prints this to Output"));
+    button = new Method<App>("button 3", this, &App::ChangeButtonName);
+    button->add(new Note(DESCRIPTION, "l2b3: Changes own button name"));
     folder->add(button);
 
     button = new Method<App>("button 4", this, &App::PrintSelf);
@@ -58,8 +58,14 @@ void App::Init()
 }
 
 
-bool App::PrintSelf(Vertex* self)
+bool App::PrintSelf(Vertex* method)
 {
-    Output->set(((Note*)(self->get(DESCRIPTION)))->get());
+    Output->set(((Note*)(method->get(DESCRIPTION)))->get());
+    return true;
+}
+
+bool App::ChangeButtonName(Vertex* method)
+{
+    method->name("Executed");
     return true;
 }
