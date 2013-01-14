@@ -210,10 +210,9 @@ Vertex* Layer::GetSubLayout(Vertex* data, Vertex* layer)
     // Check if there is a layout or layout request attached to the data
     Vertex* layout_data = data->Vertex::get(ANY, LAYOUT);
     string layer_type = layer->type();
-    Vertex* req = get(layer_type);
     if(layout_data)
     {
-        layout_data = layout_data->get(ANY, req->name());
+        layout_data = layout_data->get(ANY, layer_type);
         if(layout_data)
         {
             layout_data = layout_data->get();
@@ -224,6 +223,7 @@ Vertex* Layer::GetSubLayout(Vertex* data, Vertex* layer)
 
     // TODO: Vertex::get(Vertex* path)
     Vertex* tmp_repo;
+    Vertex* req = get(layer_type);
     while((req=req->get()) != NULL)
     {
         if(layout_data)
@@ -256,10 +256,10 @@ Vertex* Layer::GetSubLayout(Vertex* data, Vertex* layer)
 
 bool Layer::AddToUpdate(Vertex* layout, std::string position)
 {
-    Vertex* curr_layout = get(LAYOUT, ANY);
-    Vertex* field = curr_layout->get(FIELD, position);
+    Vertex* field = get(LAYOUT, ANY)->get(FIELD, position);
     if(!field)
         return false;
+
     // Add to the update tree
     Vertex* parent_layout = field->get(PARENT)->get();
     parent_layout->get(TOUPDATE)->attach(layout);
