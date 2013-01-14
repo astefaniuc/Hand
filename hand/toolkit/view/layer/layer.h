@@ -54,9 +54,9 @@ class Layer : public VirtualSurface
     protected:
         // Insert "data" as layer of type layer_type at "position"
         virtual Layer* Insert(Vertex* data, std::string position);
+        void Insert(Vertex* data);
         Layer* GetLayer(Vertex* data, std::string position);
-        virtual Vertex* GetSubLayout(Vertex* data, Vertex* layer_factory);
-        bool AddToUpdate(Vertex* layout, std::string position);
+        virtual Vertex* GetLayout(Vertex* data);
 
         virtual void DrawChilds(bool forced);
 

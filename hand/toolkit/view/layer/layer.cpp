@@ -138,18 +138,20 @@ Layer* Layer::Insert(Vertex* data, string position)
     if(!sub_layer)
         return NULL;
 
-    Vertex* layout = GetSubLayout(data, sub_layer);
-
-    sub_layer->Vertex::get(LAYERMANAGER)->set(Vertex::get(LAYERMANAGER)->get());
-    sub_layer->set(get(THEME));
-    sub_layer->SetLayout(layout);
     get(CHILDREN)->add(sub_layer);
     sub_layer->SetParent(this);
-    sub_layer->SetContent(data);
 
-    AddToUpdate(layout, position);
+    sub_layer->Insert(data);
 
     return sub_layer;
+}
+
+
+void Layer::Insert(Vertex* data)
+{
+    SetLayout(GetLayout(data));
+
+    SetContent(data);
 }
 
 
@@ -200,16 +202,19 @@ Layer* Layer::GetLayer(Vertex* data, string position)
 
     // Create the Layer
     factory->execute(data);
-    return dynamic_cast<Layer*>(data->Vertex::get(LAYER, ANY));
+    Vertex* layer = data->Vertex::get(LAYER, ANY);
+    // The position is needed further for layout handling
+    layer->name(position);
+    return dynamic_cast<Layer*>(layer);
 }
 
 
-Vertex* Layer::GetSubLayout(Vertex* data, Vertex* layer)
+Vertex* Layer::GetLayout(Vertex* data)
 {
     // Get the detailed Layout type
     // Check if there is a layout or layout request attached to the data
     Vertex* layout_data = data->Vertex::get(ANY, LAYOUT);
-    string layer_type = layer->type();
+    string layer_type = type();
     if(layout_data)
     {
         layout_data = layout_data->get(ANY, layer_type);
@@ -219,11 +224,11 @@ Vertex* Layer::GetSubLayout(Vertex* data, Vertex* layer)
         }
     }
 
-    Vertex* layout = get(THEME)->get(THEME, ANY)->get(ANY, LAYOUT)->get(layer_type);
+    Vertex* layout = Parent->get(THEME)->get(THEME, ANY)->get(ANY, LAYOUT)->get(layer_type);
 
     // TODO: Vertex::get(Vertex* path)
     Vertex* tmp_repo;
-    Vertex* req = get(layer_type);
+    Vertex* req = Parent->get(LAYOUT, ANY)->get(FIELD, name())->Vertex::get(REQUEST)->get(layer_type);
     while((req=req->get()) != NULL)
     {
         if(layout_data)
@@ -240,46 +245,27 @@ Vertex* Layer::GetSubLayout(Vertex* data, Vertex* layer)
         layout = layout->get();
     layout->get(TARGET)->set(data);
 
-    if(layer_type == LIST)
-    {
-        // The LIST needs two different SIZEANDPOSITION rects: one for the blit
-        // on the parent surface and one to calculate the children
-        Vertex* buffer_layout = new Layout("Buffer");
-        buffer_layout->get(SIZEANDPOSITION)->Vertex::get(REQUEST)->get(RECT)->get(FULL);
-        buffer_layout->add(layout);
-        layout = buffer_layout;
-    }
-
     return layout;
-}
-
-
-bool Layer::AddToUpdate(Vertex* layout, std::string position)
-{
-    Vertex* field = get(LAYOUT, ANY)->get(FIELD, position);
-    if(!field)
-        return false;
-
-    // Add to the update tree
-    Vertex* parent_layout = field->get(PARENT)->get();
-    parent_layout->get(TOUPDATE)->attach(layout);
-    field = parent_layout;
-    // Bridge also any intermediate lists
-    while((parent_layout=field->get(PARENT)->get()) != NULL)
-    {
-        if(!parent_layout->get(TOUPDATE)->attach(field))
-            break;
-        field = parent_layout;
-    }
-    return true;
 }
 
 
 void Layer::SetLayout(Vertex* layout)
 {
-    set(layout);
     add(layout);
     get(THEME)->get(THEME, ANY)->execute(layout);
+
+    // Add to the update tree
+    Vertex* parent_layout = Parent->get(LAYOUT, ANY)->get(FIELD, name())->get(PARENT)->get();
+    parent_layout->get(TOUPDATE)->attach(layout);
+
+    // Bridge also any intermediate lists
+    layout = parent_layout;
+    while((parent_layout=layout->get(PARENT)->get()) != NULL)
+    {
+        if(!parent_layout->get(TOUPDATE)->attach(layout))
+            break;
+        layout = parent_layout;
+    }
 }
 
 

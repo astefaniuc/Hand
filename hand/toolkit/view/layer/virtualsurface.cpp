@@ -236,4 +236,6 @@ void VirtualSurface::SetBuffer(SDL_Surface* buffer)
 void VirtualSurface::SetParent(VirtualSurface* parent)
 {
     Parent = parent;
+    set(parent->get(LAYERMANAGER));
+    set(parent->get(THEME));
 }

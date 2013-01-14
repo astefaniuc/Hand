@@ -20,6 +20,7 @@
 #include "view/layer/listlayer.h"
 #include "graph/method.h"
 #include "graph/data.h"
+#include "view/datatypes/layout.h"
 
 
 using namespace std;
@@ -79,4 +80,16 @@ bool ListLayer::execute(Vertex* param)
 {
     SetCommand(Vertex::get(LAYERMANAGER)->get()->get(ANY, COMMANDS));
     return true;
+}
+
+
+Vertex* ListLayer::GetLayout(Vertex* data)
+{
+    // The LIST needs two different SIZEANDPOSITION rects: one for the blit
+    // on the parent surface and one to calculate the children
+    Vertex* layout = new Layout("Buffer");
+    layout->get(SIZEANDPOSITION)->Vertex::get(REQUEST)->get(RECT)->get(FULL);
+    layout->add(Layer::GetLayout(data));
+
+    return layout;
 }

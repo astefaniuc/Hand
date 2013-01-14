@@ -34,6 +34,8 @@ class ListLayer : public Layer
         bool SetCommand(Vertex* cmd);
         // Requests the input focus
         bool execute(Vertex* param);
+    protected:
+        virtual Vertex* GetLayout(Vertex* data);
 };
 
 #endif /* VIEW_LAYER_LISTLAYER_H */
