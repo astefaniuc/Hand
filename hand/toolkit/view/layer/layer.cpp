@@ -134,17 +134,11 @@ Layer* Layer::Insert(Vertex* data, string position)
     if(!data)
         return NULL;
 
-    Vertex* factory = GetLayerFactory(data, position);
-    if(!factory)
-        return NULL;
-
-    Vertex* layout = GetLayout(data, factory);
-
-    // Create the Layer
-    factory->execute(data);
-    Layer* sub_layer = dynamic_cast<Layer*>(data->Vertex::get(LAYER, ANY));
+    Layer* sub_layer = GetLayer(data, position);
     if(!sub_layer)
         return NULL;
+
+    Vertex* layout = GetSubLayout(data, sub_layer);
 
     sub_layer->Vertex::get(LAYERMANAGER)->set(Vertex::get(LAYERMANAGER)->get());
     sub_layer->set(get(THEME));
@@ -159,22 +153,20 @@ Layer* Layer::Insert(Vertex* data, string position)
 }
 
 
-Vertex* Layer::GetLayerFactory(Vertex* data, string position)
+Layer* Layer::GetLayer(Vertex* data, string position)
 {
     if(!data)
         return NULL;
 
-    Vertex* curr_layout = get(LAYOUT, ANY);
-    Vertex* field = curr_layout->get(FIELD, position);
+    Vertex* field = get(LAYOUT, ANY)->get(FIELD, position);
     if(!field)
         return NULL;
-
+    Vertex* req = field->Vertex::get(REQUEST)->get();
 
     FactoryMap* layer_factories = dynamic_cast<FactoryMap*>(get(FACTORYMAP, LAYER_FACTORIES));
     Factory* factory = NULL;
 
     // Get the Layer and basic Layout type
-    Vertex* req = field->Vertex::get(REQUEST)->get();
     if(req->get()->name() == ANY)
     {
         factory = layer_factories->GetFactory(data);
@@ -200,18 +192,24 @@ Vertex* Layer::GetLayerFactory(Vertex* data, string position)
     }
 
     if(!factory)
+    {
         factory = layer_factories->GetFactory(req->get()->name());
+        if(!factory)
+            return NULL;
+    }
 
-    return factory;
+    // Create the Layer
+    factory->execute(data);
+    return dynamic_cast<Layer*>(data->Vertex::get(LAYER, ANY));
 }
 
 
-Vertex* Layer::GetLayout(Vertex* data, Vertex* layer_factory)
+Vertex* Layer::GetSubLayout(Vertex* data, Vertex* layer)
 {
     // Get the detailed Layout type
     // Check if there is a layout or layout request attached to the data
     Vertex* layout_data = data->Vertex::get(ANY, LAYOUT);
-    string layer_type = layer_factory->get(OUTPUTTYPE)->get()->name();
+    string layer_type = layer->type();
     Vertex* req = get(layer_type);
     if(layout_data)
     {

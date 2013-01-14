@@ -246,7 +246,7 @@ string Vertex::type()
 {
     // TODO: needs context sensitive type
     if(Type)
-        return Type->Body->back()->name();
+        return Type->Body->front()->name();
 
     return VERTEX;
 }

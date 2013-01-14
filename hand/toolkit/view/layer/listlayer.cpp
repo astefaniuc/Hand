@@ -55,10 +55,8 @@ void ListLayer::SetContent(Vertex* data)
 
     Vertex* child;
     uint i = 0;
-    // Now create layout
     while((child=data->get(++i)) != NULL)
         // Create the sub-objects
-        // Check if the Layer supports insertion at position
         Insert(child, ELEMENT);
 }
 
