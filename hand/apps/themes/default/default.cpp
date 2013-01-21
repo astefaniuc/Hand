@@ -63,8 +63,10 @@ Default::Default() : Theme(DEFAULT)
     folder = get(RECT);
     folder->set(new RectFactory(FRAME,            .01, .03, .98, .94));
     folder->set(new RectFactory(FULL,               0,   0,   1,   1));
-    folder->set(new RectFactory(HORIZONTAL,         1,   0,   1,   0));
     folder->set(new RectFactory(SCALED,           .05, .05,  .9,  .9));
+
+    folder = get(ALIGNMENT);
+    folder->set(new RectFactory(HORIZONTAL,         1,   0,   1,   0));
     folder->set(new RectFactory(SCALEDHORIZONTAL,   1,   0,  .5,   0));
     folder->set(new RectFactory(VERTICAL,           0,   1,   0,   1));
     // Colors
@@ -83,14 +85,14 @@ Default::Default() : Theme(DEFAULT)
 bool Default::GetViewLayout(Vertex* layout)
 {
     layout->get(SIZEANDPOSITION)->Vertex::get(REQUEST)->get(RECT)->get(FULL);
-    layout->get(ALIGNMENT)->Vertex::get(REQUEST)->get(RECT)->get(VERTICAL);
+    layout->get(ALIGNMENT)->Vertex::get(REQUEST)->get(ALIGNMENT)->get(VERTICAL);
     layout->get(DRAWER)->Vertex::get(REQUEST)->get(DRAWER)->get(LIST);
 
     layout->get(CHILDREN)->get(ELEMENT)->Vertex::get(REQUEST)->get(LAYOUT)->get(ANY);
 
     Vertex* controls = get(LAYOUT)->get(LIST)->get(FRAMEDLIST)->get();
-    controls->get(ALIGNMENT)->Vertex::get(REQUEST)->get(RECT)->get(HORIZONTAL);
-    controls->get(CHILDREN)->get(ELEMENT)->Vertex::get(REQUEST)->get(LAYOUT)->get(BUTTON);
+    controls->get(ALIGNMENT)->Vertex::get(REQUEST)->get(ALIGNMENT)->get()->name(HORIZONTAL);
+    controls->get(CHILDREN)->get(ELEMENT)->Vertex::get(REQUEST)->get(LAYOUT)->get()->name(BUTTON);
     layout->add(controls);
 
     return true;
@@ -100,7 +102,7 @@ bool Default::GetViewLayout(Vertex* layout)
 bool Default::GetListLayout(Vertex* layout)
 {
     layout->get(SIZEANDPOSITION)->Vertex::get(REQUEST)->get(RECT)->get(FULL);
-    layout->get(ALIGNMENT)->Vertex::get(REQUEST)->get(RECT)->get(VERTICAL);
+    layout->get(ALIGNMENT)->Vertex::get(REQUEST)->get(ALIGNMENT)->get(HORIZONTAL);
     layout->get(DRAWER)->Vertex::get(REQUEST)->get(DRAWER)->get(LIST);
 
     layout->get(CHILDREN)->get(ELEMENT)->Vertex::get(REQUEST)->get(LAYOUT)->get(ANY);
@@ -140,19 +142,19 @@ bool Default::GetButtonLayout(Vertex* layout)
     // The Button container
     Vertex* content = get(LAYOUT)->get(LIST)->get();
     layout->add(content);
-    content->get(ALIGNMENT)->Vertex::get(REQUEST)->get(RECT)->get(VERTICAL);
+    content->get(ALIGNMENT)->Vertex::get(REQUEST)->get(ALIGNMENT)->get()->name(VERTICAL);
     frame->get(TOUPDATE)->attach(content);
 
     Vertex* upper = get(LAYOUT)->get(LIST)->get();
     content->add(upper);
     // The next call of content->get(LAYOUT, LIST) should return a new object
     upper->name("Upper");
-    upper->get(ALIGNMENT)->Vertex::get(REQUEST)->get(RECT)->get(SCALEDHORIZONTAL);
+    upper->get(ALIGNMENT)->Vertex::get(REQUEST)->get(ALIGNMENT)->get()->name(SCALEDHORIZONTAL);
 
     Vertex* lower = get(LAYOUT)->get(LIST)->get();
     content->add(lower);
     lower->name("Lower");
-    lower->get(ALIGNMENT)->Vertex::get(REQUEST)->get(RECT)->get(SCALEDHORIZONTAL);
+    lower->get(ALIGNMENT)->Vertex::get(REQUEST)->get(ALIGNMENT)->get()->name(SCALEDHORIZONTAL);
 
     // Store the layer/layout types for the fields as simple nodes
     upper->get(CHILDREN)->get(ICON)->Vertex::get(REQUEST)->get(LAYOUT)->get(TEXT);

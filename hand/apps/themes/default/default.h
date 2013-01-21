@@ -48,7 +48,7 @@ class Default : public Theme
 
         bool DrawView(Vertex* drawing);
 
-    private:
+    protected:
         std::string GetString(Vertex* vs);
 };
 

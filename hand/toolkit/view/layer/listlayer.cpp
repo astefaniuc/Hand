@@ -34,11 +34,6 @@ ListLayer::ListLayer(string name) : Layer(name)
 }
 
 
-ListLayer::~ListLayer()
-{
-}
-
-
 void ListLayer::SetContent(Vertex* data)
 {
     // Connect list and layer

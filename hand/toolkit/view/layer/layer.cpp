@@ -224,11 +224,12 @@ Vertex* Layer::GetLayout(Vertex* data)
         }
     }
 
-    Vertex* layout = Parent->get(THEME)->get(THEME, ANY)->get(ANY, LAYOUT)->get(layer_type);
+    Vertex* layout = get(THEME)->get(THEME, ANY)->get(ANY, LAYOUT)->get(layer_type);
+    Vertex* field = Parent->get(LAYOUT, ANY)->get(FIELD, name());
 
     // TODO: Vertex::get(Vertex* path)
     Vertex* tmp_repo;
-    Vertex* req = Parent->get(LAYOUT, ANY)->get(FIELD, name())->Vertex::get(REQUEST)->get(layer_type);
+    Vertex* req = field->Vertex::get(REQUEST)->get(layer_type);
     while((req=req->get()) != NULL)
     {
         if(layout_data)
@@ -255,11 +256,9 @@ void Layer::SetLayout(Vertex* layout)
     get(THEME)->get(THEME, ANY)->execute(layout);
 
     // Add to the update tree
-    Vertex* parent_layout = Parent->get(LAYOUT, ANY)->get(FIELD, name())->get(PARENT)->get();
-    parent_layout->get(TOUPDATE)->attach(layout);
-
+    layout->set(Parent->get(LAYOUT, ANY)->get(FIELD, name())->get(PARENT));
+    Vertex* parent_layout;
     // Bridge also any intermediate lists
-    layout = parent_layout;
     while((parent_layout=layout->get(PARENT)->get()) != NULL)
     {
         if(!parent_layout->get(TOUPDATE)->attach(layout))

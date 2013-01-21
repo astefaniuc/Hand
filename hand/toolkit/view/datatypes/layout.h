@@ -32,6 +32,7 @@ class Layout : public List
 
         bool add(Vertex* child);
         using List::get;
+        // Implements get(FIELD, name)
         virtual Vertex* get(std::string type, std::string name);
         bool execute(Vertex* surface);
         void reset();

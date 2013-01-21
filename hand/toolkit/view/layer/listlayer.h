@@ -27,7 +27,7 @@ class ListLayer : public Layer
 {
     public:
         ListLayer(std::string name);
-        virtual ~ListLayer();
+        virtual ~ListLayer(){};
 
         // Set pointer to a data tree node
         void SetContent(Vertex* focus);

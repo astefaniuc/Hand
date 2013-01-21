@@ -72,7 +72,7 @@ bool Device::execute(Vertex* init_screen)
 
     Vertex* layout = Vertex::get(FACTORY, THEMES)->get(DEFAULT)->get(LAYOUT)->get(LIST)->get();
     layout->get(SIZEANDPOSITION)->Vertex::get(REQUEST)->get(RECT)->get()->name(SCALED);
-    layout->get(ALIGNMENT)->Vertex::get(REQUEST)->get(RECT)->get()->name(HORIZONTAL);
+    layout->get(ALIGNMENT)->Vertex::get(REQUEST)->get(ALIGNMENT)->get()->name(HORIZONTAL);
     keys_view_tree->Vertex::get(LAYOUT)->get(LIST)->set(layout);
 
     // Load un-initialized keys
