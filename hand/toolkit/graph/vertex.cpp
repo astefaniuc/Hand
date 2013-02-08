@@ -87,20 +87,16 @@ bool Vertex::set(Vertex* child)
 
     VIterator curr = Body->find(child);
     if(curr == Body->end())
-    {
         // New sub-item
-        Body->insert(Body->begin(), child);
         child->References->push_back(this);
-    }
+    else if(curr == Body->begin())
+        // Already set
+        return true;
     else
-    {
-        // Already here
-        if(curr != Body->begin())
-        {
-            Body->erase(curr);
-            Body->insert(Body->begin(), child);
-        }
-    }
+        // Already here but in wrong position
+        Body->erase(curr);
+
+    Body->insert(Body->begin(), child);
 
     return true;
 }

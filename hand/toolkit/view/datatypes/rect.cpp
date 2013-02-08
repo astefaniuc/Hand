@@ -68,30 +68,6 @@ void Rect::reset()
 // ----------------------------------------------------------------
 
 
-RectFactory::RectFactory
-(
-        string name,
-        double x_,
-        double y_,
-        double w_,
-        double h_
-) : Rect(name, new Rel_Rect(x_, y_, w_, h_))
-{
-    type(FACTORY);
-}
-
-
-Vertex* RectFactory::_get()
-{
-    return new Rect(name(), new Rel_Rect(Value->x, Value->y, Value->w, Value->h));
-}
-
-
-// ----------------------------------------------------------------
-// ----------------------------------------------------------------
-// ----------------------------------------------------------------
-
-
 Alternate::Alternate(Rect* alig, Rect* alt_alig)
     : Data<Rel_Rect*>(alig->name(), alig->get())
 {
@@ -123,31 +99,6 @@ bool Alternate::execute(Vertex* layout)
     }
 
     return true;
-}
-
-
-// ----------------------------------------------------------------
-// ----------------------------------------------------------------
-// ----------------------------------------------------------------
-
-
-AlternateFactory::AlternateFactory
-(
-        string name,
-        Vertex* rect_factory,
-        Vertex* alt_rect_factory
-) : Vertex(name)
-{
-    type(FACTORY);
-    attach(rect_factory);
-    attach(alt_rect_factory);
-}
-
-
-Vertex* AlternateFactory::_get()
-{
-    return new Alternate(dynamic_cast<Rect*>(get(1)->get()),
-                         dynamic_cast<Rect*>(get(2)->get()));
 }
 
 

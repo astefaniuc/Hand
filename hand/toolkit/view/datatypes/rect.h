@@ -52,9 +52,22 @@ class Rect : public Data<Rel_Rect*>
 class RectFactory : public Rect
 {
     public:
-        RectFactory(std::string name, double x_, double y_, double w_, double h_);
+        RectFactory(std::string name,
+                           double x_,
+                           double y_,
+                           double w_,
+                           double h_) : Rect(name, new Rel_Rect(x_, y_, w_, h_))
+        {
+            type(FACTORY);
+        };
+
         ~RectFactory(){};
-        Vertex* _get();
+
+
+        Vertex* _get()
+        {
+            return new Rect(name(), new Rel_Rect(Value->x, Value->y, Value->w, Value->h));
+        };
 };
 
 
@@ -74,9 +87,21 @@ class AlternateFactory : public Vertex
     public:
         AlternateFactory(std::string name,
                          Vertex* rect_factory,
-                         Vertex* alt_rect_factory);
+                         Vertex* alt_rect_factory) : Vertex(name)
+        {
+            type(FACTORY);
+            attach(rect_factory);
+            attach(alt_rect_factory);
+        };
+
         ~AlternateFactory(){};
-        Vertex* _get();
+
+
+        Vertex* _get()
+        {
+            return new Alternate(dynamic_cast<Rect*>(get(1)->get()),
+                                 dynamic_cast<Rect*>(get(2)->get()));
+        };
 };
 
 
