@@ -67,8 +67,9 @@ Default::Default() : Theme(DEFAULT)
 
     folder = get(ALIGNMENT);
     folder->set(new RectFactory(HORIZONTAL,         1,   0,   1,   0));
-    folder->set(new RectFactory(SCALEDHORIZONTAL,   1,   0,  .5,   0));
     folder->set(new RectFactory(VERTICAL,           0,   1,   0,   1));
+    folder->set(new AlternateFactory(ALTERNATE, folder->get(HORIZONTAL), folder->get(VERTICAL)));
+    folder->set(new RectFactory(SCALEDHORIZONTAL,   1,   0,  .5,   0));
     // Colors
     folder = get(COLOR);
     folder->get(BACKGROUND)->set(new Rgb(BUTTON,  40,  40, 100));
@@ -84,7 +85,7 @@ Default::Default() : Theme(DEFAULT)
 
 bool Default::GetViewLayout(Vertex* layout)
 {
-    layout->get(SIZEANDPOSITION)->Vertex::get(REQUEST)->get(RECT)->get(FULL);
+    layout->get(COORDINATES)->Vertex::get(REQUEST)->get(RECT)->get(FULL);
     layout->get(ALIGNMENT)->Vertex::get(REQUEST)->get(ALIGNMENT)->get(VERTICAL);
     layout->get(DRAWER)->Vertex::get(REQUEST)->get(DRAWER)->get(LIST);
 
@@ -101,8 +102,8 @@ bool Default::GetViewLayout(Vertex* layout)
 
 bool Default::GetListLayout(Vertex* layout)
 {
-    layout->get(SIZEANDPOSITION)->Vertex::get(REQUEST)->get(RECT)->get(FULL);
-    layout->get(ALIGNMENT)->Vertex::get(REQUEST)->get(ALIGNMENT)->get(HORIZONTAL);
+    layout->get(COORDINATES)->Vertex::get(REQUEST)->get(RECT)->get(FULL);
+    layout->get(ALIGNMENT)->Vertex::get(REQUEST)->get(ALIGNMENT)->get(ALTERNATE);
     layout->get(DRAWER)->Vertex::get(REQUEST)->get(DRAWER)->get(LIST);
 
     layout->get(CHILDREN)->get(ELEMENT)->Vertex::get(REQUEST)->get(LAYOUT)->get(ANY);
@@ -113,7 +114,7 @@ bool Default::GetListLayout(Vertex* layout)
 
 bool Default::GetFramedListLayout(Vertex* layout)
 {
-    layout->get(SIZEANDPOSITION)->Vertex::get(REQUEST)->get(RECT)->get(SCALED);
+    layout->get(COORDINATES)->Vertex::get(REQUEST)->get(RECT)->get(SCALED);
 
     Vertex* frame = get(LAYOUT)->get(FRAME)->get();
     layout->add(frame);
@@ -130,7 +131,7 @@ bool Default::GetFramedListLayout(Vertex* layout)
 
 bool Default::GetButtonLayout(Vertex* layout)
 {
-    layout->get(SIZEANDPOSITION)->Vertex::get(REQUEST)->get(RECT)->get(SCALED);
+    layout->get(COORDINATES)->Vertex::get(REQUEST)->get(RECT)->get(SCALED);
 
     Vertex* frame = get(LAYOUT)->get(FRAME)->get();
     layout->add(frame);
@@ -168,7 +169,7 @@ bool Default::GetButtonLayout(Vertex* layout)
 
 bool Default::GetFrameLayout(Vertex* layout)
 {
-    layout->get(SIZEANDPOSITION)->Vertex::get(REQUEST)->get(RECT)->get(FRAME);
+    layout->get(COORDINATES)->Vertex::get(REQUEST)->get(RECT)->get(FRAME);
     layout->get(DRAWER)->Vertex::get(REQUEST)->get(DRAWER)->get(FRAME);
     layout->get(COLOR)->Vertex::get(REQUEST)->get(COLOR)->get(FRAME);
 
@@ -178,7 +179,7 @@ bool Default::GetFrameLayout(Vertex* layout)
 
 bool Default::GetBackgroundLayout(Vertex* layout)
 {
-    layout->get(SIZEANDPOSITION)->Vertex::get(REQUEST)->get(RECT)->get(FULL);
+    layout->get(COORDINATES)->Vertex::get(REQUEST)->get(RECT)->get(FULL);
     layout->get(DRAWER)->Vertex::get(REQUEST)->get(DRAWER)->get(BACKGROUND);
     layout->get(COLOR)->Vertex::get(REQUEST)->get(COLOR)->get(BACKGROUND)->get(BUTTON);
 
@@ -188,7 +189,7 @@ bool Default::GetBackgroundLayout(Vertex* layout)
 
 bool Default::GetTextLayout(Vertex* layout)
 {
-    layout->get(SIZEANDPOSITION)->Vertex::get(REQUEST)->get(RECT)->get(SCALED);
+    layout->get(COORDINATES)->Vertex::get(REQUEST)->get(RECT)->get(SCALED);
     layout->get(DRAWER)->Vertex::get(REQUEST)->get(DRAWER)->get(TEXT);
     layout->get(COLOR)->Vertex::get(REQUEST)->get(COLOR)->get(FONT);
 
@@ -209,7 +210,7 @@ bool Default::DrawFrame(Vertex* layout)
 
     SDL_Rect total_size = vs->GetSize();
     SDL_Rect content_size = total_size;
-    Rel_Rect* sap = GetRect(SIZEANDPOSITION, layout);
+    Rel_Rect* sap = GetRect(COORDINATES, layout);
     Multiply(sap, &content_size);
 
     Vertex* to_update = layout->get(TOUPDATE);
@@ -218,7 +219,7 @@ bool Default::DrawFrame(Vertex* layout)
         Vertex* child;
         uint i = 0;
         while((child=to_update->get(++i)) != NULL)
-            Multiply(sap, GetRect(SIZEANDPOSITION, child));
+            Multiply(sap, GetRect(COORDINATES, child));
     }
 
     // Draw each frame line separately
@@ -289,7 +290,7 @@ bool Default::DrawText(Vertex* layout)
 
     Rel_Rect sub;
     PlaceCentered(source, size, sub);
-    Multiply(&sub, GetRect(SIZEANDPOSITION, layout));
+    Multiply(&sub, GetRect(COORDINATES, layout));
 
     vs->SetBuffer(source);
     return true;
@@ -307,7 +308,7 @@ bool Default::DrawList(Vertex* layout)
         return true;
 
     Rel_Rect* align = GetRect(ALIGNMENT, layout);
-    Rel_Rect* size = GetRect(SIZEANDPOSITION, layout);
+    Rel_Rect* size = GetRect(COORDINATES, layout);
     Rel_Rect calc;
 
     for(uint i=1; i<=child_cnt; i++)
@@ -316,7 +317,7 @@ bool Default::DrawList(Vertex* layout)
         calc.w = (1 - (c * align->w))*(1 - calc.x);
         calc.h = (1 - (c * align->h))*(1 - calc.y);
 
-        Rel_Rect* sub = GetRect(SIZEANDPOSITION, children->get(i));
+        Rel_Rect* sub = GetRect(COORDINATES, children->get(i));
 
         // The Rect multiplication is NOT commutative, the order is important
         Rel_Rect tmp = calc;
@@ -342,7 +343,7 @@ bool Default::ColorSurface(Vertex* layout)
     SDL_Surface* sf = vs->GetBuffer();
     SDL_Rect size = vs->GetSize();
 
-    Rel_Rect* csap = GetRect(SIZEANDPOSITION, layout);
+    Rel_Rect* csap = GetRect(COORDINATES, layout);
     Multiply(csap, &size);
     SDL_SetClipRect(sf, &size);
     FillRect(sf, &size, GetRgb("BackgroundColor", layout));

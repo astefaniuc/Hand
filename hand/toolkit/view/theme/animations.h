@@ -28,7 +28,7 @@ class Animation : public virtual HandApp
     public:
         Animation() : HandApp("Animation"){};
         virtual ~Animation(){};
-//        void SizeAndPosition(SDL_Rect& current_size);
+//        void Coordinates(SDL_Rect& current_size);
         virtual bool execute(Vertex* tgt) = 0;
 
     protected:

@@ -98,7 +98,7 @@ bool Layout::execute(Vertex* vs)
 
 void Layout::reset()
 {
-    Vertex* sub = get(SIZEANDPOSITION)->get();
+    Vertex* sub = get(COORDINATES)->get();
     if(sub)
         sub->reset();
     Vertex* children = get(LINK, CHILDREN);

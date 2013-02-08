@@ -203,7 +203,7 @@ bool LayerManager::Expand(Vertex* to_expand)
 
 void LayerManager::SetSize(SDL_Rect size)
 {
-    SizeAndPositionOnBuffer = size;
+    CoordinatesOnBuffer = size;
 }
 
 

@@ -92,6 +92,70 @@ Vertex* RectFactory::_get()
 // ----------------------------------------------------------------
 
 
+Alternate::Alternate(Rect* alig, Rect* alt_alig)
+    : Data<Rel_Rect*>(alig->name(), alig->get())
+{
+    type(METHOD);
+    attach(alig);
+    attach(alt_alig);
+}
+
+
+bool Alternate::execute(Vertex* layout)
+{
+    Vertex* p_alig;
+    while((layout=layout->get(PARENT)->get()) != NULL)
+    {
+        p_alig = layout->get(ALIGNMENT)->get();
+        if(!p_alig)
+            continue;
+        if(p_alig->name() == name())
+        {
+            Vertex* alt = get(2);
+            // Change Vertex positions
+            set(alt);
+            // Change returned data
+            set((dynamic_cast<Rect*>(alt))->get());
+            // Change also the name
+            name(alt->name());
+        }
+        break;
+    }
+
+    return true;
+}
+
+
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
+
+
+AlternateFactory::AlternateFactory
+(
+        string name,
+        Vertex* rect_factory,
+        Vertex* alt_rect_factory
+) : Vertex(name)
+{
+    type(FACTORY);
+    attach(rect_factory);
+    attach(alt_rect_factory);
+}
+
+
+Vertex* AlternateFactory::_get()
+{
+    return new Alternate(dynamic_cast<Rect*>(get(1)->get()),
+                         dynamic_cast<Rect*>(get(2)->get()));
+}
+
+
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
+
+
 void Multiply(Rel_Rect* src, Rel_Rect* tgt)
 {
     if(!src || !tgt)
@@ -114,12 +178,16 @@ void Multiply(Rel_Rect* src, SDL_Rect* tgt)
 }
 
 
-Rel_Rect* GetRect(string name, Vertex* tree)
+Rel_Rect* GetRect(string name, Vertex* layout)
 {
-    Vertex* named = tree->get(ANY, name);
-    if(named)
+    Vertex* rect = layout->get(ANY, name);
+    if(rect && ((rect=rect->get()) != NULL))
     {
-        Rect* container = dynamic_cast<Rect*>(named->get());
+        if(rect->is(METHOD))
+            // Allow value changes based on (parent) layout configuration
+            rect->execute(layout);
+
+        Data<Rel_Rect*>* container = dynamic_cast<Data<Rel_Rect*>*>(rect);
         if(container)
             return container->get();
     }

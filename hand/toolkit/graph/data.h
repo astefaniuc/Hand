@@ -43,7 +43,7 @@ class Data : public Vertex
             return true;
         };
         using Vertex::get;
-        I get()
+        virtual I get()
         {
             return Value;
         };

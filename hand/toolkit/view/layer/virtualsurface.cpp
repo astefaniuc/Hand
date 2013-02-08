@@ -105,8 +105,8 @@ VirtualSurface::VirtualSurface(string name) : Vertex(name)
     Changed = true;
     Buffer = NULL;
     Parent = NULL;
-    SizeAndPositionOnBuffer.x = SizeAndPositionOnBuffer.y =
-            SizeAndPositionOnBuffer.w = SizeAndPositionOnBuffer.h = 0;
+    CoordinatesOnBuffer.x = CoordinatesOnBuffer.y =
+            CoordinatesOnBuffer.w = CoordinatesOnBuffer.h = 0;
 }
 
 
@@ -121,7 +121,7 @@ void VirtualSurface::MapSurface(Rel_Rect* src_rect, SDL_Rect &tgt_rect, SDL_Surf
     if(BufferType == COLLECTOR)
     {
         // Get the absolute position on the current buffer
-        tgt_rect = SizeAndPositionOnBuffer;
+        tgt_rect = CoordinatesOnBuffer;
         Multiply(src_rect, &tgt_rect);
         tgt_surface = GetBuffer();
         // "Updated" must be true in this case
@@ -131,7 +131,7 @@ void VirtualSurface::MapSurface(Rel_Rect* src_rect, SDL_Rect &tgt_rect, SDL_Surf
     // TODO: surface mapped incorrectly for List having BufferType OVERLAY
 
     // Get the next layers buffer and absolute position
-    Rel_Rect* sap = GetRect(SIZEANDPOSITION, get(LAYOUT, ANY));
+    Rel_Rect* sap = GetRect(COORDINATES, get(LAYOUT, ANY));
     Multiply(src_rect, sap);
     if(Parent)
         Parent->MapSurface(src_rect, tgt_rect, tgt_surface);
@@ -178,13 +178,13 @@ void VirtualSurface::BlitSurface
 void VirtualSurface::SetSize(SDL_Rect size)
 {
     // Store only the size, position from layout
-    Rel_Rect* sap = GetRect(SIZEANDPOSITION, get(LAYOUT, ANY));
+    Rel_Rect* sap = GetRect(COORDINATES, get(LAYOUT, ANY));
     if(sap)
         Multiply(sap, &size);
-    if((size.w!=SizeAndPositionOnBuffer.w) || (size.h!=SizeAndPositionOnBuffer.h))
+    if((size.w!=CoordinatesOnBuffer.w) || (size.h!=CoordinatesOnBuffer.h))
     {
-        SizeAndPositionOnBuffer.w = size.w;
-        SizeAndPositionOnBuffer.h = size.h;
+        CoordinatesOnBuffer.w = size.w;
+        CoordinatesOnBuffer.h = size.h;
         SDL_FreeSurface(Buffer);
         Buffer = NULL;
         Changed = true;
@@ -194,7 +194,7 @@ void VirtualSurface::SetSize(SDL_Rect size)
 
 SDL_Rect VirtualSurface::GetSize()
 {
-    return SizeAndPositionOnBuffer;
+    return CoordinatesOnBuffer;
 }
 
 
@@ -217,7 +217,7 @@ SDL_Surface* VirtualSurface::GetBuffer()
             const SDL_PixelFormat& fmt = *(Buffer->format);
             // Draw on buffer independent of the position
             Buffer = SDL_CreateRGBSurface(SDL_DOUBLEBUF|SDL_HWSURFACE,
-                                          SizeAndPositionOnBuffer.w, SizeAndPositionOnBuffer.h,
+                                          CoordinatesOnBuffer.w, CoordinatesOnBuffer.h,
                                           fmt.BitsPerPixel,
                                           fmt.Rmask, fmt.Gmask, fmt.Bmask, fmt.Amask);
         }

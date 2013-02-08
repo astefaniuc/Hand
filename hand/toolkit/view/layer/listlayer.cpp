@@ -80,10 +80,10 @@ bool ListLayer::execute(Vertex* param)
 
 Vertex* ListLayer::GetLayout(Vertex* data)
 {
-    // The LIST needs two different SIZEANDPOSITION rects: one for the blit
+    // The LIST needs two different COORDINATES rects: one for the blit
     // on the parent surface and one to calculate the children
     Vertex* layout = new Layout("Buffer");
-    layout->get(SIZEANDPOSITION)->Vertex::get(REQUEST)->get(RECT)->get(FULL);
+    layout->get(COORDINATES)->Vertex::get(REQUEST)->get(RECT)->get(FULL);
     layout->add(Layer::GetLayout(data));
 
     return layout;

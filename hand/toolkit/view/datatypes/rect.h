@@ -58,9 +58,31 @@ class RectFactory : public Rect
 };
 
 
+class Alternate : public Data<Rel_Rect*>
+{
+    public:
+        // Alignment parameters are of type "Rect"
+        Alternate(Rect* alignment, Rect* alternate_alignment);
+        ~Alternate(){};
+
+        bool execute(Vertex* layout);
+};
+
+
+class AlternateFactory : public Vertex
+{
+    public:
+        AlternateFactory(std::string name,
+                         Vertex* rect_factory,
+                         Vertex* alt_rect_factory);
+        ~AlternateFactory(){};
+        Vertex* _get();
+};
+
+
 void Multiply(Rel_Rect* src, Rel_Rect* tgt);
 void Multiply(Rel_Rect* src, SDL_Rect* tgt);
-// Helper func for extracting a Rect from a Vertex tree
-Rel_Rect* GetRect(std::string rect_name, Vertex* from_tree);
+// Helper func for extracting a Rel_Rect from a layout
+Rel_Rect* GetRect(std::string rect_name, Vertex* layout);
 
 #endif /* VIEW_DATATYPES_RECT_H */

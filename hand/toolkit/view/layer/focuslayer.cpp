@@ -93,7 +93,7 @@ void FocusLayer::SetContent(Vertex* data)
             j++;
         }
     }
-    SDL_Rect list_size = DrawObject.SizeAndPositionOnBuffer;
+    SDL_Rect list_size = DrawObject.CoordinatesOnBuffer;
     Rect rel_size(0.1, 0.1, 0.8, 0.8);
     rel_size.MultiplyTo(list_size);
     Layer* list = Content->GetLayer();

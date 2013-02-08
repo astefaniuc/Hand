@@ -252,6 +252,7 @@ Vertex* Layer::GetLayout(Vertex* data)
 
 void Layer::SetLayout(Vertex* layout)
 {
+    // TODO: custom layouts shouldn't be deleted with the layer
     add(layout);
     get(THEME)->get(THEME, ANY)->execute(layout);
 
@@ -273,8 +274,8 @@ void Layer::Draw(bool forced)
 /*  if(BufferType == NONE)
     {
         // TODO: this crashes in LayerManager during "write through"
-        Parent->MapSurface(_Layout->SizeAndPosition,
-                            SizeAndPositionOnBuffer,
+        Parent->MapSurface(_Layout->Coordinates,
+                            CoordinatesOnBuffer,
                             GetBuffer());
         Updated = true; // ?
     }*/
@@ -290,11 +291,11 @@ void Layer::Draw(bool forced)
         DrawChilds(forced);
 
     Rel_Rect tmp;
-    Rel_Rect* sap = GetRect(SIZEANDPOSITION, layout);
+    Rel_Rect* sap = GetRect(COORDINATES, layout);
     if(sap)
         tmp = *sap;
 
-    Show(&SizeAndPositionOnBuffer, &tmp);
+    Show(&CoordinatesOnBuffer, &tmp);
 
     if(BufferType == OVERLAY)
     {

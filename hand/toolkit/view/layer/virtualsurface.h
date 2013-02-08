@@ -78,7 +78,7 @@ class VirtualSurface : public Vertex
         bool Changed;
     protected:
         buffer_type BufferType;
-        SDL_Rect SizeAndPositionOnBuffer;
+        SDL_Rect CoordinatesOnBuffer;
         VirtualSurface* Parent;
         SDL_Surface* Buffer;
         bool Updated;

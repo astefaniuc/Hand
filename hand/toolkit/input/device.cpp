@@ -71,7 +71,7 @@ bool Device::execute(Vertex* init_screen)
     init_screen->add(keys_view_tree);
 
     Vertex* layout = Vertex::get(FACTORY, THEMES)->get(DEFAULT)->get(LAYOUT)->get(LIST)->get();
-    layout->get(SIZEANDPOSITION)->Vertex::get(REQUEST)->get(RECT)->get()->name(SCALED);
+    layout->get(COORDINATES)->Vertex::get(REQUEST)->get(RECT)->get()->name(SCALED);
     layout->get(ALIGNMENT)->Vertex::get(REQUEST)->get(ALIGNMENT)->get()->name(HORIZONTAL);
     keys_view_tree->Vertex::get(LAYOUT)->get(LIST)->set(layout);
 
