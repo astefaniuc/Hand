@@ -36,6 +36,25 @@ StateNode::StateNode(uint size, Vertex* peers) : List(STATENODE)
 }
 
 
+Vertex* StateNode::get(string name)
+{
+    Vertex* ret = List::get(ANY, name);
+    if(ret || (name!=VIEW))
+        return ret;
+
+    ret = List::get(VIEW);
+    Vertex* active_keys;
+    // Peers
+    Vertex* keylist = Vertex::get(COMMANDS)->Vertex::get(DEVICE, ANY)->get(VIEW)->get(KEYLIST);
+    uint i = 0;
+    while((active_keys=get(++i)) != NULL)
+        if(active_keys->name() == PARENT)
+             ret->attach(keylist->get(i));
+
+    return ret;
+}
+
+
 StateNode* StateNode::GetParent(uint k_nr)
 {
     Vertex* ret = get(k_nr);

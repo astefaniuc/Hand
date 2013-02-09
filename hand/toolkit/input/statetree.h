@@ -38,6 +38,8 @@ class StateGraph : public Vertex
         void ConnectNodes(Vertex* parent, Vertex* child, uint pos);
         Vertex* GetParentNode(uint level, uint pos);
         Vertex* GetCommands(uint level);
+        Vertex* GetNewPeersList();
+
         StateNode* Root;
 };
 

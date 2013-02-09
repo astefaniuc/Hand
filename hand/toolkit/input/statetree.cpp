@@ -35,8 +35,9 @@ bool StateGraph::execute(Vertex* device)
     uint size = device->Vertex::get(KEYLIST)->size();
     if((size==0) || (size>MAX_NUMBER_OF_BUTTONS))
         return false;
+    set(device);
     // Create the root/null key
-    Root = new StateNode(size, new List(COMMANDS));
+    Root = new StateNode(size, GetNewPeersList());
     // Build the key tree on top
     for(uint i=1; i<=size; i++)
         // Build the key tree bellow
@@ -54,7 +55,7 @@ void StateGraph::AddNodes(uint level, uint key_nr)
 
     // Previous level nodes
     Vertex* p_nodes = GetCommands(level-1);
-    // Next level nodes (the active one)
+    // Current level nodes
     Vertex* c_nodes = GetCommands(level);
 
     uint i = 0;
@@ -112,7 +113,7 @@ Vertex* StateGraph::GetCommands(uint level)
     {
         if(tmp_node->get(i)->get() == NULL)
             // Nothing yet on this level - create level container once
-            return new List(COMMANDS);
+            return GetNewPeersList();
         tmp_node = tmp_node->GetChild(i);
     }
     return tmp_node->Vertex::get(COMMANDS);
@@ -126,4 +127,11 @@ void StateGraph::ConnectNodes(Vertex* p, Vertex* c, uint i)
     Vertex* v = c->get(i);
     v->name(PARENT);
     v->attach(p);
+}
+
+Vertex* StateGraph::GetNewPeersList()
+{
+    Vertex* ret = new List(COMMANDS);
+    ret->Vertex::attach(get(DEVICE, ANY));
+    return ret;
 }

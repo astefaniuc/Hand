@@ -48,7 +48,6 @@ class Layer : public VirtualSurface
         virtual void NotifyChanged();
         virtual void Init(){};
 
-        virtual void SetLayout(Vertex* layout);
         virtual void Draw(bool forced);
 
     protected:
@@ -56,6 +55,7 @@ class Layer : public VirtualSurface
         virtual Layer* Insert(Vertex* data, std::string position);
         void Insert(Vertex* data);
         Layer* GetLayer(Vertex* data, std::string position);
+        virtual void SetLayout(Vertex* layout);
         virtual Vertex* GetLayout(Vertex* data);
 
         virtual void DrawChilds(bool forced);

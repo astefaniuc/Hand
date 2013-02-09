@@ -32,9 +32,12 @@ class Device : public virtual HandApp
     public:
                Device();
               ~Device();
+
+        using HandApp::get;
+        // Implements get(VIEW)
+        Vertex* get(std::string name);
         // Sets the key map
         bool   Init();
-        bool   execute(Vertex* init_screen);
         // Functions accessing the layer object (not possible from here)
         bool   Press(int key_id);
         bool   Release(int key_id);

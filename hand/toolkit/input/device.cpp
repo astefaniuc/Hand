@@ -29,6 +29,7 @@ using namespace std;
 
 Device::Device() : HandApp("settings:Keyboard::0")
 {
+    type(DEVICE);
     StateMachine = NULL;
     numberOfKeys = NUMBER_OF_BUTTONS;
 }
@@ -40,35 +41,18 @@ Device::~Device()
 }
 
 
-bool Device::Init()
+Vertex* Device::get(string name)
 {
-    string  key_str;
-    Note* data;
+    Vertex* ret = List::get(ANY, name);
+    if(ret || (name!=VIEW))
+        return ret;
 
-    for(uint i=1; i<=numberOfKeys; i++)
-    {
-        // Do we have keys to load?
-        data = GetKey(i);
-        if(!data)
-            return false;
-        key_str = data->get();
-        if(key_str == "")
-            return false;
-        // Translate list entries to device keys
-        Keys.push_back(atoi(key_str.c_str()));
-    }
-    return true;
-}
-
-
-bool Device::execute(Vertex* init_screen)
-{
+    Vertex* init_screen = List::get(VIEW);
     // Two main entries: a keylist and the description
     init_screen->add(new Note(DESCRIPTION, "Press 5 keys on the keyboard"));
 
     Vertex* keys_data_tree = Vertex::get(KEYLIST);
-    Vertex* keys_view_tree = new List(KEYLIST);
-    init_screen->add(keys_view_tree);
+    Vertex* keys_view_tree = init_screen->get(KEYLIST);
 
     Vertex* layout = Vertex::get(FACTORY, THEMES)->get(DEFAULT)->get(LAYOUT)->get(LIST)->get();
     layout->get(COORDINATES)->Vertex::get(REQUEST)->get(RECT)->get()->name(SCALED);
@@ -88,6 +72,27 @@ bool Device::execute(Vertex* init_screen)
         frame->Vertex::get(LAYOUT)->get(LIST)->set(factory->get());
         frame->add(id);
         keys_view_tree->add(frame);
+    }
+    return init_screen;
+}
+
+
+bool Device::Init()
+{
+    string  key_str;
+    Note* data;
+
+    for(uint i=1; i<=numberOfKeys; i++)
+    {
+        // Do we have keys to load?
+        data = GetKey(i);
+        if(!data)
+            return false;
+        key_str = data->get();
+        if(key_str == "")
+            return false;
+        // Translate list entries to device keys
+        Keys.push_back(atoi(key_str.c_str()));
     }
     return true;
 }

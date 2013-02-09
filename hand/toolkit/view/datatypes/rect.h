@@ -37,6 +37,7 @@ struct Rel_Rect
 };
 
 
+
 class Rect : public Data<Rel_Rect*>
 {
     public:
@@ -47,6 +48,7 @@ class Rect : public Data<Rel_Rect*>
         bool set(Rel_Rect*);
         void reset();
 };
+
 
 
 class RectFactory : public Rect
@@ -71,6 +73,7 @@ class RectFactory : public Rect
 };
 
 
+
 class Alternate : public Data<Rel_Rect*>
 {
     public:
@@ -80,6 +83,7 @@ class Alternate : public Data<Rel_Rect*>
 
         bool execute(Vertex* layout);
 };
+
 
 
 class AlternateFactory : public Vertex

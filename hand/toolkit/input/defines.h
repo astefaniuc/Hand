@@ -23,8 +23,9 @@
 
 #define CHILD             "Child"
 #define COMMAND           "Command"
-#define KEYLIST           "Keylist"
 #define COMMANDS          "Commands"
+#define DEVICE            "Device"
+#define KEYLIST           "Keylist"
 #define STATEGRAPH        "StateGraph"
 #define STATENODE         "StateNode"
 

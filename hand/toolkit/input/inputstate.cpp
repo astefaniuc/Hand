@@ -111,7 +111,7 @@ bool InputState::GetCommand(Vertex* target, uint level)
         // bidirectional
         if(f_cmd->Vertex::get(METHOD)->set(target))
         {
-            target->get(COMMAND)->set(f_cmd);
+            target->Vertex::get(COMMAND)->set(f_cmd);
 
             return true;
         }

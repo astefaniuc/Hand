@@ -122,12 +122,8 @@ void LayerManager::SetDevice(Device* device)
     _Device = device;
     device->Vertex::get(LAYERMANAGER)->set(this);
     if(!device->Init())
-    {
         // No, show init screen
-        Vertex* init_screen = new List("Init screen");
-        device->execute(init_screen);
-        Request(init_screen);
-    }
+        Request(device->get(VIEW));
     else
         // TODO: load controls vertices also with the init screen
         Expand(device->Vertex::get(KEYLIST));
