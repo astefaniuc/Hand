@@ -44,36 +44,42 @@ Device::~Device()
 Vertex* Device::get(string name)
 {
     Vertex* ret = List::get(ANY, name);
-    if(ret || (name!=VIEW))
+    if(ret)
         return ret;
 
-    Vertex* init_screen = List::get(VIEW);
-    // Two main entries: a keylist and the description
-    init_screen->add(new Note(DESCRIPTION, "Press 5 keys on the keyboard"));
-
-    Vertex* keys_data_tree = Vertex::get(KEYLIST);
-    Vertex* keys_view_tree = init_screen->get(KEYLIST);
-
-    Vertex* layout = Vertex::get(FACTORY, THEMES)->get(DEFAULT)->get(LAYOUT)->get(LIST)->get();
-    layout->get(COORDINATES)->Vertex::get(REQUEST)->get(RECT)->get()->name(SCALED);
-    layout->get(ALIGNMENT)->Vertex::get(REQUEST)->get(ALIGNMENT)->get()->name(HORIZONTAL);
-    keys_view_tree->Vertex::get(LAYOUT)->get(LIST)->set(layout);
-
-    // Load un-initialized keys
-    Vertex* factory = Vertex::get(FACTORY, THEMES)->get(DEFAULT)->get(LAYOUT)->get(LIST)->get(FRAMEDLIST);
-    Vertex* id;
-    Vertex* frame;
-    for(uint i=0; i < numberOfKeys; ++i)
+    if(name == VIEW)
     {
-        id = new Note("Keydata", "");
-        keys_data_tree->add(id);
+        ret = List::get(VIEW);
+        // Two main entries: a keylist and the description
+        ret->add(new Note(DESCRIPTION, "Press 5 keys on the keyboard"));
 
-        frame = new List("");
-        frame->Vertex::get(LAYOUT)->get(LIST)->set(factory->get());
-        frame->add(id);
-        keys_view_tree->add(frame);
+        Vertex* keys_data_tree = Vertex::get(KEYLIST);
+        Vertex* keys_view_tree = ret->get(KEYLIST);
+
+        keys_view_tree->Vertex::get(LAYOUT)->get(LIST)->set(get(LAYOUT));
+
+        // Load un-initialized keys
+        Vertex* factory = Vertex::get(FACTORY, THEMES)->get(DEFAULT)->get(LAYOUT)->get(LIST)->get(FRAMEDLIST);
+        Vertex* id;
+        Vertex* frame;
+        for(uint i=0; i < numberOfKeys; ++i)
+        {
+            id = new Note("Keydata", "");
+            keys_data_tree->add(id);
+
+            frame = new List("");
+            frame->Vertex::get(LAYOUT)->get(LIST)->set(factory->get());
+            frame->add(id);
+            keys_view_tree->add(frame);
+        }
     }
-    return init_screen;
+    else if(name == LAYOUT)
+    {
+        ret = Vertex::get(FACTORY, THEMES)->get(DEFAULT)->get(LAYOUT)->get(LIST)->get();
+        ret->get(COORDINATES)->Vertex::get(REQUEST)->get(RECT)->get()->name(SCALED);
+        ret->get(ALIGNMENT)->Vertex::get(REQUEST)->get(ALIGNMENT)->get()->name(HORIZONTAL);
+    }
+    return ret;
 }
 
 

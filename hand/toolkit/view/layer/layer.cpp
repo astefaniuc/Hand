@@ -252,7 +252,6 @@ Vertex* Layer::GetLayout(Vertex* data)
 
 void Layer::SetLayout(Vertex* layout)
 {
-    // TODO: custom layouts shouldn't be deleted with the layer
     add(layout);
     get(THEME)->get(THEME, ANY)->execute(layout);
 
