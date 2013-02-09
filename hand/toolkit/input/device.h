@@ -52,6 +52,8 @@ class Device : public virtual HandApp
         void   DeleteKey(uint index);
         // Returns the key number
         int    GetKeyIndex(int key_id);
+        // Layout factory for KEYLIST
+        bool   GetKeyListLayout(Vertex* layout);
 
         // Members:
         InputState* StateMachine;

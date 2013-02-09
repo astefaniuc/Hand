@@ -42,13 +42,10 @@ Vertex* StateNode::get(string name)
     if(ret || (name!=VIEW))
         return ret;
 
-    Vertex* device = Vertex::get(COMMANDS)->Vertex::get(DEVICE, ANY);
+    Vertex* keylist = Vertex::get(COMMANDS)->Vertex::get(DEVICE, ANY)->get(VIEW)->get(KEYLIST);
 
     ret = List::get(VIEW);
-    ret->Vertex::get(LAYOUT)->get(LIST)->set(device->get(LAYOUT));
-
-    // Peers
-    Vertex* keylist = device->get(VIEW)->get(KEYLIST);
+    ret->Vertex::set(keylist->Vertex::get(LAYOUT));
 
     Vertex* active_keys;
     uint i = 0;

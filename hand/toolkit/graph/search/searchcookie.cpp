@@ -55,7 +55,7 @@ Vertex* SearchCookie::get(uint i)
     SearchCookie* branch = (SearchCookie*)List::get(i);
     if(branch && branch->IsDeadBranch)
     {
-        remove(branch);
+        delete(branch);
 
         branch = (SearchCookie*)SearchCookie::get(i);
         if(!branch && (i==1))
