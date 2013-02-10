@@ -36,6 +36,14 @@ StateNode::StateNode(uint size, Vertex* peers) : List(STATENODE)
 }
 
 
+bool StateNode::set(Vertex* sub)
+{
+    if(!sub || !sub->is(METHOD) || Vertex::get(METHOD, ANY))
+        return false;
+    return Vertex::set(sub);
+}
+
+
 Vertex* StateNode::get(string name)
 {
     Vertex* ret = List::get(ANY, name);

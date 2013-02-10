@@ -63,7 +63,7 @@ bool InputState::Release(uint k)
     if(ReleasedKey == NullKey)
     {
         // Inform the GUI
-        Vertex* method = PressedKey->Vertex::get(METHOD)->get();
+        Vertex* method = PressedKey->Vertex::get(METHOD, ANY);
         if(method)
             method->execute(method);
 
@@ -109,7 +109,7 @@ bool InputState::GetCommand(Vertex* target, uint level)
     {
         // Bind the functional list to the state graph (command) node,
         // bidirectional
-        if(f_cmd->Vertex::get(METHOD)->set(target))
+        if(f_cmd->set(target))
         {
             target->Vertex::get(COMMAND)->set(f_cmd);
 

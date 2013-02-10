@@ -31,7 +31,6 @@ class LayerManager;
 
 class InputState
 {
-
     public:
         // Link to the parent object, the main server
         InputState(Vertex* device);

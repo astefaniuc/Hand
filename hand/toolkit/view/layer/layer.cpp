@@ -95,11 +95,14 @@ bool Layer::SetCommand(Vertex* cmd)
 {
     if(!cmd)
         return false;
+
     Vertex* target = get(EXECUTE)->get();
-    if(!cmd->Vertex::get(METHOD)->set(target))
+    if(!cmd->set(target))
         return false;
     target->Vertex::get(COMMAND)->set(cmd);
+
     Insert(cmd->get(VIEW), CONTROLID);
+
     return true;
 }
 

@@ -63,10 +63,29 @@ bool ListLayer::SetCommand(Vertex* cmd)
     if(!children)
         return false;
 
-    Layer* child;
+    // Destroy the previous focus
+    Vertex* foc_cmds = cmd->Vertex::get(DEVICE, ANY)->Vertex::get(FOCUS);
     uint i = 0;
+    {
+        Vertex* fc;
+        while((fc=foc_cmds->get(++i)) != NULL)
+        {
+            fc->Vertex::detach(fc->Vertex::get(METHOD, ANY));
+            delete(fc->get(VIEW)->Vertex::get(LAYER, CONTROLID));
+        }
+        foc_cmds->reset();
+    }
+
+    Layer* child;
+    i = 0;
+    Vertex* curr_cmd;
     while((child=dynamic_cast<Layer*>(children->get(++i))) != NULL)
-        child->Layer::SetCommand(cmd->get(i));
+    {
+        curr_cmd = cmd->get(i);
+        if(child->Layer::SetCommand(curr_cmd))
+            // Store current focus
+            foc_cmds->attach(curr_cmd);
+    }
     return true;
 }
 

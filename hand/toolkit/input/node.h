@@ -29,6 +29,8 @@ class StateNode : public List
         StateNode(uint size, Vertex* peers);
         ~StateNode(){};
 
+        // Implements set(METHOD)
+        bool set(Vertex* sub);
         using List::get;
         // Implements get(VIEW)
         Vertex* get(std::string name);
