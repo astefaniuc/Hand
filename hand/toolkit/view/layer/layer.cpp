@@ -145,6 +145,7 @@ Layer* Layer::Insert(Vertex* data, string position)
     sub_layer->SetParent(this);
 
     sub_layer->Insert(data);
+    sub_layer->Init();
 
     return sub_layer;
 }

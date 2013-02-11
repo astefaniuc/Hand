@@ -192,7 +192,7 @@ bool LayerManager::Expand(Vertex* to_expand)
     MasterView = Insert(to_expand, ELEMENT);
     if(!MasterView)
         return false;
-    MasterView->SetCommand(get(COMMANDS));
+    MasterView->get(EXECUTE)->get()->execute(get(COMMANDS));
     return true;
 }
 

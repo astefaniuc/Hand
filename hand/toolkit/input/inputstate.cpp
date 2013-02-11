@@ -65,7 +65,12 @@ bool InputState::Release(uint k)
         // Inform the GUI
         Vertex* method = PressedKey->Vertex::get(METHOD, ANY);
         if(method)
-            method->execute(method);
+        {
+            Vertex* param = method->Vertex::get("Parameter")->get();
+            if(!param)
+                param = method;
+            method->execute(param);
+        }
 
         reset();
     }

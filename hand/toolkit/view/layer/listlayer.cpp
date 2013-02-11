@@ -31,7 +31,14 @@ ListLayer::ListLayer(string name) : Layer(name)
 {
     type(LIST);
     BufferType = COLLECTOR;
-    get(EXECUTE)->add(new Method<ListLayer>("SetCommand", this, &ListLayer::execute));
+}
+
+
+void ListLayer::Init()
+{
+    Vertex* focus = new Method<ListLayer>("SetFocus", this, &ListLayer::SetFocusControls);
+    focus->get("Parameter")->set(Vertex::get(LAYERMANAGER)->get()->get(ANY, COMMANDS));
+    get(EXECUTE)->set(focus);
 }
 
 
@@ -58,7 +65,7 @@ void ListLayer::SetContent(Vertex* data)
 }
 
 
-bool ListLayer::SetCommand(Vertex* cmd)
+bool ListLayer::SetFocusControls(Vertex* cmd)
 {
     Vertex* children = get(LINK, CHILDREN);
     if(!children)
@@ -100,13 +107,6 @@ bool ListLayer::SetCommand(Vertex* cmd)
             child->get(BACK)->set(get(EXECUTE)->get());
         }
     }
-    return true;
-}
-
-
-bool ListLayer::execute(Vertex* param)
-{
-    SetCommand(Vertex::get(LAYERMANAGER)->get()->get(ANY, COMMANDS));
     return true;
 }
 

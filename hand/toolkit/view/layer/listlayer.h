@@ -31,10 +31,10 @@ class ListLayer : public Layer
 
         // Set pointer to a data tree node
         void SetContent(Vertex* focus);
-        bool SetCommand(Vertex* cmd);
         // Requests the input focus
-        bool execute(Vertex* param);
+        bool SetFocusControls(Vertex* cmd);
     protected:
+        virtual void Init();
         virtual Vertex* GetLayout(Vertex* data);
 };
 
