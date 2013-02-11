@@ -39,7 +39,6 @@ class StateNode : public List
         StateNode* GetParent(uint pos);
         // Returns the sub-node at given position if it's a child
         StateNode* GetChild(uint pos);
-
 };
 
 

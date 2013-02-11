@@ -18,6 +18,7 @@
  */
 
 #include "view/layer/listlayer.h"
+#include "view/layer/layermanager.h"
 #include "graph/method.h"
 #include "graph/data.h"
 #include "view/datatypes/layout.h"
@@ -76,6 +77,15 @@ bool ListLayer::SetCommand(Vertex* cmd)
         foc_cmds->reset();
     }
 
+    {
+        Vertex* back = get(BACK)->get();
+        if(back)
+        {
+            (dynamic_cast<LayerManager*>(Vertex::get(LAYERMANAGER)->get()))->GetCommand(back, 2);
+            foc_cmds->attach(back->Vertex::get(COMMAND)->get());
+        }
+    }
+
     Layer* child;
     i = 0;
     Vertex* curr_cmd;
@@ -83,8 +93,12 @@ bool ListLayer::SetCommand(Vertex* cmd)
     {
         curr_cmd = cmd->get(i);
         if(child->Layer::SetCommand(curr_cmd))
+        {
             // Store current focus
             foc_cmds->attach(curr_cmd);
+            // Add a back reference
+            child->get(BACK)->set(get(EXECUTE)->get());
+        }
     }
     return true;
 }
