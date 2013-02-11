@@ -27,7 +27,7 @@
 using namespace std;
 
 
-LayerManager::LayerManager() : ListLayer(LAYERMANAGER)
+LayerManager::LayerManager() : Layer(LAYERMANAGER)
 {
     Vertex::get(LAYERMANAGER)->set(this);
     type(LAYERMANAGER);

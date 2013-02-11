@@ -27,7 +27,7 @@ class Device;
 class InputState;
 
 
-class LayerManager : public ListLayer
+class LayerManager : public Layer
 {
     public:
                 LayerManager();
