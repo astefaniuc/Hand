@@ -68,8 +68,6 @@ void HandServer::Present(string file)
         app = app->Vertex::get(ot->name(), ANY);
     }
     GetUser()->Layer::SetContent(app);
-    // Start the timer driven (callback) execution and stop the current thread
-    Beat();
 }
 
 
@@ -89,7 +87,7 @@ LayerManager* HandServer::GetUser()
 }
 
 
-// C Method used in HandServer::Beat()
+// C Method used in HandServer::Start()
 // C++ methods can't be called directly as a callback
 Uint32 CallServerPump(Uint32 i, void* server)
 {
@@ -99,7 +97,7 @@ Uint32 CallServerPump(Uint32 i, void* server)
 }
 
 
-// C Method used in HandServer::Beat()
+// C Method used in HandServer::Start()
 // Removes all devices but the keyboard from the event queue
 int EventFilter(const SDL_Event *event)
 {
@@ -109,7 +107,7 @@ int EventFilter(const SDL_Event *event)
 }
 
 
-void HandServer::Beat()
+void HandServer::Start()
 {
     // Start only once
     if(Timer)

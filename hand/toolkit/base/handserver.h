@@ -39,11 +39,10 @@ class HandServer : public DataManager
         static HandServer* GetInstance(void);
         // Called from main()
         void Present(std::string file);
-    private:
         // Initializes all subsystems:
         LayerManager* GetUser();
         // Starts timer (infinite loop)
-        void Beat();
+        void Start();
     public:
         // Called from C callback
         void Pump();
