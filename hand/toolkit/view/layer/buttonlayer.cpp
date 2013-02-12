@@ -50,6 +50,9 @@ void ButtonLayer::SetContent(Vertex* data)
     Insert(data, NAME);
     Insert(data->Vertex::get(NOTE, DESCRIPTION), DESCRIPTION);
     Insert(data->Vertex::get(ANY, ICON), ICON);
+    Vertex* cmd = data->Vertex::get(COMMAND)->get();
+    if(cmd)
+        Insert(cmd->get(VIEW), CONTROLID);
 }
 
 

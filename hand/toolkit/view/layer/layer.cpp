@@ -64,7 +64,7 @@ bool Layer::Update(bool forced)
 void Layer::SetContent(Vertex* data)
 {
     // ReleaseContent
-    get(CHILDREN)->reset();
+//    get(CHILDREN)->reset();
     get(CONTENT)->set(data);
     Changed = true;
 }

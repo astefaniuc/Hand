@@ -59,6 +59,7 @@
 #define RGB              "RGB"
 #define SCALED           "scaled"
 #define SCALEDHORIZONTAL "scaled horizontal"
+#define SYSTEM           "System"
 #define TARGET           "Target"
 #define TEXT             "Text"
 #define THEME            "Theme"

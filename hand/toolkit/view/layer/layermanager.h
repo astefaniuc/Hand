@@ -33,6 +33,9 @@ class LayerManager : public Layer
                 LayerManager();
         virtual ~LayerManager();
 
+    protected:
+        void    Init();
+    public:
         bool    Update(bool force);
 
         bool    GetCommand(Vertex* func, int level);
@@ -49,20 +52,17 @@ class LayerManager : public Layer
         void SetBufferType(buffer_type bt);
         void SetBuffer(SDL_Surface* buffer);
 
-    protected:
-        void    Init();
-
     private:
+        bool    Expand(Vertex* list);
         bool    Exit(Vertex* ignore);
         bool    GetAllThemes(Vertex* themes_dir);
         bool    LoadTheme(Vertex* theme);
         void    UnloadTheme();
-        bool    Expand(Vertex* list);
 
         // Contains the only pointer to the Device
         Device*  _Device;
         Vertex*  NextRequest;
-        Layer*   MasterView;
+        Layer*   MainView;
 };
 
 #endif /* VIEW_LAYER_LAYERMANAGER_H */

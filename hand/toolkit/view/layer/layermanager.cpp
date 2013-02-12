@@ -31,10 +31,10 @@ LayerManager::LayerManager() : Layer(LAYERMANAGER)
 {
     Vertex::get(LAYERMANAGER)->set(this);
     type(LAYERMANAGER);
+
     NextRequest = NULL;
     _Device = NULL;
-    MasterView = NULL;
-    // TODO: still needed?
+    MainView = NULL;
     BufferType = COLLECTOR;
 }
 
@@ -53,13 +53,13 @@ void LayerManager::Init()
     // Load the theme
     LoadTheme(Vertex::get(FACTORY, THEMES)->get(DEFAULT));
 
-    List* pub = new List("System");
-    add(pub);
+    Vertex* pub = get(SYSTEM);
     Layer::SetContent(pub);
     pub->add(new Method<LayerManager>("Exit", this, &LayerManager::Exit));
     // Add the exit function to the tree of available funcs
     // Request command at highest level
     GetCommand(pub->get("Exit"), _Device->GetNumberOfKeys());
+    Insert(pub, SYSTEM);
 }
 
 
@@ -67,16 +67,26 @@ bool LayerManager::Update(bool forced)
 {
     if(NextRequest)
     {
-        if(MasterView)
+        if(MainView)
         {
-            delete(MasterView);
-            MasterView = NULL;
+            delete(MainView);
+            MainView = NULL;
         }
         if(Expand(NextRequest))
             forced = true;
     }
     NextRequest = NULL;
     return Layer::Update(forced);
+}
+
+
+bool LayerManager::Expand(Vertex* to_expand)
+{
+    MainView = Insert(to_expand, VIEW);
+    if(!MainView)
+        return false;
+    MainView->get(EXECUTE)->get()->execute(get(COMMANDS));
+    return true;
 }
 
 
@@ -108,7 +118,7 @@ bool LayerManager::Exit(Vertex* content)
 {
     content = GetContent();
     // Check if the default location is currently active
-    if(MasterView && (MasterView->GetContent()!=content))
+    if(MainView && (MainView->GetContent()!=content))
         return Request(content);
 
     // Suicide
@@ -156,8 +166,13 @@ bool LayerManager::LoadTheme(Vertex* f)
     Vertex* layout = get(LAYOUT, ANY);
     if(!layout)
     {
+        layout = theme->get(LAYOUT)->get();
+        layout->get(COORDINATES)->Vertex::get(REQUEST)->get(RECT)->get(FULL);
+        layout->get(ALIGNMENT)->Vertex::get(REQUEST)->get(ALIGNMENT)->get(SCALEDHORIZONTAL);
+        layout->get(DRAWER)->Vertex::get(REQUEST)->get(DRAWER)->get(LIST);
 
-        layout = theme->get(LAYOUT)->get(LIST)->get();
+        layout->get(CHILDREN)->get(VIEW)->Vertex::get(REQUEST)->get(LAYOUT)->get(ANY);
+        layout->get(CHILDREN)->get(SYSTEM)->Vertex::get(REQUEST)->get(LAYOUT)->get(ANY);
         layout->name("MasterLayer");
         set(layout);
 
@@ -187,16 +202,6 @@ bool LayerManager::GetAllThemes(Vertex* themes_list)
 }
 
 
-bool LayerManager::Expand(Vertex* to_expand)
-{
-    MasterView = Insert(to_expand, ELEMENT);
-    if(!MasterView)
-        return false;
-    MasterView->get(EXECUTE)->get()->execute(get(COMMANDS));
-    return true;
-}
-
-
 void LayerManager::SetSize(SDL_Rect size)
 {
     CoordinatesOnBuffer = size;
@@ -213,4 +218,3 @@ void LayerManager::SetBuffer(SDL_Surface* buffer)
 {
     Buffer = buffer;
 }
-

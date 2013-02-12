@@ -49,7 +49,8 @@ Default::Default() : Theme(DEFAULT)
     folder->set(new Drawer(TEXT,       this, &Default::DrawText));
 
     // Layouts
-    folder = get(LAYOUT);
+    folder = new LayoutF(LAYOUT, this, NULL);
+    set(folder);
     folder->set(new LayoutF(BACKGROUND, this, &Default::GetBackgroundLayout));
     folder->set(new LayoutF(BUTTON,     this, &Default::GetButtonLayout));
     folder->set(new LayoutF(FRAME,      this, &Default::GetFrameLayout));
@@ -107,7 +108,6 @@ bool Default::GetListLayout(Vertex* layout)
     layout->get(DRAWER)->Vertex::get(REQUEST)->get(DRAWER)->get(LIST);
 
     layout->get(CHILDREN)->get(ELEMENT)->Vertex::get(REQUEST)->get(LAYOUT)->get(ANY);
-
     return true;
 }
 
@@ -299,11 +299,11 @@ bool Default::DrawText(Vertex* layout)
 
 bool Default::DrawList(Vertex* layout)
 {
-    Vertex* children = layout->get(TOUPDATE);
-    if(!children)
+    Vertex* to_update = layout->get(TOUPDATE);
+    if(!to_update)
         return false;
 
-    uint child_cnt = children->size();
+    uint child_cnt = to_update->size();
     if(child_cnt < 1)
         return true;
 
@@ -317,7 +317,7 @@ bool Default::DrawList(Vertex* layout)
         calc.w = (1 - (c * align->w))*(1 - calc.x);
         calc.h = (1 - (c * align->h))*(1 - calc.y);
 
-        Rel_Rect* sub = GetRect(COORDINATES, children->get(i));
+        Rel_Rect* sub = GetRect(COORDINATES, to_update->get(i));
 
         // The Rect multiplication is NOT commutative, the order is important
         Rel_Rect tmp = calc;

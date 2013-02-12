@@ -44,7 +44,7 @@ Device::~Device()
 Vertex* Device::get(string name)
 {
     Vertex* ret = List::get(ANY, name);
-    if(ret && (name!=VIEW))
+    if(ret || (name!=VIEW))
         return ret;
 
     ret = List::get(VIEW);

@@ -21,7 +21,6 @@
 #include "view/layer/layermanager.h"
 #include "graph/method.h"
 #include "graph/data.h"
-#include "view/datatypes/layout.h"
 
 
 using namespace std;
@@ -115,7 +114,8 @@ Vertex* ListLayer::GetLayout(Vertex* data)
 {
     // The LIST needs two different COORDINATES rects: one for the blit
     // on the parent surface and one to calculate the children
-    Vertex* layout = new Layout("Buffer");
+    Vertex* layout = get(THEME)->get(THEME, ANY)->get(LAYOUT)->get();
+    layout->name("Buffer");
     layout->get(COORDINATES)->Vertex::get(REQUEST)->get(RECT)->get(FULL);
     layout->add(Layer::GetLayout(data));
 
