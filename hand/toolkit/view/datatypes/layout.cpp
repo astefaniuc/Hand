@@ -27,6 +27,7 @@ using namespace std;
 Layout::Layout(string name) : List(name)
 {
     type(LAYOUT);
+    add(new FieldsContainer(this));
 }
 
 
@@ -35,8 +36,8 @@ bool Layout::add(Vertex* child)
     if(!child->is(LAYOUT))
         return List::add(child);
 
-    get(CHILDREN)->add(child);
-    return child->get(PARENT)->set(this);
+    get(FIELDS)->add(child);
+    return child->Vertex::get(PARENT)->set(this);
 }
 
 
@@ -50,20 +51,16 @@ Vertex* Layout::get(string type, string name)
         return NULL;
 
     // "GetField" mode
-    Vertex* children = get(LINK, CHILDREN);
-    if(!children)
-        return NULL;
+    // Skip layouts from different layers (fields)
+    Vertex* fields = get(FIELDS)->Vertex::get(PUBLIC);
 
-    ret = children->get(ANY, name);
+    ret = fields->get(ANY, name);
     if(ret)
-    {
-        ret->get(PARENT)->set(this);
         return ret;
-    }
 
     Vertex* child;
     uint i = 0;
-    while((child=children->get(++i)) != NULL)
+    while((child=fields->get(++i)) != NULL)
     {
         ret = child->get(type, name);
         if(ret)
@@ -79,33 +76,89 @@ bool Layout::execute(Vertex* vs)
     // Set the surface in the layout and use the layout
     // as parameter for the drawer
     set(vs);
-    Vertex* f = get(DRAWER)->get();
-    if(f)
+    Vertex* drawer = get(DRAWER)->get();
+    if(drawer)
         // Execute drawer on current layout
-        f->execute(this);
-    f = get(LINK, CHILDREN);
-    if(f)
-    {
-        Vertex* layout;
-        uint i = 0;
-        while((layout=f->get(++i)) != NULL)
-            // Ignored parameter
-            layout->execute(vs);
-    }
+        drawer->execute(this);
+
+    // Skip layouts from different layers (fields)
+    Vertex* fields = get(FIELDS)->Vertex::get(PUBLIC);
+    Vertex* layout;
+    uint i = 0;
+    while((layout=fields->get(++i)) != NULL)
+        // Ignored parameter
+        layout->execute(vs);
+
     return true;
 }
 
 
 void Layout::reset()
 {
-    Vertex* sub = get(COORDINATES)->get();
-    if(sub)
-        sub->reset();
-    Vertex* children = get(LINK, CHILDREN);
-    if(!children)
-        return;
+    Vertex* coords = get(COORDINATES)->get();
+    if(coords)
+        coords->reset();
+
+    Vertex* fields = get(FIELDS);
     Vertex* layout;
     uint i = 0;
-    while((layout=children->get(++i)) != NULL)
+    while((layout=fields->get(++i)) != NULL)
         layout->reset();
+}
+
+
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
+// ----------------------------------------------------------------
+
+
+Vertex* FieldsContainer::get(uint i)
+{
+    Vertex* sub;
+    uint found = 0;
+    uint j = 0;
+    while((sub=List::get(++j)) != NULL)
+    {
+        if(sub->is(LAYOUT))
+        {
+            found++;
+            if(found == i)
+                return sub;
+        }
+        else
+        {
+            if((found + sub->size()) >= i)
+                return sub->get(i - found);
+            found += sub->size();
+        }
+    }
+    return NULL;
+}
+
+
+Vertex* FieldsContainer::get(string name)
+{
+    Vertex* ret = get(ANY, name);
+    if(!ret)
+    {
+        // Creates a new vertex
+        ret = List::get(name);
+        ret->Vertex::set(Vertex::get(PARENT));
+    }
+    return ret;
+}
+
+
+uint FieldsContainer::size()
+{
+    Vertex* sub;
+    uint found = 0;
+    uint j = 0;
+    while((sub=List::get(++j)) != NULL)
+        if(sub->is(LAYOUT))
+            found++;
+        else
+            found += sub->size();
+
+    return found;
 }

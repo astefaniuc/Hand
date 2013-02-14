@@ -80,7 +80,7 @@ Alternate::Alternate(Rect* alig, Rect* alt_alig)
 bool Alternate::execute(Vertex* layout)
 {
     Vertex* p_alig;
-    while((layout=layout->get(PARENT)->get()) != NULL)
+    while((layout=layout->Vertex::get(PARENT)->get()) != NULL)
     {
         p_alig = layout->get(ALIGNMENT)->get();
         if(!p_alig)

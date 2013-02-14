@@ -260,15 +260,9 @@ void Layer::SetLayout(Vertex* layout)
     get(THEME)->get(THEME, ANY)->execute(layout);
 
     // Add to the update tree
-    layout->set(Parent->get(LAYOUT, ANY)->get(FIELD, name())->get(PARENT));
-    Vertex* parent_layout;
-    // Bridge also any intermediate lists
-    while((parent_layout=layout->get(PARENT)->get()) != NULL)
-    {
-        if(!parent_layout->get(TOUPDATE)->attach(layout))
-            break;
-        layout = parent_layout;
-    }
+    Vertex* field = Parent->get(LAYOUT, ANY)->get(FIELD, name());
+    field->attach(layout);
+    layout->Vertex::set(field->Vertex::get(PARENT));
 }
 
 

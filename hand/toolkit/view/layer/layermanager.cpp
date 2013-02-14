@@ -171,8 +171,8 @@ bool LayerManager::LoadTheme(Vertex* f)
         layout->get(ALIGNMENT)->Vertex::get(REQUEST)->get(ALIGNMENT)->get(SCALEDHORIZONTAL);
         layout->get(DRAWER)->Vertex::get(REQUEST)->get(DRAWER)->get(LIST);
 
-        layout->get(CHILDREN)->get(VIEW)->Vertex::get(REQUEST)->get(LAYOUT)->get(ANY);
-        layout->get(CHILDREN)->get(SYSTEM)->Vertex::get(REQUEST)->get(LAYOUT)->get(ANY);
+        layout->get(FIELDS)->get(VIEW)->Vertex::get(REQUEST)->get(LAYOUT)->get(ANY);
+        layout->get(FIELDS)->get(SYSTEM)->Vertex::get(REQUEST)->get(LAYOUT)->get(ANY);
         layout->name("MasterLayer");
         set(layout);
 

@@ -30,12 +30,36 @@ class Layout : public List
         Layout(std::string name);
         virtual ~Layout(){};
 
+        // Implements add(sub_layout), a sub_layout is a fixed field
         bool add(Vertex* child);
+
         using List::get;
-        // Implements get(FIELD, name)
-        virtual Vertex* get(std::string type, std::string name);
+        // Implements get(FIELD, name) used in Layer classes to poll
+        // the availability of a specific field
+        Vertex* get(std::string type, std::string name);
+
         bool execute(Vertex* surface);
         void reset();
+};
+
+
+class FieldsContainer : public List
+{
+    public:
+        FieldsContainer(Vertex* parent_layout) : List(FIELDS)
+        {
+            Vertex::get(PARENT)->set(parent_layout);
+        };
+        ~FieldsContainer(){};
+
+        using List::get;
+        // Iterates through sub-layouts (filled fields)
+        Vertex* get(uint item);
+        // Adds a Vertex::Link to the parent layout to new fields
+        Vertex* get(std::string name);
+
+        // Returns the number of sub-layouts (filled fields)
+        uint size();
 };
 
 

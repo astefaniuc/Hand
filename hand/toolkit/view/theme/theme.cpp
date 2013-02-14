@@ -70,11 +70,10 @@ bool Theme::execute(Vertex* input)
     while((sub=input->get(++i)) != NULL)
     {
         name = sub->name();
-        if((name==TOUPDATE) || (name==LAYER_FACTORIES)
-                || (name==TARGET) || (name==THEME))
+        if((name==LAYER_FACTORIES) || (name==TARGET) || (name==THEME))
             continue;
 
-        if(name == CHILDREN)
+        if(name == FIELDS)
         {
             uint j = 0;
             Vertex* child;

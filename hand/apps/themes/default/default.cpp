@@ -69,7 +69,7 @@ Default::Default() : Theme(DEFAULT)
     folder = get(ALIGNMENT);
     folder->set(new RectFactory(HORIZONTAL,         1,   0,   1,   0));
     folder->set(new RectFactory(VERTICAL,           0,   1,   0,   1));
-    folder->set(new AlternateFactory(ALTERNATE, folder->get(HORIZONTAL), folder->get(VERTICAL)));
+    folder->set(new AlternateFactory(ALTERNATE, folder->get(VERTICAL), folder->get(HORIZONTAL)));
     folder->set(new RectFactory(SCALEDHORIZONTAL,   1,   0,  .5,   0));
     // Colors
     folder = get(COLOR);
@@ -90,11 +90,11 @@ bool Default::GetViewLayout(Vertex* layout)
     layout->get(ALIGNMENT)->Vertex::get(REQUEST)->get(ALIGNMENT)->get(VERTICAL);
     layout->get(DRAWER)->Vertex::get(REQUEST)->get(DRAWER)->get(LIST);
 
-    layout->get(CHILDREN)->get(ELEMENT)->Vertex::get(REQUEST)->get(LAYOUT)->get(ANY);
+    layout->get(FIELDS)->get(ELEMENT)->Vertex::get(REQUEST)->get(LAYOUT)->get(ANY);
 
     Vertex* controls = get(LAYOUT)->get(LIST)->get(FRAMEDLIST)->get();
     controls->get(ALIGNMENT)->Vertex::get(REQUEST)->get(ALIGNMENT)->get()->name(HORIZONTAL);
-    controls->get(CHILDREN)->get(ELEMENT)->Vertex::get(REQUEST)->get(LAYOUT)->get()->name(BUTTON);
+    controls->get(FIELDS)->get(ELEMENT)->Vertex::get(REQUEST)->get(LAYOUT)->get()->name(BUTTON);
     layout->add(controls);
 
     return true;
@@ -107,7 +107,7 @@ bool Default::GetListLayout(Vertex* layout)
     layout->get(ALIGNMENT)->Vertex::get(REQUEST)->get(ALIGNMENT)->get(ALTERNATE);
     layout->get(DRAWER)->Vertex::get(REQUEST)->get(DRAWER)->get(LIST);
 
-    layout->get(CHILDREN)->get(ELEMENT)->Vertex::get(REQUEST)->get(LAYOUT)->get(ANY);
+    layout->get(FIELDS)->get(ELEMENT)->Vertex::get(REQUEST)->get(LAYOUT)->get(ANY);
     return true;
 }
 
@@ -122,9 +122,8 @@ bool Default::GetFramedListLayout(Vertex* layout)
     Vertex* bgrd = get(LAYOUT)->get(BACKGROUND)->get();
     bgrd->get(COLOR)->Vertex::get(REQUEST)->get(COLOR)->get(BACKGROUND)->get()->name(LIST);
     frame->add(bgrd);
-    frame->get(TOUPDATE)->attach(bgrd);
 
-    GetListLayout(layout);
+    frame->add(get(LAYOUT)->get(LIST)->get());
     return true;
 }
 
@@ -134,34 +133,30 @@ bool Default::GetButtonLayout(Vertex* layout)
     layout->get(COORDINATES)->Vertex::get(REQUEST)->get(RECT)->get(SCALED);
 
     Vertex* frame = get(LAYOUT)->get(FRAME)->get();
+    frame->add(get(LAYOUT)->get(BACKGROUND)->get());
     layout->add(frame);
-
-    Vertex* bgrd = get(LAYOUT)->get(BACKGROUND)->get();
-    frame->add(bgrd);
-    frame->get(TOUPDATE)->attach(bgrd);
 
     // The Button container
     Vertex* content = get(LAYOUT)->get(LIST)->get();
-    layout->add(content);
+    content->name("Content");
     content->get(ALIGNMENT)->Vertex::get(REQUEST)->get(ALIGNMENT)->get()->name(VERTICAL);
-    frame->get(TOUPDATE)->attach(content);
+    frame->add(content);
 
     Vertex* upper = get(LAYOUT)->get(LIST)->get();
-    content->add(upper);
-    // The next call of content->get(LAYOUT, LIST) should return a new object
     upper->name("Upper");
     upper->get(ALIGNMENT)->Vertex::get(REQUEST)->get(ALIGNMENT)->get()->name(SCALEDHORIZONTAL);
+    content->get(FIELDS)->add(upper);
 
     Vertex* lower = get(LAYOUT)->get(LIST)->get();
-    content->add(lower);
     lower->name("Lower");
     lower->get(ALIGNMENT)->Vertex::get(REQUEST)->get(ALIGNMENT)->get()->name(SCALEDHORIZONTAL);
+    content->get(FIELDS)->add(lower);
 
     // Store the layer/layout types for the fields as simple nodes
-    upper->get(CHILDREN)->get(ICON)->Vertex::get(REQUEST)->get(LAYOUT)->get(TEXT);
-    upper->get(CHILDREN)->get(NAME)->Vertex::get(REQUEST)->get(LAYOUT)->get(TEXT);
-    lower->get(CHILDREN)->get(DESCRIPTION)->Vertex::get(REQUEST)->get(LAYOUT)->get(TEXT);
-    lower->get(CHILDREN)->get(CONTROLID)->Vertex::get(REQUEST)->get(LAYOUT)->get(LIST);
+    upper->get(FIELDS)->get(ICON)->Vertex::get(REQUEST)->get(LAYOUT)->get(TEXT);
+    upper->get(FIELDS)->get(NAME)->Vertex::get(REQUEST)->get(LAYOUT)->get(TEXT);
+    lower->get(FIELDS)->get(DESCRIPTION)->Vertex::get(REQUEST)->get(LAYOUT)->get(TEXT);
+    lower->get(FIELDS)->get(CONTROLID)->Vertex::get(REQUEST)->get(LAYOUT)->get(LIST);
 
     return true;
 }
@@ -213,14 +208,11 @@ bool Default::DrawFrame(Vertex* layout)
     Rel_Rect* sap = GetRect(COORDINATES, layout);
     Multiply(sap, &content_size);
 
-    Vertex* to_update = layout->get(TOUPDATE);
-    if(to_update)
-    {
-        Vertex* child;
-        uint i = 0;
-        while((child=to_update->get(++i)) != NULL)
-            Multiply(sap, GetRect(COORDINATES, child));
-    }
+    Vertex* fields = layout->get(FIELDS);
+    Vertex* child;
+    uint i = 0;
+    while((child=fields->get(++i)) != NULL)
+        Multiply(sap, GetRect(COORDINATES, child));
 
     // Draw each frame line separately
     SDL_Rect up, down, left, right;
@@ -299,25 +291,22 @@ bool Default::DrawText(Vertex* layout)
 
 bool Default::DrawList(Vertex* layout)
 {
-    Vertex* to_update = layout->get(TOUPDATE);
-    if(!to_update)
-        return false;
-
-    uint child_cnt = to_update->size();
-    if(child_cnt < 1)
+    Vertex* fields = layout->get(FIELDS);
+    uint cnt = fields->size();
+    if(cnt < 1)
         return true;
 
     Rel_Rect* align = GetRect(ALIGNMENT, layout);
     Rel_Rect* size = GetRect(COORDINATES, layout);
     Rel_Rect calc;
 
-    for(uint i=1; i<=child_cnt; i++)
+    for(uint i=1; i<=cnt; i++)
     {
-        double c = double(child_cnt-i)/double(child_cnt-i+1);
+        double c = double(cnt-i)/double(cnt-i+1);
         calc.w = (1 - (c * align->w))*(1 - calc.x);
         calc.h = (1 - (c * align->h))*(1 - calc.y);
 
-        Rel_Rect* sub = GetRect(COORDINATES, to_update->get(i));
+        Rel_Rect* sub = GetRect(COORDINATES, fields->get(i));
 
         // The Rect multiplication is NOT commutative, the order is important
         Rel_Rect tmp = calc;
