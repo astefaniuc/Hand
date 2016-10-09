@@ -20,6 +20,7 @@
 #include <dlfcn.h>
 #include <boost/filesystem/path.hpp>
 #include <boost/filesystem/operations.hpp>
+#include <iostream>
 #include "base/handapp.h"
 #include "base/handapploader.h"
 #include "base/filesystem.h"

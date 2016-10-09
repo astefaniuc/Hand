@@ -39,9 +39,6 @@ class LayerManager : public Layer
         bool    Update(bool force);
 
         bool    GetCommand(Vertex* func, int level);
-        // Returns the list which should be mapped to the InputState
-        // TODO: better move it to the "view" layer or to base layer?
-        Vertex* GetCommandList(Vertex* base);
         void    SetDevice(Device*);
 
         // Stores the pointer to the object to be displayed next

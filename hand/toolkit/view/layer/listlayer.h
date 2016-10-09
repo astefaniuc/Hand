@@ -27,15 +27,17 @@ class ListLayer : public Layer
 {
     public:
         ListLayer(std::string name);
-        virtual ~ListLayer(){};
+        virtual ~ListLayer() {}
 
         // Set pointer to a data tree node
         void SetContent(Vertex* focus);
         // Requests the input focus
-        bool SetFocusControls(Vertex* cmd);
     protected:
         virtual void Init();
         virtual Vertex* GetLayout(Vertex* data);
+        bool SetFocus(Vertex*);
+        // Returns the list which should be mapped to the InputState
+        Vertex* GetControlsList(Vertex* curr_list);
 };
 
 #endif /* VIEW_LAYER_LISTLAYER_H */

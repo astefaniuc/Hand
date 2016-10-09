@@ -85,24 +85,8 @@ bool LayerManager::Expand(Vertex* to_expand)
     MainView = Insert(to_expand, VIEW);
     if(!MainView)
         return false;
-    MainView->get(EXECUTE)->get()->execute(get(COMMANDS));
+    MainView->get(EXECUTE)->get()->execute(NULL);
     return true;
-}
-
-
-Vertex* LayerManager::GetCommandList(Vertex* menu)
-{
-    Vertex* child;
-    uint i = 0;
-    while((child=menu->get(++i)) != NULL)
-    {
-        if(child->is(METHOD))
-            return menu;
-
-        else if((child=GetCommandList(child)) != NULL)
-            return child;
-    }
-    return NULL;
 }
 
 

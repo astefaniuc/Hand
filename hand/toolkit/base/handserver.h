@@ -36,7 +36,7 @@ class HandServer : public DataManager
         ~HandServer();
 
     public:
-        static HandServer* GetInstance(void);
+        static HandServer* GetInstance();
         // Called from main()
         void Present(std::string file);
         // Initializes all subsystems:
@@ -48,7 +48,7 @@ class HandServer : public DataManager
         void Pump();
     private:
         //  User input handling
-        void GetUserInput(void);
+        void GetUserInput();
         void Press(SDLKey);
         void Release(SDLKey);
 

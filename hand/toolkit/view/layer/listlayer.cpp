@@ -35,9 +35,15 @@ ListLayer::ListLayer(string name) : Layer(name)
 
 void ListLayer::Init()
 {
-    Vertex* focus = new Method<ListLayer>("SetFocus", this, &ListLayer::SetFocusControls);
-    focus->get("Parameter")->set(Vertex::get(LAYERMANAGER)->get()->get(ANY, COMMANDS));
-    get(EXECUTE)->set(focus);
+    Vertex* focus = new Method<ListLayer>("SetFocus", this, &ListLayer::SetFocus);
+    focus->get("Parameter")->set(get(CONTENT)->get());
+    get(FOCUS)->set(focus);
+
+    focus = new Method<ListLayer>("SetFocusOnControls", this, &ListLayer::SetFocus);
+    focus->get("Parameter")->set(GetControlsList(get(LINK, CHILDREN)));
+    get(FOCUS)->attach(focus);
+
+    get(EXECUTE)->set(get(FOCUS)->get());
 }
 
 
@@ -64,11 +70,13 @@ void ListLayer::SetContent(Vertex* data)
 }
 
 
-bool ListLayer::SetFocusControls(Vertex* cmd)
+bool ListLayer::SetFocus(Vertex*)
 {
-    Vertex* children = get(LINK, CHILDREN);
-    if(!children)
+    Vertex* tgt= GetControlsList(get(LINK, CHILDREN));
+    if(!tgt)
         return false;
+
+    Vertex* cmd = Vertex::get(LAYERMANAGER)->get()->get(ANY, COMMANDS);
 
     // Destroy the previous focus
     Vertex* foc_cmds = cmd->Vertex::get(DEVICE, ANY)->Vertex::get(FOCUS);
@@ -95,7 +103,7 @@ bool ListLayer::SetFocusControls(Vertex* cmd)
     Layer* child;
     i = 0;
     Vertex* curr_cmd;
-    while((child=dynamic_cast<Layer*>(children->get(++i))) != NULL)
+    while((child=dynamic_cast<Layer*>(tgt->get(++i))) != NULL)
     {
         curr_cmd = cmd->get(i);
         if(child->Layer::SetCommand(curr_cmd))
@@ -107,6 +115,25 @@ bool ListLayer::SetFocusControls(Vertex* cmd)
         }
     }
     return true;
+}
+
+
+Vertex* ListLayer::GetControlsList(Vertex* curr_list)
+{
+    if(!curr_list)
+        return NULL;
+
+    Vertex* child;
+    uint i = 0;
+    while((child=curr_list->get(++i)) != NULL)
+    {
+        if(child->is(BUTTON))
+            return curr_list;
+
+        else if((child=GetControlsList(child->get(LINK, CHILDREN))) != NULL)
+            return child;
+    }
+    return NULL;
 }
 
 
