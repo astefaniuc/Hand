@@ -1,33 +1,6 @@
-/*
- *  Copyright 2012 Alex Stefaniuc
- *
- *  This file is part of Hand.
- *
- *  Hand is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU Lesser General Public License
- *  as published by the Free Software Foundation, either version 3
- *  of the License, or (at your option) any later version.
- *
- *  Hand is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU Lesser General Public License for more details.
- *
- *  You should have received a copy of the GNU Lesser General Public
- *  License along with Hand. If not, see <http://www.gnu.org/licenses/>.
- */
-
 #include "view/layer/virtualsurface.h"
 #include "view/theme/animations.h"
 #include "view/datatypes/rect.h"
-
-
-using namespace std;
-
-
-AnimationsList::AnimationsList() : List("AnimationsList")
-{
-};
 
 
 AnimationsList::~AnimationsList()
@@ -36,7 +9,7 @@ AnimationsList::~AnimationsList()
     Animation* to_delete = GetFirstAnimation();
     do{
         delete(to_delete);
-    }while((to_delete=GetNextAnimation()) != NULL);
+    }while((to_delete=GetNextAnimation()) != nullptr);
     */
     reset();
 }
@@ -60,13 +33,10 @@ bool AnimationsList::Update(Vertex* layout)
 {
     bool changed = false;
     Animation* animation = GetFirstAnimation();
-    while((GetNextAnimation()) != NULL)
-    {
+    // TODO: do {...} while(...) ?
+    while(GetNextAnimation())
         if(animation->execute(layout))
-        {
             changed = true;
-        }
-    }
 
     return changed;
 }
@@ -91,20 +61,16 @@ Animation* AnimationsList::GetNextAnimation()
 
 Animation* AnimationsList::GetCurrentAnimation()
 {
-    return NULL;
+    return nullptr;
 }
 
 
 //-----------------------------------------------
-//-----------------------------------------------
 
 
-VirtualSurface::VirtualSurface(string name) : Vertex(name)
+VirtualSurface::VirtualSurface(const std::string& name) : Vertex(name)
 {
     type(VIRTUALSURFACE);
-    Changed = true;
-    Buffer = NULL;
-    Parent = NULL;
     CoordinatesOnBuffer.x = CoordinatesOnBuffer.y =
             CoordinatesOnBuffer.w = CoordinatesOnBuffer.h = 0;
 }
@@ -145,7 +111,7 @@ void VirtualSurface::Show(SDL_Rect* rect_abs_on_buffer, Rel_Rect* rect_relative_
 
     SDL_Rect tgt_rect;
     // Calculate position of the excerpt on the parent layer
-    SDL_Surface* tgt_surface = NULL;
+    SDL_Surface* tgt_surface = nullptr;
     Parent->MapSurface(rect_relative_to_parent, tgt_rect, tgt_surface);
 
     if(Parent->BufferType == OVERLAY)
@@ -156,17 +122,12 @@ void VirtualSurface::Show(SDL_Rect* rect_abs_on_buffer, Rel_Rect* rect_relative_
 }
 
 
-void VirtualSurface::BlitSurface
-(
-        SDL_Surface* source,
-        SDL_Rect* src_pos,
-        SDL_Surface* target,
-        SDL_Rect* tgt_pos
-)
+void VirtualSurface::BlitSurface(
+    SDL_Surface* source, SDL_Rect* src_pos, SDL_Surface* target, SDL_Rect* tgt_pos)
 {
     // Recalculate also the position
     SDL_SetClipRect(target, tgt_pos);
-    if((source != NULL) && (target != NULL))
+    if(source && target)
     {
 //                SDL_SetAlpha(source, SDL_SRCALPHA, 128);
 //                SDL_SetAlpha(target, SDL_SRCALPHA, 128);
@@ -186,15 +147,9 @@ void VirtualSurface::SetSize(SDL_Rect size)
         CoordinatesOnBuffer.w = size.w;
         CoordinatesOnBuffer.h = size.h;
         SDL_FreeSurface(Buffer);
-        Buffer = NULL;
+        Buffer = nullptr;
         Changed = true;
     }
-}
-
-
-SDL_Rect VirtualSurface::GetSize()
-{
-    return CoordinatesOnBuffer;
 }
 
 
@@ -209,17 +164,18 @@ void VirtualSurface::SetBufferType(buffer_type bt)
 
 SDL_Surface* VirtualSurface::GetBuffer()
 {
-    if(Buffer == NULL)
+    if(!Buffer)
     {
         Buffer = SDL_GetVideoSurface();
         if(Parent)
         {
             const SDL_PixelFormat& fmt = *(Buffer->format);
             // Draw on buffer independent of the position
-            Buffer = SDL_CreateRGBSurface(SDL_DOUBLEBUF|SDL_HWSURFACE,
-                                          CoordinatesOnBuffer.w, CoordinatesOnBuffer.h,
-                                          fmt.BitsPerPixel,
-                                          fmt.Rmask, fmt.Gmask, fmt.Bmask, fmt.Amask);
+            Buffer = SDL_CreateRGBSurface(
+                    SDL_DOUBLEBUF|SDL_HWSURFACE,
+                    CoordinatesOnBuffer.w, CoordinatesOnBuffer.h,
+                    fmt.BitsPerPixel,
+                    fmt.Rmask, fmt.Gmask, fmt.Bmask, fmt.Amask);
         }
     }
     return Buffer;

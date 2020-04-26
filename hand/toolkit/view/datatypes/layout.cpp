@@ -1,30 +1,8 @@
-/*
- *  Copyright 2012 Alex Stefaniuc
- *
- *  This file is part of Hand.
- *
- *  Hand is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU Lesser General Public License
- *  as published by the Free Software Foundation, either version 3
- *  of the License, or (at your option) any later version.
- *
- *  Hand is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU Lesser General Public License for more details.
- *
- *  You should have received a copy of the GNU Lesser General Public
- *  License along with Hand. If not, see <http://www.gnu.org/licenses/>.
- */
-
 #include "view/datatypes/layout.h"
 #include "view/datatypes/rect.h"
 
 
-using namespace std;
-
-
-Layout::Layout(string name) : List(name)
+Layout::Layout(const std::string& name) : List(name)
 {
     type(LAYOUT);
     add(new FieldsContainer(this));
@@ -41,14 +19,14 @@ bool Layout::add(Vertex* child)
 }
 
 
-Vertex* Layout::get(string type, string name)
+Vertex* Layout::get(const std::string& type, const std::string& name)
 {
     Vertex* ret = List::get(type, name);
     if(ret)
         return ret;
 
     if(type != FIELD)
-        return NULL;
+        return nullptr;
 
     // "GetField" mode
     // Skip layouts from different layers (fields)
@@ -60,14 +38,14 @@ Vertex* Layout::get(string type, string name)
 
     Vertex* child;
     uint i = 0;
-    while((child=fields->get(++i)) != NULL)
+    while((child=fields->get(++i)) != nullptr)
     {
         ret = child->get(type, name);
         if(ret)
             return ret;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 
@@ -85,7 +63,7 @@ bool Layout::execute(Vertex* vs)
     Vertex* fields = get(FIELDS)->Vertex::get(PUBLIC);
     Vertex* layout;
     uint i = 0;
-    while((layout=fields->get(++i)) != NULL)
+    while((layout=fields->get(++i)) != nullptr)
         // Ignored parameter
         layout->execute(vs);
 
@@ -102,26 +80,22 @@ void Layout::reset()
     Vertex* fields = get(FIELDS);
     Vertex* layout;
     uint i = 0;
-    while((layout=fields->get(++i)) != NULL)
+    while((layout=fields->get(++i)) != nullptr)
         layout->reset();
 }
 
-
 // ----------------------------------------------------------------
-// ----------------------------------------------------------------
-// ----------------------------------------------------------------
-
 
 Vertex* FieldsContainer::get(uint i)
 {
     Vertex* sub;
     uint found = 0;
     uint j = 0;
-    while((sub=List::get(++j)) != NULL)
+    while((sub=List::get(++j)) != nullptr)
     {
         if(sub->is(LAYOUT))
         {
-            found++;
+            ++found;
             if(found == i)
                 return sub;
         }
@@ -132,11 +106,11 @@ Vertex* FieldsContainer::get(uint i)
             found += sub->size();
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 
-Vertex* FieldsContainer::get(string name)
+Vertex* FieldsContainer::get(const std::string& name)
 {
     Vertex* ret = get(ANY, name);
     if(!ret)
@@ -154,11 +128,13 @@ uint FieldsContainer::size()
     Vertex* sub;
     uint found = 0;
     uint j = 0;
-    while((sub=List::get(++j)) != NULL)
+    while((sub=List::get(++j)) != nullptr)
+    {
         if(sub->is(LAYOUT))
             found++;
         else
             found += sub->size();
+    }
 
     return found;
 }

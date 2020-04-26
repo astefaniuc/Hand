@@ -1,29 +1,22 @@
-#ifndef HANDAPP_TEST2_H
-#define HANDAPP_TEST2_H
+#ifndef HAND_APPS_TEST_TEST2_H
+#define HAND_APPS_TEST_TEST2_H
 
 #include "include/hand.h"
 
 
-using namespace std;
-
-
 class FindTester : public HandApp
 {
-    public:
-        FindTester(void);
-        void TestRemove();
-        void TestFindBigTree();
-    private:
-        Vertex* Build(Vertex* entry,
-                      int depth,
-                      int width,
-                      string& last_type);
-        Vertex* _Build(Vertex* entry,
-                       int depth,
-                       int width,
-                       string type);
-        Vertex* TestFind(string name, string type, bool relation);
-        bool CheckFound(Vertex* expected, Vertex* found);
+public:
+    FindTester(void);
+    void TestRemove();
+    void TestFindBigTree();
+
+private:
+    Vertex* Build(Vertex* entry, int depth, int width, std::string& last_type);
+    Vertex* _Build(Vertex* entry, int depth, int width, const std::string& type);
+
+    Vertex* TestFind(const std::string& name, const std::string& type, bool relation);
+    bool CheckFound(Vertex* expected, Vertex* found);
 };
 
-#endif /* HANDAPP_TEST2_H */
+#endif // HAND_APPS_TEST_TEST2_H

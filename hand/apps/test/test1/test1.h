@@ -1,21 +1,20 @@
-#ifndef HANDAPP_TEST1_H
-#define HANDAPP_TEST1_H
+#ifndef HAND_APPS_TEST_TEST1_H
+#define HAND_APPS_TEST_TEST1_H
 
 #include "include/hand.h"
 
 
-using namespace std;
-
-
 class App : public HandApp
 {
-    public:
-        App(void) : HandApp("Gui_Test") {Init();};
-    private:
-        bool PrintSelf(Vertex* method);
-        bool ChangeButtonName(Vertex* method);
-        void Init(void);
-        Note* Output;
+public:
+    App() : HandApp("Gui_Test") { Init(); }
+
+private:
+    bool PrintSelf(Vertex* method);
+    bool ChangeButtonName(Vertex* method);
+    void Init();
+
+    Note* Output;
 };
 
-#endif /* HANDAPP_TEST1_H */
+#endif // HAND_APPS_TEST_TEST1_H

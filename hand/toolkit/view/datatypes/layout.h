@@ -1,24 +1,5 @@
-/*
- *  Copyright 2012 Alex Stefaniuc
- *
- *  This file is part of Hand.
- *
- *  Hand is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU Lesser General Public License
- *  as published by the Free Software Foundation, either version 3
- *  of the License, or (at your option) any later version.
- *
- *  Hand is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU Lesser General Public License for more details.
- *
- *  You should have received a copy of the GNU Lesser General Public
- *  License along with Hand. If not, see <http://www.gnu.org/licenses/>.
- */
-
-#ifndef VIEW_DATATYPES_LAYOUT_H
-#define VIEW_DATATYPES_LAYOUT_H
+#ifndef HAND_VIEW_DATATYPES_LAYOUT_H
+#define HAND_VIEW_DATATYPES_LAYOUT_H
 
 #include "graph/list.h"
 #include "graph/method.h"
@@ -26,40 +7,38 @@
 
 class Layout : public List
 {
-    public:
-        Layout(std::string name);
-        virtual ~Layout(){};
+public:
+    Layout(const std::string& name);
 
-        // Implements add(sub_layout), a sub_layout is a fixed field
-        bool add(Vertex* child);
+    // Implements add(sub_layout), a sub_layout is a fixed field
+    bool add(Vertex* child) override;
 
-        using List::get;
-        // Implements get(FIELD, name) used in Layer classes to poll
-        // the availability of a specific field
-        Vertex* get(std::string type, std::string name);
+    using List::get;
+    // Implements get(FIELD, name) used in Layer classes to poll
+    // the availability of a specific field
+    Vertex* get(const std::string& type, const std::string& name) override;
 
-        bool execute(Vertex* surface);
-        void reset();
+    bool execute(Vertex* surface) override;
+    void reset() override;
 };
 
 
 class FieldsContainer : public List
 {
-    public:
-        FieldsContainer(Vertex* parent_layout) : List(FIELDS)
-        {
-            Vertex::get(PARENT)->set(parent_layout);
-        };
-        ~FieldsContainer(){};
+public:
+    FieldsContainer(Vertex* parent_layout) : List(FIELDS)
+    {
+        Vertex::get(PARENT)->set(parent_layout);
+    }
 
-        using List::get;
-        // Iterates through sub-layouts (filled fields)
-        Vertex* get(uint item);
-        // Adds a Vertex::Link to the parent layout to new fields
-        Vertex* get(std::string name);
+    using List::get;
+    // Iterates through sub-layouts (filled fields)
+    Vertex* get(uint item) override;
+    // Adds a Vertex::Link to the parent layout to new fields
+    Vertex* get(const std::string& name) override;
 
-        // Returns the number of sub-layouts (filled fields)
-        uint size();
+    // Returns the number of sub-layouts (filled fields)
+    uint size() override;
 };
 
 
@@ -68,20 +47,19 @@ class LayoutFactory : public Method<I>
 {
     typedef bool (I::*TFunction)(Vertex*);
 
-    public:
-        LayoutFactory(std::string name, I* obj, TFunction func) : Method<I>(name, obj, func)
-        {
-            Vertex::type(FACTORY);
-        };
-        virtual ~LayoutFactory(){};
+public:
+    LayoutFactory(const std::string& name, I* obj, TFunction func) : Method<I>(name, obj, func)
+    {
+        Vertex::type(FACTORY);
+    }
 
-        Vertex* _get()
-        {
-            Vertex* ret = new Layout(Vertex::name());
-            Vertex::add(ret);
-            Method<I>::execute(ret);
-            return ret;
-        };
+    Vertex* _get() override
+    {
+        Vertex* ret = new Layout(Vertex::name());
+        Vertex::add(ret);
+        Method<I>::execute(ret);
+        return ret;
+    }
 };
 
-#endif /* VIEW_DATATYPES_LAYOUT_H */
+#endif // HAND_VIEW_DATATYPES_LAYOUT_H

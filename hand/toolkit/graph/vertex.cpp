@@ -1,22 +1,3 @@
-/*
- *  Copyright 2012 Alex Stefaniuc
- *
- *  This file is part of Hand.
- *
- *  Hand is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU Lesser General Public License
- *  as published by the Free Software Foundation, either version 3
- *  of the License, or (at your option) any later version.
- *
- *  Hand is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU Lesser General Public License for more details.
- *
- *  You should have received a copy of the GNU Lesser General Public
- *  License along with Hand. If not, see <http://www.gnu.org/licenses/>.
- */
-
 #include "graph/baselist.h"
 #include "graph/vertex.h"
 #include "graph/link.h"
@@ -25,13 +6,8 @@
 #include "base/handserver.h"
 
 
-using namespace std;
-
-
-Vertex::Vertex(string name)
+Vertex::Vertex(const std::string& name) : Name(name)
 {
-    Type = NULL;
-    Name = name;
     Body = new BaseList();
     References = new BaseList();
 }
@@ -42,7 +18,7 @@ Vertex::~Vertex()
     reset();
     delete(Type);
     // Remove references to this object
-    for(VIterator curr = References->begin(); curr != References->end(); curr++)
+    for(VIterator curr = References->begin(); curr != References->end(); ++curr)
         (*curr)->Body->erase(this);
     delete(References);
     delete(Body);
@@ -55,7 +31,7 @@ void Vertex::reset()
     while(curr != Body->end())
     {
         // Recursively delete all children
-        if(!(*curr)->owner() || ((*curr)->owner()==this))
+        if(!(*curr)->getOwner() || ((*curr)->getOwner() == this))
             delete((*curr));
         else
         {
@@ -74,7 +50,7 @@ bool Vertex::add(Vertex* child)
 
     if(Body->find(child)==Body->end())
         Body->push_back(child);
-    child->owner(this);
+    child->setOwner(this);
 
     return true;
 }
@@ -104,7 +80,7 @@ bool Vertex::set(Vertex* child)
 
 bool Vertex::attach(Vertex* child)
 {
-    if(!child || (Body->find(child)!=Body->end()))
+    if(!child || (Body->find(child) != Body->end()))
         return false;
 
     Body->push_back(child);
@@ -122,17 +98,17 @@ Vertex* Vertex::get()
 
 Vertex* Vertex::_get()
 {
-    return NULL;
+    return nullptr;
 }
 
 
-Vertex* Vertex::get(string s)
+Vertex* Vertex::get(const std::string& s)
 {
     if(s == "")
-        return NULL;
+        return nullptr;
     VIterator curr;
     VIterator end = Body->end();
-    for(curr=Body->begin(); curr!=end; curr++)
+    for(curr = Body->begin(); curr != end; ++curr)
         if((*curr)->name() == s)
             return (*curr);
 
@@ -142,40 +118,40 @@ Vertex* Vertex::get(string s)
 }
 
 
-Vertex* Vertex::get(string type, string name)
+Vertex* Vertex::get(const std::string& type, const std::string& name)
 {
     VIterator curr = Body->begin();
     VIterator end = Body->end();
 
     if(type == ANY)
     {
-        for(; curr!=end; curr++)
+        for(; curr != end; ++curr)
             if((*curr)->name() == name)
                 return (*curr);
     }
     else if(name == ANY)
     {
-        for(; curr!=end; curr++)
+        for(; curr != end; ++curr)
             if((*curr)->is(type))
                 return (*curr);
     }
     else
     {
-        for(; curr!=end; curr++)
-            if(((*curr)->name()==name) && (*curr)->is(type))
+        for(; curr != end; ++curr)
+            if(((*curr)->name() == name) && (*curr)->is(type))
                 return (*curr);
-        if((type==FACTORY) || (type==FACTORYMAP))
+        if((type == FACTORY) || (type == FACTORYMAP))
             return HandServer::GetInstance()->get(type, name);
     }
 
-    return NULL;
+    return nullptr;
 }
 
 
 Vertex* Vertex::get(uint i)
 {
     if(i == 0)
-        return NULL;
+        return nullptr;
 
     // 1-based
     --i;
@@ -183,13 +159,13 @@ Vertex* Vertex::get(uint i)
     if(i < Body->size())
         return Body->at(i);
 
-    return NULL;
+    return nullptr;
 }
 
 
 bool Vertex::remove(Vertex* child)
 {
-    if(!child->owner() || (child->owner()==this))
+    if(!child->getOwner() || (child->getOwner() == this))
     {
         delete(child);
         return true;
@@ -214,19 +190,7 @@ uint Vertex::size()
 }
 
 
-void Vertex::name(string name)
-{
-    Name = name;
-}
-
-
-string& Vertex::name()
-{
-    return Name;
-}
-
-
-void Vertex::type(string type)
+void Vertex::type(const std::string& type)
 {
     if(type.empty())
         return;
@@ -238,7 +202,7 @@ void Vertex::type(string type)
 }
 
 
-string Vertex::type()
+std::string Vertex::type()
 {
     // TODO: needs context sensitive type
     if(Type)
@@ -248,7 +212,7 @@ string Vertex::type()
 }
 
 
-bool Vertex::is(string type)
+bool Vertex::is(const std::string& type)
 {
     if(type.empty())
         return false;
@@ -282,7 +246,7 @@ bool Vertex::is(RegularExpression* se)
 }
 
 
-void Vertex::owner(Vertex* owner)
+void Vertex::setOwner(Vertex* owner)
 {
     VIterator curr = References->find(owner);
     if(curr != References->end())
@@ -295,21 +259,9 @@ void Vertex::owner(Vertex* owner)
 }
 
 
-Vertex* Vertex::owner()
+Vertex* Vertex::getOwner()
 {
     return References->front();
-}
-
-
-string Vertex::getAsString()
-{
-    return Name;
-}
-
-
-bool Vertex::execute(Vertex* func_param)
-{
-    return false;
 }
 
 
@@ -326,10 +278,10 @@ bool Vertex::isOpen(Search* search)
 }
 
 
-Vertex* Vertex::find(string name, int max_depth)
+Vertex* Vertex::find(const std::string& name, int max_depth)
 {
     int depth = 0;
-    Vertex* result = NULL;
+    Vertex* result = nullptr;
     while(depth <= max_depth)
     {
         // Allow call of overloaded _Find
@@ -343,24 +295,24 @@ Vertex* Vertex::find(string name, int max_depth)
 }
 
 
-Vertex* Vertex::_find(string name, int depth)
+Vertex* Vertex::_find(const std::string& name, int depth)
 {
     if(depth < 0)
-        return NULL;
+        return nullptr;
     if(depth == 0)
     {
         if(Name == name)
             return this;
-        return NULL;
+        return nullptr;
     }
 
-    Vertex* ret = NULL;
+    Vertex* ret = nullptr;
     uint s = Body->size();
     --depth;
     for(uint i=0; i<s; i++)
     {
         ret = Body->at(i)->Vertex::_find(name, depth);
-        if(ret != NULL)
+        if(ret != nullptr)
             break;
     }
     return ret;
@@ -378,5 +330,5 @@ Vertex* Vertex::find(RegularExpression* expression)
         if(expression->Matches(ret->name()))
             return ret;
     }
-    return NULL;
+    return nullptr;
 }

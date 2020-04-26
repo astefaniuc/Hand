@@ -1,29 +1,7 @@
-/*
- *  Copyright 2012 Alex Stefaniuc
- *
- *  This file is part of Hand.
- *
- *  Hand is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU Lesser General Public License
- *  as published by the Free Software Foundation, either version 3
- *  of the License, or (at your option) any later version.
- *
- *  Hand is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU Lesser General Public License for more details.
- *
- *  You should have received a copy of the GNU Lesser General Public
- *  License along with Hand. If not, see <http://www.gnu.org/licenses/>.
- */
-
 #include "graph/list.h"
 
 
-using namespace std;
-
-
-List::List(string name) : Vertex(name)
+List::List(const std::string& name) : Vertex(name)
 {
     /*
        Delayed initialization of the public list,
@@ -58,13 +36,13 @@ Vertex* List::_get()
 }
 
 
-Vertex* List::get(string s)
+Vertex* List::get(const std::string& s)
 {
     if(s == PUBLIC)
     {
         Vertex* child;
         uint i = 0;
-        while((child=Vertex::get(++i)) != NULL)
+        while((child=Vertex::get(++i)) != nullptr)
             if(child->name() == s)
                 return child;
 
@@ -84,7 +62,7 @@ Vertex* List::get(uint i)
 }
 
 
-Vertex* List::get(string type, string name)
+Vertex* List::get(const std::string& type, const std::string& name)
 {
     return List::get(PUBLIC)->get(type, name);
 }

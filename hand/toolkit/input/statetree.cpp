@@ -1,27 +1,5 @@
-/*
- *  Copyright 2012 Alex Stefaniuc
- *
- *  This file is part of Hand.
- *
- *  Hand is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU Lesser General Public License
- *  as published by the Free Software Foundation, either version 3
- *  of the License, or (at your option) any later version.
- *
- *  Hand is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU Lesser General Public License for more details.
- *
- *  You should have received a copy of the GNU Lesser General Public
- *  License along with Hand. If not, see <http://www.gnu.org/licenses/>.
- */
-
 #include "input/statetree.h"
 #include "input/node.h"
-
-
-using namespace std;
 
 
 StateGraph::StateGraph() : Vertex(STATEGRAPH)
@@ -32,14 +10,14 @@ StateGraph::StateGraph() : Vertex(STATEGRAPH)
 
 bool StateGraph::execute(Vertex* device)
 {
-    uint size = device->Vertex::get(KEYLIST)->size();
-    if((size==0) || (size>MAX_NUMBER_OF_BUTTONS))
+    unsigned size = device->Vertex::get(KEYLIST)->size();
+    if(!size || (size > MAX_NUMBER_OF_BUTTONS))
         return false;
     set(device);
     // Create the root/null key
     Root = new StateNode(size, GetNewPeersList());
     // Build the key tree on top
-    for(uint i=1; i<=size; i++)
+    for(unsigned i = 1; i <= size; ++i)
         // Build the key tree bellow
         AddNodes(1, i);
 
@@ -61,10 +39,10 @@ void StateGraph::AddNodes(uint level, uint key_nr)
     uint i = 0;
     Vertex* parent_node;
     // Create a new node for each one existing one level down
-    while((parent_node=p_nodes->get(++i)) != NULL)
+    while((parent_node=p_nodes->get(++i)) != nullptr)
     {
         // Ignore nodes inserted for the current key
-        if(parent_node->get(key_nr)->get() != NULL)
+        if(parent_node->get(key_nr)->get())
             continue;
 
         // Appends also the new node to c_nodes
@@ -94,24 +72,24 @@ Vertex* StateGraph::GetParentNode(uint level, uint pos)
     Vertex* peers = GetCommands(level);
     Vertex* node;
     uint i = 0;
-    while((node=peers->get(++i)) != NULL)
-        if(node->get(pos)->get() == NULL)
+    while((node=peers->get(++i)) != nullptr)
+        if(!node->get(pos)->get())
             return node;
 
-    return NULL;
+    return nullptr;
 }
 
 
 Vertex* StateGraph::GetCommands(uint level)
 {
     if(level > Root->size())
-        return NULL;
+        return nullptr;
 
     // Search from bottom up
     StateNode* tmp_node = Root;
     for(uint i=1; i<=level; i++)
     {
-        if(tmp_node->get(i)->get() == NULL)
+        if(!tmp_node->get(i)->get())
             // Nothing yet on this level - create level container once
             return GetNewPeersList();
         tmp_node = tmp_node->GetChild(i);

@@ -1,22 +1,3 @@
-/*
- *  Copyright 2012 Alex Stefaniuc
- *
- *  This file is part of Hand.
- *
- *  Hand is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU Lesser General Public License
- *  as published by the Free Software Foundation, either version 3
- *  of the License, or (at your option) any later version.
- *
- *  Hand is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU Lesser General Public License for more details.
- *
- *  You should have received a copy of the GNU Lesser General Public
- *  License along with Hand. If not, see <http://www.gnu.org/licenses/>.
- */
-
 #include "base/handserver.h"
 #include "view/layer/layermanager.h"
 #include "input/device.h"
@@ -25,15 +6,8 @@
 #include "base/filesystem.h"
 
 
-using namespace std;
-
-
 HandServer::HandServer()
 {
-    ExecNotFinished = false;
-    CreateNewUserOnOrphanKeyPress = true;
-    DeleteDeviceIfEmpty = true;
-    Timer = NULL;
     _Screen = new Screen();
 }
 
@@ -44,11 +18,11 @@ HandServer::~HandServer()
 }
 
 
-HandServer* HandServer::Instance = NULL;
+HandServer* HandServer::Instance = nullptr;
 
 HandServer* HandServer::GetInstance()
 {
-    if(Instance == NULL)
+    if(!Instance)
     {
         Instance = new HandServer();
         Instance->Init();
@@ -57,7 +31,7 @@ HandServer* HandServer::GetInstance()
 }
 
 
-void HandServer::Present(string file)
+void HandServer::Present(const std::string& file)
 {
     Vertex* app = new File(file);
     while(Resolve(app))
@@ -163,7 +137,7 @@ void HandServer::Press(SDLKey k)
     Vertex* all_dev = get("Devices");
     Device* dev;
     uint i = 0;
-    while((dev=dynamic_cast<Device*>(all_dev->get(++i))) != NULL)
+    while((dev=dynamic_cast<Device*>(all_dev->get(++i))) != nullptr)
         if(dev->Press(k))
             return;
 
@@ -183,7 +157,7 @@ void HandServer::Release(SDLKey k)
     Vertex* all_dev = get("Devices");
     Device* dev;
     uint i = 0;
-    while((dev=dynamic_cast<Device*>(all_dev->get(++i))) != NULL)
+    while((dev=dynamic_cast<Device*>(all_dev->get(++i))) != nullptr)
     {
         if(dev->Release(k))
         {

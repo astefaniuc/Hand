@@ -1,22 +1,3 @@
-/*
- *  Copyright 2012 Alex Stefaniuc
- *
- *  This file is part of Hand.
- *
- *  Hand is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU Lesser General Public License
- *  as published by the Free Software Foundation, either version 3
- *  of the License, or (at your option) any later version.
- *
- *  Hand is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU Lesser General Public License for more details.
- *
- *  You should have received a copy of the GNU Lesser General Public
- *  License along with Hand. If not, see <http://www.gnu.org/licenses/>.
- */
-
 #include <SDL/SDL.h>
 #include "input/device.h"
 #include "input/inputstate.h"
@@ -24,14 +5,9 @@
 #include "view/datatypes/layout.h"
 
 
-using namespace std;
-
-
 Device::Device() : HandApp("settings:Keyboard::0")
 {
     type(DEVICE);
-    StateMachine = NULL;
-    numberOfKeys = NUMBER_OF_BUTTONS;
 }
 
 
@@ -41,7 +17,7 @@ Device::~Device()
 }
 
 
-Vertex* Device::get(string name)
+Vertex* Device::get(const std::string& name)
 {
     Vertex* ret = List::get(ANY, name);
     if(ret || (name!=VIEW))
@@ -90,17 +66,14 @@ bool Device::GetKeyListLayout(Vertex* layout)
 
 bool Device::Init()
 {
-    string  key_str;
-    Note* data;
-
-    for(uint i=1; i<=numberOfKeys; i++)
+    for(uint i = 1; i<=numberOfKeys; ++i)
     {
         // Do we have keys to load?
-        data = GetKey(i);
+        Note* data = GetKey(i);
         if(!data)
             return false;
-        key_str = data->get();
-        if(key_str == "")
+        std::string key_str = data->get();
+        if(key_str.empty())
             return false;
         // Translate list entries to device keys
         Keys.push_back(atoi(key_str.c_str()));
@@ -162,9 +135,7 @@ Note* Device::GetKey(uint pos)
 
 bool Device::IsUnused()
 {
-    if(Keys.size() == 0)
-        return true;
-    return false;
+    return !Keys.size();
 }
 
 
@@ -184,8 +155,8 @@ void Device::DeleteKey(uint index)
     Note* curr;
     Note* next;
     uint i = index;
-    string key;
-    while((curr=GetKey(i)) != NULL)
+    std::string key;
+    while((curr=GetKey(i)) != nullptr)
     {
         next = GetKey(++i);
         if(next)
@@ -210,7 +181,7 @@ uint Device::GetNumberOfKeys()
 InputState* Device::GetInputState()
 {
     // Create inputstate object
-    if(StateMachine == NULL)
+    if(!StateMachine)
         StateMachine = new InputState(this);
     return StateMachine;
 }

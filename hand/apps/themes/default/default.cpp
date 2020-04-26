@@ -1,26 +1,4 @@
-/*
- *  Copyright 2012 Alex Stefaniuc
- *
- *  This file is part of Hand.
- *
- *  Hand is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU Lesser General Public License
- *  as published by the Free Software Foundation, either version 3
- *  of the License, or (at your option) any later version.
- *
- *  Hand is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU Lesser General Public License for more details.
- *
- *  You should have received a copy of the GNU Lesser General Public
- *  License along with Hand. If not, see <http://www.gnu.org/licenses/>.
- */
-
 #include "default.h"
-
-
-using namespace std;
 
 
 extern "C" Vertex* Create()
@@ -44,27 +22,27 @@ Default::Default() : Theme(DEFAULT)
     // Drawers
     Vertex* folder = get(DRAWER);
     folder->set(new Drawer(BACKGROUND, this, &Default::ColorSurface));
-    folder->set(new Drawer(FRAME,      this, &Default::DrawFrame));
-    folder->set(new Drawer(LIST,       this, &Default::DrawList));
-    folder->set(new Drawer(TEXT,       this, &Default::DrawText));
+    folder->set(new Drawer(FRAME, this, &Default::DrawFrame));
+    folder->set(new Drawer(LIST, this, &Default::DrawList));
+    folder->set(new Drawer(TEXT, this, &Default::DrawText));
 
     // Layouts
-    folder = new LayoutF(LAYOUT, this, NULL);
+    folder = new LayoutF(LAYOUT, this, nullptr);
     set(folder);
     folder->set(new LayoutF(BACKGROUND, this, &Default::GetBackgroundLayout));
-    folder->set(new LayoutF(BUTTON,     this, &Default::GetButtonLayout));
-    folder->set(new LayoutF(FRAME,      this, &Default::GetFrameLayout));
-    folder->set(new LayoutF(LIST,       this, &Default::GetListLayout));
+    folder->set(new LayoutF(BUTTON, this, &Default::GetButtonLayout));
+    folder->set(new LayoutF(FRAME, this, &Default::GetFrameLayout));
+    folder->set(new LayoutF(LIST, this, &Default::GetListLayout));
     folder->get(LIST)->set(new LayoutF(FRAMEDLIST, this, &Default::GetFramedListLayout));
-    folder->get(LIST)->set(new LayoutF(VIEW,       this, &Default::GetViewLayout));
-    folder->set(new LayoutF(TEXT,       this, &Default::GetTextLayout));
+    folder->get(LIST)->set(new LayoutF(VIEW, this, &Default::GetViewLayout));
+    folder->set(new LayoutF(TEXT, this, &Default::GetTextLayout));
 
     // Properties
     // Dimensions
     folder = get(RECT);
-    folder->set(new RectFactory(FRAME,            .01, .03, .98, .94));
-    folder->set(new RectFactory(FULL,               0,   0,   1,   1));
-    folder->set(new RectFactory(SCALED,           .05, .05,  .9,  .9));
+    folder->set(new RectFactory(FRAME,  .01, .03, .98, .94));
+    folder->set(new RectFactory(FULL,     0,   0,   1,   1));
+    folder->set(new RectFactory(SCALED, .05, .05,  .9,  .9));
 
     folder = get(ALIGNMENT);
     folder->set(new RectFactory(HORIZONTAL,         1,   0,   1,   0));
@@ -79,9 +57,8 @@ Default::Default() : Theme(DEFAULT)
     folder                 ->set(new Rgb(FRAME,   30,  30,  75));
 }
 
-// ----------------------------------------------------------------
+
 // ------------------------ Layouts -------------------------------
-// ----------------------------------------------------------------
 
 
 bool Default::GetViewLayout(Vertex* layout)
@@ -192,9 +169,7 @@ bool Default::GetTextLayout(Vertex* layout)
 }
 
 
-// ----------------------------------------------------------------
 // ------------------------- Drawers ------------------------------
-// ----------------------------------------------------------------
 
 
 bool Default::DrawFrame(Vertex* layout)
@@ -211,7 +186,7 @@ bool Default::DrawFrame(Vertex* layout)
     Vertex* fields = layout->get(FIELDS);
     Vertex* child;
     uint i = 0;
-    while((child=fields->get(++i)) != NULL)
+    while((child=fields->get(++i)) != nullptr)
         Multiply(sap, GetRect(COORDINATES, child));
 
     // Draw each frame line separately
@@ -239,7 +214,7 @@ bool Default::DrawFrame(Vertex* layout)
     SDL_Surface* buffer = vs->GetBuffer();
     SDL_Rect* border[4] = {&up, &down, &left, &right};
     Rgb* color = GetRgb("FrameColor", layout);
-    for(int i=0; i<4; i++)
+    for(unsigned i = 0; i < 4; ++i)
     {
         SDL_SetClipRect(buffer, border[i]);
         FillRect(buffer, border[i], color);
@@ -263,22 +238,22 @@ bool Default::DrawText(Vertex* layout)
     if(!vs)
         return false;
 
-    string text = GetString(layout);
+    std::string text = GetString(layout);
     if(text.empty())
     {
-        vs->SetBuffer(NULL);
+        vs->SetBuffer(nullptr);
         return false;
     }
 
     SDL_Rect size = vs->GetSize();
     // Calculate the fitting font size
     int w, h;
-    int fh = size.h*0.7;
+    int fh = size.h * 0.7;
     TTF_SizeText(GetFont(fh), text.c_str(), &w, &h);
-    if((w>size.w) || (h>size.h))
-        fh = h*double(size.w)*0.7/w;
+    if((w > size.w) || (h > size.h))
+        fh = h * double(size.w) * 0.7 / w;
 
-    SDL_Surface* source = RenderText(&text, fh, GetRgb("FontColor", layout));
+    SDL_Surface* source = RenderText(text, fh, GetRgb("FontColor", layout));
 
     Rel_Rect sub;
     PlaceCentered(source, size, sub);
@@ -303,8 +278,8 @@ bool Default::DrawList(Vertex* layout)
     for(uint i=1; i<=cnt; i++)
     {
         double c = double(cnt-i)/double(cnt-i+1);
-        calc.w = (1 - (c * align->w))*(1 - calc.x);
-        calc.h = (1 - (c * align->h))*(1 - calc.y);
+        calc.w = (1 - (c * align->w)) * (1 - calc.x);
+        calc.h = (1 - (c * align->h)) * (1 - calc.y);
 
         Rel_Rect* sub = GetRect(COORDINATES, fields->get(i));
 
@@ -315,8 +290,8 @@ bool Default::DrawList(Vertex* layout)
         Multiply(size, sub);
 
         // Set the coordinates for the next iteration
-        calc.x += (calc.w*align->x);
-        calc.y += (calc.h*align->y);
+        calc.x += (calc.w * align->x);
+        calc.y += (calc.h * align->y);
     }
 
     return true;
@@ -341,7 +316,7 @@ bool Default::ColorSurface(Vertex* layout)
 }
 
 
-string Default::GetString(Vertex* layout)
+std::string Default::GetString(Vertex* layout)
 {
     Vertex* content = layout->get(TARGET)->get();
     if(content)
@@ -350,8 +325,6 @@ string Default::GetString(Vertex* layout)
 }
 
 
-//================================================//
-//================================================//
 //================================================//
 /*
 ZoomIn::ZoomIn()

@@ -39,7 +39,7 @@ void FindTester::TestRemove()
     delete(root_node);
     // Should print an error
     CheckFound(last_build, TestFind(last_name, LIST, false));
-    for(uint i=0; i<10; i++)
+    for(uint i = 0; i < 10; ++i)
     {
         // Memory consumption shouldn't grow during this
         root_node = new Vertex("RootNode");
@@ -80,18 +80,12 @@ void FindTester::TestFindBigTree()
 }
 
 
-Vertex* FindTester::Build
-(
-        Vertex* entry,
-        int depth,
-        int width,
-        string& last_type
-)
+Vertex* FindTester::Build(Vertex* entry, int depth, int width, std::string& last_type)
 {
     ostringstream t;
     t << "width" << width;
     last_type = t.str();
-    Vertex* ret = NULL;
+    Vertex* ret = nullptr;
     double start_time = clock();
     cout << "     Build(depth " << depth << ", width " << width << ", type "
             << last_type << ") time: ";
@@ -101,33 +95,26 @@ Vertex* FindTester::Build
 }
 
 
-Vertex* FindTester::_Build
-(
-        Vertex* entry,
-        int depth,
-        int width,
-        string type
-)
+Vertex* FindTester::_Build(Vertex* entry, int depth, int width, const std::string& type)
 {
-    Vertex* f = NULL;
+    Vertex* f = nullptr;
     for(int i=1; i<=width; i++)
     {
         {
             ostringstream n;
             n << "depth" << depth << "width" << i;
-            string name = n.str();
-            f = new List(name);
+            f = new List(n.str());
         }
         f->type(type);
         entry->get(CHILDREN)->add(f);
         if(depth > 1)
-            f = _Build(f, depth-1, i, type);
+            f = _Build(f, depth - 1, i, type);
     }
     return f;
 }
 
 
-Vertex* FindTester::TestFind(string name, string type, bool relation)
+Vertex* FindTester::TestFind(const std::string& name, const std::string& type, bool relation)
 {
     double start_time = clock();
     Search search("Test search");
@@ -149,7 +136,7 @@ Vertex* FindTester::TestFind(string name, string type, bool relation)
 
     if(found)
         return search.get("Findings")->get();
-    return NULL;
+    return nullptr;
 }
 
 

@@ -1,29 +1,7 @@
-/*
- *  Copyright 2012 Alex Stefaniuc
- *
- *  This file is part of Hand.
- *
- *  Hand is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU Lesser General Public License
- *  as published by the Free Software Foundation, either version 3
- *  of the License, or (at your option) any later version.
- *
- *  Hand is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU Lesser General Public License for more details.
- *
- *  You should have received a copy of the GNU Lesser General Public
- *  License along with Hand. If not, see <http://www.gnu.org/licenses/>.
- */
-
 #include "view/datatypes/rect.h"
 
 
-using namespace std;
-
-
-Rect::Rect(string name, Rel_Rect* val) : Data<Rel_Rect*>(name, val)
+Rect::Rect(const std::string& name, Rel_Rect* val) : Data<Rel_Rect*>(name, val)
 {
     type(RECT);
     // For now add plain data directly
@@ -62,11 +40,7 @@ void Rect::reset()
     Value->h = ((Data<double>*)get("h"))->get();
 }
 
-
 // ----------------------------------------------------------------
-// ----------------------------------------------------------------
-// ----------------------------------------------------------------
-
 
 Alternate::Alternate(Rect* alig, Rect* alt_alig)
     : Data<Rel_Rect*>(alig->name(), alig->get())
@@ -79,13 +53,12 @@ Alternate::Alternate(Rect* alig, Rect* alt_alig)
 
 bool Alternate::execute(Vertex* layout)
 {
-    Vertex* p_alig;
-    while((layout=layout->Vertex::get(PARENT)->get()) != NULL)
+    while((layout=layout->Vertex::get(PARENT)->get()) != nullptr)
     {
-        p_alig = layout->get(ALIGNMENT)->get();
-        if(!p_alig)
+        Vertex* alig = layout->get(ALIGNMENT)->get();
+        if(!alig)
             continue;
-        if(p_alig->name() == name())
+        if(alig->name() == name())
         {
             Vertex* alt = get(2);
             // Change Vertex positions
@@ -101,11 +74,7 @@ bool Alternate::execute(Vertex* layout)
     return true;
 }
 
-
 // ----------------------------------------------------------------
-// ----------------------------------------------------------------
-// ----------------------------------------------------------------
-
 
 void Multiply(Rel_Rect* src, Rel_Rect* tgt)
 {
@@ -129,10 +98,10 @@ void Multiply(Rel_Rect* src, SDL_Rect* tgt)
 }
 
 
-Rel_Rect* GetRect(string name, Vertex* layout)
+Rel_Rect* GetRect(const std::string& name, Vertex* layout)
 {
     Vertex* rect = layout->get(ANY, name);
-    if(rect && ((rect=rect->get()) != NULL))
+    if(rect && ((rect=rect->get()) != nullptr))
     {
         if(rect->is(METHOD))
             // Allow value changes based on (parent) layout configuration
@@ -142,5 +111,5 @@ Rel_Rect* GetRect(string name, Vertex* layout)
         if(container)
             return container->get();
     }
-    return NULL;
+    return nullptr;
 }

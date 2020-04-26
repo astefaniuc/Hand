@@ -1,30 +1,8 @@
-/*
- *  Copyright 2012 Alex Stefaniuc
- *
- *  This file is part of Hand.
- *
- *  Hand is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU Lesser General Public License
- *  as published by the Free Software Foundation, either version 3
- *  of the License, or (at your option) any later version.
- *
- *  Hand is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU Lesser General Public License for more details.
- *
- *  You should have received a copy of the GNU Lesser General Public
- *  License along with Hand. If not, see <http://www.gnu.org/licenses/>.
- */
-
 #include "view/datatypes/rgb.h"
 #include "graph/data.h"
 
 
-using namespace std;
-
-
-Rgb::Rgb(string name, Uint8 r_, Uint8 g_, Uint8 b_) : Vertex(name)
+Rgb::Rgb(const std::string& name, Uint8 r_, Uint8 g_, Uint8 b_) : Vertex(name)
 {
     type(RGB);
     // For now add plain data directly
@@ -45,7 +23,7 @@ void Rgb::reset()
 }
 
 
-Rgb* GetRgb(string name, Vertex* tree)
+Rgb* GetRgb(const std::string& name, Vertex* tree)
 {
     Vertex* rgb = tree->get(ANY, "Color");
     if(rgb)

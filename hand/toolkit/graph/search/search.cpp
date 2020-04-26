@@ -1,41 +1,14 @@
-/*
- *  Copyright 2012 Alex Stefaniuc
- *
- *  This file is part of Hand.
- *
- *  Hand is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU Lesser General Public License
- *  as published by the Free Software Foundation, either version 3
- *  of the License, or (at your option) any later version.
- *
- *  Hand is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU Lesser General Public License for more details.
- *
- *  You should have received a copy of the GNU Lesser General Public
- *  License along with Hand. If not, see <http://www.gnu.org/licenses/>.
- */
-
 #include "graph/search/search.h"
 #include "graph/search/searchcookie.h"
 #include "graph/search/searchstring.h"
 
 
-using namespace std;
-
-
-Search::Search(string name) : Vertex(name)
+Search::Search(const std::string& name) : Vertex(name)
 {
     type(METHOD);
     type(SEARCH);
 
     Findings = get("Findings");
-    SearchName = NULL;
-    SearchType = NULL;
-    SearchLink = NULL;
-    MaxDepth = MAX_SEARCH_DEPTH;
-    MultipleFinds = false;
 }
 
 
@@ -49,7 +22,7 @@ void Search::reset()
 {
     Vertex* child;
     uint i = 0;
-    while((child=Findings->get(++i)) != NULL)
+    while((child=Findings->get(++i)) != nullptr)
         Findings->detach(child);
 }
 
@@ -71,7 +44,7 @@ bool Search::execute(Vertex* target)
     path->attach(target);
 
     uint depth;
-    for(depth=0; depth<=MaxDepth; depth++)
+    for(depth = 0; depth <= MaxDepth; ++depth)
     {
         if(Step(path))
         {
@@ -80,7 +53,7 @@ bool Search::execute(Vertex* target)
                 break;
         }
 
-        if(path->size() == 0)
+        if(!path->size())
             break;
     }
 
@@ -92,7 +65,7 @@ bool Search::execute(Vertex* target)
 bool Search::Step(Vertex* path)
 {
     bool found = false;
-    if(path->size() == 0)
+    if(!path->size())
     {
         // Head of path
         found = SearchAllChilds(path);
@@ -103,7 +76,7 @@ bool Search::Step(Vertex* path)
     {
         Vertex* branch;
         uint i = 0;
-        while((branch=path->get(++i)) != NULL)
+        while((branch=path->get(++i)) != nullptr)
         {
             if(Step(branch))
             {
@@ -123,7 +96,7 @@ bool Search::SearchAllChilds(Vertex* path)
     Vertex* child;
     Vertex* path_extension;
     uint i = 0;
-    while((child=path->get()->get(++i)) != NULL)
+    while((child=path->get()->get(++i)) != nullptr)
     {
         if(!child->isOpen(this))
             continue;
@@ -156,46 +129,29 @@ bool Search::Matches(Vertex* target)
 }
 
 
-void Search::SetSearchname(string s, bool make_regex)
+void Search::SetSearchname(const std::string& s, bool make_regex)
 {
     // Add a link to the own interface for the GUI
     SearchName = AddSearchRegex("SearchName", s, make_regex);
 }
 
 
-RegularExpression* Search::GetSearchName()
-{
-    return SearchName;
-}
-
-
-void Search::SetSearchType(string s, bool make_regex)
+void Search::SetSearchType(const std::string& s, bool make_regex)
 {
     // Add a link to the own interface for the GUI
     SearchType = AddSearchRegex("SearchType", s, make_regex);
 }
 
 
-RegularExpression* Search::GetSearchType()
-{
-    return SearchType;
-}
-
-
-void Search::SetSearchLink(string s, bool make_regex)
+void Search::SetSearchLink(const std::string& s, bool make_regex)
 {
     // Add a link to the own interface for the GUI
     SearchLink = AddSearchRegex("SearchLink", s, make_regex);
 }
 
 
-RegularExpression* Search::GetSearchLink()
-{
-    return SearchLink;
-}
-
-
-RegularExpression* Search::AddSearchRegex(string relation_name, string s, bool make_regex)
+RegularExpression* Search::AddSearchRegex(
+    const std::string& relation_name, const std::string& s, bool make_regex)
 {
     RegularExpression* se;
     if(make_regex)
@@ -209,7 +165,7 @@ RegularExpression* Search::AddSearchRegex(string relation_name, string s, bool m
 }
 
 
-string Search::GetCookieName()
+std::string Search::GetCookieName()
 {
     return SEARCHCOOKIE;
 }

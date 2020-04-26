@@ -1,32 +1,12 @@
-/*
- *  Copyright 2012 Alex Stefaniuc
- *
- *  This file is part of Hand.
- *
- *  Hand is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU Lesser General Public License
- *  as published by the Free Software Foundation, either version 3
- *  of the License, or (at your option) any later version.
- *
- *  Hand is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU Lesser General Public License for more details.
- *
- *  You should have received a copy of the GNU Lesser General Public
- *  License along with Hand. If not, see <http://www.gnu.org/licenses/>.
- */
-
 #include <boost/filesystem/operations.hpp>
 #include "base/filesystem.h"
 #include "graph/data.h"
 
 
-using namespace std;
 using namespace boost::filesystem;
 
 
-File::File(string file_name) : List(file_name)
+File::File(const std::string& file_name) : List(file_name)
 {
     type(FILE_);
     path file_path(file_name);
@@ -42,7 +22,7 @@ File::File(string file_name) : List(file_name)
 }
 
 
-string File::GetFullPath()
+std::string File::GetFullPath()
 {
     return GetPath().string();
 }
@@ -69,16 +49,12 @@ path File::GetPath()
 
 
 // ----------------------------------------------------------------
-// ----------------------------------------------------------------
-// ----------------------------------------------------------------
 
 
 bool FileFactory::IsValidInput(Vertex* input)
 {
     path file_path(input->name());
-    if(is_regular_file(file_path) || is_directory(file_path))
-        return true;
-    return false;
+    return (is_regular_file(file_path) || is_directory(file_path));
 }
 
 
@@ -87,23 +63,18 @@ bool FileFactory::execute(Vertex* tree)
     Note* d_path = dynamic_cast<Note*>(tree);
     if(!d_path)
         return false;
-    Vertex* ret =  new File(d_path->get());
-    tree->Vertex::add(ret);
-    return true;
+
+    return tree->Vertex::add(new File(d_path->get()));
 }
 
 
-// ----------------------------------------------------------------
-// ----------------------------------------------------------------
 // ----------------------------------------------------------------
 
 
 bool  DirectoryLoader::IsValidInput(Vertex* entry)
 {
     File* ff = dynamic_cast<File*>(entry);
-    if(ff && is_directory(ff->GetPath()))
-        return true;
-    return false;
+    return (ff && is_directory(ff->GetPath()));
 }
 
 
@@ -120,7 +91,7 @@ bool  DirectoryLoader::execute(Vertex* tree)
     // (Re-)read the themes in
     ff_dir->reset();
     File* file;
-    for(directory_iterator dir_it(dir_path); dir_it!=end; dir_it++)
+    for(directory_iterator dir_it(dir_path); dir_it != end ; ++dir_it)
     {
         if(is_regular_file(dir_it->status()))
         {

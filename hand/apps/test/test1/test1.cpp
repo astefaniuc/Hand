@@ -16,7 +16,6 @@ extern "C" void Destroy(HandApp* app)
 
 void App::Init()
 {
-
     // The one and only view
     Output = new Note("Output field name", "<< Empty >>");
 

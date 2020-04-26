@@ -1,22 +1,3 @@
-/*
- *  Copyright 2012 Alex Stefaniuc
- *
- *  This file is part of Hand.
- *
- *  Hand is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU Lesser General Public License
- *  as published by the Free Software Foundation, either version 3
- *  of the License, or (at your option) any later version.
- *
- *  Hand is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU Lesser General Public License for more details.
- *
- *  You should have received a copy of the GNU Lesser General Public
- *  License along with Hand. If not, see <http://www.gnu.org/licenses/>.
- */
-
 #include <dlfcn.h>
 #include <boost/filesystem/path.hpp>
 #include <boost/filesystem/operations.hpp>
@@ -25,30 +6,6 @@
 #include "base/handapploader.h"
 #include "base/filesystem.h"
 #include "base/handserver.h"
-
-
-using namespace std;
-
-
-HandApp::HandApp(string name) : List(name)
-{
-    type(HANDAPP);
-}
-
-
-Binary::Binary() : Vertex(NAME_NOT_INIT)
-{
-    type(APPLOADER);
-    Library = NULL;
-    Create = NULL;
-    Destroy = NULL;
-}
-
-
-Binary::~Binary()
-{
-    reset();
-}
 
 
 bool Binary::execute(Vertex* input)
@@ -67,7 +24,7 @@ bool Binary::execute(Vertex* input)
             return true;
     }
 
-    cout << dlerror() << endl;
+    std::cout << dlerror() << std::endl;
     return false;
 }
 
@@ -87,14 +44,12 @@ void Binary::reset()
             Destroy(casted);
         dlclose(Library);
     }
-    Library = NULL;
-    Create = NULL;
-    Destroy = NULL;
+    Library = nullptr;
+    Create = nullptr;
+    Destroy = nullptr;
 }
 
 
-// ----------------------------------------------------------------
-// ----------------------------------------------------------------
 // ----------------------------------------------------------------
 
 
@@ -135,11 +90,9 @@ bool HandAppLoader::execute(Vertex* input)
 
 
 // ----------------------------------------------------------------
-// ----------------------------------------------------------------
-// ----------------------------------------------------------------
 
 
-BinaryManager::BinaryManager(string n, string d) : List(n)
+BinaryManager::BinaryManager(const std::string& n, const std::string& d) : List(n)
 {
     type(FACTORY);
     // The path to the theme files
@@ -152,7 +105,7 @@ BinaryManager::BinaryManager(string n, string d) : List(n)
     // Load all themes once
     uint i = 0;
     Vertex* file;
-    while((file=dir->get(++i)) != NULL)
+    while((file=dir->get(++i)) != nullptr)
     {
         file->Vertex::get(REQUEST)->get(HANDAPP);
         HandServer::GetInstance()->execute(file);
