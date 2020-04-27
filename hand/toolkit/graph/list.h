@@ -22,9 +22,9 @@ public:
 
     Vertex* get(const std::string& child) override;
     Vertex* get(const std::string& type, const std::string& name) override;
-    Vertex* get(uint child) override;
+    Vertex* get(unsigned child) override;
 
-    uint size() override;
+    unsigned size() override;
     // Removes all entries from the PUBLIC sub-vertex
     void reset() override;
     bool detach(Vertex* item) override;

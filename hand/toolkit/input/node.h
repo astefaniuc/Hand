@@ -7,7 +7,7 @@
 class StateNode : public List
 {
 public:
-    StateNode(uint size, Vertex* peers);
+    StateNode(unsigned size, Vertex* peers);
 
     // Implements set(METHOD)
     bool set(Vertex* sub);
@@ -16,9 +16,9 @@ public:
     Vertex* get(std::string name);
 
     // Returns the sub-node at given position if it's a parent
-    StateNode* GetParent(uint pos);
+    StateNode* GetParent(unsigned pos);
     // Returns the sub-node at given position if it's a child
-    StateNode* GetChild(uint pos);
+    StateNode* GetChild(unsigned pos);
 };
 
 

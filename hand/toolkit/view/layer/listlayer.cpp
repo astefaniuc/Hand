@@ -30,18 +30,18 @@ void ListLayer::SetContent(Vertex* data)
     // Connect list and layer
     Layer::SetContent(data);
 
-    uint nr_of_childs = data->size();
+    unsigned nr_of_childs = data->size();
     nr_of_childs--;
-    Data<uint>* max_c = dynamic_cast<Data<uint>*>(get(LAYOUT, ANY)->get("MaxSize"));
+    Data<unsigned>* max_c = dynamic_cast<Data<unsigned>*>(get(LAYOUT, ANY)->get("MaxSize"));
     if(max_c)
     {
-        uint max_size = max_c->get();
+        unsigned max_size = max_c->get();
         if(max_size < nr_of_childs)
             nr_of_childs = max_size;
     }
 
     Vertex* child;
-    uint i = 0;
+    unsigned i = 0;
     while((child=data->get(++i)) != nullptr)
         // Create the sub-objects
         Insert(child, ELEMENT);
@@ -58,7 +58,7 @@ bool ListLayer::SetFocus(Vertex*)
 
     // Destroy the previous focus
     Vertex* foc_cmds = cmd->Vertex::get(DEVICE, ANY)->Vertex::get(FOCUS);
-    uint i = 0;
+    unsigned i = 0;
     {
         Vertex* fc;
         while((fc=foc_cmds->get(++i)) != nullptr)
@@ -102,7 +102,7 @@ Vertex* ListLayer::GetControlsList(Vertex* curr_list)
         return nullptr;
 
     Vertex* child;
-    uint i = 0;
+    unsigned i = 0;
     while((child=curr_list->get(++i)) != nullptr)
     {
         if(child->is(BUTTON))

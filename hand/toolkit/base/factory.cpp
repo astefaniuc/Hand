@@ -24,7 +24,7 @@ bool Factory::IsValidInput(Vertex* input)
 
     Vertex* itf = get(INPUTTYPE);
     Vertex* it;
-    uint i = 0;
+    unsigned i = 0;
     while((it=itf->get(++i)) != nullptr)
         if((it->name() == ANY) || input->is(it->name()))
             return true;
@@ -98,7 +98,7 @@ Factory* FactoryMap::GetFactory(Vertex* target)
 {
     Factory* ret = nullptr;
     Factory* tmp = nullptr;
-    uint i = 0;
+    unsigned i = 0;
     Vertex* child;
     while((child=get(++i)) != nullptr)
     {
@@ -119,7 +119,7 @@ Factory* FactoryMap::GetFactory(const std::string& output_type)
         return nullptr;
 
     Factory* ret;
-    uint i = 0;
+    unsigned i = 0;
     Vertex* child;
     while((child=get(++i)) != nullptr)
     {

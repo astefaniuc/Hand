@@ -148,7 +148,7 @@ Vertex* Vertex::get(const std::string& type, const std::string& name)
 }
 
 
-Vertex* Vertex::get(uint i)
+Vertex* Vertex::get(unsigned i)
 {
     if(i == 0)
         return nullptr;
@@ -184,7 +184,7 @@ bool Vertex::detach(Vertex* child)
 }
 
 
-uint Vertex::size()
+unsigned Vertex::size()
 {
     return Body->size();
 }
@@ -307,9 +307,9 @@ Vertex* Vertex::_find(const std::string& name, int depth)
     }
 
     Vertex* ret = nullptr;
-    uint s = Body->size();
+    unsigned s = Body->size();
     --depth;
-    for(uint i=0; i<s; i++)
+    for(unsigned i=0; i<s; i++)
     {
         ret = Body->at(i)->Vertex::_find(name, depth);
         if(ret != nullptr)
@@ -322,9 +322,9 @@ Vertex* Vertex::_find(const std::string& name, int depth)
 Vertex* Vertex::find(RegularExpression* expression)
 {
     // "Plain" find, don't descend
-    uint s = Body->size();
+    unsigned s = Body->size();
     Vertex* ret;
-    for(uint i=0; i<s; i++)
+    for(unsigned i=0; i<s; i++)
     {
         ret = Body->at(i);
         if(expression->Matches(ret->name()))

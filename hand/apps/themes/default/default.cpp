@@ -185,7 +185,7 @@ bool Default::DrawFrame(Vertex* layout)
 
     Vertex* fields = layout->get(FIELDS);
     Vertex* child;
-    uint i = 0;
+    unsigned i = 0;
     while((child=fields->get(++i)) != nullptr)
         Multiply(sap, GetRect(COORDINATES, child));
 
@@ -267,7 +267,7 @@ bool Default::DrawText(Vertex* layout)
 bool Default::DrawList(Vertex* layout)
 {
     Vertex* fields = layout->get(FIELDS);
-    uint cnt = fields->size();
+    unsigned cnt = fields->size();
     if(cnt < 1)
         return true;
 
@@ -275,7 +275,7 @@ bool Default::DrawList(Vertex* layout)
     Rel_Rect* size = GetRect(COORDINATES, layout);
     Rel_Rect calc;
 
-    for(uint i=1; i<=cnt; i++)
+    for(unsigned i=1; i<=cnt; i++)
     {
         double c = double(cnt-i)/double(cnt-i+1);
         calc.w = (1 - (c * align->w)) * (1 - calc.x);

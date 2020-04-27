@@ -26,17 +26,17 @@ bool StateGraph::execute(Vertex* device)
 }
 
 
-void StateGraph::AddNodes(uint level, uint key_nr)
+void StateGraph::AddNodes(unsigned level, unsigned key_nr)
 {
     Vertex* tmp_node;
     Vertex* new_node;
 
     // Previous level nodes
-    Vertex* p_nodes = GetCommands(level-1);
+    Vertex* p_nodes = GetPeersList(level-1);
     // Current level nodes
-    Vertex* c_nodes = GetCommands(level);
+    Vertex* c_nodes = GetPeersList(level);
 
-    uint i = 0;
+    unsigned i = 0;
     Vertex* parent_node;
     // Create a new node for each one existing one level down
     while((parent_node=p_nodes->get(++i)) != nullptr)
@@ -50,7 +50,7 @@ void StateGraph::AddNodes(uint level, uint key_nr)
         // Connect new and old node at key number position
         ConnectNodes(parent_node, new_node, key_nr);
         // The new node inherits from the old one the position of the parents
-        for(uint j=1; j<=key_nr; j++)
+        for(unsigned j=1; j<=key_nr; j++)
         {
             if(parent_node->get(j)->name() == PARENT)
             {
@@ -67,11 +67,11 @@ void StateGraph::AddNodes(uint level, uint key_nr)
 }
 
 
-Vertex* StateGraph::GetParentNode(uint level, uint pos)
+Vertex* StateGraph::GetParentNode(unsigned level, unsigned pos)
 {
-    Vertex* peers = GetCommands(level);
+    Vertex* peers = GetPeersList(level);
     Vertex* node;
-    uint i = 0;
+    unsigned i = 0;
     while((node=peers->get(++i)) != nullptr)
         if(!node->get(pos)->get())
             return node;
@@ -80,14 +80,14 @@ Vertex* StateGraph::GetParentNode(uint level, uint pos)
 }
 
 
-Vertex* StateGraph::GetCommands(uint level)
+Vertex* StateGraph::GetPeersList(unsigned level)
 {
     if(level > Root->size())
         return nullptr;
 
     // Search from bottom up
     StateNode* tmp_node = Root;
-    for(uint i=1; i<=level; i++)
+    for(unsigned i=1; i<=level; i++)
     {
         if(!tmp_node->get(i)->get())
             // Nothing yet on this level - create level container once
@@ -98,7 +98,7 @@ Vertex* StateGraph::GetCommands(uint level)
 }
 
 
-void StateGraph::ConnectNodes(Vertex* p, Vertex* c, uint i)
+void StateGraph::ConnectNodes(Vertex* p, Vertex* c, unsigned i)
 {
     p->get(i)->attach(c);
 

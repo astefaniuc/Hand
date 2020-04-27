@@ -33,12 +33,12 @@ public:
 
     using List::get;
     // Iterates through sub-layouts (filled fields)
-    Vertex* get(uint item) override;
+    Vertex* get(unsigned item) override;
     // Adds a Vertex::Link to the parent layout to new fields
     Vertex* get(const std::string& name) override;
 
     // Returns the number of sub-layouts (filled fields)
-    uint size() override;
+    unsigned size() override;
 };
 
 

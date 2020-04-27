@@ -25,7 +25,7 @@ protected:
 
     // Helper methods
     virtual TTF_Font* GetFont(int size);
-    virtual void GetFontHeight(Vertex* layout, uint& max_size);
+    virtual void GetFontHeight(Vertex* layout, unsigned& max_size);
     VirtualSurface* GetSurface(Vertex* layout);
 
     // Drawing interface

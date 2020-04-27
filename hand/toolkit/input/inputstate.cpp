@@ -15,7 +15,7 @@ InputState::InputState(Vertex* dev)
 }
 
 
-bool InputState::Press(uint k)
+bool InputState::Press(unsigned k)
 {
     PressedKey = ReleasedKey = ReleasedKey->GetChild(k);
     if(!PressedKey)
@@ -28,7 +28,7 @@ bool InputState::Press(uint k)
 }
 
 
-bool InputState::Release(uint k)
+bool InputState::Release(unsigned k)
 {
     // Move the ReleasedKey up the the three
     // and the ReleasedKey down to the current key combination node
@@ -81,7 +81,7 @@ StateNode* InputState::GetKey(key_pointer key)
 }
 
 
-bool InputState::GetCommand(Vertex* target, uint level)
+bool InputState::GetCommand(Vertex* target, unsigned level)
 {
     if(!NullKey)
         // Not initialized
@@ -90,7 +90,7 @@ bool InputState::GetCommand(Vertex* target, uint level)
     // Get the list of available commands
     Vertex* free_cmds = GetCommands(level);
     Vertex* f_cmd;
-    uint i = 0;
+    unsigned i = 0;
     while((f_cmd=free_cmds->get(++i)) != nullptr)
     {
         // Bind the functional list to the state graph (command) node,
@@ -106,14 +106,14 @@ bool InputState::GetCommand(Vertex* target, uint level)
 }
 
 
-Vertex* InputState::GetCommands(uint level)
+Vertex* InputState::GetCommands(unsigned level)
 {
     if(level > NullKey->size())
         return nullptr;
 
     // Search from bottom up
     StateNode* tmp_node = NullKey;
-    for(uint i=1; i<=level; i++)
+    for(unsigned i=1; i<=level; i++)
         tmp_node = tmp_node->GetChild(i);
 
     return tmp_node->Vertex::get(COMMANDS);

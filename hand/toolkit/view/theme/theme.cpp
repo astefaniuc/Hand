@@ -43,7 +43,7 @@ bool Theme::execute(Vertex* input)
     }
 
     Vertex* sub;
-    uint i = 0;
+    unsigned i = 0;
     while((sub=input->get(++i)) != nullptr)
     {
         std::string name = sub->name();
@@ -52,7 +52,7 @@ bool Theme::execute(Vertex* input)
 
         if(name == FIELDS)
         {
-            uint j = 0;
+            unsigned j = 0;
             Vertex* child;
             while((child=sub->get(++j)) != nullptr)
                 execute(child);
@@ -110,14 +110,14 @@ TTF_Font* Theme::GetFont(int size)
 }
 
 
-void Theme::GetFontHeight(Vertex* layout, uint& max_size)
+void Theme::GetFontHeight(Vertex* layout, unsigned& max_size)
 {
     Vertex* pref = layout->get(DIM_FONT_PREFERRED);
     if(pref)
-        max_size = ((Data<uint>*)pref)->get();
+        max_size = ((Data<unsigned>*)pref)->get();
     else
     {
-        uint max = ((Data<uint>*)layout->get(DIM_FONT_MAX))->get();
+        unsigned max = ((Data<unsigned>*)layout->get(DIM_FONT_MAX))->get();
         if(max_size >= max)
             max_size = max;
     }

@@ -36,7 +36,7 @@ bool Persistence::execute(Vertex* keys_tree)
     // TEMP:
     std::string key_ids[] = { "97", "119", "101"," 102", "32" };
 
-    for(uint i = 0; i < (sizeof(key_ids)/sizeof(key_ids[0])); ++i)
+    for(unsigned i = 0; i < (sizeof(key_ids)/sizeof(key_ids[0])); ++i)
     {
         // Init keys with SDLKey values
 //        keys_tree->List[i]->set(key_ids[i]);

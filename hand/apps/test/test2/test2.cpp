@@ -39,7 +39,7 @@ void FindTester::TestRemove()
     delete(root_node);
     // Should print an error
     CheckFound(last_build, TestFind(last_name, LIST, false));
-    for(uint i = 0; i < 10; ++i)
+    for(unsigned i = 0; i < 10; ++i)
     {
         // Memory consumption shouldn't grow during this
         root_node = new Vertex("RootNode");

@@ -37,7 +37,7 @@ Vertex* Layout::get(const std::string& type, const std::string& name)
         return ret;
 
     Vertex* child;
-    uint i = 0;
+    unsigned i = 0;
     while((child=fields->get(++i)) != nullptr)
     {
         ret = child->get(type, name);
@@ -62,7 +62,7 @@ bool Layout::execute(Vertex* vs)
     // Skip layouts from different layers (fields)
     Vertex* fields = get(FIELDS)->Vertex::get(PUBLIC);
     Vertex* layout;
-    uint i = 0;
+    unsigned i = 0;
     while((layout=fields->get(++i)) != nullptr)
         // Ignored parameter
         layout->execute(vs);
@@ -79,18 +79,18 @@ void Layout::reset()
 
     Vertex* fields = get(FIELDS);
     Vertex* layout;
-    uint i = 0;
+    unsigned i = 0;
     while((layout=fields->get(++i)) != nullptr)
         layout->reset();
 }
 
 // ----------------------------------------------------------------
 
-Vertex* FieldsContainer::get(uint i)
+Vertex* FieldsContainer::get(unsigned i)
 {
     Vertex* sub;
-    uint found = 0;
-    uint j = 0;
+    unsigned found = 0;
+    unsigned j = 0;
     while((sub=List::get(++j)) != nullptr)
     {
         if(sub->is(LAYOUT))
@@ -123,11 +123,11 @@ Vertex* FieldsContainer::get(const std::string& name)
 }
 
 
-uint FieldsContainer::size()
+unsigned FieldsContainer::size()
 {
     Vertex* sub;
-    uint found = 0;
-    uint j = 0;
+    unsigned found = 0;
+    unsigned j = 0;
     while((sub=List::get(++j)) != nullptr)
     {
         if(sub->is(LAYOUT))

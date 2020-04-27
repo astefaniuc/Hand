@@ -38,7 +38,7 @@ Vertex* Device::get(const std::string& name)
                             ->get(LAYOUT)->get(LIST)->get(FRAMEDLIST);
     Vertex* id;
     Vertex* frame;
-    for(uint i=0; i < numberOfKeys; ++i)
+    for(unsigned i=0; i < numberOfKeys; ++i)
     {
         id = new Note("Keydata", "");
         keys_data_tree->add(id);
@@ -66,7 +66,7 @@ bool Device::GetKeyListLayout(Vertex* layout)
 
 bool Device::Init()
 {
-    for(uint i = 1; i<=numberOfKeys; ++i)
+    for(unsigned i = 1; i<=numberOfKeys; ++i)
     {
         // Do we have keys to load?
         Note* data = GetKey(i);
@@ -108,7 +108,7 @@ bool Device::Release(int k)
         // Device is during initialization
         DeleteKey(index);
         StateMachine->reset();
-        for(uint i=1; i<=Keys.size(); ++i)
+        for(unsigned i=1; i<=Keys.size(); ++i)
             StateMachine->Press(i);
         return true;
     }
@@ -127,7 +127,7 @@ int Device::GetKeyIndex(int k)
 }
 
 
-Note* Device::GetKey(uint pos)
+Note* Device::GetKey(unsigned pos)
 {
     return dynamic_cast<Note*>(Vertex::get(KEYLIST)->get(pos));
 }
@@ -150,11 +150,11 @@ void Device::AddKey(int k)
 }
 
 
-void Device::DeleteKey(uint index)
+void Device::DeleteKey(unsigned index)
 {
     Note* curr;
     Note* next;
-    uint i = index;
+    unsigned i = index;
     std::string key;
     while((curr=GetKey(i)) != nullptr)
     {
@@ -172,7 +172,7 @@ void Device::DeleteKey(uint index)
 }
 
 
-uint Device::GetNumberOfKeys()
+unsigned Device::GetNumberOfKeys()
 {
     return numberOfKeys;
 }

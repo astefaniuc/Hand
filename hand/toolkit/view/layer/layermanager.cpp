@@ -152,7 +152,7 @@ bool LayerManager::GetAllThemes(Vertex* themes_list)
     // Set switching theme callback to all found themes
     Vertex* loader = get(THEME)->get(METHOD, LOADER);
     Vertex* theme;
-    uint i = 0;
+    unsigned i = 0;
     while((theme=themes_list->get(++i)) != nullptr)
         theme->add(loader);
 

@@ -21,7 +21,7 @@ Search::~Search()
 void Search::reset()
 {
     Vertex* child;
-    uint i = 0;
+    unsigned i = 0;
     while((child=Findings->get(++i)) != nullptr)
         Findings->detach(child);
 }
@@ -43,7 +43,7 @@ bool Search::execute(Vertex* target)
     Vertex* path = new SearchCookie();
     path->attach(target);
 
-    uint depth;
+    unsigned depth;
     for(depth = 0; depth <= MaxDepth; ++depth)
     {
         if(Step(path))
@@ -75,7 +75,7 @@ bool Search::Step(Vertex* path)
     else
     {
         Vertex* branch;
-        uint i = 0;
+        unsigned i = 0;
         while((branch=path->get(++i)) != nullptr)
         {
             if(Step(branch))
@@ -95,7 +95,7 @@ bool Search::SearchAllChilds(Vertex* path)
     bool found = false;
     Vertex* child;
     Vertex* path_extension;
-    uint i = 0;
+    unsigned i = 0;
     while((child=path->get()->get(++i)) != nullptr)
     {
         if(!child->isOpen(this))

@@ -14,10 +14,10 @@ public:
     bool execute(Vertex* device) override;
 
 private:
-    void AddNodes(uint level, uint key_nr);
-    void ConnectNodes(Vertex* parent, Vertex* child, uint pos);
-    Vertex* GetParentNode(uint level, uint pos);
-    Vertex* GetCommands(uint level);
+    void AddNodes(unsigned level, unsigned key_nr);
+    void ConnectNodes(Vertex* parent, Vertex* child, unsigned pos);
+    Vertex* GetParentNode(unsigned level, unsigned pos);
+    Vertex* GetPeersList(unsigned level);
     Vertex* GetNewPeersList();
 
     StateNode* Root = nullptr;

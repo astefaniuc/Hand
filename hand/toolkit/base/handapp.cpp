@@ -103,7 +103,7 @@ BinaryManager::BinaryManager(const std::string& n, const std::string& d) : List(
     dir->Vertex::get(REQUEST)->get(FILE_);
     HandServer::GetInstance()->execute(dir);
     // Load all themes once
-    uint i = 0;
+    unsigned i = 0;
     Vertex* file;
     while((file=dir->get(++i)) != nullptr)
     {

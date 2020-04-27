@@ -23,15 +23,15 @@ public:
     bool Press(int key_id);
     bool Release(int key_id);
     bool IsUnused();
-    uint GetNumberOfKeys();
+    unsigned GetNumberOfKeys();
     // Return the input state machine
     InputState* GetInputState();
 
 protected:
     // Returns the Key symbol at specified position
-    Note* GetKey(uint index);
+    Note* GetKey(unsigned index);
     void AddKey(int key_id);
-    void DeleteKey(uint index);
+    void DeleteKey(unsigned index);
     // Returns the key number
     int GetKeyIndex(int key_id);
     // Layout factory for KEYLIST
@@ -40,7 +40,7 @@ protected:
     // Members:
     InputState* StateMachine = nullptr;
     // Number of controls
-    uint numberOfKeys = NUMBER_OF_BUTTONS;
+    unsigned numberOfKeys = NUMBER_OF_BUTTONS;
     std::vector<int> Keys;
     std::vector<int>::iterator currentKey;
 };

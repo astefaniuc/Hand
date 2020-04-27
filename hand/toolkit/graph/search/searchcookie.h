@@ -17,7 +17,7 @@ public:
     // Sets Target
     bool attach(Vertex* target);
     // Returns open sub-paths
-    Vertex* get(uint item);
+    Vertex* get(unsigned item);
     bool isOpen(Search* search) override { return false; }
 
 protected:

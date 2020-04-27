@@ -17,15 +17,15 @@ public:
     InputState(Vertex* device);
     virtual ~InputState() {}
     // Stores information about pressed keys by moving up the PressedKey ptr
-    bool Press(uint index);
+    bool Press(unsigned index);
     // Stores information about released keys by moving down the ReleasedKey ptr
-    bool Release(uint index);
+    bool Release(unsigned index);
     // Resets "pressed" and "released" information
     void reset();
     StateNode* GetKey(key_pointer);
-    Vertex* GetCommands(uint level);
+    Vertex* GetCommands(unsigned level);
     // Maps a command node to the given list
-    bool GetCommand(Vertex* method, uint level);
+    bool GetCommand(Vertex* method, unsigned level);
 
 protected:
     LayerManager* LM;

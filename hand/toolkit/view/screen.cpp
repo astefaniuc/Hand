@@ -98,7 +98,7 @@ bool Screen::SetLayerManagerPositions()
     SDL_Rect screen_tmp = screen;
 
     Layer* lm;
-    uint i = 0;
+    unsigned i = 0;
     while((lm=dynamic_cast<Layer*>(all_lm->get(++i))) != nullptr)
     {
         screen_tmp.w = screen.w/all_lm->size();
@@ -116,7 +116,7 @@ bool Screen::ShowSurface(void)
 
     Vertex* all_lm = Vertex::get(LAYERMANAGER);
     Layer* layer;
-    uint i = 0;
+    unsigned i = 0;
     while((layer=dynamic_cast<Layer*>(all_lm->get(++i))) != nullptr)
         layer->Update(false);
 

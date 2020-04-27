@@ -136,7 +136,7 @@ void HandServer::Press(SDLKey k)
 {
     Vertex* all_dev = get("Devices");
     Device* dev;
-    uint i = 0;
+    unsigned i = 0;
     while((dev=dynamic_cast<Device*>(all_dev->get(++i))) != nullptr)
         if(dev->Press(k))
             return;
@@ -156,7 +156,7 @@ void HandServer::Release(SDLKey k)
     // Gets the device
     Vertex* all_dev = get("Devices");
     Device* dev;
-    uint i = 0;
+    unsigned i = 0;
     while((dev=dynamic_cast<Device*>(all_dev->get(++i))) != nullptr)
     {
         if(dev->Release(k))

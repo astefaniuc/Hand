@@ -33,7 +33,7 @@ public:
     std::string GetCookieName();
 
     // TODO: GUI display?
-    uint MaxDepth = MAX_SEARCH_DEPTH;
+    unsigned MaxDepth = MAX_SEARCH_DEPTH;
     bool MultipleFinds = false;
 
 protected:

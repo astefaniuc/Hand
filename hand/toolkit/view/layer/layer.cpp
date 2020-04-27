@@ -126,7 +126,7 @@ Layer* Layer::GetLayer(Vertex* data, const std::string& position)
     else if(req->size() > 1)
     {
         Vertex* tmp_req;
-        uint i = 0;
+        unsigned i = 0;
         while((tmp_req=req->get(++i)) != nullptr)
         {
             factory = layer_factories->GetFactory(tmp_req->name());
@@ -254,7 +254,7 @@ void Layer::DrawChilds(bool forced)
 
     Layer* layer;
     Vertex* child;
-    uint i = 0;
+    unsigned i = 0;
     while((child=children->get(++i)) != nullptr)
     {
         layer = dynamic_cast<Layer*>(child);

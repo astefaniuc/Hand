@@ -41,7 +41,7 @@ Vertex* List::get(const std::string& s)
     if(s == PUBLIC)
     {
         Vertex* child;
-        uint i = 0;
+        unsigned i = 0;
         while((child=Vertex::get(++i)) != nullptr)
             if(child->name() == s)
                 return child;
@@ -56,7 +56,7 @@ Vertex* List::get(const std::string& s)
 }
 
 
-Vertex* List::get(uint i)
+Vertex* List::get(unsigned i)
 {
     return List::get(PUBLIC)->get(i);
 }
@@ -68,7 +68,7 @@ Vertex* List::get(const std::string& type, const std::string& name)
 }
 
 
-uint List::size()
+unsigned List::size()
 {
     return List::get(PUBLIC)->size();
 }
