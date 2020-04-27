@@ -1,0 +1,10 @@
+target_sources(${LIBNAME} PRIVATE
+    buttonlayer.cpp
+    factories.cpp
+    layer.cpp
+    layermanager.cpp
+    listlayer.cpp
+    textlayer.cpp
+    virtualsurface.cpp)
+
+target_include_directories(${LIBNAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})

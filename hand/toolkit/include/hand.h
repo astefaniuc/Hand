@@ -9,4 +9,4 @@
 #include "graph/search/search.h"
 #include "base/handserver.h"
 
-#endif /* INCLUDE_HAND_H */
+#endif // INCLUDE_HAND_H
