@@ -4,19 +4,18 @@ pre-alpha (https://github.com/astefaniuc/Hand/wiki/Software-Status)
 
 # Supported OS: #
 -----------------
-Ubuntu Linux 12.04
+Linux
 
 #### Build: #####
 -----------------
-> make
-(No "configure")
+> ./build.sh
 
 ##### Run: ######
 -----------------
 > cd <your_path>/hand
 > ./hand.sh
 or
-> ./hand.sh ./apps/test/test1.so
+> ./hand.sh <fullpath>/binaries/lib/apps/test1.so
 
 # Dependencies: #
 -----------------

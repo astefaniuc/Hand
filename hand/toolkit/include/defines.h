@@ -10,7 +10,6 @@
 // Paths and file names
 #define FONT_FILE "/usr/share/fonts/truetype/freefont/FreeSans.ttf"
 #define LIBRARY_FILE_EXTENSION ".so"
-#define THEMES_DIRECTORY "./apps/themes/"
 
 
 enum default_number_of_items

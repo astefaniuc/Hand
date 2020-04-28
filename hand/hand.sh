@@ -1,2 +1,2 @@
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:./toolkit
-./hand $1
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:./binaries/lib
+./binaries/bin/hand $1
