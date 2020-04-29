@@ -1,3 +1,5 @@
+#!/bin/bash
+
 base_dir="$(pwd)"
 
 build_type="Release"
