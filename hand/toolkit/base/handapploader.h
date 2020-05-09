@@ -10,18 +10,16 @@ typedef void destroyer(void*);
 
 class File;
 
-class Binary : public Vertex
+class Binary
 {
 public:
-    Binary() : Vertex(NAME_NOT_INIT) { type(APPLOADER); }
+    Binary() { /*TODO*/ }
     ~Binary() { reset(); }
 
-    bool execute(Vertex* ignore) override;
+    bool execute(Vertex* ignore);
     void reset();
 
 private:
-    Vertex* _get() override;
-
     // Shared library handle
     void* Library = nullptr;
     creator* Create = nullptr;

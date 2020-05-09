@@ -3,6 +3,7 @@
 
 #include <SDL/SDL.h>
 #include "graph/list.h"
+#include "user.h"
 
 
 class Animation;
@@ -62,7 +63,6 @@ public:
 protected:
     buffer_type BufferType = NONE;
     SDL_Rect CoordinatesOnBuffer;
-    VirtualSurface* Parent = nullptr;
     SDL_Surface* Buffer = nullptr;
     bool Updated = false;
 };

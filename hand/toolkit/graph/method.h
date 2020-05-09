@@ -4,36 +4,26 @@
 #include "graph/vertex.h"
 
 
-template <class I>
-class Method : public Vertex
+template <class CallbackOwner>
+class Action : public HmiItem
 {
-typedef bool (I::*TFunction)(Vertex*);
+    typedef void (CallbackOwner::*TCallback)(HmiItem*);
 
 public:
-    Method(std::string name, I* obj, TFunction func)
-        : Vertex(name), Object(obj), Function(func) { type(METHOD); }
-
-    // Execute the Method
-    bool execute(Vertex* param)
+    Action(
+        const std::string& a_name, const std::string& a_description,
+        CallbackOwner* a_obj, TCallback a_func)
+        : HmiItem(a_name, a_description)
     {
-        if(Function)
-            return (Object->*Function)(param);
-        return false;
+        m_Method = new CCallback<CallbackOwner>(a_obj, a_func);
+        AddActivationClient(m_Method);
     }
+    ~Action() { delete m_Method; }
 
-    using Vertex::set;
-    void set(TFunction func) { Function = func; }
-
-    using Vertex::get;
-    virtual I* get()
-    {
-        // Only makes sense to return the object
-        return Object;
-    }
+    Type GetType() const override { return HmiItem::EAction; }
 
 private:
-    I* Object;
-    TFunction Function;
+    CCallback<CallbackOwner>* m_Method;
 };
 
 #endif // HAND_GRAPH_METHOD_H

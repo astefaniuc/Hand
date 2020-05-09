@@ -8,17 +8,18 @@ class Default : public Theme
 {
 public:
     Default();
+    HmiItem* GetHmi() override { return m_Hmi; }
 
 protected:
     // Layout creators
-    bool GetViewLayout(Vertex* out);
-    bool GetFramedListLayout(Vertex* out);
-    bool GetListLayout(Vertex* out);
-    bool GetButtonLayout(Vertex* out);
-    bool GetContainerLayout(Vertex* out);
-    bool GetFrameLayout(Vertex* out);
-    bool GetBackgroundLayout(Vertex* out);
-    bool GetTextLayout(Vertex* out);
+    bool GetViewLayout(Layout* a_out);
+    bool GetFramedListLayout(Layout* a_out);
+    bool GetListLayout(Layout* a_out);
+    bool GetButtonLayout(Layout* a_out);
+    bool GetContainerLayout(Layout* a_out);
+    bool GetFrameLayout(Layout* a_out);
+    bool GetBackgroundLayout(Layout* a_out);
+    bool GetTextLayout(Layout* a_out);
 
     // Drawing methods
     bool ColorSurface(Vertex* drawing);
@@ -29,17 +30,8 @@ protected:
     bool DrawView(Vertex* drawing);
 
     std::string GetString(Vertex* vs);
-};
 
-/*
-class ZoomIn : public virtual Animation
-{
-    public:
-        ZoomIn();
-        ~ZoomIn(){};
-        virtual bool GetSize(SDL_Rect& size);
-        virtual bool GetNextProgress();
+    List m_Hmi;
 };
-*/
 
 #endif // HAND_THEMES_DEFAULT_H

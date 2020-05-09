@@ -5,7 +5,7 @@
 #include "graph/method.h"
 
 
-LayerManager::LayerManager() : Layer(LAYERMANAGER)
+MasterLayer::MasterLayer() : Layer(LAYERMANAGER)
 {
     Vertex::get(LAYERMANAGER)->set(this);
     type(LAYERMANAGER);
@@ -13,7 +13,7 @@ LayerManager::LayerManager() : Layer(LAYERMANAGER)
 }
 
 
-LayerManager::~LayerManager()
+MasterLayer::~MasterLayer()
 {
     delete(_Device);
     // Don't delete screen
@@ -21,15 +21,15 @@ LayerManager::~LayerManager()
 }
 
 
-void LayerManager::Init()
+void MasterLayer::Init()
 {
-    get(THEME)->add(new Method<LayerManager>(LOADER, this, &LayerManager::LoadTheme));
+    get(THEME)->add(new Method<MasterLayer>(LOADER, this, &MasterLayer::LoadTheme));
     // Load the theme
     LoadTheme(Vertex::get(FACTORY, THEMES)->get(DEFAULT));
 
     Vertex* pub = get(SYSTEM);
     Layer::SetContent(pub);
-    pub->add(new Method<LayerManager>("Exit", this, &LayerManager::Exit));
+    pub->add(new Method<MasterLayer>("Exit", this, &MasterLayer::Exit));
     // Add the exit function to the tree of available funcs
     // Request command at highest level
     GetCommand(pub->get("Exit"), _Device->GetNumberOfKeys());
@@ -37,7 +37,7 @@ void LayerManager::Init()
 }
 
 
-bool LayerManager::Update(bool forced)
+bool MasterLayer::Update(bool forced)
 {
     if(NextRequest)
     {
@@ -54,7 +54,7 @@ bool LayerManager::Update(bool forced)
 }
 
 
-bool LayerManager::Expand(Vertex* to_expand)
+bool MasterLayer::Expand(Vertex* to_expand)
 {
     MainView = Insert(to_expand, VIEW);
     if(!MainView)
@@ -64,7 +64,7 @@ bool LayerManager::Expand(Vertex* to_expand)
 }
 
 
-bool LayerManager::GetCommand(Vertex* f, int level)
+bool MasterLayer::GetCommand(Vertex* f, int level)
 {
     if(f)
         return _Device->GetInputState()->GetCommand(f, level);
@@ -72,7 +72,7 @@ bool LayerManager::GetCommand(Vertex* f, int level)
 }
 
 
-bool LayerManager::Exit(Vertex* content)
+bool MasterLayer::Exit(Vertex* content)
 {
     content = GetContent();
     // Check if the default location is currently active
@@ -85,7 +85,7 @@ bool LayerManager::Exit(Vertex* content)
 }
 
 
-void LayerManager::SetDevice(Device* device)
+void MasterLayer::SetDevice(Device* device)
 {
     _Device = device;
     device->Vertex::get(LAYERMANAGER)->set(this);
@@ -95,23 +95,20 @@ void LayerManager::SetDevice(Device* device)
     else
         // TODO: load controls vertices also with the init screen
         Expand(device->Vertex::get(KEYLIST));
-    // Delayed initialization of the LayerManager, needs device ptr
+    // Delayed initialization of the MasterLayer, needs device ptr
     // TODO: handle switching devices
     Init();
 }
 
 
-bool LayerManager::Request(Vertex* request)
+bool MasterLayer::Show(Vertex* request)
 {
     NextRequest = request;
-
-    // Removes animations
-//    DrawObject->Animations.reset();
     return true;
 }
 
 
-bool LayerManager::LoadTheme(Vertex* f)
+bool MasterLayer::LoadTheme(Vertex* f)
 {
     Vertex* bin = f->Vertex::get(APPLOADER, ANY);
     if(!bin)
@@ -145,7 +142,7 @@ bool LayerManager::LoadTheme(Vertex* f)
 }
 
 
-bool LayerManager::GetAllThemes(Vertex* themes_list)
+bool MasterLayer::GetAllThemes(Vertex* themes_list)
 {
     themes_list = Vertex::get(FACTORY, THEMES);
 

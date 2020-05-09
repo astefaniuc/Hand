@@ -1,7 +1,7 @@
 #include "view/layer/listlayer.h"
-#include "view/layer/layermanager.h"
 #include "graph/method.h"
 #include "graph/data.h"
+#include "user.h"
 
 
 ListLayer::ListLayer(const std::string& name) : Layer(name)
@@ -54,7 +54,7 @@ bool ListLayer::SetFocus(Vertex*)
     if(!tgt)
         return false;
 
-    Vertex* cmd = Vertex::get(LAYERMANAGER)->get()->get(ANY, COMMANDS);
+    Vertex* cmd = GetLayerManager()->get(ANY, COMMANDS);
 
     // Destroy the previous focus
     Vertex* foc_cmds = cmd->Vertex::get(DEVICE, ANY)->Vertex::get(FOCUS);
@@ -73,7 +73,7 @@ bool ListLayer::SetFocus(Vertex*)
         Vertex* back = get(BACK)->get();
         if(back)
         {
-            (dynamic_cast<LayerManager*>(Vertex::get(LAYERMANAGER)->get()))->GetCommand(back, 2);
+            GetLayerManager()->GetCommand(back, 2);
             foc_cmds->attach(back->Vertex::get(COMMAND)->get());
         }
     }

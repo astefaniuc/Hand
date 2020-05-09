@@ -55,7 +55,6 @@ void Binary::reset()
 
 HandAppLoader::HandAppLoader() : Factory("HandApp Loader", FILE_, HANDAPP)
 {
-    type(APPLOADERFACTORY);
 }
 
 

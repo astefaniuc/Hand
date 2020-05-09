@@ -6,14 +6,13 @@
 #include "view/layer/virtualsurface.h"
 
 
-Theme::Theme(const std::string& name) : HandApp(name)
+Theme::Theme()
 {
     if(TTF_Init() == -1)
     {
         std::cout << TTF_GetError() << std::endl;
         exit(22);
     }
-    type(THEME);
 }
 
 
@@ -28,66 +27,13 @@ Theme::~Theme()
 }
 
 
-bool Theme::execute(Vertex* input)
+bool Theme::Draw(Layout* a_input)
 {
-    if(!dynamic_cast<Layout*>(input))
+    if(!a_input)
         return false;
 
-    // Get the layout factory
-    Vertex* req = input->Vertex::get(ANY, REQUEST);
-    if(req)
-    {
-        req = req->get();
-        if(req)
-            get(LAYOUT)->get(req->name())->execute(input);
-    }
-
-    Vertex* sub;
-    unsigned i = 0;
-    while((sub=input->get(++i)) != nullptr)
-    {
-        std::string name = sub->name();
-        if((name==LAYER_FACTORIES) || (name==TARGET) || (name==THEME))
-            continue;
-
-        if(name == FIELDS)
-        {
-            unsigned j = 0;
-            Vertex* child;
-            while((child=sub->get(++j)) != nullptr)
-                execute(child);
-        }
-        else
-            FillOut(sub);
-    }
+    // TODO
     return true;
-}
-
-
-bool Theme::FillOut(Vertex* request)
-{
-    Vertex* req = request->Vertex::get(ANY, REQUEST);
-    if(req)
-        req = req->get();
-    if(!req)
-        // Nothing to do
-        return false;
-    if(request->get(req->name(), ANY))
-        // Already resolved
-        return false;
-    // TODO: Vertex::get(Vertex* path)
-    Vertex* repo = get(ANY, req->name());
-    if(!repo)
-        return false;
-    while((req=req->get()) != nullptr)
-    {
-        repo = repo->get(ANY, req->name());
-        if(!repo)
-            return false;
-    }
-    if(repo->is(FACTORY))
-        return request->set(repo->get());
-    return request->set(repo);
 }
 
 

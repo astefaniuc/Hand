@@ -3,9 +3,10 @@
 
 #include <SDL/SDL.h>
 #include "base/handapp.h"
+#include "layer/user.h"
 
 
-class Screen : public virtual HandApp
+class Screen
 {
 public:
     Screen();
@@ -15,7 +16,6 @@ public:
     bool SetFullscreen();
     bool SetWindowed();
     void Init();
-    // GetResolution()
     // GetSize()/ GetPosition()
     SDL_Rect GetResolution();
     // GetBuffer()
@@ -25,6 +25,9 @@ public:
 
     bool ShowSurface();
 
+    void SetLayerManager(LayerManager* a_lm) { m_LayerManager = a_lm; }
+    LayerManager* GetLayerManager() { return m_LayerManager; }
+
 private:
     void InitSDL();
 
@@ -33,6 +36,8 @@ private:
     // TODO: we need only one "Size" member and the "IsFullscreen" to store
     // all sizes we need ("Surface" stores the second size)
     bool IsFullscreen;
+
+    LayerManager* m_LayerManager;
 };
 
 #endif // HAND_VIEW_SCREEN_H

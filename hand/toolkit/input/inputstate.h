@@ -7,14 +7,13 @@
 #include "include/defines.h"
 
 
-class Device;
-class LayerManager;
+class CUser;
 
 class InputState
 {
 public:
     // Link to the parent object, the main server
-    InputState(Vertex* device);
+    InputState(Device* a_device);
     virtual ~InputState() {}
     // Stores information about pressed keys by moving up the PressedKey ptr
     bool Press(unsigned index);
@@ -28,7 +27,8 @@ public:
     bool GetCommand(Vertex* method, unsigned level);
 
 protected:
-    LayerManager* LM;
+    // TODO: do we need to store the pointer?
+    CUser* m_User;
 
     StateNode* NullKey;
     StateNode* PressedKey;

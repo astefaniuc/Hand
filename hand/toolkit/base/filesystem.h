@@ -8,14 +8,12 @@
 class DirectoryLoader : public Factory
 {
 public:
-    DirectoryLoader() : Factory("DirectoryLoader", FILE_, FILE_) {}
-
     bool execute(Vertex* descriptor);
     bool IsValidInput(Vertex* input);
 };
 
 
-class File : public List
+class File : public PlainData<std::string>
 {
 public:
     File(const std::string& file);

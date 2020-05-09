@@ -1,17 +1,16 @@
 #include "input/inputstate.h"
+
+#include "../view/layer/user.h"
 #include "graph/vertex.h"
-#include "view/layer/layermanager.h"
 
 
 using namespace std;
 
 
-InputState::InputState(Vertex* dev)
+InputState::InputState(CUser* a_user) : m_User(a_user)
 {
-    LM = dynamic_cast<LayerManager*>(dev->Vertex::get(LAYERMANAGER)->get());
-    dev->get(FACTORY, STATEGRAPH)->execute(dev);
-    NullKey = PressedKey = ReleasedKey = dynamic_cast<StateNode*>(dev->Vertex::get(STATENODE, ANY));
-    LM->set(GetCommands(1));
+    NullKey = PressedKey = ReleasedKey = m_User->GetStateGraph();
+    m_User->set(GetCommands(1));
 }
 
 

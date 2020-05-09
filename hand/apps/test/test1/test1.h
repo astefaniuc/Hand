@@ -7,14 +7,13 @@
 class App : public HandApp
 {
 public:
-    App() : HandApp("Gui_Test") { Init(); }
+    App();
 
 private:
-    bool PrintSelf(Vertex* method);
-    bool ChangeButtonName(Vertex* method);
-    void Init();
+    HmiItem* PrintSelf(HmiItem* method);
+    HmiItem* ChangeButtonName(HmiItem* method);
 
-    Note* Output;
+    List m_Hmi;
 };
 
 #endif // HAND_APPS_TEST_TEST1_H

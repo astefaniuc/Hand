@@ -5,7 +5,7 @@
 #include "base/datamanager.h"
 
 
-class LayerManager;
+class CUser;
 class Device;
 class Screen;
 
@@ -21,7 +21,7 @@ public:
     // Called from main()
     void Present(const std::string& file);
     // Initializes all subsystems:
-    LayerManager* GetUser();
+    CUser* CreateUser();
     // Starts timer (infinite loop)
     void Start();
 

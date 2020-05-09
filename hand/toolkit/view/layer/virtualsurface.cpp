@@ -166,17 +166,15 @@ SDL_Surface* VirtualSurface::GetBuffer()
 {
     if(!Buffer)
     {
+        // TODO ...
         Buffer = SDL_GetVideoSurface();
-        if(Parent)
-        {
-            const SDL_PixelFormat& fmt = *(Buffer->format);
-            // Draw on buffer independent of the position
-            Buffer = SDL_CreateRGBSurface(
-                    SDL_DOUBLEBUF|SDL_HWSURFACE,
-                    CoordinatesOnBuffer.w, CoordinatesOnBuffer.h,
-                    fmt.BitsPerPixel,
-                    fmt.Rmask, fmt.Gmask, fmt.Bmask, fmt.Amask);
-        }
+        const SDL_PixelFormat& fmt = *(Buffer->format);
+        // Draw on buffer independent of the position
+        Buffer = SDL_CreateRGBSurface(
+                SDL_DOUBLEBUF|SDL_HWSURFACE,
+                CoordinatesOnBuffer.w, CoordinatesOnBuffer.h,
+                fmt.BitsPerPixel,
+                fmt.Rmask, fmt.Gmask, fmt.Bmask, fmt.Amask);
     }
     return Buffer;
 }
@@ -186,12 +184,4 @@ void VirtualSurface::SetBuffer(SDL_Surface* buffer)
 {
     SDL_FreeSurface(Buffer);
     Buffer = buffer;
-}
-
-
-void VirtualSurface::SetParent(VirtualSurface* parent)
-{
-    Parent = parent;
-    set(parent->get(LAYERMANAGER));
-    set(parent->get(THEME));
 }

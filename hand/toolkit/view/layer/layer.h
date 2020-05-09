@@ -4,11 +4,10 @@
 #include "view/layer/virtualsurface.h"
 
 
-class Layer : public VirtualSurface
+class Layer
 {
 public:
-    Layer(const std::string& name) : VirtualSurface(name) { type(LAYER); }
-    ~Layer() { Collapse(); }
+    virtual ~Layer() { Collapse(); }
 
     // Checks and updates content and triggers a re-draw if needed
     virtual bool Update(bool force);
@@ -49,12 +48,13 @@ protected:
     virtual bool Exit();
 
     Layer* ParentLayer = nullptr;
-
+    CUser* m_User;
+    VirtualSurface* m_ScreenRect;
 //        bool Updated;
 public:
+    Vertex* m_Data;
     bool IsVisible = true;
     bool IsExpanded = false;
 };
-
 
 #endif // HAND_VIEW_LAYER_LAYER_H

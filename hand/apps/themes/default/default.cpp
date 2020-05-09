@@ -17,7 +17,7 @@ typedef Method<Default> Drawer;
 typedef LayoutFactory<Default> LayoutF;
 
 
-Default::Default() : Theme(DEFAULT)
+Default::Default() : m_Hmi(a_name)
 {
     // Drawers
     Vertex* folder = get(DRAWER);
@@ -61,7 +61,7 @@ Default::Default() : Theme(DEFAULT)
 // ------------------------ Layouts -------------------------------
 
 
-bool Default::GetViewLayout(Vertex* layout)
+bool Default::GetViewLayout(Layout* layout)
 {
     layout->get(COORDINATES)->Vertex::get(REQUEST)->get(RECT)->get(FULL);
     layout->get(ALIGNMENT)->Vertex::get(REQUEST)->get(ALIGNMENT)->get(VERTICAL);
@@ -139,7 +139,7 @@ bool Default::GetButtonLayout(Vertex* layout)
 }
 
 
-bool Default::GetFrameLayout(Vertex* layout)
+bool Default::GetFrameLayout(Layout* layout)
 {
     layout->get(COORDINATES)->Vertex::get(REQUEST)->get(RECT)->get(FRAME);
     layout->get(DRAWER)->Vertex::get(REQUEST)->get(DRAWER)->get(FRAME);
@@ -323,36 +323,3 @@ std::string Default::GetString(Vertex* layout)
         return content->getAsString();
     return "";
 }
-
-
-//================================================//
-/*
-ZoomIn::ZoomIn()
-{
-    Progress = 0.1;
-    AnimationRate = 0.1;
-}
-
-
-bool ZoomIn::GetSize(SDL_Rect& size)
-{
-    if(!GetNextProgress()) return false;
-    Rect tmp;
-    tmp.w = tmp.h = tmp.x = tmp.y = Progress;
-    SqueezeRect(size, tmp);
-    return true;
-
-}
-
-bool ZoomIn::GetNextProgress()
-{
-    if(Progress == 1.0)
-        return false;
-    if(Progress < 1.0)
-        //progress = 50;
-        Progress += AnimationRate;
-    else if(Progress > 1.0)
-        Progress -= AnimationRate;
-    return true;
-}
-*/

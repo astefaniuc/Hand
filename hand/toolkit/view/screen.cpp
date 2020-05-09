@@ -5,7 +5,7 @@
 #include "graph/method.h"
 
 
-Screen::Screen() : HandApp("Screen")
+Screen::Screen()
 {
     IsFullscreen = false;
     // Start SDL as the default drawing engine:
@@ -90,7 +90,7 @@ SDL_Rect Screen::GetResolution()
 
 bool Screen::SetLayerManagerPositions()
 {
-    Vertex* all_lm = Vertex::get(LAYERMANAGER);
+    Vertex* all_lm = GetLayerManager();
     if(all_lm->size() < 1)
         return false;
 
@@ -114,7 +114,7 @@ bool Screen::ShowSurface(void)
     if(!SetLayerManagerPositions())
         return false;
 
-    Vertex* all_lm = Vertex::get(LAYERMANAGER);
+    Vertex* all_lm = GetLayerManager();
     Layer* layer;
     unsigned i = 0;
     while((layer=dynamic_cast<Layer*>(all_lm->get(++i))) != nullptr)

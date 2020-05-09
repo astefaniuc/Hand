@@ -31,7 +31,6 @@
 #define ICON             "Icon"
 #define LAYER            "Layer"
 #define LAYER_FACTORIES  "Layer Factories"
-#define LAYERMANAGER     "LayerManager"
 #define LAYOUT           "Layout"
 #define LOADER           "Loader"
 #define NAME             "Name"
@@ -46,9 +45,9 @@
 #define TEXT             "Text"
 #define THEME            "Theme"
 #define THEMES           "Themes"
+#define USER             "User"
 #define VERTICAL         "vertical"
 #define VIEW             "View"
-#define VIRTUALSURFACE   "Virtualsurface"
 
 
 #endif // HAND_VIEW_DEFINES_H

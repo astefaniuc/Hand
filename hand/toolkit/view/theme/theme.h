@@ -5,6 +5,7 @@
 // #include "SDL/SDL_Image.h"
 #include <map>
 #include "base/handapp.h"
+#include "graph/list.h"
 
 
 class Layout;
@@ -15,15 +16,12 @@ class VirtualSurface;
 class Theme : public HandApp
 {
 public:
-    Theme(const std::string& name);
-    virtual ~Theme();
+    Theme();
+    ~Theme();
 
-    bool execute(Vertex* request) override;
+    bool Draw(Layout* a_input);
 
 protected:
-    bool FillOut(Vertex* layout);
-
-    // Helper methods
     virtual TTF_Font* GetFont(int size);
     virtual void GetFontHeight(Vertex* layout, unsigned& max_size);
     VirtualSurface* GetSurface(Vertex* layout);

@@ -7,7 +7,6 @@
 
 Device::Device() : HandApp("settings:Keyboard::0")
 {
-    type(DEVICE);
 }
 
 

@@ -13,9 +13,6 @@ bool Layer::Exit()
 
 bool Layer::Update(bool forced)
 {
-    if(Animations.Update(this))
-        Changed = true;
-
     if(Changed || forced)
         Draw(forced);
 
@@ -211,7 +208,7 @@ void Layer::Draw(bool forced)
 {
 /*  if(BufferType == NONE)
     {
-        // TODO: this crashes in LayerManager during "write through"
+        // TODO: this crashes in CUser during "write through"
         Parent->MapSurface(_Layout->Coordinates,
                             CoordinatesOnBuffer,
                             GetBuffer());

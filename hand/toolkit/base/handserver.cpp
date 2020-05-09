@@ -1,5 +1,6 @@
 #include "base/handserver.h"
-#include "view/layer/layermanager.h"
+
+#include "../view/layer/user.h"
 #include "input/device.h"
 #include "view/screen.h"
 #include "graph/data.h"
@@ -41,23 +42,20 @@ void HandServer::Present(const std::string& file)
             break;
         app = app->Vertex::get(ot->name(), ANY);
     }
-    GetUser()->Layer::SetContent(app);
+    CreateUser()->Layer::SetContent(app);
 }
 
 
-LayerManager* HandServer::GetUser()
+CUser* HandServer::CreateUser()
 {
-    // TODO: rename LayerManager to User, or additional User class?
-    LayerManager* layer_mgr = new LayerManager();
-    _Screen->Vertex::get(LAYERMANAGER)->add(layer_mgr);
+    CUser* user = new CUser();
+    _Screen->SetUser(user);
 
     // Create device object with input state
-    Device* device = new Device();
-    layer_mgr->SetDevice(device);
-    get("Devices")->add(device);
-    layer_mgr->SetBuffer(_Screen->GetSurface());
+    user->SetDevice(new Device());
+    user->SetBuffer(_Screen->GetSurface());
 
-    return layer_mgr;
+    return user;
 }
 
 
@@ -152,7 +150,7 @@ void HandServer::Press(SDLKey k)
 
 void HandServer::Release(SDLKey k)
 {
-    Vertex* lm = _Screen->Vertex::get(LAYERMANAGER);
+    CUser* lm = _Screen->GetUser();
     // Gets the device
     Vertex* all_dev = get("Devices");
     Device* dev;
@@ -166,7 +164,7 @@ void HandServer::Release(SDLKey k)
                && (lm->size() > 1))
             {
                 // Exit last layer
-                delete(lm->get(lm->size()));
+                delete lm->get(lm->size());
             }
             return;
         }
