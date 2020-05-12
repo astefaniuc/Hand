@@ -23,7 +23,7 @@ bool SearchCookie::attach(Vertex* target)
 
 Vertex* SearchCookie::get(unsigned i)
 {
-    SearchCookie* branch = (SearchCookie*)List::get(i);
+    SearchCookie* branch = (SearchCookie*)Collection::get(i);
     if(branch && branch->IsDeadBranch)
     {
         delete(branch);

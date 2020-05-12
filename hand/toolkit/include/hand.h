@@ -1,8 +1,7 @@
 #ifndef INCLUDE_HAND_H
 #define INCLUDE_HAND_H
 
-
-#include "base/handapp.h"
+#include "base/module.h"
 #include "graph/link.h"
 #include "graph/data.h"
 #include "graph/method.h"

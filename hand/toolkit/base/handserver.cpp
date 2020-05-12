@@ -34,7 +34,7 @@ HandServer* HandServer::GetInstance()
 
 void HandServer::Present(const std::string& file)
 {
-    Vertex* app = new File(file);
+    Vertex* app = new Path(file);
     while(Resolve(app))
     {
         Vertex* ot = app->Vertex::get(REQUEST)->get();

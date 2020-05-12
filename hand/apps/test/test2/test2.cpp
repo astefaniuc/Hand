@@ -14,13 +14,13 @@ extern "C" Vertex* Create()
 }
 
 
-extern "C" void Destroy(HandApp* app)
+extern "C" void Destroy(Module* app)
 {
     delete app;
 }
 
 
-FindTester::FindTester(void) : HandApp("FindTester")
+FindTester::FindTester(void) : Module("FindTester")
 {
 //    TestRemove();
     TestFindBigTree();
@@ -103,7 +103,7 @@ Vertex* FindTester::_Build(Vertex* entry, int depth, int width, const std::strin
         {
             ostringstream n;
             n << "depth" << depth << "width" << i;
-            f = new List(n.str());
+            f = new Collection(n.str());
         }
         f->type(type);
         entry->get(CHILDREN)->add(f);

@@ -1,7 +1,6 @@
 #include "view/layer/layer.h"
 #include "view/datatypes/rect.h"
 #include "view/datatypes/layout.h"
-#include "base/factory.h"
 
 
 bool Layer::Exit()

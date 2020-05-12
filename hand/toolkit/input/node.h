@@ -1,17 +1,17 @@
 #ifndef HAND_INPUT_STATENODE_H
 #define HAND_INPUT_STATENODE_H
 
-#include "graph/list.h"
+#include "graph/collection.h"
 
 
-class StateNode : public List
+class StateNode : public Collection
 {
 public:
     StateNode(unsigned size, Vertex* peers);
 
     // Implements set(METHOD)
     bool set(Vertex* sub);
-    using List::get;
+    using Collection::get;
     // Implements get(VIEW)
     Vertex* get(std::string name);
 

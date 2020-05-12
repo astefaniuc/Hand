@@ -4,10 +4,10 @@
 #include "graph/vertex.h"
 
 
-class HandApp
+class Module
 {
 public:
-    virtual ~HandApp() = default;
+    virtual ~Module() = default;
 
     virtual HmiItem* GetHmi() = 0;
 };

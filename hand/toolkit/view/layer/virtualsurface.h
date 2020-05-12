@@ -2,25 +2,8 @@
 #define HAND_VIEW_LAYER_VIRTUALSURFACE_H
 
 #include <SDL/SDL.h>
-#include "graph/list.h"
+#include "graph/collection.h"
 #include "user.h"
-
-
-class Animation;
-
-class AnimationsList : public List
-{
-public:
-    AnimationsList() : List("AnimationsList") {}
-    ~AnimationsList();
-    void reset();
-    bool Update(Vertex* layout);
-    void AppendAnimation(Animation* to_append);
-    void RemoveCurrentAnimation();
-    Animation* GetFirstAnimation();
-    Animation* GetNextAnimation();
-    Animation* GetCurrentAnimation();
-};
 
 
 enum buffer_type
@@ -57,7 +40,6 @@ public:
             SDL_Surface* source, SDL_Rect* source_pos,
             SDL_Surface* target, SDL_Rect* target_pos);
 
-    AnimationsList Animations;
     bool Changed = true;
 
 protected:

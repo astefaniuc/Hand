@@ -4,8 +4,8 @@
 #include "SDL/SDL_ttf.h"
 // #include "SDL/SDL_Image.h"
 #include <map>
-#include "base/handapp.h"
-#include "graph/list.h"
+#include "base/module.h"
+#include "graph/collection.h"
 
 
 class Layout;
@@ -13,7 +13,7 @@ class Rgb;
 class Rel_Rect;
 class VirtualSurface;
 
-class Theme : public HandApp
+class Theme : public Module
 {
 public:
     Theme();

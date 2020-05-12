@@ -2,7 +2,7 @@
 #define HAND_VIEW_SCREEN_H
 
 #include <SDL/SDL.h>
-#include "base/handapp.h"
+#include "base/module.h"
 #include "layer/user.h"
 
 

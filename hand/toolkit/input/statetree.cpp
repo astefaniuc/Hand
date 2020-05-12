@@ -109,7 +109,7 @@ void StateGraph::ConnectNodes(Vertex* p, Vertex* c, unsigned i)
 
 Vertex* StateGraph::GetNewPeersList()
 {
-    Vertex* ret = new List(COMMANDS);
+    Vertex* ret = new Collection(COMMANDS);
     ret->Vertex::attach(get(DEVICE, ANY));
     return ret;
 }

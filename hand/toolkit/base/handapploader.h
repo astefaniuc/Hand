@@ -1,46 +1,35 @@
 #ifndef HAND_APPLOADER_H
 #define HAND_APPLOADER_H
 
-#include "base/factory.h"
+#include "base/module.h"
+#include "base/filesystem.h"
 
 
 // Class factories for dynamic linking
-typedef List* creator();
-typedef void destroyer(void*);
 
-class File;
-
-class Binary
+class ModuleLib : public File
 {
 public:
-    Binary() { /*TODO*/ }
-    ~Binary() { reset(); }
+    ModuleLib() { /*TODO*/ }
+    ~ModuleLib() { Close(); }
 
-    bool execute(Vertex* ignore);
-    void reset();
+    bool IsValid(const std::string&) override;
+    // Temp, TODO?
+    HmiItem* GetHmi() override;
+
+    bool Load(Path* a_path);
+    void Close();
 
 private:
+    typedef Module* creator();
+    typedef void destroyer(void*);
+
     // Shared library handle
     void* Library = nullptr;
     creator* Create = nullptr;
     destroyer* Destroy = nullptr;
-};
 
-
-class HandAppLoader : public Factory
-{
-public:
-    HandAppLoader();
-
-    bool execute(Vertex* descriptor) override;
-    bool IsValidInput(Vertex* input);
- };
-
-
-class BinaryManager : public List
-{
-public:
-    BinaryManager(const std::string& name, const std::string& dir);
+    Module* m_Module = nullptr;
 };
 
 #endif // HAND_APPLOADER_H

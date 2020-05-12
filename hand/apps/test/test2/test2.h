@@ -4,7 +4,7 @@
 #include "include/hand.h"
 
 
-class FindTester : public HandApp
+class FindTester : public Module
 {
 public:
     FindTester(void);

@@ -183,6 +183,11 @@ public:
         RemoveCallback(a_client, m_Activation);
     }
 
+    // Layout options
+
+    /// You can keep HmiItems in the closer focus while the user descends into details.
+    void SetVisualPersistence(int a_level);
+
 protected:
     typedef std::vector<ICallback*> Listeners;
 

@@ -2,19 +2,19 @@
 #define HAND_INPUT_DEVICE_H
 
 #include <vector>
-#include "base/handapp.h"
+
+#include "base/module.h"
 #include "graph/data.h"
 
 
 class InputState;
 
-class Device : public virtual HandApp
+class Device : public virtual Module
 {
 public:
     Device();
     ~Device();
 
-    using HandApp::get;
     // Implements get(VIEW)
     Vertex* get(const std::string& name) override;
     // Sets the key map

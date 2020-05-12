@@ -3,71 +3,6 @@
 #include "view/datatypes/rect.h"
 
 
-AnimationsList::~AnimationsList()
-{
-    /*
-    Animation* to_delete = GetFirstAnimation();
-    do{
-        delete(to_delete);
-    }while((to_delete=GetNextAnimation()) != nullptr);
-    */
-    reset();
-}
-
-
-void AnimationsList::reset()
-{
-//    for(Current=Begin; Begin!=End; Current++)
-    {
-        RemoveCurrentAnimation();
-    }
-}
-
-
-void AnimationsList::AppendAnimation(Animation* a)
-{
-}
-
-
-bool AnimationsList::Update(Vertex* layout)
-{
-    bool changed = false;
-    Animation* animation = GetFirstAnimation();
-    // TODO: do {...} while(...) ?
-    while(GetNextAnimation())
-        if(animation->execute(layout))
-            changed = true;
-
-    return changed;
-}
-
-
-void AnimationsList::RemoveCurrentAnimation()
-{
-}
-
-
-Animation* AnimationsList::GetFirstAnimation()
-{
-    return GetCurrentAnimation();
-}
-
-
-Animation* AnimationsList::GetNextAnimation()
-{
-    return GetCurrentAnimation();
-}
-
-
-Animation* AnimationsList::GetCurrentAnimation()
-{
-    return nullptr;
-}
-
-
-//-----------------------------------------------
-
-
 VirtualSurface::VirtualSurface(const std::string& name) : Vertex(name)
 {
     type(VIRTUALSURFACE);
@@ -94,7 +29,7 @@ void VirtualSurface::MapSurface(Rel_Rect* src_rect, SDL_Rect &tgt_rect, SDL_Surf
         return;
     }
 
-    // TODO: surface mapped incorrectly for List having BufferType OVERLAY
+    // TODO: surface mapped incorrectly for Collection having BufferType OVERLAY
 
     // Get the next layers buffer and absolute position
     Rel_Rect* sap = GetRect(COORDINATES, get(LAYOUT, ANY));

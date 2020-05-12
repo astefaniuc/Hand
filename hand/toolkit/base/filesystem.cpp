@@ -1,111 +1,83 @@
-#include <boost/filesystem/operations.hpp>
 #include "base/filesystem.h"
-#include "graph/data.h"
+#include <boost/filesystem/operations.hpp>
+#include <boost/filesystem/path.hpp>
 
 
-using namespace boost::filesystem;
+namespace bfs = boost::filesystem;
 
 
-File::File(const std::string& file_name) : List(file_name)
+bfs::path GetPath(TData<std::string>* a_in)
 {
-    type(FILE_);
-    path file_path(file_name);
-    if(is_regular_file(file_path))
+    // We can't do this in the ctor because the parent is not set.
+    bfs::path path(a_in->GetValue());
+    if(path.is_relative())
     {
-        if(file_path.has_parent_path())
-            get(PATH)->set(new File(file_path.parent_path().string()));
+        Folder* parentManip = nullptr;
+        TData<std::string>* parentItem = dynamic_cast<TData<std::string>*>(a_in->GetParent());
+        if(parentItem)
+            parentManip = dynamic_cast<Folder*>(parentItem->GetManipulator());
 
-        name(file_path.filename().string());
+        if(parentManip)
+            // Get path from parent folder.
+            path = parentManip->GetAbsolute() + "/" + a_in->GetValue();
+        else
+            bfs::system_complete(path);
     }
-    else // is directory
-        name(file_name);
+
+    return path;
 }
 
 
-std::string File::GetFullPath()
+std::string Path::GetAbsolute()
 {
-    return GetPath().string();
+    return GetPath(m_Item).string();
 }
 
 
-path File::GetPath()
+std::string Path::GetRelative()
 {
-    path _path;
-    // Get directory information from parent path
-    Vertex* dir_rel = get(PATH);
-    if(dir_rel)
+    return GetPath(m_Item).relative_path().string();
+}
+
+
+bool Folder::IsValid(const std::string&)
+{
+    return is_directory(GetPath(m_Item));
+}
+
+Collection* Folder::GetContent()
+{
+    bfs::path path = GetPath(m_Item);
+    if(!is_directory(path))
+        return nullptr;
+
+    Collection* ret = new Collection(m_Item->GetValue(), "Content");
+
+    bfs::directory_iterator end;
+    for(bfs::directory_iterator iter(path); iter != end ; ++iter)
     {
-        File* parent_path = dynamic_cast<File*>(dir_rel->get());
-        if(parent_path)
-            _path = parent_path->GetPath();
+        Manipulator<std::string>* manip = nullptr;
+        if(is_regular_file(iter->status()))
+            manip = new File();
+        else if(is_directory(iter->status()))
+            manip = new Folder();
+
+        ret->Add(new TData<std::string>(iter->path().filename().string(), "", "", manip));
     }
-    // Check if it's still a relative path
-    _path /= name();
-    if(_path.is_relative())
-        system_complete(_path);
 
-    return _path;
+    return ret;
 }
-
 
 // ----------------------------------------------------------------
 
-
-bool FileFactory::IsValidInput(Vertex* input)
+bool File::IsValid(const std::string&)
 {
-    path file_path(input->name());
-    return (is_regular_file(file_path) || is_directory(file_path));
+    return is_regular_file(GetPath(m_Item));
 }
 
 
-bool FileFactory::execute(Vertex* tree)
+std::string File::GetExtension()
 {
-    Note* d_path = dynamic_cast<Note*>(tree);
-    if(!d_path)
-        return false;
-
-    return tree->Vertex::add(new File(d_path->get()));
+    return GetPath(m_Item).extension().string();
 }
 
-
-// ----------------------------------------------------------------
-
-
-bool  DirectoryLoader::IsValidInput(Vertex* entry)
-{
-    File* ff = dynamic_cast<File*>(entry);
-    return (ff && is_directory(ff->GetPath()));
-}
-
-
-bool  DirectoryLoader::execute(Vertex* tree)
-{
-    File* ff_dir = dynamic_cast<File*>(tree);
-    if(!ff_dir)
-        return false;
-    path dir_path = ff_dir->GetPath();
-    if(!is_directory(dir_path))
-        return false;
-
-    directory_iterator end;
-    // (Re-)read the themes in
-    ff_dir->reset();
-    File* file;
-    for(directory_iterator dir_it(dir_path); dir_it != end ; ++dir_it)
-    {
-        if(is_regular_file(dir_it->status()))
-        {
-            if(dir_it->path().extension() == LIBRARY_FILE_EXTENSION)
-            {
-                file = new File(dir_it->path().filename().string());
-                file->get(PATH)->set(ff_dir);
-                ff_dir->add(file);
-            }
-        }
-        else if(is_directory(dir_it->status()))
-        {
-            // TODO: check or add dir
-        }
-    }
-    return true;
-}

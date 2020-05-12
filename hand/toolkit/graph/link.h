@@ -1,13 +1,13 @@
 #ifndef HAND_GRAPH_LINK_H
 #define HAND_GRAPH_LINK_H
 
-#include "graph/list.h"
+#include "graph/collection.h"
 
 
-class Link : public List
+class Link : public Collection
 {
 public:
-    Link(const std::string& name) : List(name) { type(LINK); }
+    Link(const std::string& name) : Collection(name) { type(LINK); }
 
     // Helper method for the search engine
     bool isOpen(Search* search);

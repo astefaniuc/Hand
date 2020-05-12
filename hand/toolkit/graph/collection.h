@@ -4,15 +4,15 @@
 #include "graph/data.h"
 
 
-class List : public Data
+class Collection : public Data
 {
 public:
-    List(
+    Collection(
         const std::string& a_name,
         const std::string& a_description,
-        IManipulator* a_editor = nullptr)
-        : Data(a_name, a_description, a_editor) {}
-    ~List() { Clear(); }
+        Module* a_manipulator = nullptr)
+        : Data(a_name, a_description, a_manipulator) {}
+    ~Collection() { Clear(); }
 
     /// Insert a child item and assume ownership of it.
     void Add(HmiItem* a_child);

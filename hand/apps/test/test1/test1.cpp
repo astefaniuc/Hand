@@ -1,14 +1,14 @@
 #include "test1.h"
 
 
-extern "C" HandApp* Create()
+extern "C" Module* Create()
 {
     // Export interface
     return (new App());
 }
 
 
-extern "C" void Destroy(HandApp* app)
+extern "C" void Destroy(Module* app)
 {
     delete app;
 }
@@ -26,7 +26,7 @@ App::App() : m_Hmi("Test1", "Simple test application")
     m_Hmi.Add(new Action<App>("button 2", "l1b2: prints this to Output,\n with newline", this, &App::PrintSelf));
 
     // Create sub-menu folder
-    List* sub = new List("Level 2", "l1b3: calls sub-menu");
+    Collection* sub = new Collection("Level 2", "l1b3: calls sub-menu");
     // Set the dummy callback methods
     sub->Add(new Action<App>("button 1", "l2b1: Func C bug", this, &App::PrintSelf));
     sub->Add(new Action<App>("button 2", "l2b2: prints this to Output", this, &App::PrintSelf));

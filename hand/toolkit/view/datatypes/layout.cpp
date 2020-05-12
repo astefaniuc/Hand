@@ -2,7 +2,7 @@
 #include "view/datatypes/rect.h"
 
 
-Layout::Layout(const std::string& name) : List(name)
+Layout::Layout(const std::string& name) : Collection(name)
 {
     type(LAYOUT);
     add(new FieldsContainer(this));
@@ -12,7 +12,7 @@ Layout::Layout(const std::string& name) : List(name)
 bool Layout::add(Vertex* child)
 {
     if(!child->is(LAYOUT))
-        return List::add(child);
+        return Collection::add(child);
 
     get(FIELDS)->add(child);
     return child->Vertex::get(PARENT)->set(this);
@@ -21,7 +21,7 @@ bool Layout::add(Vertex* child)
 
 Vertex* Layout::get(const std::string& type, const std::string& name)
 {
-    Vertex* ret = List::get(type, name);
+    Vertex* ret = Collection::get(type, name);
     if(ret)
         return ret;
 
@@ -91,7 +91,7 @@ Vertex* FieldsContainer::get(unsigned i)
     Vertex* sub;
     unsigned found = 0;
     unsigned j = 0;
-    while((sub=List::get(++j)) != nullptr)
+    while((sub=Collection::get(++j)) != nullptr)
     {
         if(sub->is(LAYOUT))
         {
@@ -116,7 +116,7 @@ Vertex* FieldsContainer::get(const std::string& name)
     if(!ret)
     {
         // Creates a new vertex
-        ret = List::get(name);
+        ret = Collection::get(name);
         ret->Vertex::set(Vertex::get(PARENT));
     }
     return ret;
@@ -128,7 +128,7 @@ unsigned FieldsContainer::size()
     Vertex* sub;
     unsigned found = 0;
     unsigned j = 0;
-    while((sub=List::get(++j)) != nullptr)
+    while((sub=Collection::get(++j)) != nullptr)
     {
         if(sub->is(LAYOUT))
             found++;

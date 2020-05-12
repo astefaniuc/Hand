@@ -1,12 +1,12 @@
 #include "input/node.h"
 
 
-StateNode::StateNode(unsigned size, Vertex* peers) : List(STATENODE)
+StateNode::StateNode(unsigned size, Vertex* peers) : Collection(STATENODE)
 {
     type(STATENODE);
     // Init the related Nodes container with "empty" objects
     for(unsigned i=1; i<=size; i++)
-        add(new List(CHILD));
+        add(new Collection(CHILD));
 
     Vertex::attach(peers);
     // Adds itself to the peers list
@@ -24,13 +24,13 @@ bool StateNode::set(Vertex* sub)
 
 Vertex* StateNode::get(std::string name)
 {
-    Vertex* ret = List::get(ANY, name);
+    Vertex* ret = Collection::get(ANY, name);
     if(ret || (name!=VIEW))
         return ret;
 
     Vertex* keylist = Vertex::get(COMMANDS)->Vertex::get(DEVICE, ANY)->get(VIEW)->get(KEYLIST);
 
-    ret = List::get(VIEW);
+    ret = Collection::get(VIEW);
     ret->Vertex::set(keylist->Vertex::get(LAYOUT));
 
     Vertex* active_keys;

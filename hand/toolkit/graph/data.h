@@ -1,34 +1,34 @@
 #ifndef HAND_GRAPH_DATA_H
 #define HAND_GRAPH_DATA_H
 
+#include "base/module.h"
 #include "graph/vertex.h"
 
 
-class IManipulator
-{
-public:
-    virtual ~IManipulator() = default;
-    virtual ICallback* GetHmi() = 0;
-};
+class Data;
 
 
-template <typename DataType>
-class Manipulator : public IManipulator
+class Persistence
 {
 public:
-    // TEMP?
-    virtual bool IsValid(DataType) = 0;
+    virtual ~Persistence() {}
+
+    virtual bool SetFile(const std::string& a_path) = 0;
+    virtual const std::string& GetFile() const = 0;
+
+    virtual bool Load(Data* a_in) const = 0;
+    virtual bool Save(Data* a_out) const = 0;
 };
 
 
 class Data : public HmiItem
 {
 public:
-    Data(const std::string& a_name, const std::string& a_description, IManipulator* a_editor)
-        : HmiItem(a_name, a_description), m_Manipulator(a_editor)
+    Data(const std::string& a_name, const std::string& a_description, Module* a_manipulator)
+        : HmiItem(a_name, a_description), m_Manipulator(a_manipulator)
     {
-        if (m_Manipulator)
-            AddActivationClient(m_Manipulator->GetHmi());
+//        if (m_Manipulator)
+//            AddActivationClient(m_Manipulator->GetHmi());
     }
     ~Data() { delete m_Manipulator; }
 
@@ -42,26 +42,56 @@ public:
         RemoveCallback(a_client, m_DataChanged);
     }
 
-    IManipulator* GetManipulator() { return m_Manipulator; }
+    /// Deletes a previously stored manipulator.
+    void SetManipulator(Module* a_manipulator);
+    Module* GetManipulator() { return m_Manipulator; }
+
+    /// Deletes a previously stored persistence object.
+    void SetPersistence(Persistence* a_storage);
+    Persistence* GetPersistence() { return m_Storage; }
 
 protected:
+    Persistence* m_Storage = nullptr;
+
     Listeners m_DataChanged;
-    IManipulator* m_Manipulator;
+    Module* m_Manipulator = nullptr;
 };
 
 
+template<typename DataType> class TData;
+
+
 template <typename DataType>
-class PlainData : public Data
+class Manipulator : public Module
 {
 public:
-    PlainData(
+    void SetItem(TData<DataType>* a_toHandle) { m_Item = a_toHandle; }
+    // TEMP?
+    virtual bool IsValid(const DataType& a_input) = 0;
+    // Temp, TODO?
+    HmiItem* GetHmi() override { return m_Item; }
+
+protected:
+    TData<DataType>* m_Item = nullptr;
+};
+
+
+template<typename DataType>
+class TData : public Data
+{
+public:
+    TData(
         const std::string& a_name,
         const std::string& a_description,
-        DataType a_defaultVal,
-        IManipulator* a_editor = nullptr)
-        : Data(a_name, a_description, a_editor), m_Value(a_defaultVal) {}
+        const DataType& a_defaultVal,
+        Manipulator<DataType>* a_manipulator = nullptr)
+        : Data(a_name, a_description, a_manipulator), m_Value(a_defaultVal)
+    {
+        if (a_manipulator)
+            a_manipulator->SetItem(this);
+    }
 
-    bool SetValue(DataType a_val)
+    virtual bool SetValue(const DataType& a_val)
     {
         // The manipulator should call this with valid data.
         // TODO: remove this? What about Persistence?
@@ -72,9 +102,9 @@ public:
         Execute(m_DataChanged);
         return true;
     }
-    virtual DataType GetValue() { return m_Value; }
+    virtual const DataType& GetValue() { return m_Value; }
     /// Get the value as a human readable string.
-    std::string GetValueString()
+    virtual std::string GetValueString()
     {
         std::ostringstream s;
         s << m_Value;

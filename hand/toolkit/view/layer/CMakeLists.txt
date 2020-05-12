@@ -1,6 +1,5 @@
 target_sources(${LIBNAME} PRIVATE
     buttonlayer.cpp
-    factories.cpp
     layer.cpp
     layermanager.cpp
     listlayer.cpp

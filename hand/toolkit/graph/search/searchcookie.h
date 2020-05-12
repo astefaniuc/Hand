@@ -1,17 +1,17 @@
 #ifndef HAND_GRAPH_SEARCH_SEARCHCOOKIE_H
 #define HAND_GRAPH_SEARCH_SEARCHCOOKIE_H
 
-#include "graph/list.h"
+#include "graph/collection.h"
 
 
 #define SEARCHCOOKIE "SearchCookie"
 
 class Search;
 
-class SearchCookie : public List
+class SearchCookie : public Collection
 {
 public:
-    SearchCookie() : List(SEARCHCOOKIE) {}
+    SearchCookie() : Collection(SEARCHCOOKIE) {}
     virtual ~SearchCookie();
 
     // Sets Target

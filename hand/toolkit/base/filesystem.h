@@ -1,35 +1,34 @@
 #ifndef HAND_BASE_FILESYSTEM_H
 #define HAND_BASE_FILESYSTEM_H
 
-#include <boost/filesystem/path.hpp>
-#include "base/factory.h"
+#include "graph/data.h"
+#include "graph/collection.h"
 
 
-class DirectoryLoader : public Factory
+class Path : public Manipulator<std::string>
 {
 public:
-    bool execute(Vertex* descriptor);
-    bool IsValidInput(Vertex* input);
+    std::string GetAbsolute();
+    std::string GetRelative();
 };
 
 
-class File : public PlainData<std::string>
+class Folder : public Path
 {
 public:
-    File(const std::string& file);
+    bool IsValid(const std::string&) override;
 
-    std::string GetFullPath();
-    boost::filesystem::path GetPath();
+    /// Returns a list of files and sub-folders.
+    // TODO: regular expressions for filtering
+    Collection* GetContent();
 };
 
 
-class FileFactory : public Factory
+class File : public Path
 {
 public:
-    FileFactory() : Factory("FileFactory", NOTE, FILE_) {}
-
-    bool execute(Vertex* input);
-    bool IsValidInput(Vertex* input);
+    bool IsValid(const std::string&) override;
+    std::string GetExtension();
 };
 
 #endif // HAND_BASE_FILESYSTEM_H

@@ -31,7 +31,7 @@ protected:
 
     std::string GetString(Vertex* vs);
 
-    List m_Hmi;
+    Collection m_Hmi;
 };
 
 #endif // HAND_THEMES_DEFAULT_H

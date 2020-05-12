@@ -4,7 +4,7 @@
 #include "include/hand.h"
 
 
-class App : public HandApp
+class App : public Module
 {
 public:
     App();
@@ -13,7 +13,7 @@ private:
     HmiItem* PrintSelf(HmiItem* method);
     HmiItem* ChangeButtonName(HmiItem* method);
 
-    List m_Hmi;
+    Collection m_Hmi;
 };
 
 #endif // HAND_APPS_TEST_TEST1_H

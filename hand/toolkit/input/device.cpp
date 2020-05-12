@@ -5,7 +5,7 @@
 #include "view/datatypes/layout.h"
 
 
-Device::Device() : HandApp("settings:Keyboard::0")
+Device::Device() : Module("settings:Keyboard::0")
 {
 }
 
@@ -18,11 +18,11 @@ Device::~Device()
 
 Vertex* Device::get(const std::string& name)
 {
-    Vertex* ret = List::get(ANY, name);
+    Vertex* ret = Collection::get(ANY, name);
     if(ret || (name!=VIEW))
         return ret;
 
-    ret = List::get(VIEW);
+    ret = Collection::get(VIEW);
     // Two main entries: a keylist and the description
     ret->add(new Note(DESCRIPTION, "Press 5 keys on the keyboard"));
 
@@ -42,7 +42,7 @@ Vertex* Device::get(const std::string& name)
         id = new Note("Keydata", "");
         keys_data_tree->add(id);
 
-        frame = new List("");
+        frame = new Collection("");
         frame->Vertex::get(LAYOUT)->get(LIST)->set(factory);
         frame->add(id);
         keys_view_tree->add(frame);

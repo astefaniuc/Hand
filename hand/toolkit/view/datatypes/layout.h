@@ -1,11 +1,11 @@
 #ifndef HAND_VIEW_DATATYPES_LAYOUT_H
 #define HAND_VIEW_DATATYPES_LAYOUT_H
 
-#include "graph/list.h"
+#include "graph/collection.h"
 #include "graph/method.h"
 
 
-class Layout : public List
+class Layout : public Collection
 {
 public:
     Layout(const std::string& name);
@@ -13,7 +13,7 @@ public:
     // Implements add(sub_layout), a sub_layout is a fixed field
     bool add(Vertex* child) override;
 
-    using List::get;
+    using Collection::get;
     // Implements get(FIELD, name) used in Layer classes to poll
     // the availability of a specific field
     Vertex* get(const std::string& type, const std::string& name) override;
@@ -23,15 +23,15 @@ public:
 };
 
 
-class FieldsContainer : public List
+class FieldsContainer : public Collection
 {
 public:
-    FieldsContainer(Vertex* parent_layout) : List(FIELDS)
+    FieldsContainer(Vertex* parent_layout) : Collection(FIELDS)
     {
         Vertex::get(PARENT)->set(parent_layout);
     }
 
-    using List::get;
+    using Collection::get;
     // Iterates through sub-layouts (filled fields)
     Vertex* get(unsigned item) override;
     // Adds a Vertex::Link to the parent layout to new fields

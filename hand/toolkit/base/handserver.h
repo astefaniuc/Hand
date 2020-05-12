@@ -2,14 +2,13 @@
 #define HAND_BASE_SERVER_H
 
 #include <SDL/SDL.h>
-#include "base/datamanager.h"
-
+#include <string>
 
 class CUser;
 class Device;
 class Screen;
 
-class HandServer : public DataManager
+class HandServer
 {
 // Singleton
 private:
