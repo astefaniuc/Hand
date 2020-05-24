@@ -78,16 +78,16 @@ VirtualSurface* Theme::GetSurface(Vertex* in)
 
 void Theme::FillRect(SDL_Surface* sf, SDL_Rect* r, Rgb* c)
 {
-    SDL_FillRect(sf, r, SDL_MapRGB(sf->format, c->r, c->g, c->b));
+    SDL_FillRect(sf, r, SDL_MapRGB(sf->format, c->m_r, c->m_g, c->m_b));
 }
 
 
 SDL_Surface* Theme::RenderText(const std::string& text, int size, Rgb* color)
 {
     SDL_Color sdl_color;
-    sdl_color.r = color->r;
-    sdl_color.g = color->g;
-    sdl_color.b = color->b;
+    sdl_color.r = color->m_r;
+    sdl_color.g = color->m_g;
+    sdl_color.b = color->m_b;
     return TTF_RenderText_Blended(GetFont(size), text.c_str(), sdl_color);
 }
 

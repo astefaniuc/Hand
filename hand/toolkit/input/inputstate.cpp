@@ -1,27 +1,24 @@
 #include "input/inputstate.h"
-
-#include "../view/layer/user.h"
+#include "input/statetree.h"
 #include "graph/vertex.h"
 
 
-using namespace std;
-
-
-InputState::InputState(CUser* a_user) : m_User(a_user)
+InputState::InputState(unsigned a_numberOfKeys)
 {
-    NullKey = PressedKey = ReleasedKey = m_User->GetStateGraph();
-    m_User->set(GetCommands(1));
+    StateGraph state;
+    NullKey = PressedKey = ReleasedKey = state.Create(a_numberOfKeys);
 }
 
 
 bool InputState::Press(unsigned k)
 {
     PressedKey = ReleasedKey = ReleasedKey->GetChild(k);
-    if(!PressedKey)
+    if (!PressedKey)
     {
         reset();
         return false;
     }
+
 
     return true;
 }
@@ -31,7 +28,7 @@ bool InputState::Release(unsigned k)
 {
     // Move the ReleasedKey up the the three
     // and the ReleasedKey down to the current key combination node
-    if((PressedKey == NullKey) ||
+    if( (PressedKey == NullKey) ||
         ((ReleasedKey=ReleasedKey->GetParent(k)) == nullptr))
     {
         // Some events get lost, this command is corrupted
@@ -40,17 +37,12 @@ bool InputState::Release(unsigned k)
     }
 
     // Execute command when all pressed keys have been released
-    if(ReleasedKey == NullKey)
+    if (ReleasedKey == NullKey)
     {
         // Inform the GUI
-        Vertex* method = PressedKey->Vertex::get(METHOD, ANY);
-        if(method)
-        {
-            Vertex* param = method->Vertex::get("Parameter")->get();
-            if(!param)
-                param = method;
-            method->execute(param);
-        }
+        HmiItem* action = PressedKey->GetAction();
+        if (action)
+            action->Activate();
 
         reset();
     }
@@ -80,24 +72,20 @@ StateNode* InputState::GetKey(key_pointer key)
 }
 
 
-bool InputState::GetCommand(Vertex* target, unsigned level)
+bool InputState::GetCommand(HmiItem* target, unsigned level)
 {
-    if(!NullKey)
+    if (!NullKey)
         // Not initialized
         return false;
 
     // Get the list of available commands
-    Vertex* free_cmds = GetCommands(level);
-    Vertex* f_cmd;
-    unsigned i = 0;
-    while((f_cmd=free_cmds->get(++i)) != nullptr)
+    StateNode::PeersList* levelCmds = GetCommands(level);
+    for (StateNode* node : *levelCmds)
     {
-        // Bind the functional list to the state graph (command) node,
-        // bidirectional
-        if(f_cmd->set(target))
+        // Bind the functional list to the state graph (command) node.
+        if (!node->GetAction())
         {
-            target->Vertex::get(COMMAND)->set(f_cmd);
-
+            node->SetAction(target);
             return true;
         }
     }
@@ -105,15 +93,12 @@ bool InputState::GetCommand(Vertex* target, unsigned level)
 }
 
 
-Vertex* InputState::GetCommands(unsigned level)
+StateNode::PeersList* InputState::GetCommands(unsigned level)
 {
-    if(level > NullKey->size())
-        return nullptr;
-
     // Search from bottom up
-    StateNode* tmp_node = NullKey;
-    for(unsigned i=1; i<=level; i++)
-        tmp_node = tmp_node->GetChild(i);
+    StateNode* node = NullKey;
+    for (unsigned i = 0; i < level; ++i)
+        node = node->GetChild(i);
 
-    return tmp_node->Vertex::get(COMMANDS);
+    return node->GetPeersList();
 }

@@ -21,7 +21,7 @@ bfs::path GetPath(TData<std::string>* a_in)
             // Get path from parent folder.
             path = parentManip->GetAbsolute() + "/" + a_in->GetValue();
         else
-            bfs::system_complete(path);
+            system_complete(path);
     }
 
     return path;

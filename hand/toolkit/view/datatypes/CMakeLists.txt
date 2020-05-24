@@ -1,5 +1,4 @@
 target_sources(${LIBNAME} PRIVATE
-    layout.cpp
     rect.cpp
     rgb.cpp)
 

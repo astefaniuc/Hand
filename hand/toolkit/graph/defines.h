@@ -6,9 +6,7 @@
 #define VERTEX   "Vertex"
 #define LIST     "List"
 #define METHOD   "Method"
-#define LINK     "Link"
 #define DATA     "Data"
-#define SEARCH   "Search"
 // TODO: The string returned by typeid() for 'string' varies
 // on different platforms
 #define NOTE "Ss"

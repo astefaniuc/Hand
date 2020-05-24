@@ -19,14 +19,6 @@ enum default_number_of_items
 };
 
 
-enum key_pointer
-{
-    ROOT,
-    PRESSED,
-    RELEASED
-};
-
-
 enum key_position
 {
     THUMB,

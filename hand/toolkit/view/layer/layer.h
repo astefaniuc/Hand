@@ -4,7 +4,7 @@
 #include "view/layer/virtualsurface.h"
 
 
-class Layer
+class Layer : public VirtualSurface
 {
 public:
     virtual ~Layer() { Collapse(); }
@@ -19,15 +19,15 @@ public:
 
 
     // Set pointer to a data tree node
-    virtual void SetContent(Vertex* content);
-    Vertex* GetContent();
+    virtual void SetContent(HmiItem* content);
+    HmiItem* GetContent() { return m_Data; }
 
     void Collapse();
 
-    virtual bool SetCommand(Vertex* cmd);
+    virtual bool SetCommand(HmiItem* cmd);
 
     // Reacting on user input
-    virtual bool Request(Vertex* request);
+    virtual bool Request(HmiItem* request);
 
     virtual void NotifyChanged() { Changed = true; }
 
@@ -37,11 +37,8 @@ public:
 
 protected:
     // Insert "data" as layer of type layer_type at "position"
-    Layer* Insert(Vertex* data, const std::string& position);
-    void Insert(Vertex* data);
-    Layer* GetLayer(Vertex* data, const std::string& position);
-    virtual void SetLayout(Vertex* layout);
-    virtual Vertex* GetLayout(Vertex* data);
+    Layer* Insert(HmiItem* data, const std::string& position);
+    void Insert(HmiItem* data);
 
     virtual void DrawChilds(bool forced);
 
@@ -52,7 +49,7 @@ protected:
     VirtualSurface* m_ScreenRect;
 //        bool Updated;
 public:
-    Vertex* m_Data;
+    HmiItem* m_Data;
     bool IsVisible = true;
     bool IsExpanded = false;
 };

@@ -17,24 +17,24 @@ public:
 
     bool Update(bool force) override;
 
-    bool GetCommand(Vertex* func, int level);
+    bool GetCommand(HmiItem* func, int level);
     void SetDevice(Device* device);
 
     // Stores the pointer to the object to be displayed next
-    bool Request(Vertex* request);
+    bool Request(HmiItem* request);
 
 protected:
     void Init() override;
 
 private:
-    bool Expand(Vertex* list);
-    bool Exit(Vertex* ignore);
+    bool Expand(HmiItem* list);
+    bool Exit(HmiItem* ignore);
 
     // Contains the only pointer to the Device
     Device* _Device = nullptr;
-    Vertex* NextRequest = nullptr;
+    HmiItem* NextRequest = nullptr;
     Layer* MainView = nullptr;
-    Vertex m_UI;
+    HmiItem m_UI;
 };
 
 #endif // HAND_VIEW_LAYER_LAYERMANAGER_H

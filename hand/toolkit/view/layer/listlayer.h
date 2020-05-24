@@ -7,17 +7,17 @@
 class ListLayer : public Layer
 {
 public:
-    ListLayer(const std::string& name);
+    ListLayer() { BufferType = COLLECTOR; }
+
 
     // Set pointer to a data tree node
-    void SetContent(Vertex* focus);
+    void SetContent(HmiItem* focus) override;
     // Requests the input focus
 protected:
     void Init() override;
-    Vertex* GetLayout(Vertex* data) override;
-    bool SetFocus(Vertex*);
+    bool SetFocus(HmiItem*);
     // Returns the list which should be mapped to the InputState
-    Vertex* GetControlsList(Vertex* curr_list);
+    HmiItem* GetControlsList();
 };
 
 #endif // HAND_VIEW_LAYER_LISTLAYER_H

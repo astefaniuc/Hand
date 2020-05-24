@@ -52,7 +52,7 @@ bool CUser::Update(bool forced)
 }
 
 
-bool CUser::Expand(Vertex* to_expand)
+bool CUser::Expand(HmiItem* to_expand)
 {
     MainView = Insert(to_expand, VIEW);
     if(!MainView)

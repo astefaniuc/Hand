@@ -16,10 +16,10 @@ enum buffer_type
 
 class Rel_Rect;
 
-class VirtualSurface : public Vertex
+class VirtualSurface
 {
 public:
-    VirtualSurface(const std::string& name);
+    VirtualSurface();
     virtual ~VirtualSurface();
 
     void Show(SDL_Rect* rect_abs_on_buffer, Rel_Rect* rect_relative_to_parent);

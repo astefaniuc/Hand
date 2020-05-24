@@ -1,19 +1,21 @@
 #ifndef HAND_INPUT_INPUTSTATE_H
 #define HAND_INPUT_INPUTSTATE_H
 
-#include <vector>
-#include <string>
 #include "input/node.h"
-#include "include/defines.h"
 
 
-class CUser;
+enum key_pointer
+{
+    ROOT,
+    PRESSED,
+    RELEASED
+};
+
 
 class InputState
 {
 public:
-    // Link to the parent object, the main server
-    InputState(Device* a_device);
+    InputState(unsigned numberOfKeys);
     virtual ~InputState() {}
     // Stores information about pressed keys by moving up the PressedKey ptr
     bool Press(unsigned index);
@@ -22,14 +24,11 @@ public:
     // Resets "pressed" and "released" information
     void reset();
     StateNode* GetKey(key_pointer);
-    Vertex* GetCommands(unsigned level);
+    StateNode::PeersList* GetCommands(unsigned level);
     // Maps a command node to the given list
-    bool GetCommand(Vertex* method, unsigned level);
+    bool GetCommand(HmiItem* method, unsigned level);
 
 protected:
-    // TODO: do we need to store the pointer?
-    CUser* m_User;
-
     StateNode* NullKey;
     StateNode* PressedKey;
     StateNode* ReleasedKey;

@@ -53,8 +53,8 @@ Default::Default() : m_Hmi(a_name)
     folder = get(COLOR);
     folder->get(BACKGROUND)->set(new Rgb(BUTTON,  40,  40, 100));
     folder->get(BACKGROUND)->set(new Rgb(LIST,    20,  20,  50));
-    folder                 ->set(new Rgb(FONT,   200, 200, 200));
-    folder                 ->set(new Rgb(FRAME,   30,  30,  75));
+    folder->set(new Rgb(FONT,   200, 200, 200));
+    folder->set(new Rgb(FRAME,   30,  30,  75));
 }
 
 

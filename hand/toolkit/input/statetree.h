@@ -1,26 +1,24 @@
 #ifndef HAND_INPUT_STATEGRAPH_H
 #define HAND_INPUT_STATEGRAPH_H
 
-#include "graph/vertex.h"
+#include "input/node.h"
 
 
 class StateNode;
 
-class StateGraph : public Vertex
+class StateGraph
 {
 public:
-    StateGraph();
-
-    bool execute(Vertex* device) override;
+    StateNode* Create(unsigned numberOfKeys);
 
 private:
-    void AddNodes(unsigned level, unsigned key_nr);
-    void ConnectNodes(Vertex* parent, Vertex* child, unsigned pos);
-    Vertex* GetParentNode(unsigned level, unsigned pos);
-    Vertex* GetPeersList(unsigned level);
-    Vertex* GetNewPeersList();
+    void AddNodes(unsigned level, unsigned keyNumber);
+    void ConnectNodes(StateNode* parent, StateNode* child, unsigned pos);
+    StateNode* GetParentNode(unsigned level, unsigned pos);
+    StateNode::PeersList* GetPeersList(unsigned level);
 
-    StateNode* Root = nullptr;
+    StateNode* m_Root = nullptr;
+    unsigned m_NumberOfKeys = 0;
 };
 
 

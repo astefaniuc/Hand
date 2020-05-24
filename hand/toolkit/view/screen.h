@@ -12,7 +12,7 @@ public:
     Screen();
 
     // App mode interface
-    bool ToggleFullscreen(Vertex* ignore);
+    HmiItem* ToggleFullscreen(HmiItem*);
     bool SetFullscreen();
     bool SetWindowed();
     void Init();
@@ -21,12 +21,10 @@ public:
     // GetBuffer()
     // Re-calculate position for all layer manager
     bool SetLayerManagerPositions();
-    SDL_Surface* GetSurface() { return Surface; }
+    // TODO: handle multiple users
+    SDL_Surface* GetSurface(CUser*) { return Surface; }
 
     bool ShowSurface();
-
-    void SetLayerManager(LayerManager* a_lm) { m_LayerManager = a_lm; }
-    LayerManager* GetLayerManager() { return m_LayerManager; }
 
 private:
     void InitSDL();
@@ -36,8 +34,6 @@ private:
     // TODO: we need only one "Size" member and the "IsFullscreen" to store
     // all sizes we need ("Surface" stores the second size)
     bool IsFullscreen;
-
-    LayerManager* m_LayerManager;
 };
 
 #endif // HAND_VIEW_SCREEN_H

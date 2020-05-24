@@ -2,31 +2,24 @@
 #include "graph/data.h"
 
 
-Rgb::Rgb(const std::string& name, Uint8 r_, Uint8 g_, Uint8 b_) : Vertex(name)
+Rgb::Rgb(
+    const std::string& name, const std::string& description,
+    uint8_t r, uint8_t g, uint8_t b)
+    : Collection(name, description)
 {
-    type(RGB);
     // For now add plain data directly
-    add(new Data<Uint8>("r", r_));
-    add(new Data<Uint8>("g", g_));
-    add(new Data<Uint8>("b", b_));
-    r = r_;
-    g = g_;
-    b = b_;
+    Add(new TData<uint8_t>("r", "", r));
+    Add(new TData<uint8_t>("g", "", g));
+    Add(new TData<uint8_t>("b", "", b));
+    m_r = r;
+    m_g = g;
+    m_b = b;
 }
 
 
-void Rgb::reset()
+void Rgb::Reset()
 {
-    r = ((Data<Uint8>*)get("r"))->get();
-    g = ((Data<Uint8>*)get("g"))->get();
-    b = ((Data<Uint8>*)get("b"))->get();
-}
-
-
-Rgb* GetRgb(const std::string& name, Vertex* tree)
-{
-    Vertex* rgb = tree->get(ANY, "Color");
-    if(rgb)
-        rgb = rgb->get();
-    return dynamic_cast<Rgb*>(rgb);
+    m_r = ((TData<uint8_t>*)GetChild("r"))->GetValue();
+    m_g = ((TData<uint8_t>*)GetChild("g"))->GetValue();
+    m_b = ((TData<uint8_t>*)GetChild("b"))->GetValue();
 }

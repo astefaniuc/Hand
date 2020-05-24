@@ -3,6 +3,8 @@
 
 #include <SDL/SDL.h>
 #include <string>
+#include <vector>
+
 
 class CUser;
 class Device;
@@ -10,15 +12,10 @@ class Screen;
 
 class HandServer
 {
-// Singleton
-private:
+public:
     HandServer();
     ~HandServer();
 
-public:
-    static HandServer* GetInstance();
-    // Called from main()
-    void Present(const std::string& file);
     // Initializes all subsystems:
     CUser* CreateUser();
     // Starts timer (infinite loop)
@@ -28,18 +25,11 @@ public:
     void Pump();
 
 private:
-    //  User input handling
-    void GetUserInput();
-    void Press(SDLKey);
-    void Release(SDLKey);
-
-    // Members:
-    // The one and only server (singleton)
-    static HandServer* Instance;
     // TODO: multiple screens e.g. touch screen device
-    Screen* _Screen;
+    Screen* m_Screen = nullptr;
+    std::vector<Device*> m_Devices;
+
     // The queue for system device events
-    SDL_Event Event;
     SDL_TimerID Timer = nullptr;
     bool ExecNotFinished = false;
 

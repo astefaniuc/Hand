@@ -1,89 +1,83 @@
-#include <SDL/SDL.h>
 #include "input/device.h"
 #include "input/inputstate.h"
-#include "graph/method.h"
-#include "view/datatypes/layout.h"
 
 
-Device::Device() : Module("settings:Keyboard::0")
+// C Method, removes all devices but the keyboard from the event queue.
+int EventFilter(const SDL_Event *event)
 {
+    if((event->type == SDL_KEYDOWN) || (event->type == SDL_KEYUP))
+        return 1;
+    return 0;
+}
+
+
+
+Device::Device() : Module()
+{
+    // Only for speed
+    SDL_SetEventFilter(EventFilter);
 }
 
 
 Device::~Device()
 {
-    delete(StateMachine);
+    delete m_StateMachine;
+    delete m_KeysHmi;
 }
 
 
-Vertex* Device::get(const std::string& name)
+HmiItem* Device::GetHmi()
 {
-    Vertex* ret = Collection::get(ANY, name);
-    if(ret || (name!=VIEW))
-        return ret;
+    m_KeysHmi = new Collection("Keyboard Initialization", "Press 5 keys on the keyboard");
+    m_KeysHmi->Add(new Note("Thumb", "", ""));
+    m_KeysHmi->Add(new Note("Pointer finger", "", ""));
+    m_KeysHmi->Add(new Note("Middle finger", "", ""));
+    m_KeysHmi->Add(new Note("Ring finger", "", ""));
+    m_KeysHmi->Add(new Note("Little finger", "", ""));
 
-    ret = Collection::get(VIEW);
-    // Two main entries: a keylist and the description
-    ret->add(new Note(DESCRIPTION, "Press 5 keys on the keyboard"));
-
-    Vertex* keys_data_tree = Vertex::get(KEYLIST);
-    Vertex* keys_view_tree = ret->get(KEYLIST);
-
-    keys_view_tree->Vertex::get(LAYOUT)->get(LIST)->set(
-            new LayoutFactory<Device>(LIST, this, &Device::GetKeyListLayout));
-
-    // Load un-initialized keys
-    Vertex* factory = Vertex::get(FACTORY, THEMES)->get(DEFAULT)
-                            ->get(LAYOUT)->get(LIST)->get(FRAMEDLIST);
-    Vertex* id;
-    Vertex* frame;
-    for(unsigned i=0; i < numberOfKeys; ++i)
-    {
-        id = new Note("Keydata", "");
-        keys_data_tree->add(id);
-
-        frame = new Collection("");
-        frame->Vertex::get(LAYOUT)->get(LIST)->set(factory);
-        frame->add(id);
-        keys_view_tree->add(frame);
-    }
-    return ret;
-}
-
-
-bool Device::GetKeyListLayout(Vertex* layout)
-{
-    if(Vertex::get(FACTORY, THEMES)->get(DEFAULT)->get(LAYOUT)->get(LIST)->execute(layout))
-    {
-        layout->get(COORDINATES)->Vertex::get(REQUEST)->get(RECT)->get()->name(SCALED);
-        layout->get(ALIGNMENT)->Vertex::get(REQUEST)->get(ALIGNMENT)->get()->name(HORIZONTAL);
-        return true;
-    }
-    return false;
+    return m_KeysHmi;
 }
 
 
 bool Device::Init()
 {
-    for(unsigned i = 1; i<=numberOfKeys; ++i)
+    for (unsigned i = 0; i < m_NumberOfKeys; ++i)
     {
         // Do we have keys to load?
         Note* data = GetKey(i);
         if(!data)
             return false;
-        std::string key_str = data->get();
+        std::string key_str = data->GetValue();
         if(key_str.empty())
             return false;
         // Translate list entries to device keys
-        Keys.push_back(atoi(key_str.c_str()));
+        m_Keys.push_back(atoi(key_str.c_str()));
     }
     return true;
 }
 
 
+void Device::GetUserInput()
+{
+    SDL_Event event;
+    while(SDL_PollEvent(&event))
+    {
+        switch(event.type)
+        {
+        case SDL_KEYDOWN:
+            Press(event.key.keysym.sym);
+            break;
+        case SDL_KEYUP:
+            Release(event.key.keysym.sym);
+            break;
+        }
+    }
+}
+
+
 bool Device::Press(int k)
 {
-    if(Keys.size() < numberOfKeys)
+    if (m_Keys.size() < m_NumberOfKeys)
         // Device is during initialization
         AddKey(k);
 
@@ -91,7 +85,7 @@ bool Device::Press(int k)
     if(index == -1)
         return false;
 
-    StateMachine->Press(index);
+    m_StateMachine->Press(index);
     return true;
 }
 
@@ -99,27 +93,26 @@ bool Device::Press(int k)
 bool Device::Release(int k)
 {
     int index = GetKeyIndex(k);
-    if(index == -1)
+    if (index == -1)
         return false;
 
-    if(Keys.size() < numberOfKeys)
+    if (m_Keys.size() < m_NumberOfKeys)
     {
         // Device is during initialization
         DeleteKey(index);
-        StateMachine->reset();
-        for(unsigned i=1; i<=Keys.size(); ++i)
-            StateMachine->Press(i);
+        m_StateMachine->reset();
+        for (unsigned i = 0; i < m_Keys.size(); ++i)
+            m_StateMachine->Press(i);
         return true;
     }
-    return StateMachine->Release(index);
+    return m_StateMachine->Release(index);
 }
 
 
 int Device::GetKeyIndex(int k)
 {
-    int i = 1;
-    for(currentKey=Keys.begin(); currentKey!=Keys.end(); currentKey++, i++)
-        if((*currentKey) == k)
+    for (int i = 0; i < m_Keys.size(); ++i)
+        if (m_Keys[i] == k)
             return i;
 
     return -1;
@@ -128,59 +121,51 @@ int Device::GetKeyIndex(int k)
 
 Note* Device::GetKey(unsigned pos)
 {
-    return dynamic_cast<Note*>(Vertex::get(KEYLIST)->get(pos));
+    return dynamic_cast<Note*>(m_KeysHmi->GetChild(pos));
 }
 
 
 bool Device::IsUnused()
 {
-    return !Keys.size();
+    return !m_Keys.size();
 }
 
 
 void Device::AddKey(int k)
 {
-    Keys.push_back(k);
-    // Display the key on the initialization screen
-    int index = GetKeyIndex(k);
-    currentKey = Keys.begin() + index - 1;
+    int index = m_Keys.size();
+    m_Keys.push_back(k);
 
-    GetKey(index)->set(SDL_GetKeyName((SDLKey)(*currentKey)));
+    GetKey(index)->SetValue(SDL_GetKeyName((SDLKey)k));
 }
 
 
 void Device::DeleteKey(unsigned index)
 {
-    Note* curr;
-    Note* next;
-    unsigned i = index;
-    std::string key;
-    while((curr=GetKey(i)) != nullptr)
+    // Adjust UI literals
+    Note* curr = GetKey(index);
+    for (unsigned i = index + 1; i < m_NumberOfKeys; ++i)
     {
-        next = GetKey(++i);
-        if(next)
-            key = next->get();
-        else
-            key = "";
-        curr->set(key);
+        Note* next = GetKey(i);
+        curr->SetValue(next->GetValue());
+        curr = next;
     }
 
-    currentKey = Keys.begin() + index - 1;
-    if(currentKey != Keys.end())
-        currentKey = Keys.erase(currentKey);
+    // Delete from the SDL key map
+    m_Keys.erase(m_Keys.begin() + index);
 }
 
 
 unsigned Device::GetNumberOfKeys()
 {
-    return numberOfKeys;
+    return m_NumberOfKeys;
 }
 
 
 InputState* Device::GetInputState()
 {
     // Create inputstate object
-    if(!StateMachine)
-        StateMachine = new InputState(this);
-    return StateMachine;
+    if(!m_StateMachine)
+        m_StateMachine = new InputState(m_NumberOfKeys);
+    return m_StateMachine;
 }

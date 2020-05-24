@@ -4,24 +4,9 @@
 #include "user.h"
 
 
-ListLayer::ListLayer(const std::string& name) : Layer(name)
-{
-    type(LIST);
-    BufferType = COLLECTOR;
-}
-
-
 void ListLayer::Init()
 {
-    Vertex* focus = new Method<ListLayer>("SetFocus", this, &ListLayer::SetFocus);
-    focus->get("Parameter")->set(get(CONTENT)->get());
-    get(FOCUS)->set(focus);
-
-    focus = new Method<ListLayer>("SetFocusOnControls", this, &ListLayer::SetFocus);
-    focus->get("Parameter")->set(GetControlsList(get(LINK, CHILDREN)));
-    get(FOCUS)->attach(focus);
-
-    get(EXECUTE)->set(get(FOCUS)->get());
+    // TODO?
 }
 
 
@@ -50,79 +35,20 @@ void ListLayer::SetContent(Vertex* data)
 
 bool ListLayer::SetFocus(Vertex*)
 {
-    Vertex* tgt= GetControlsList(get(LINK, CHILDREN));
+    HmiItem* tgt= GetControlsList();
     if(!tgt)
         return false;
 
-    Vertex* cmd = GetLayerManager()->get(ANY, COMMANDS);
-
-    // Destroy the previous focus
-    Vertex* foc_cmds = cmd->Vertex::get(DEVICE, ANY)->Vertex::get(FOCUS);
-    unsigned i = 0;
-    {
-        Vertex* fc;
-        while((fc=foc_cmds->get(++i)) != nullptr)
-        {
-            fc->Vertex::detach(fc->Vertex::get(METHOD, ANY));
-            delete(fc->get(VIEW)->Vertex::get(LAYER, CONTROLID));
-        }
-        foc_cmds->reset();
-    }
-
-    {
-        Vertex* back = get(BACK)->get();
-        if(back)
-        {
-            GetLayerManager()->GetCommand(back, 2);
-            foc_cmds->attach(back->Vertex::get(COMMAND)->get());
-        }
-    }
-
-    Layer* child;
-    i = 0;
-    Vertex* curr_cmd;
-    while((child=dynamic_cast<Layer*>(tgt->get(++i))) != nullptr)
-    {
-        curr_cmd = cmd->get(i);
-        if(child->Layer::SetCommand(curr_cmd))
-        {
-            // Store current focus
-            foc_cmds->attach(curr_cmd);
-            // Add a back reference
-            child->get(BACK)->set(get(EXECUTE)->get());
-        }
-    }
+    // TODO
     return true;
 }
 
 
-Vertex* ListLayer::GetControlsList(Vertex* curr_list)
+HmiItem* ListLayer::GetControlsList()
 {
-    if(!curr_list)
+    if(!m_Data)
         return nullptr;
 
-    Vertex* child;
-    unsigned i = 0;
-    while((child=curr_list->get(++i)) != nullptr)
-    {
-        if(child->is(BUTTON))
-            return curr_list;
-
-        else if((child=GetControlsList(child->get(LINK, CHILDREN))) != nullptr)
-            return child;
-    }
+    // TODO
     return nullptr;
-}
-
-
-Vertex* ListLayer::GetLayout(Vertex* data)
-{
-    // The LIST needs two different COORDINATES rects: one for the blit
-    // on the parent surface and one to calculate the children
-    Vertex* layout = get(THEME)->get(THEME, ANY)->get(LAYOUT)->get();
-    layout->name("Buffer");
-    layout->get(COORDINATES)->Vertex::get(REQUEST)->get(RECT)->get(FULL);
-    layout->add(Layer::GetLayout(data));
-
-    return layout;
 }

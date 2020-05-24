@@ -1,24 +1,18 @@
 #ifndef HAND_VIEW_DATATYPES_RGB_H
 #define HAND_VIEW_DATATYPES_RGB_H
 
-#include <SDL/SDL.h>
-#include "graph/vertex.h"
+#include "graph/collection.h"
 
 
-class Rgb : public Vertex
+class Rgb : public Collection
 {
 public:
-    Rgb(const std::string& name, Uint8 r_, Uint8 g_, Uint8 b_);
-    void reset() override;
+    Rgb(const std::string& name, const std::string& description, uint8_t r, uint8_t g, uint8_t b);
+    void Reset();
 
-    Uint8 r;
-    Uint8 g;
-    Uint8 b;
+    uint8_t m_r;
+    uint8_t m_g;
+    uint8_t m_b;
 };
-
-
-// Helper func for extracting a Rgb from a Vertex tree
-Rgb* GetRgb(const std::string& rgb_name, Vertex* from_tree);
-
 
 #endif // HAND_VIEW_DATATYPES_RGB_H

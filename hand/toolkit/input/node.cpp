@@ -1,63 +1,46 @@
 #include "input/node.h"
 
 
-StateNode::StateNode(unsigned size, Vertex* peers) : Collection(STATENODE)
+StateNode::StateNode(unsigned size, PeersList* peers)
+    : m_Links(size),
+      m_Peers(peers)
 {
-    type(STATENODE);
-    // Init the related Nodes container with "empty" objects
-    for(unsigned i=1; i<=size; i++)
-        add(new Collection(CHILD));
-
-    Vertex::attach(peers);
     // Adds itself to the peers list
-    peers->add(this);
+    m_Peers->push_back(this);
 }
 
 
-bool StateNode::set(Vertex* sub)
+void StateNode::SetParent(StateNode* parent, unsigned pos)
 {
-    if(!sub || !sub->is(METHOD) || Vertex::get(METHOD, ANY))
-        return false;
-    return Vertex::set(sub);
+    Link& ret = m_Links[pos];
+    ret.IsParent = true;
+    ret.Item = parent;
 }
 
 
-Vertex* StateNode::get(std::string name)
+StateNode* StateNode::GetParent(unsigned pos)
 {
-    Vertex* ret = Collection::get(ANY, name);
-    if(ret || (name!=VIEW))
-        return ret;
-
-    Vertex* keylist = Vertex::get(COMMANDS)->Vertex::get(DEVICE, ANY)->get(VIEW)->get(KEYLIST);
-
-    ret = Collection::get(VIEW);
-    ret->Vertex::set(keylist->Vertex::get(LAYOUT));
-
-    Vertex* active_keys;
-    unsigned i = 0;
-    while((active_keys=get(++i)) != nullptr)
-        if(active_keys->name() == PARENT)
-             ret->attach(keylist->get(i));
-
-    return ret;
-}
-
-
-StateNode* StateNode::GetParent(unsigned k_nr)
-{
-    Vertex* ret = get(k_nr);
-    if(ret && (ret->name() == PARENT))
-        return dynamic_cast<StateNode*>(ret->get());
+    const Link& ret = m_Links[pos];
+    if (ret.IsParent)
+        return ret.Item;
 
     return nullptr;
 }
 
 
-StateNode* StateNode::GetChild(unsigned k_nr)
+void StateNode::SetChild(StateNode* child, unsigned pos)
 {
-    Vertex* ret = get(k_nr);
-    if(ret && (ret->name() == CHILD))
-        return dynamic_cast<StateNode*>(ret->get());
+    Link& ret = m_Links[pos];
+    ret.IsParent = false;
+    ret.Item = child;
+}
+
+
+StateNode* StateNode::GetChild(unsigned pos)
+{
+    const Link& ret = m_Links[pos];
+    if (!ret.IsParent)
+        return ret.Item;
 
     return nullptr;
 }

@@ -1,11 +1,9 @@
 #include "view/layer/virtualsurface.h"
-#include "view/theme/animations.h"
 #include "view/datatypes/rect.h"
 
 
-VirtualSurface::VirtualSurface(const std::string& name) : Vertex(name)
+VirtualSurface::VirtualSurface()
 {
-    type(VIRTUALSURFACE);
     CoordinatesOnBuffer.x = CoordinatesOnBuffer.y =
             CoordinatesOnBuffer.w = CoordinatesOnBuffer.h = 0;
 }

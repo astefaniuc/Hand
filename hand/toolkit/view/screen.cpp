@@ -21,10 +21,10 @@ void Screen::Init()
 }
 
 
-bool Screen::ToggleFullscreen(Vertex* ignore)
+HmiItem* Screen::ToggleFullscreen(HmiItem*)
 {
-    bool ret = IsFullscreen ? SetWindowed() : SetFullscreen();
-    return ret;
+    IsFullscreen ? SetWindowed() : SetFullscreen();
+    return nullptr;
 }
 
 

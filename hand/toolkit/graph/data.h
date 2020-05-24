@@ -117,4 +117,8 @@ private:
     DataType m_Value;
 };
 
+
+typedef TData<std::string> Note;
+
+
 #endif // HAND_GRAPH_DATA_H
