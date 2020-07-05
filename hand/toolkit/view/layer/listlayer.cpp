@@ -1,39 +1,34 @@
 #include "view/layer/listlayer.h"
-#include "graph/method.h"
-#include "graph/data.h"
-#include "user.h"
+#include "graph/collection.h"
 
 
-void ListLayer::Init()
-{
-    // TODO?
-}
-
-
-void ListLayer::SetContent(Vertex* data)
+void ListLayer::SetContent(HmiItem* a_data)
 {
     // Connect list and layer
-    Layer::SetContent(data);
-
-    unsigned nr_of_childs = data->size();
-    nr_of_childs--;
-    Data<unsigned>* max_c = dynamic_cast<Data<unsigned>*>(get(LAYOUT, ANY)->get("MaxSize"));
-    if(max_c)
-    {
-        unsigned max_size = max_c->get();
-        if(max_size < nr_of_childs)
-            nr_of_childs = max_size;
-    }
-
-    Vertex* child;
-    unsigned i = 0;
-    while((child=data->get(++i)) != nullptr)
-        // Create the sub-objects
-        Insert(child, ELEMENT);
+    Layer::SetContent(a_data);
+    m_StartPosition = 0;
 }
 
 
-bool ListLayer::SetFocus(Vertex*)
+void ListLayer::Show(Interface* a_hmi)
+{
+    Collection* listData = dynamic_cast<Collection*>(a_hmi);
+    if (listData)
+    {
+        unsigned count = listData->Size() - m_StartPosition;
+        if(GetMaxItemsToShow() < count)
+            count = GetMaxItemsToShow();
+
+        for (unsigned i = 0; i < count; ++i)
+            // Create the sub-objects
+            Insert(listData->GetChild(i + m_StartPosition)->GetLayer());
+    }
+    else
+        Insert(a_hmi->GetLayer());
+}
+
+
+bool ListLayer::SetFocus(HmiItem*)
 {
     HmiItem* tgt= GetControlsList();
     if(!tgt)

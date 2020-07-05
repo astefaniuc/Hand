@@ -1,157 +1,34 @@
 #include "view/layer/layermanager.h"
 #include "input/device.h"
 #include "input/inputstate.h"
-#include "view/datatypes/layout.h"
 #include "graph/method.h"
 
 
-MasterLayer::MasterLayer() : Layer(LAYERMANAGER)
+MasterLayer::MasterLayer()
 {
-    Vertex::get(LAYERMANAGER)->set(this);
-    type(LAYERMANAGER);
     BufferType = COLLECTOR;
+
+    m_Exit = new Action<MasterLayer>("Exit", "Close interface", this, &MasterLayer::Exit);
 }
 
 
-MasterLayer::~MasterLayer()
+void MasterLayer::Show(Interface* a_hmi)
 {
-    delete(_Device);
-    // Don't delete screen
-    Buffer = nullptr;
+    Clear();
+
+    m_View = Insert(a_hmi->GetView());
+    HmiItem* controls = a_hmi->GetControls();
+    if (controls)
+        m_Controls = Insert(controls->GetLayer());
+
+    HmiItem* aux = a_hmi->GetAuxilliary();
+    if (aux)
+        m_Auxilliary = Insert(aux->GetLayer());
 }
 
 
-void MasterLayer::Init()
+void MasterLayer::Exit(HmiItem*)
 {
-    get(THEME)->add(new Method<MasterLayer>(LOADER, this, &MasterLayer::LoadTheme));
-    // Load the theme
-    LoadTheme(Vertex::get(FACTORY, THEMES)->get(DEFAULT));
-
-    Vertex* pub = get(SYSTEM);
-    Layer::SetContent(pub);
-    pub->add(new Method<MasterLayer>("Exit", this, &MasterLayer::Exit));
-    // Add the exit function to the tree of available funcs
-    // Request command at highest level
-    GetCommand(pub->get("Exit"), _Device->GetNumberOfKeys());
-    Insert(pub, SYSTEM);
-}
-
-
-bool MasterLayer::Update(bool forced)
-{
-    if(NextRequest)
-    {
-        if(MainView)
-        {
-            delete(MainView);
-            MainView = nullptr;
-        }
-        if(Expand(NextRequest))
-            forced = true;
-    }
-    NextRequest = nullptr;
-    return Layer::Update(forced);
-}
-
-
-bool MasterLayer::Expand(Vertex* to_expand)
-{
-    MainView = Insert(to_expand, VIEW);
-    if(!MainView)
-        return false;
-    MainView->get(EXECUTE)->get()->execute(nullptr);
-    return true;
-}
-
-
-bool MasterLayer::GetCommand(Vertex* f, int level)
-{
-    if(f)
-        return _Device->GetInputState()->GetCommand(f, level);
-    return false;
-}
-
-
-bool MasterLayer::Exit(Vertex* content)
-{
-    content = GetContent();
-    // Check if the default location is currently active
-    if(MainView && (MainView->GetContent()!=content))
-        return Request(content);
-
     // Suicide
     delete(this);
-    return false;
-}
-
-
-void MasterLayer::SetDevice(Device* device)
-{
-    _Device = device;
-    device->Vertex::get(LAYERMANAGER)->set(this);
-    if(!device->Init())
-        // No, show init screen
-        Request(device->get(VIEW));
-    else
-        // TODO: load controls vertices also with the init screen
-        Expand(device->Vertex::get(KEYLIST));
-    // Delayed initialization of the MasterLayer, needs device ptr
-    // TODO: handle switching devices
-    Init();
-}
-
-
-bool MasterLayer::Show(Vertex* request)
-{
-    NextRequest = request;
-    return true;
-}
-
-
-bool MasterLayer::LoadTheme(Vertex* f)
-{
-    Vertex* bin = f->Vertex::get(APPLOADER, ANY);
-    if(!bin)
-        return false;
-
-    Vertex* theme = bin->get();
-    if(!theme)
-        return false;
-
-    Vertex* layout = get(LAYOUT, ANY);
-    if(!layout)
-    {
-        layout = theme->get(LAYOUT)->get();
-        layout->get(COORDINATES)->Vertex::get(REQUEST)->get(RECT)->get(FULL);
-        layout->get(ALIGNMENT)->Vertex::get(REQUEST)->get(ALIGNMENT)->get(SCALEDHORIZONTAL);
-        layout->get(DRAWER)->Vertex::get(REQUEST)->get(DRAWER)->get(LIST);
-
-        layout->get(FIELDS)->get(VIEW)->Vertex::get(REQUEST)->get(LAYOUT)->get(ANY);
-        layout->get(FIELDS)->get(SYSTEM)->Vertex::get(REQUEST)->get(LAYOUT)->get(ANY);
-        layout->name("MasterLayer");
-        set(layout);
-
-    }
-    // (Re-)sets the theme for all sub-layers
-    Vertex* prev = get(THEME)->get(THEME, ANY);
-    if(prev)
-        delete(prev);
-    get(THEME)->set(theme);
-    theme->execute(layout);
-    return true;
-}
-
-
-bool MasterLayer::GetAllThemes(Vertex* themes_list)
-{
-    themes_list = Vertex::get(FACTORY, THEMES);
-
-    // Set switching theme callback to all found themes
-    Vertex* loader = get(THEME)->get(METHOD, LOADER);
-    Vertex* theme;
-    unsigned i = 0;
-    while((theme=themes_list->get(++i)) != nullptr)
-        theme->add(loader);
-
-    return Request(themes_list);
 }

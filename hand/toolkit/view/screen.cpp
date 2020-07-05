@@ -7,28 +7,24 @@
 
 Screen::Screen()
 {
-    IsFullscreen = false;
+    m_IsFullscreen = false;
     // Start SDL as the default drawing engine:
     InitSDL();
     SetWindowed();
-}
 
-
-void Screen::Init()
-{
     // Add a func to toggle fullscreen <-> windowed mode
-    add(new Method<Screen>("Toggle full screen", this, &Screen::ToggleFullscreen));
+    // TODO
+//    new Action<Screen>("Toggle full screen", "", this, &Screen::ToggleFullscreen);
 }
 
 
-HmiItem* Screen::ToggleFullscreen(HmiItem*)
+void Screen::ToggleFullscreen(HmiItem*)
 {
-    IsFullscreen ? SetWindowed() : SetFullscreen();
-    return nullptr;
+    m_IsFullscreen ? SetWindowed() : SetFullscreen();
 }
 
 
-void Screen::InitSDL(void)
+void Screen::InitSDL()
 {
     atexit(SDL_Quit);
     // Initialize the SDL library:
@@ -44,83 +40,93 @@ bool Screen::SetFullscreen()
 {
     // This is the only chance to get the HW screen resolution
     const SDL_VideoInfo* info = SDL_GetVideoInfo();
-    Surface = SDL_SetVideoMode(
+    m_Surface = SDL_SetVideoMode(
             info->current_w, info->current_h, 32, SDL_DOUBLEBUF|SDL_HWSURFACE|SDL_FULLSCREEN);
-    if(!Surface)
+    if(!m_Surface)
     {
         std::cout << SDL_GetError() << std::endl;
         exit(23);
     }
-    return (IsFullscreen = true);
+    return (m_IsFullscreen = true);
 }
 
 
 bool Screen::SetWindowed()
 {
-    Surface = SDL_SetVideoMode(1280, 1024, 32, SDL_DOUBLEBUF|SDL_HWSURFACE);
-    if(!Surface)
+    m_Surface = SDL_SetVideoMode(1280, 1024, 32, SDL_DOUBLEBUF|SDL_HWSURFACE);
+    if(!m_Surface)
     {
         std::cout << SDL_GetError() << std::endl;
         exit(24);
     }
-    return (IsFullscreen = false);
+    return (m_IsFullscreen = false);
 }
 
 
 SDL_Rect Screen::GetResolution()
 {
-    const SDL_VideoInfo* inf;
-    // Return real application size
-    Uint16 biggest_Uint16 = 65535;
-    inf = SDL_GetVideoInfo();
-    SDL_Rect tmp = {0, 0, 0, 0};
-    if(inf->current_w <= biggest_Uint16)
+    const Uint16 maxUint16 = 65535;
+    const SDL_VideoInfo* inf = SDL_GetVideoInfo();
+
+    SDL_Rect tmp = { 0, 0, 0, 0 };
+    if ((inf->current_w <= maxUint16) && (inf->current_h <= maxUint16))
+    {
         tmp.w = inf->current_w;
-    else
-        tmp.w = biggest_Uint16;
-
-    if(inf->current_h <= biggest_Uint16)
         tmp.h = inf->current_h;
-    else
-        tmp.h = biggest_Uint16;
-
+    }
     return tmp;
 }
 
 
-bool Screen::SetLayerManagerPositions()
+void Screen::Add(CUser* a_user)
 {
-    Vertex* all_lm = GetLayerManager();
-    if(all_lm->size() < 1)
-        return false;
-
-    SDL_Rect screen = GetResolution();
-    SDL_Rect screen_tmp = screen;
-
-    Layer* lm;
-    unsigned i = 0;
-    while((lm=dynamic_cast<Layer*>(all_lm->get(++i))) != nullptr)
-    {
-        screen_tmp.w = screen.w/all_lm->size();
-        screen_tmp.x = screen_tmp.w*(i-1);
-        lm->SetSize(screen_tmp);
-    }
-    return true;
+    m_Users.push_back(a_user);
+    a_user->SetBuffer(m_Surface);
+    SplitScreen();
 }
 
 
-bool Screen::ShowSurface(void)
+void Screen::Remove(CUser* a_user)
 {
-    if(!SetLayerManagerPositions())
+    for (unsigned i = 0; i < m_Users.size(); ++i)
+    {
+        if (m_Users[i] == a_user)
+        {
+            m_Users.erase(m_Users.begin() + i);
+            // Recalculate areas for remaining users
+            SplitScreen();
+            return;
+        }
+    }
+}
+
+
+void Screen::SplitScreen()
+{
+    if (!m_Users.size())
+        return;
+
+    SDL_Rect screen = GetResolution();
+    Uint16 newWidth = screen.w / m_Users.size();
+
+    for (unsigned i = 0; i < m_Users.size(); ++i)
+    {
+        screen.w = newWidth;
+        screen.x = newWidth * (i - 1);
+        m_Users[i]->SetSize(screen);
+    }
+}
+
+
+bool Screen::ShowSurface()
+{
+    if (!m_Users.size())
         return false;
 
-    Vertex* all_lm = GetLayerManager();
-    Layer* layer;
-    unsigned i = 0;
-    while((layer=dynamic_cast<Layer*>(all_lm->get(++i))) != nullptr)
-        layer->Update(false);
+    for (CUser* user : m_Users)
+        user->Update(false);
 
     // Need to call this extra as BuildSurface is called recursively
-    SDL_Flip(Surface);
+    SDL_Flip(m_Surface);
     return true;
 }

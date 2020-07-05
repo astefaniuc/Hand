@@ -4,16 +4,18 @@
 #include <SDL/SDL.h>
 #include <string>
 #include <vector>
+#include "graph/data.h"
 
 
 class CUser;
 class Device;
 class Screen;
+class ModuleLib;
 
 class HandServer
 {
 public:
-    HandServer();
+    HandServer(const std::string& startApp);
     ~HandServer();
 
     // Initializes all subsystems:
@@ -28,6 +30,8 @@ private:
     // TODO: multiple screens e.g. touch screen device
     Screen* m_Screen = nullptr;
     std::vector<Device*> m_Devices;
+    std::vector<ModuleLib*> m_RunningApps;
+    Note* m_AppPath = nullptr;
 
     // The queue for system device events
     SDL_TimerID Timer = nullptr;

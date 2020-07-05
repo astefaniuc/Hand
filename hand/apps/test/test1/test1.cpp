@@ -19,7 +19,7 @@ App::App() : m_Hmi("Test1", "Simple test application")
     // The one and only view
     m_Hmi.Add(new HmiItem("Output field name", "<< Empty >>"));
     // Add controls
-    Vertex* folder = get("Level 1");
+    HmiItem* folder = get("Level 1");
 
     // Set the dummy callback methods
     m_Hmi.Add(new Action<App>("button 1", "l1b1: prints this to Output", this, &App::PrintSelf));

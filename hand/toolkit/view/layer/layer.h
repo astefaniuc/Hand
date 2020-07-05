@@ -8,9 +8,10 @@ class Layer : public VirtualSurface
 {
 public:
     virtual ~Layer() { Collapse(); }
+    Layer() : m_FrameColor("FrameColor"), m_BackgroundColor("FrameColor") {}
 
     // Checks and updates content and triggers a re-draw if needed
-    virtual bool Update(bool force);
+    bool Update(bool force);
 
     // Methods to (re-)set links to external objects:
     void SetParentLayer(Layer* parent) { ParentLayer = parent; }
@@ -19,7 +20,7 @@ public:
 
 
     // Set pointer to a data tree node
-    virtual void SetContent(HmiItem* content);
+    virtual void SetContent(HmiItem* data);
     HmiItem* GetContent() { return m_Data; }
 
     void Collapse();
@@ -31,25 +32,33 @@ public:
 
     virtual void NotifyChanged() { Changed = true; }
 
-    virtual void Init() {}
-
     virtual void Draw(bool forced);
 
+    const Rgb& GetFrameColor() { return m_FrameColor; }
+    void SetFrameColor(const Rgb& color) { m_FrameColor = color; }
+
+    const Rgb& GetBackgroundColor() { return m_BackgroundColor; }
+    void SetBackgroundColor(const Rgb& color) { m_BackgroundColor = color; }
+
 protected:
+    virtual void DrawFrame();
     // Insert "data" as layer of type layer_type at "position"
-    Layer* Insert(HmiItem* data, const std::string& position);
-    void Insert(HmiItem* data);
+    Layer* Insert(Layer* child);
 
-    virtual void DrawChilds(bool forced);
+    virtual void DrawChildren(bool forced);
 
-    virtual bool Exit();
+    virtual void Exit(HmiItem*);
 
     Layer* ParentLayer = nullptr;
-    CUser* m_User;
-    VirtualSurface* m_ScreenRect;
+    std::vector<Layer*> m_Sublayers;
+    VirtualSurface* m_ScreenRect = nullptr;
+
 //        bool Updated;
 public:
-    HmiItem* m_Data;
+    HmiItem* m_Data = nullptr;
+    Rgb m_FrameColor;
+    Rgb m_BackgroundColor;
+
     bool IsVisible = true;
     bool IsExpanded = false;
 };

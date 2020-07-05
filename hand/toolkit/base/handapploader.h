@@ -14,10 +14,10 @@ public:
     ~ModuleLib() { Close(); }
 
     bool IsValid(const std::string&) override;
-    // Temp, TODO?
-    HmiItem* GetHmi() override;
 
-    bool Load(Path* a_path);
+    Interface* GetHmi() override;
+
+    bool Load();
     void Close();
 
 private:

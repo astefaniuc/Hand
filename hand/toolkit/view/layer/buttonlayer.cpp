@@ -4,49 +4,22 @@
 #include "graph/data.h"
 
 
-ButtonLayer::ButtonLayer(const std::string& name) : Layer(name)
+ButtonLayer::ButtonLayer() : Layer()
 {
     BufferType = COLLECTOR;
-    type(BUTTON);
+    // TODO: make this configurable
+    m_Name = new TextLayer();
+    m_Description = new TextLayer();
+    m_Command = new TextLayer();
+
 }
 
 
-ButtonLayer::~ButtonLayer()
+void ButtonLayer::SetContent(HmiItem* a_data)
 {
-    delete FunctionBox;
-}
+    Layer::SetContent(a_data);
 
-
-void ButtonLayer::SetContent(Vertex* data)
-{
-    Layer::SetContent(data);
-    get(EXECUTE)->set(data);
-
-    // Create the sub-elements of the button
-    // The preview
-/*    if(data->is(LIST))
-    {
-        SetExpandable();
-        // Add list as preview
-        Insert(data, PREVIEW);
-    }*/
-
-    Insert(data, NAME);
-    Insert(data->Vertex::get(NOTE, DESCRIPTION), DESCRIPTION);
-    Insert(data->Vertex::get(ANY, ICON), ICON);
-    Vertex* cmd = data->Vertex::get(COMMAND)->get();
-    if(cmd)
-        Insert(cmd->get(VIEW), CONTROLID);
-}
-
-
-void ButtonLayer::SetExpandable()
-{
-    FunctionBox = new Method<ButtonLayer>("ExpandList", this, &ButtonLayer::ExpandList);
-}
-
-
-bool ButtonLayer::ExpandList(Vertex*)
-{
-    return ParentLayer->Request(GetContent());
+    m_Name->SetData(a_data->GetName());
+    m_Description->SetData(a_data->GetDescription());
+    // TODO: m_Command
 }

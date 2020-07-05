@@ -16,7 +16,7 @@ public:
     ~Device();
 
     // Implements get(VIEW)
-    HmiItem* GetHmi() override;
+    Interface* GetHmi() override;
     // Sets the key map
     bool Init();
     // Functions accessing the layer object (not possible from here)
@@ -48,7 +48,8 @@ protected:
     unsigned m_NumberOfKeys = NUMBER_OF_BUTTONS;
     std::vector<int> m_Keys;
 
-    Collection* m_KeysHmi = nullptr;
+    Collection* m_KeysHmi;
+    Interface* m_Hmi = nullptr;
 };
 
 #endif // HAND_INPUT_DEVICE_H

@@ -8,7 +8,7 @@ class Default : public Theme
 {
 public:
     Default();
-    HmiItem* GetHmi() override { return m_Hmi; }
+    Interface* GetHmi() override { return m_Hmi; }
 
 protected:
     // Layout creators
@@ -22,14 +22,13 @@ protected:
     bool GetTextLayout(Layout* a_out);
 
     // Drawing methods
-    bool ColorSurface(Vertex* drawing);
-    bool DrawFrame(Vertex* drawing);
-    bool DrawList(Vertex* drawing);
-    bool DrawText(Vertex* drawing);
+    bool ColorSurface(HmiItem* drawing);
+    bool DrawList(HmiItem* drawing);
+    bool DrawText(HmiItem* drawing);
 
-    bool DrawView(Vertex* drawing);
+    bool DrawView(HmiItem* drawing);
 
-    std::string GetString(Vertex* vs);
+    std::string GetString(HmiItem* vs);
 
     Collection m_Hmi;
 };

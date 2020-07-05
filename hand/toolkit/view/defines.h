@@ -43,7 +43,6 @@
 #define TEXT             "Text"
 #define THEME            "Theme"
 #define THEMES           "Themes"
-#define USER             "User"
 #define VERTICAL         "vertical"
 #define VIEW             "View"
 

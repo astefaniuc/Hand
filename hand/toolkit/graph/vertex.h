@@ -13,7 +13,7 @@ class ICallback
 {
 public:
     virtual ~ICallback() = default;
-    virtual HmiItem* Execute(HmiItem* a_caller) = 0;
+    virtual void Execute(HmiItem* a_caller) = 0;
 };
 
 
@@ -26,11 +26,10 @@ public:
     CCallback(CallbackOwner* a_obj, TCallback a_func)
         : m_Object(a_obj), m_Function(a_func) {}
 
-    HmiItem* Execute(HmiItem* a_caller) final
+    void Execute(HmiItem* a_caller) final
     {
         if(m_Object && m_Function)
-            return (m_Object->*m_Function)(a_caller);
-        return a_caller;
+            (m_Object->*m_Function)(a_caller);
     }
 
 private:
@@ -38,6 +37,8 @@ private:
     TCallback m_Function;
 };
 
+
+class Layer;
 
 class HmiItem
 {
@@ -67,6 +68,8 @@ public:
     void SetParent(HmiItem* a_parent) { m_Parent = a_parent; }
     HmiItem* GetParent() const { return m_Parent; }
 
+    Layer* GetLayer();
+    void SetLayer(Layer* visualization);
 
     void SetSelected(bool a_isSelected);
     bool IsSelected() const { return m_IsSelected; }
@@ -107,6 +110,7 @@ private:
     std::string m_Description;
 
     HmiItem* m_Parent = nullptr;
+    Layer* m_Visualization = nullptr;
     bool m_IsSelected = false;
 
     Listeners m_SelectionChange;

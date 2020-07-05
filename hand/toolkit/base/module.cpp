@@ -3,18 +3,16 @@
 #include <iostream>
 
 
-bool ModuleLib::Load(Path* a_path)
+bool ModuleLib::Load()
 {
     Close();
-    if(!a_path)
-        return false;
 
-    Library = dlopen(a_path->GetAbsolute().c_str(), RTLD_LAZY | RTLD_GLOBAL);
-    if(Library)
+    Library = dlopen(GetAbsolute().c_str(), RTLD_LAZY | RTLD_GLOBAL);
+    if (Library)
     {
         Create = (creator*) dlsym(Library, "Create");
         Destroy = (destroyer*) dlsym(Library, "Destroy");
-        if(Create && Destroy)
+        if (Create && Destroy)
             return true;
     }
 
@@ -23,7 +21,7 @@ bool ModuleLib::Load(Path* a_path)
 }
 
 
-HmiItem* ModuleLib::GetHmi()
+Interface* ModuleLib::GetHmi()
 {
     if (!m_Module)
         m_Module = Create();

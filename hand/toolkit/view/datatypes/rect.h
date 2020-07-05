@@ -43,7 +43,7 @@ private:
 };
 
 
-void Multiply(Rel_Rect* src, Rel_Rect* tgt);
-void Multiply(Rel_Rect* src, SDL_Rect* tgt);
+void Multiply(const Rel_Rect& src, Rel_Rect& tgt);
+void Multiply(const Rel_Rect& src, SDL_Rect& tgt);
 
 #endif // HAND_VIEW_DATATYPES_RECT_H

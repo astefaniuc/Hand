@@ -12,7 +12,7 @@ set(THEMESDIR ${LIBDIR}/themes/)
 add_subdirectory(toolkit)
 add_subdirectory(apps)
 
-add_executable(hand hand.cpp)
+add_executable(hand main.cpp)
 target_link_libraries(hand toolkit)
 
 

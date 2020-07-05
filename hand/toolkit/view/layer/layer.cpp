@@ -1,12 +1,10 @@
 #include "view/layer/layer.h"
-#include "view/datatypes/rect.h"
-#include "view/datatypes/layout.h"
 
 
-bool Layer::Exit()
+void Layer::Exit(HmiItem*)
 {
     // Check if the default location is currently active
-    return ParentLayer->Exit();
+    ParentLayer->Exit(nullptr);
 }
 
 
@@ -29,15 +27,6 @@ void Layer::SetContent(HmiItem* data)
 
 void Layer::Collapse()
 {
-    HmiItem* children = get(LINK, CHILDREN);
-    if(!children)
-        return;
-
-    HmiItem* child;
-    while((child=children->get(1)) != nullptr)
-        // Recursively deletes sub-layers
-        delete child;
-
     IsExpanded = false;
 }
 
@@ -48,28 +37,12 @@ bool Layer::Request(HmiItem* req)
 }
 
 
-Layer* Layer::Insert(HmiItem* data, const std::string& position)
+Layer* Layer::Insert(Layer* a_child)
 {
-    if(!data)
-        return nullptr;
+    m_Sublayers.push_back(a_child);
+    a_child->SetParent(this);
 
-    Layer* sub_layer = GetLayer(data, position);
-    if(!sub_layer)
-        return nullptr;
-
-    get(CHILDREN)->add(sub_layer);
-    sub_layer->SetParent(this);
-
-    sub_layer->Insert(data);
-    sub_layer->Init();
-
-    return sub_layer;
-}
-
-
-void Layer::Insert(HmiItem* data)
-{
-    SetContent(data);
+    return a_child;
 }
 
 
@@ -77,55 +50,74 @@ void Layer::Draw(bool forced)
 {
 /*  if(BufferType == NONE)
     {
-        // TODO: this crashes in CUser during "write through"
+        // TODO: this crashes in MasterLayer during "write through"
         Parent->MapSurface(_Layout->Coordinates,
                             CoordinatesOnBuffer,
                             GetBuffer());
         Updated = true; // ?
     }*/
     // Call the Theme function for drawing with the current settings
-    HmiItem* layout = get(LAYOUT, ANY);
-    if(!layout)
-        return;
 
-    layout->execute(this);
+
+    // TODO: derived drawing
 
     if(BufferType == COLLECTOR)
         // Draw first the child on the buffer
-        DrawChilds(forced);
+        DrawChildren(forced);
 
-    Rel_Rect tmp;
-    Rel_Rect* sap = GetRect(COORDINATES, layout);
-    if(sap)
-        tmp = *sap;
-
+    Rel_Rect tmp = GetCoordinates();
     Show(&CoordinatesOnBuffer, &tmp);
 
     if(BufferType == OVERLAY)
     {
         // Draw childs afterwards (not buffered)
-        DrawChilds(forced);
+        DrawChildren(forced);
 //        Updated = true;
     }
-    // Clean-up temporary size and position values
-    layout->reset();
 }
 
 
-void Layer::DrawChilds(bool forced)
+void Layer::DrawFrame()
 {
-    HmiItem* children = get(LINK, CHILDREN);
-    if(!children)
-        return;
+    SDL_Rect total_size = GetSize();
+    SDL_Rect content_size = total_size;
+    Multiply(GetCoordinates(), content_size);
 
-    Layer* layer;
-    HmiItem* child;
-    unsigned i = 0;
-    while((child=children->get(++i)) != nullptr)
+    // Draw each frame line separately
+    SDL_Rect up, down, left, right;
+    up.x = total_size.x;
+    up.y = total_size.y;
+    up.w = total_size.w;
+    up.h = content_size.y - total_size.y;
+
+    down.x = total_size.x;
+    down.y = content_size.y + content_size.h;
+    down.w = total_size.w;
+    down.h = total_size.h - content_size.h - up.h;
+
+    left.x = total_size.x;
+    left.y = content_size.y;
+    left.w = content_size.x - total_size.x;
+    left.h = content_size.h;
+
+    right.x = content_size.x + content_size.w;
+    right.y = left.y;
+    right.w = total_size.w - left.w - content_size.w;
+    right.h = left.h;
+
+    SDL_Surface* buffer = GetBuffer();
+    SDL_Rect* border[4] = { &up, &down, &left, &right };
+    for (unsigned i = 0; i < 4; ++i)
     {
-        layer = dynamic_cast<Layer*>(child);
-        if(!layer)
-            continue;
+        SDL_SetClipRect(buffer, border[i]);
+        FillRect(buffer, border[i], GetFrameColor());
+    }
+}
+
+void Layer::DrawChildren(bool forced)
+{
+    for (Layer* layer : m_Sublayers)
+    {
         layer->SetSize(GetSize());
         layer->Update(forced);
     }

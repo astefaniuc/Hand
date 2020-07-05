@@ -1,5 +1,4 @@
 #include "view/layer/virtualsurface.h"
-#include "view/datatypes/rect.h"
 
 
 VirtualSurface::VirtualSurface()
@@ -15,13 +14,13 @@ VirtualSurface::~VirtualSurface()
 }
 
 
-void VirtualSurface::MapSurface(Rel_Rect* src_rect, SDL_Rect &tgt_rect, SDL_Surface*& tgt_surface)
+void VirtualSurface::MapSurface(Rel_Rect* src_rect, SDL_Rect& tgt_rect, SDL_Surface*& tgt_surface)
 {
     if(BufferType == COLLECTOR)
     {
         // Get the absolute position on the current buffer
         tgt_rect = CoordinatesOnBuffer;
-        Multiply(src_rect, &tgt_rect);
+        Multiply(*src_rect, tgt_rect);
         tgt_surface = GetBuffer();
         // "Updated" must be true in this case
         return;
@@ -30,28 +29,29 @@ void VirtualSurface::MapSurface(Rel_Rect* src_rect, SDL_Rect &tgt_rect, SDL_Surf
     // TODO: surface mapped incorrectly for Collection having BufferType OVERLAY
 
     // Get the next layers buffer and absolute position
-    Rel_Rect* sap = GetRect(COORDINATES, get(LAYOUT, ANY));
-    Multiply(src_rect, sap);
-    if(Parent)
-        Parent->MapSurface(src_rect, tgt_rect, tgt_surface);
+    Rel_Rect sap = GetCoordinates();
+    Multiply(*src_rect, sap);
+    SetCoordinates(sap);
+    if(m_Parent)
+        m_Parent->MapSurface(src_rect, tgt_rect, tgt_surface);
 }
 
 
-void VirtualSurface::Show(SDL_Rect* rect_abs_on_buffer, Rel_Rect* rect_relative_to_parent)
+void VirtualSurface::Show(SDL_Rect* a_absOnBuffer, Rel_Rect* a_relativeToParent)
 {
-    if(Updated || !Parent)
+    if(Updated || !m_Parent)
         return;
 
     SDL_Rect tgt_rect;
     // Calculate position of the excerpt on the parent layer
     SDL_Surface* tgt_surface = nullptr;
-    Parent->MapSurface(rect_relative_to_parent, tgt_rect, tgt_surface);
+    m_Parent->MapSurface(a_relativeToParent, tgt_rect, tgt_surface);
 
-    if(Parent->BufferType == OVERLAY)
-        Parent->Show(&tgt_rect, rect_relative_to_parent);
+    if(m_Parent->BufferType == OVERLAY)
+        m_Parent->Show(&tgt_rect, a_relativeToParent);
 
     // DrawObject as parameter for positioning and alpha values
-    BlitSurface(Buffer, rect_abs_on_buffer, tgt_surface, &tgt_rect);
+    BlitSurface(Buffer, a_absOnBuffer, tgt_surface, &tgt_rect);
 }
 
 
@@ -72,10 +72,8 @@ void VirtualSurface::BlitSurface(
 void VirtualSurface::SetSize(SDL_Rect size)
 {
     // Store only the size, position from layout
-    Rel_Rect* sap = GetRect(COORDINATES, get(LAYOUT, ANY));
-    if(sap)
-        Multiply(sap, &size);
-    if((size.w!=CoordinatesOnBuffer.w) || (size.h!=CoordinatesOnBuffer.h))
+    Multiply(GetCoordinates(), size);
+    if ((size.w != CoordinatesOnBuffer.w) || (size.h != CoordinatesOnBuffer.h))
     {
         CoordinatesOnBuffer.w = size.w;
         CoordinatesOnBuffer.h = size.h;
@@ -83,6 +81,12 @@ void VirtualSurface::SetSize(SDL_Rect size)
         Buffer = nullptr;
         Changed = true;
     }
+}
+
+
+void VirtualSurface::FillRect(SDL_Surface* sf, SDL_Rect* r, const Rgb& c)
+{
+    SDL_FillRect(sf, r, SDL_MapRGB(sf->format, c.m_r, c.m_g, c.m_b));
 }
 
 
@@ -97,7 +101,7 @@ void VirtualSurface::SetBufferType(buffer_type bt)
 
 SDL_Surface* VirtualSurface::GetBuffer()
 {
-    if(!Buffer)
+    if (!Buffer)
     {
         // TODO ...
         Buffer = SDL_GetVideoSurface();

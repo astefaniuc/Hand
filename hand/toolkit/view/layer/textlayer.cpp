@@ -1,8 +1,7 @@
 #include "view/layer/textlayer.h"
 
 
-TextLayer::TextLayer(const std::string& name) : Layer(name)
+TextLayer::TextLayer() : Layer()
 {
     BufferType = OVERLAY;
-    type(TEXT);
 }

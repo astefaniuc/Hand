@@ -7,7 +7,9 @@
 class Rgb : public Collection
 {
 public:
-    Rgb(const std::string& name, const std::string& description, uint8_t r, uint8_t g, uint8_t b);
+    Rgb(
+        const std::string& name, const std::string& description = std::string(),
+        uint8_t r = 0, uint8_t g = 0, uint8_t b = 0);
     void Reset();
 
     uint8_t m_r;

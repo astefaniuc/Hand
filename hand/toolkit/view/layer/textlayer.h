@@ -4,10 +4,14 @@
 #include "layer.h"
 
 
-class TextLayer : public virtual Layer
+class TextLayer : public Layer
 {
 public:
-    TextLayer(const std::string& name);
+    TextLayer();
+    void SetData(const std::string& text) { m_Text = text; }
+
+private:
+    std::string m_Text;
 };
 
 #endif // HAND_VIEW_LAYER_TEXTLAYER_H

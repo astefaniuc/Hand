@@ -3,18 +3,38 @@
 #include "view/layer/user.h"
 #include "input/device.h"
 #include "view/screen.h"
-#include "graph/data.h"
-#include "base/filesystem.h"
+#include "base/handapploader.h"
+#include <iostream>
 
 
-HandServer::HandServer()
+HandServer::HandServer(const std::string& a_startApp)
 {
     m_Screen = new Screen();
+    CUser* user = CreateUser();
+    if (!a_startApp.empty())
+    {
+        m_AppPath = new Note("Start app", "Passed as program argument", a_startApp);
+        ModuleLib* app = new ModuleLib();
+        app->SetItem(m_AppPath);
+        if (app->Load())
+        {
+            m_RunningApps.push_back(app);
+            user->SetContent(app->GetHmi());
+        }
+        else
+        {
+            std::cerr << "Error: can't open app '" << a_startApp << "'.";
+            delete app;
+        }
+    }
 }
 
 
 HandServer::~HandServer()
 {
+    for (ModuleLib* app : m_RunningApps)
+        delete app;
+    delete m_AppPath;
     delete m_Screen;
 }
 
@@ -27,11 +47,10 @@ CUser* HandServer::CreateUser()
     m_Devices.push_back(device);
     // Create device object with input state
     user->SetDevice(device);
-    user->SetBuffer(m_Screen->GetSurface(user));
+    m_Screen->Add(user);
 
     return user;
 }
-
 
 // C Method used in HandServer::Start()
 // C++ methods can't be called directly as a callback

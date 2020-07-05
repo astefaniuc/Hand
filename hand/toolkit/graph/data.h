@@ -68,11 +68,13 @@ public:
     void SetItem(TData<DataType>* a_toHandle) { m_Item = a_toHandle; }
     // TEMP?
     virtual bool IsValid(const DataType& a_input) = 0;
-    // Temp, TODO?
-    HmiItem* GetHmi() override { return m_Item; }
+
+    Interface* GetHmi() override { return m_Interface; }
+    void SetHmi(Interface* interface) { m_Interface = interface; }
 
 protected:
     TData<DataType>* m_Item = nullptr;
+    Interface* m_Interface = nullptr;
 };
 
 

@@ -6,9 +6,9 @@
 #include <map>
 #include "base/module.h"
 #include "graph/collection.h"
+#include "view/drawer.h"
 
 
-class Layout;
 class Rgb;
 class Rel_Rect;
 class VirtualSurface;
@@ -23,11 +23,9 @@ public:
 
 protected:
     virtual TTF_Font* GetFont(int size);
-    virtual void GetFontHeight(Vertex* layout, unsigned& max_size);
-    VirtualSurface* GetSurface(Vertex* layout);
+//    virtual void GetFontHeight(HmiItem* layout, unsigned& max_size);
 
     // Drawing interface
-    virtual void FillRect(SDL_Surface* sf, SDL_Rect* r, Rgb* c);
     virtual SDL_Surface* RenderText(const std::string& text, int size, Rgb* color);
 
     // Changes x and y of source

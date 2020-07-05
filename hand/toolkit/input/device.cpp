@@ -16,6 +16,12 @@ Device::Device() : Module()
 {
     // Only for speed
     SDL_SetEventFilter(EventFilter);
+    m_KeysHmi = new Collection("Keyboard Initialization", "Press 5 keys on the keyboard");
+    m_KeysHmi->Add(new Note("Thumb", "", ""));
+    m_KeysHmi->Add(new Note("Pointer finger", "", ""));
+    m_KeysHmi->Add(new Note("Middle finger", "", ""));
+    m_KeysHmi->Add(new Note("Ring finger", "", ""));
+    m_KeysHmi->Add(new Note("Little finger", "", ""));
 }
 
 
@@ -26,16 +32,14 @@ Device::~Device()
 }
 
 
-HmiItem* Device::GetHmi()
+Interface* Device::GetHmi()
 {
-    m_KeysHmi = new Collection("Keyboard Initialization", "Press 5 keys on the keyboard");
-    m_KeysHmi->Add(new Note("Thumb", "", ""));
-    m_KeysHmi->Add(new Note("Pointer finger", "", ""));
-    m_KeysHmi->Add(new Note("Middle finger", "", ""));
-    m_KeysHmi->Add(new Note("Ring finger", "", ""));
-    m_KeysHmi->Add(new Note("Little finger", "", ""));
-
-    return m_KeysHmi;
+    if (!m_Hmi)
+    {
+        m_Hmi = new Interface("Input device", "Keyboard initialization");
+        m_Hmi->SetControls(m_KeysHmi);
+    }
+    return m_Hmi;
 }
 
 

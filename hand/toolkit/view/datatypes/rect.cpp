@@ -37,23 +37,19 @@ void Rect::Reset()
 
 // ----------------------------------------------------------------
 
-void Multiply(Rel_Rect* src, Rel_Rect* tgt)
+void Multiply(const Rel_Rect& src, Rel_Rect& tgt)
 {
-    if(!src || !tgt)
-        return;
-    tgt->x += (src->x * tgt->w);
-    tgt->y += (src->y * tgt->h);
-    tgt->w *= src->w;
-    tgt->h *= src->h;
+    tgt.x += (src.x * tgt.w);
+    tgt.y += (src.y * tgt.h);
+    tgt.w *= src.w;
+    tgt.h *= src.h;
 }
 
 
-void Multiply(Rel_Rect* src, SDL_Rect* tgt)
+void Multiply(const Rel_Rect& src, SDL_Rect& tgt)
 {
-    if(!src || !tgt)
-        return;
-    tgt->x += (src->x * tgt->w);
-    tgt->y += (src->y * tgt->h);
-    tgt->w *= src->w;
-    tgt->h *= src->h;
+    tgt.x += (src.x * tgt.w);
+    tgt.y += (src.y * tgt.h);
+    tgt.w *= src.w;
+    tgt.h *= src.h;
 }

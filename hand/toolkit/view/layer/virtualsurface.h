@@ -3,7 +3,8 @@
 
 #include <SDL/SDL.h>
 #include "graph/collection.h"
-#include "user.h"
+#include "view/datatypes/rect.h"
+#include "view/datatypes/rgb.h"
 
 
 enum buffer_type
@@ -13,8 +14,6 @@ enum buffer_type
     COLLECTOR
 };
 
-
-class Rel_Rect;
 
 class VirtualSurface
 {
@@ -27,6 +26,9 @@ public:
     // Set coordinates and size relative to the parent layer
     virtual void SetSize(SDL_Rect size);
     SDL_Rect GetSize() { return CoordinatesOnBuffer; }
+
+    const Rel_Rect& GetCoordinates() const { return m_Coordinates; }
+    void SetCoordinates(const Rel_Rect& value) { m_Coordinates = value; }
 
     virtual void SetBufferType(buffer_type bt);
     SDL_Surface* GetBuffer();
@@ -43,7 +45,12 @@ public:
     bool Changed = true;
 
 protected:
+    void FillRect(SDL_Surface* sf, SDL_Rect* r, const Rgb& color);
+
     buffer_type BufferType = NONE;
+    VirtualSurface* m_Parent = nullptr;
+
+    Rel_Rect m_Coordinates;
     SDL_Rect CoordinatesOnBuffer;
     SDL_Surface* Buffer = nullptr;
     bool Updated = false;

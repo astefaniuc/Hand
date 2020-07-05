@@ -9,15 +9,21 @@ class ListLayer : public Layer
 public:
     ListLayer() { BufferType = COLLECTOR; }
 
-
     // Set pointer to a data tree node
     void SetContent(HmiItem* focus) override;
-    // Requests the input focus
+    void Show(Interface* hmi);
+
+    void SetMaxItemsToShow(unsigned count) { m_MaxItemsToShow = count; }
+    unsigned GetMaxItemsToShow() { return m_MaxItemsToShow; }
+
 protected:
-    void Init() override;
     bool SetFocus(HmiItem*);
     // Returns the list which should be mapped to the InputState
     HmiItem* GetControlsList();
+
+private:
+    unsigned m_MaxItemsToShow = 5;
+    unsigned m_StartPosition = 0;
 };
 
 #endif // HAND_VIEW_LAYER_LISTLAYER_H

@@ -1,7 +1,7 @@
 #include "default.h"
 
 
-extern "C" Vertex* Create()
+extern "C" HmiItem* Create()
 {
     return (new Default());
 }
@@ -20,7 +20,7 @@ typedef LayoutFactory<Default> LayoutF;
 Default::Default() : m_Hmi(a_name)
 {
     // Drawers
-    Vertex* folder = get(DRAWER);
+    HmiItem* folder = get(DRAWER);
     folder->set(new Drawer(BACKGROUND, this, &Default::ColorSurface));
     folder->set(new Drawer(FRAME, this, &Default::DrawFrame));
     folder->set(new Drawer(LIST, this, &Default::DrawList));
@@ -63,41 +63,41 @@ Default::Default() : m_Hmi(a_name)
 
 bool Default::GetViewLayout(Layout* layout)
 {
-    layout->get(COORDINATES)->Vertex::get(REQUEST)->get(RECT)->get(FULL);
-    layout->get(ALIGNMENT)->Vertex::get(REQUEST)->get(ALIGNMENT)->get(VERTICAL);
-    layout->get(DRAWER)->Vertex::get(REQUEST)->get(DRAWER)->get(LIST);
+    layout->get(COORDINATES)->HmiItem::get(REQUEST)->get(RECT)->get(FULL);
+    layout->get(ALIGNMENT)->HmiItem::get(REQUEST)->get(ALIGNMENT)->get(VERTICAL);
+    layout->get(DRAWER)->HmiItem::get(REQUEST)->get(DRAWER)->get(LIST);
 
-    layout->get(FIELDS)->get(ELEMENT)->Vertex::get(REQUEST)->get(LAYOUT)->get(ANY);
+    layout->get(FIELDS)->get(ELEMENT)->HmiItem::get(REQUEST)->get(LAYOUT)->get(ANY);
 
-    Vertex* controls = get(LAYOUT)->get(LIST)->get(FRAMEDLIST)->get();
-    controls->get(ALIGNMENT)->Vertex::get(REQUEST)->get(ALIGNMENT)->get()->name(HORIZONTAL);
-    controls->get(FIELDS)->get(ELEMENT)->Vertex::get(REQUEST)->get(LAYOUT)->get()->name(BUTTON);
+    HmiItem* controls = get(LAYOUT)->get(LIST)->get(FRAMEDLIST)->get();
+    controls->get(ALIGNMENT)->HmiItem::get(REQUEST)->get(ALIGNMENT)->get()->name(HORIZONTAL);
+    controls->get(FIELDS)->get(ELEMENT)->HmiItem::get(REQUEST)->get(LAYOUT)->get()->name(BUTTON);
     layout->add(controls);
 
     return true;
 }
 
 
-bool Default::GetListLayout(Vertex* layout)
+bool Default::GetListLayout(HmiItem* layout)
 {
-    layout->get(COORDINATES)->Vertex::get(REQUEST)->get(RECT)->get(FULL);
-    layout->get(ALIGNMENT)->Vertex::get(REQUEST)->get(ALIGNMENT)->get(ALTERNATE);
-    layout->get(DRAWER)->Vertex::get(REQUEST)->get(DRAWER)->get(LIST);
+    layout->get(COORDINATES)->HmiItem::get(REQUEST)->get(RECT)->get(FULL);
+    layout->get(ALIGNMENT)->HmiItem::get(REQUEST)->get(ALIGNMENT)->get(ALTERNATE);
+    layout->get(DRAWER)->HmiItem::get(REQUEST)->get(DRAWER)->get(LIST);
 
-    layout->get(FIELDS)->get(ELEMENT)->Vertex::get(REQUEST)->get(LAYOUT)->get(ANY);
+    layout->get(FIELDS)->get(ELEMENT)->HmiItem::get(REQUEST)->get(LAYOUT)->get(ANY);
     return true;
 }
 
 
-bool Default::GetFramedListLayout(Vertex* layout)
+bool Default::GetFramedListLayout(HmiItem* layout)
 {
-    layout->get(COORDINATES)->Vertex::get(REQUEST)->get(RECT)->get(SCALED);
+    layout->get(COORDINATES)->HmiItem::get(REQUEST)->get(RECT)->get(SCALED);
 
-    Vertex* frame = get(LAYOUT)->get(FRAME)->get();
+    HmiItem* frame = get(LAYOUT)->get(FRAME)->get();
     layout->add(frame);
 
-    Vertex* bgrd = get(LAYOUT)->get(BACKGROUND)->get();
-    bgrd->get(COLOR)->Vertex::get(REQUEST)->get(COLOR)->get(BACKGROUND)->get()->name(LIST);
+    HmiItem* bgrd = get(LAYOUT)->get(BACKGROUND)->get();
+    bgrd->get(COLOR)->HmiItem::get(REQUEST)->get(COLOR)->get(BACKGROUND)->get()->name(LIST);
     frame->add(bgrd);
 
     frame->add(get(LAYOUT)->get(LIST)->get());
@@ -105,35 +105,35 @@ bool Default::GetFramedListLayout(Vertex* layout)
 }
 
 
-bool Default::GetButtonLayout(Vertex* layout)
+bool Default::GetButtonLayout(HmiItem* layout)
 {
-    layout->get(COORDINATES)->Vertex::get(REQUEST)->get(RECT)->get(SCALED);
+    layout->get(COORDINATES)->HmiItem::get(REQUEST)->get(RECT)->get(SCALED);
 
-    Vertex* frame = get(LAYOUT)->get(FRAME)->get();
+    HmiItem* frame = get(LAYOUT)->get(FRAME)->get();
     frame->add(get(LAYOUT)->get(BACKGROUND)->get());
     layout->add(frame);
 
     // The Button container
-    Vertex* content = get(LAYOUT)->get(LIST)->get();
+    HmiItem* content = get(LAYOUT)->get(LIST)->get();
     content->name("Content");
-    content->get(ALIGNMENT)->Vertex::get(REQUEST)->get(ALIGNMENT)->get()->name(VERTICAL);
+    content->get(ALIGNMENT)->HmiItem::get(REQUEST)->get(ALIGNMENT)->get()->name(VERTICAL);
     frame->add(content);
 
-    Vertex* upper = get(LAYOUT)->get(LIST)->get();
+    HmiItem* upper = get(LAYOUT)->get(LIST)->get();
     upper->name("Upper");
-    upper->get(ALIGNMENT)->Vertex::get(REQUEST)->get(ALIGNMENT)->get()->name(SCALEDHORIZONTAL);
+    upper->get(ALIGNMENT)->HmiItem::get(REQUEST)->get(ALIGNMENT)->get()->name(SCALEDHORIZONTAL);
     content->get(FIELDS)->add(upper);
 
-    Vertex* lower = get(LAYOUT)->get(LIST)->get();
+    HmiItem* lower = get(LAYOUT)->get(LIST)->get();
     lower->name("Lower");
-    lower->get(ALIGNMENT)->Vertex::get(REQUEST)->get(ALIGNMENT)->get()->name(SCALEDHORIZONTAL);
+    lower->get(ALIGNMENT)->HmiItem::get(REQUEST)->get(ALIGNMENT)->get()->name(SCALEDHORIZONTAL);
     content->get(FIELDS)->add(lower);
 
     // Store the layer/layout types for the fields as simple nodes
-    upper->get(FIELDS)->get(ICON)->Vertex::get(REQUEST)->get(LAYOUT)->get(TEXT);
-    upper->get(FIELDS)->get(NAME)->Vertex::get(REQUEST)->get(LAYOUT)->get(TEXT);
-    lower->get(FIELDS)->get(DESCRIPTION)->Vertex::get(REQUEST)->get(LAYOUT)->get(TEXT);
-    lower->get(FIELDS)->get(CONTROLID)->Vertex::get(REQUEST)->get(LAYOUT)->get(LIST);
+    upper->get(FIELDS)->get(ICON)->HmiItem::get(REQUEST)->get(LAYOUT)->get(TEXT);
+    upper->get(FIELDS)->get(NAME)->HmiItem::get(REQUEST)->get(LAYOUT)->get(TEXT);
+    lower->get(FIELDS)->get(DESCRIPTION)->HmiItem::get(REQUEST)->get(LAYOUT)->get(TEXT);
+    lower->get(FIELDS)->get(CONTROLID)->HmiItem::get(REQUEST)->get(LAYOUT)->get(LIST);
 
     return true;
 }
@@ -141,29 +141,29 @@ bool Default::GetButtonLayout(Vertex* layout)
 
 bool Default::GetFrameLayout(Layout* layout)
 {
-    layout->get(COORDINATES)->Vertex::get(REQUEST)->get(RECT)->get(FRAME);
-    layout->get(DRAWER)->Vertex::get(REQUEST)->get(DRAWER)->get(FRAME);
-    layout->get(COLOR)->Vertex::get(REQUEST)->get(COLOR)->get(FRAME);
+    layout->get(COORDINATES)->HmiItem::get(REQUEST)->get(RECT)->get(FRAME);
+    layout->get(DRAWER)->HmiItem::get(REQUEST)->get(DRAWER)->get(FRAME);
+    layout->get(COLOR)->HmiItem::get(REQUEST)->get(COLOR)->get(FRAME);
 
     return true;
 }
 
 
-bool Default::GetBackgroundLayout(Vertex* layout)
+bool Default::GetBackgroundLayout(HmiItem* layout)
 {
-    layout->get(COORDINATES)->Vertex::get(REQUEST)->get(RECT)->get(FULL);
-    layout->get(DRAWER)->Vertex::get(REQUEST)->get(DRAWER)->get(BACKGROUND);
-    layout->get(COLOR)->Vertex::get(REQUEST)->get(COLOR)->get(BACKGROUND)->get(BUTTON);
+    layout->get(COORDINATES)->HmiItem::get(REQUEST)->get(RECT)->get(FULL);
+    layout->get(DRAWER)->HmiItem::get(REQUEST)->get(DRAWER)->get(BACKGROUND);
+    layout->get(COLOR)->HmiItem::get(REQUEST)->get(COLOR)->get(BACKGROUND)->get(BUTTON);
 
     return true;
 }
 
 
-bool Default::GetTextLayout(Vertex* layout)
+bool Default::GetTextLayout(HmiItem* layout)
 {
-    layout->get(COORDINATES)->Vertex::get(REQUEST)->get(RECT)->get(SCALED);
-    layout->get(DRAWER)->Vertex::get(REQUEST)->get(DRAWER)->get(TEXT);
-    layout->get(COLOR)->Vertex::get(REQUEST)->get(COLOR)->get(FONT);
+    layout->get(COORDINATES)->HmiItem::get(REQUEST)->get(RECT)->get(SCALED);
+    layout->get(DRAWER)->HmiItem::get(REQUEST)->get(DRAWER)->get(TEXT);
+    layout->get(COLOR)->HmiItem::get(REQUEST)->get(COLOR)->get(FONT);
 
     return true;
 }
@@ -172,58 +172,7 @@ bool Default::GetTextLayout(Vertex* layout)
 // ------------------------- Drawers ------------------------------
 
 
-bool Default::DrawFrame(Vertex* layout)
-{
-    VirtualSurface* vs = GetSurface(layout);
-    if(!vs)
-        return false;
-
-    SDL_Rect total_size = vs->GetSize();
-    SDL_Rect content_size = total_size;
-    Rel_Rect* sap = GetRect(COORDINATES, layout);
-    Multiply(sap, &content_size);
-
-    Vertex* fields = layout->get(FIELDS);
-    Vertex* child;
-    unsigned i = 0;
-    while((child=fields->get(++i)) != nullptr)
-        Multiply(sap, GetRect(COORDINATES, child));
-
-    // Draw each frame line separately
-    SDL_Rect up, down, left, right;
-    up.x = total_size.x;
-    up.y = total_size.y;
-    up.w = total_size.w;
-    up.h = content_size.y - total_size.y;
-
-    down.x = total_size.x;
-    down.y = content_size.y + content_size.h;
-    down.w = total_size.w;
-    down.h = total_size.h - content_size.h - up.h;
-
-    left.x = total_size.x;
-    left.y = content_size.y;
-    left.w = content_size.x - total_size.x;
-    left.h = content_size.h;
-
-    right.x = content_size.x + content_size.w;
-    right.y = left.y;
-    right.w = total_size.w - left.w - content_size.w;
-    right.h = left.h;
-
-    SDL_Surface* buffer = vs->GetBuffer();
-    SDL_Rect* border[4] = {&up, &down, &left, &right};
-    Rgb* color = GetRgb("FrameColor", layout);
-    for(unsigned i = 0; i < 4; ++i)
-    {
-        SDL_SetClipRect(buffer, border[i]);
-        FillRect(buffer, border[i], color);
-    }
-    return true;
-}
-
-
-bool Default::DrawView(Vertex* layout)
+bool Default::DrawView(HmiItem* layout)
 {
     VirtualSurface* vs = GetSurface(layout);
     if(!vs)
@@ -232,14 +181,14 @@ bool Default::DrawView(Vertex* layout)
 }
 
 
-bool Default::DrawText(Vertex* layout)
+bool Default::DrawText(HmiItem* layout)
 {
     VirtualSurface* vs = GetSurface(layout);
     if(!vs)
         return false;
 
     std::string text = GetString(layout);
-    if(text.empty())
+    if (text.empty())
     {
         vs->SetBuffer(nullptr);
         return false;
@@ -264,9 +213,9 @@ bool Default::DrawText(Vertex* layout)
 }
 
 
-bool Default::DrawList(Vertex* layout)
+bool Default::DrawList(HmiItem* layout)
 {
-    Vertex* fields = layout->get(FIELDS);
+    HmiItem* fields = layout->get(FIELDS);
     unsigned cnt = fields->size();
     if(cnt < 1)
         return true;
@@ -298,7 +247,7 @@ bool Default::DrawList(Vertex* layout)
 }
 
 
-bool Default::ColorSurface(Vertex* layout)
+bool Default::ColorSurface(HmiItem* layout)
 {
     VirtualSurface* vs = GetSurface(layout);
     if(!vs)
@@ -316,9 +265,9 @@ bool Default::ColorSurface(Vertex* layout)
 }
 
 
-std::string Default::GetString(Vertex* layout)
+std::string Default::GetString(HmiItem* layout)
 {
-    Vertex* content = layout->get(TARGET)->get();
+    HmiItem* content = layout->get(TARGET)->get();
     if(content)
         return content->getAsString();
     return "";

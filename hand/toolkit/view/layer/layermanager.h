@@ -1,6 +1,8 @@
 #ifndef HAND_VIEW_LAYER_LAYERMANAGER_H
 #define HAND_VIEW_LAYER_LAYERMANAGER_H
 
+#include "graph/interface.h"
+#include "graph/method.h"
 #include "view/layer/listlayer.h"
 
 
@@ -15,36 +17,24 @@ class MasterLayer : public Layer
 {
 public:
     MasterLayer();
-    virtual ~MasterLayer();
-
-    bool Update(bool force) override;
-
-    bool GetCommand(Vertex* func, int level);
-    void SetDevice(Device* device);
-
-    // Stores the pointer to the object to be displayed next
-    bool Show(Vertex* request);
 
     // VirtualSurface overloads
-    void SetSize(SDL_Rect size) { CoordinatesOnBuffer = size; }
+    void SetSize(SDL_Rect size) override { CoordinatesOnBuffer = size; }
     void SetBufferType(buffer_type bt) { BufferType = bt; }
-    void SetBuffer(SDL_Surface* buffer) { Buffer = buffer; }
 
-
-protected:
-    void Init() override;
+    void Show(Interface* hmi);
 
 private:
-    bool Expand(Vertex* list);
-    bool Exit(Vertex* ignore);
-    bool GetAllThemes(Vertex* themes_dir);
-    bool LoadTheme(Vertex* theme);
-    void UnloadTheme();
+    void Exit(HmiItem*);
+    void Clear();
 
-    // Contains the only pointer to the Device
-    Device* _Device = nullptr;
-    Vertex* NextRequest = nullptr;
-    Layer* MainView = nullptr;
+    HmiItem* NextRequest = nullptr;
+
+    Layer* m_View = nullptr;
+    Layer* m_Controls = nullptr;
+    Layer* m_Auxilliary = nullptr;
+
+    Action<MasterLayer>* m_Exit;
 };
 
 #endif // HAND_VIEW_LAYER_LAYERMANAGER_H

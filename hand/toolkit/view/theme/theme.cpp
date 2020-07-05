@@ -2,7 +2,6 @@
 #include "view/theme/theme.h"
 #include "view/datatypes/rgb.h"
 #include "view/datatypes/rect.h"
-#include "view/datatypes/layout.h"
 #include "view/layer/virtualsurface.h"
 
 
@@ -55,11 +54,11 @@ TTF_Font* Theme::GetFont(int size)
     return font;
 }
 
-
-void Theme::GetFontHeight(Vertex* layout, unsigned& max_size)
+/*
+void Theme::GetFontHeight(HmiItem* layout, unsigned& max_size)
 {
-    Vertex* pref = layout->get(DIM_FONT_PREFERRED);
-    if(pref)
+    HmiItem* pref = layout->get(DIM_FONT_PREFERRED);
+    if (pref)
         max_size = ((Data<unsigned>*)pref)->get();
     else
     {
@@ -67,19 +66,7 @@ void Theme::GetFontHeight(Vertex* layout, unsigned& max_size)
         if(max_size >= max)
             max_size = max;
     }
-}
-
-
-VirtualSurface* Theme::GetSurface(Vertex* in)
-{
-    return dynamic_cast<VirtualSurface*>(in->get(LAYER, ANY));
-}
-
-
-void Theme::FillRect(SDL_Surface* sf, SDL_Rect* r, Rgb* c)
-{
-    SDL_FillRect(sf, r, SDL_MapRGB(sf->format, c->m_r, c->m_g, c->m_b));
-}
+}*/
 
 
 SDL_Surface* Theme::RenderText(const std::string& text, int size, Rgb* color)

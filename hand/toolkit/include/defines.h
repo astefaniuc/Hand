@@ -1,7 +1,6 @@
 #ifndef HAND_INCLUDE_DEFINES_H
 #define HAND_INCLUDE_DEFINES_H
 
-#include "base/defines.h"
 #include "graph/defines.h"
 #include "view/defines.h"
 #include "input/defines.h"
