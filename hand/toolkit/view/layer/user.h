@@ -16,9 +16,6 @@ public:
     bool GetCommand(HmiItem* func, int level);
     void SetDevice(Device* device);
 
-    // Stores the pointer to the object to be displayed next
-    bool Request(HmiItem* request);
-
 private:
     // Contains the only pointer to the Device
     Device* _Device = nullptr;

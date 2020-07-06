@@ -31,12 +31,6 @@ void Layer::Collapse()
 }
 
 
-bool Layer::Request(HmiItem* req)
-{
-    return ParentLayer->Request(req);
-}
-
-
 Layer* Layer::Insert(Layer* a_child)
 {
     m_Sublayers.push_back(a_child);

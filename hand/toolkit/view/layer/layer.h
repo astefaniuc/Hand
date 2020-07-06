@@ -27,9 +27,6 @@ public:
 
     virtual bool SetCommand(HmiItem* cmd);
 
-    // Reacting on user input
-    virtual bool Request(HmiItem* request);
-
     virtual void NotifyChanged() { Changed = true; }
 
     virtual void Draw(bool forced);
