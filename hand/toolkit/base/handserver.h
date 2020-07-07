@@ -8,7 +8,7 @@
 
 
 class CUser;
-class Device;
+class EventHandler;
 class Screen;
 class ModuleLib;
 
@@ -29,17 +29,13 @@ public:
 private:
     // TODO: multiple screens e.g. touch screen device
     Screen* m_Screen = nullptr;
-    std::vector<Device*> m_Devices;
+    EventHandler* m_Input;
     std::vector<ModuleLib*> m_RunningApps;
     Note* m_AppPath = nullptr;
 
     // The queue for system device events
     SDL_TimerID Timer = nullptr;
     bool ExecNotFinished = false;
-
-    // Variables controlling the server behavior - "settings"
-    bool CreateNewUserOnOrphanKeyPress = true;
-    bool DeleteDeviceIfEmpty = true;
 };
 
 #endif // HAND_BASE_SERVER_H

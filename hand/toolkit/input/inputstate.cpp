@@ -29,7 +29,7 @@ bool InputState::Release(unsigned k)
     // Move the ReleasedKey up the the three
     // and the ReleasedKey down to the current key combination node
     if( (PressedKey == NullKey) ||
-        ((ReleasedKey=ReleasedKey->GetParent(k)) == nullptr))
+        ((ReleasedKey = ReleasedKey->GetParent(k)) == nullptr))
     {
         // Some events get lost, this command is corrupted
         reset();

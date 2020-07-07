@@ -4,21 +4,24 @@
 #include "graph/interface.h"
 #include "view/layer/layer.h"
 
-class Device;
+
+class EventHandler;
+class Screen;
+class Hand;
 
 /// Manages the items to be shown on screen and the input modes.
 class CUser : public Layer
 {
 public:
-    CUser();
+    CUser(EventHandler* input, Screen* output);
     virtual ~CUser();
 
     bool GetCommand(HmiItem* func, int level);
-    void SetDevice(Device* device);
 
 private:
-    // Contains the only pointer to the Device
-    Device* _Device = nullptr;
+    EventHandler* m_Input;
+    // May be one or two hands, using a vector is overdosed (TODO)
+    std::vector<Hand*> m_Hands;
     Interface m_UI;
 };
 

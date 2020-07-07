@@ -10,6 +10,8 @@
 HandServer::HandServer(const std::string& a_startApp)
 {
     m_Screen = new Screen();
+    m_Input = new EventHandler();
+
     CUser* user = CreateUser();
     if (!a_startApp.empty())
     {
@@ -35,19 +37,14 @@ HandServer::~HandServer()
     for (ModuleLib* app : m_RunningApps)
         delete app;
     delete m_AppPath;
+    delete m_Input;
     delete m_Screen;
 }
 
 
 CUser* HandServer::CreateUser()
 {
-    CUser* user = new CUser();
-
-    Device* device = new Device();
-    m_Devices.push_back(device);
-    // Create device object with input state
-    user->SetDevice(device);
-    m_Screen->Add(user);
+    CUser* user = new CUser(m_Input, m_Screen);
 
     return user;
 }
@@ -85,9 +82,7 @@ void HandServer::Pump()
     ExecNotFinished = true;
     // Wait till next cycle before setting the next content
     // because this deletes the calling object
-    for (Device* device : m_Devices)
-        device->GetUserInput();
-
+    m_Input->GetUserInput();
     if (!m_Screen->ShowSurface())
         // Nothing to show, the normal exit
         exit(0);

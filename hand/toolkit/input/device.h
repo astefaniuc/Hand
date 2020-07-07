@@ -4,52 +4,58 @@
 #include <vector>
 #include <SDL/SDL.h>
 #include "base/module.h"
-#include "graph/collection.h"
+#include "graph/data.h"
 
 
-class InputState;
+extern const std::string DriverNames[];
+
+
+class Hand;
 
 class Device : public virtual Module
 {
 public:
-    Device();
-    ~Device();
+    enum Driver
+    {
+        Keyboard,
+        Mouse,
+        Controller
+    };
 
-    // Implements get(VIEW)
-    Interface* GetHmi() override;
-    // Sets the key map
-    bool Init();
-    // Functions accessing the layer object (not possible from here)
-    bool Press(int key_id);
-    bool Release(int key_id);
-    bool IsUnused();
-    unsigned GetNumberOfKeys();
-    // Return the input state machine
-    InputState* GetInputState();
-    //  User input handling
-    void GetUserInput();
-    void Press(SDLKey);
-    void Release(SDLKey);
+    Device(Driver id) : m_Type(id) {}
+    virtual ~Device() {}
 
-protected:
-    /// Callbacks
-//    HmiItem* Init
+    static Driver GetDriverId(const std::string& typeName);
+    static const std::string& GetDriverName(Driver id);
+
+    virtual void SetUser(Hand* hand) { m_Hand = hand; }
+    Interface* GetHmi() override { return m_Hmi; }
+
+    const std::string& GetTypeName() { return GetDriverName(m_Type); }
+    Driver GetTypeId() { return m_Type; }
 
     // Returns the Key symbol at specified position
-    Note* GetKey(unsigned index);
-    void AddKey(int key_id);
-    void DeleteKey(unsigned index);
-    // Returns the key number
-    int GetKeyIndex(int key_id);
+    virtual void GetKeyName(int k, Note* a_out) = 0;
 
-    // Members:
-    InputState* m_StateMachine = nullptr;
-    // Number of controls
-    unsigned m_NumberOfKeys = NUMBER_OF_BUTTONS;
-    std::vector<int> m_Keys;
+    virtual bool Process(const SDL_Event& event) = 0;
 
-    Collection* m_KeysHmi;
+protected:
+    Driver m_Type;
+    Hand* m_Hand = nullptr;
     Interface* m_Hmi = nullptr;
+};
+
+
+class EventHandler
+{
+public:
+    ~EventHandler();
+
+    Hand* CreateHand(Device::Driver device);
+    void GetUserInput();
+
+private:
+    std::vector<Device*> m_Devices;
 };
 
 #endif // HAND_INPUT_DEVICE_H

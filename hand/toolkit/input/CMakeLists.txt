@@ -1,6 +1,8 @@
 target_sources(${LIBNAME} PRIVATE
     device.cpp
+    hand.cpp
     inputstate.cpp
+    keyboard.cpp
     node.cpp
     statetree.cpp)
 
