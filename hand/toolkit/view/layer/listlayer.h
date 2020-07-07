@@ -11,7 +11,7 @@ public:
 
     // Set pointer to a data tree node
     void SetContent(HmiItem* focus) override;
-    void Show(Interface* hmi);
+    void Show(HmiItem* hmi);
 
     void SetMaxItemsToShow(unsigned count) { m_MaxItemsToShow = count; }
     unsigned GetMaxItemsToShow() { return m_MaxItemsToShow; }

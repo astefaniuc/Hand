@@ -1,8 +1,8 @@
 #ifndef HAND_BASE_HANDAPP_H
 #define HAND_BASE_HANDAPP_H
 
-#include "graph/interface.h"
 
+class Interface;
 
 class Module
 {

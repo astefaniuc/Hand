@@ -1,4 +1,5 @@
 #include "graph/collection.h"
+#include "view/layer/listlayer.h"
 
 
 void Collection::Add(HmiItem* a_child)
@@ -41,4 +42,10 @@ void Collection::Clear()
             delete item;
 
     m_Value.clear();
+}
+
+
+Layer* Collection::CreateLayer()
+{
+    return new ListLayer();
 }

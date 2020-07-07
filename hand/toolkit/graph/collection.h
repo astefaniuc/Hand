@@ -32,6 +32,8 @@ public:
     HmiItem::Type GetType() const override { return HmiItem::EList; }
 
 private:
+    Layer* CreateLayer() override;
+
     std::vector<HmiItem*> m_Value;
 };
 

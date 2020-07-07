@@ -1,5 +1,5 @@
-#ifndef HAND_GRAPH_INTERFACE_H_
-#define HAND_GRAPH_INTERFACE_H_
+#ifndef HAND_GRAPH_INTERFACE_H
+#define HAND_GRAPH_INTERFACE_H
 
 #include "graph/vertex.h"
 
@@ -22,9 +22,11 @@ public:
     HmiItem* GetAuxilliary() const { return m_Auxilliary; }
 
 private:
+    Layer* CreateLayer() override;
+
     Layer* m_View = nullptr;
     HmiItem* m_Controls = nullptr;
     HmiItem* m_Auxilliary = nullptr;
 };
 
-#endif // HAND_GRAPH_INTERFACE_H_
+#endif // HAND_GRAPH_INTERFACE_H

@@ -26,6 +26,12 @@ void MasterLayer::Show(Interface* a_hmi)
         m_Auxilliary = Insert(aux->GetLayer());
 }
 
+void MasterLayer::Clear()
+{
+    m_View = nullptr;
+    m_Controls = nullptr;
+    m_Auxilliary = nullptr;
+}
 
 void MasterLayer::Exit(HmiItem*)
 {

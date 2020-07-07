@@ -28,8 +28,6 @@ private:
     void Exit(HmiItem*);
     void Clear();
 
-    HmiItem* NextRequest = nullptr;
-
     Layer* m_View = nullptr;
     Layer* m_Controls = nullptr;
     Layer* m_Auxilliary = nullptr;

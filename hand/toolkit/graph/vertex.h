@@ -56,7 +56,7 @@ public:
           m_Description(a_description)
     {}
 
-    virtual ~HmiItem() = default;
+    virtual ~HmiItem();
 
     void SetName(const std::string& a_name) { m_Name = a_name; }
     const std::string& GetName() const { return m_Name; }
@@ -104,6 +104,8 @@ protected:
 
     void RemoveCallback(ICallback* a_client, Listeners& a_clientsList);
     void Execute(const Listeners& a_list);
+
+    virtual Layer* CreateLayer() = 0;
 
 private:
     std::string m_Name;

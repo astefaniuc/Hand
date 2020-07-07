@@ -2,6 +2,7 @@
 #define HAND_GRAPH_METHOD_H
 
 #include "graph/vertex.h"
+#include "view/layer/buttonlayer.h"
 
 
 template <class CallbackOwner>
@@ -23,6 +24,8 @@ public:
     Type GetType() const override { return HmiItem::EAction; }
 
 private:
+    Layer* CreateLayer() override { return new ButtonLayer(); }
+
     CCallback<CallbackOwner>* m_Method;
 };
 

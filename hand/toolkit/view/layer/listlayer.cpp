@@ -10,7 +10,7 @@ void ListLayer::SetContent(HmiItem* a_data)
 }
 
 
-void ListLayer::Show(Interface* a_hmi)
+void ListLayer::Show(HmiItem* a_hmi)
 {
     Collection* listData = dynamic_cast<Collection*>(a_hmi);
     if (listData)

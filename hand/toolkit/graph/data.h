@@ -51,6 +51,8 @@ public:
     Persistence* GetPersistence() { return m_Storage; }
 
 protected:
+    Layer* CreateLayer() override;
+
     Persistence* m_Storage = nullptr;
 
     Listeners m_DataChanged;
