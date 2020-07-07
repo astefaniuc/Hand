@@ -6,7 +6,7 @@
 #include "input/inputstate.h"
 #include "graph/method.h"
 #include "view/layer/layermanager.h"
-#include "base/handserver.h"
+#include "base/handapploader.h"
 
 
 CUser::CUser(EventHandler* a_input, Screen* a_output)
@@ -30,12 +30,29 @@ CUser::CUser(EventHandler* a_input, Screen* a_output)
 
 CUser::~CUser()
 {
+    for (ModuleLib* app : m_RunningApps)
+        delete app;
     for (Hand* h : m_Hands)
         delete h;
     // Don't delete screen
     Buffer = nullptr;
 }
 
+
+bool CUser::LoadApp(Note* a_path)
+{
+    ModuleLib* app = new ModuleLib();
+    app->SetItem(a_path);
+    if (app->Load())
+    {
+        m_RunningApps.push_back(app);
+        SetContent(app->GetHmi());
+        return true;
+    }
+
+    delete app;
+    return false;
+}
 
 bool CUser::GetCommand(HmiItem* f, int level)
 {

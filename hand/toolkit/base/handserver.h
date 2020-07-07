@@ -10,7 +10,6 @@
 class CUser;
 class EventHandler;
 class Screen;
-class ModuleLib;
 
 class HandServer
 {
@@ -30,7 +29,7 @@ private:
     // TODO: multiple screens e.g. touch screen device
     Screen* m_Screen = nullptr;
     EventHandler* m_Input;
-    std::vector<ModuleLib*> m_RunningApps;
+    std::vector<CUser*> m_Users;
     Note* m_AppPath = nullptr;
 
     // The queue for system device events

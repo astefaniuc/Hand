@@ -1,9 +1,8 @@
 #include "base/handserver.h"
-#include <unistd.h>
 #include "view/layer/user.h"
 #include "input/device.h"
 #include "view/screen.h"
-#include "base/handapploader.h"
+#include <unistd.h>
 #include <iostream>
 
 
@@ -16,26 +15,16 @@ HandServer::HandServer(const std::string& a_startApp)
     if (!a_startApp.empty())
     {
         m_AppPath = new Note("Start app", "Passed as program argument", a_startApp);
-        ModuleLib* app = new ModuleLib();
-        app->SetItem(m_AppPath);
-        if (app->Load())
-        {
-            m_RunningApps.push_back(app);
-            user->SetContent(app->GetHmi());
-        }
-        else
-        {
+        if (!user->LoadApp(m_AppPath))
             std::cerr << "Error: can't open app '" << a_startApp << "'.";
-            delete app;
-        }
     }
 }
 
 
 HandServer::~HandServer()
 {
-    for (ModuleLib* app : m_RunningApps)
-        delete app;
+    for (CUser* user : m_Users)
+        delete user;
     delete m_AppPath;
     delete m_Input;
     delete m_Screen;
@@ -45,7 +34,7 @@ HandServer::~HandServer()
 CUser* HandServer::CreateUser()
 {
     CUser* user = new CUser(m_Input, m_Screen);
-
+    m_Users.push_back(user);
     return user;
 }
 
