@@ -2,13 +2,13 @@
 #define HAND_THEMES_DEFAULT_H
 
 #include "include/theme.h"
-
+#include "graph/collection.h"
 
 class Default : public Theme
 {
 public:
     Default();
-    Interface* GetHmi() override { return m_Hmi; }
+    HmiItem* GetHmi() override { return &m_Hmi; }
 
 protected:
     // Layout creators

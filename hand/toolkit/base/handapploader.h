@@ -5,7 +5,8 @@
 #include "base/filesystem.h"
 
 
-// Class factories for dynamic linking
+#define LIBRARY_FILE_EXTENSION ".so"
+
 
 class ModuleLib : public File
 {
@@ -15,14 +16,14 @@ public:
 
     bool IsValid(const std::string&) override;
 
-    Interface* GetHmi() override;
+    HmiItem* GetHmi() override;
 
     bool Load();
     void Close();
 
 private:
     typedef Module* creator();
-    typedef void destroyer(void*);
+    typedef void destroyer(Module*);
 
     // Shared library handle
     void* Library = nullptr;

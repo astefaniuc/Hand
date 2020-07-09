@@ -71,12 +71,12 @@ public:
     // TEMP?
     virtual bool IsValid(const DataType& a_input) = 0;
 
-    Interface* GetHmi() override { return m_Interface; }
-    void SetHmi(Interface* interface) { m_Interface = interface; }
+    HmiItem* GetHmi() override { return m_Interface; }
+    void SetHmi(HmiItem* interface) { m_Interface = interface; }
 
 protected:
     TData<DataType>* m_Item = nullptr;
-    Interface* m_Interface = nullptr;
+    HmiItem* m_Interface = nullptr;
 };
 
 

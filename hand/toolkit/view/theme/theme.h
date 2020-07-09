@@ -9,6 +9,9 @@
 #include "view/drawer.h"
 
 
+#define FONT_FILE "/usr/share/fonts/truetype/freefont/FreeSans.ttf"
+
+
 class Rgb;
 class Rel_Rect;
 class VirtualSurface;

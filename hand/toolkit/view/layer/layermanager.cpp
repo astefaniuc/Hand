@@ -12,16 +12,17 @@ MasterLayer::MasterLayer()
 }
 
 
-void MasterLayer::Show(Interface* a_hmi)
+void MasterLayer::SetContent(HmiItem* a_hmi)
 {
     Clear();
 
-    m_View = Insert(a_hmi->GetView());
-    HmiItem* controls = a_hmi->GetControls();
+    Interface* in = dynamic_cast<Interface*>(a_hmi);
+    m_View = Insert(in->GetView());
+    HmiItem* controls = in->GetControls();
     if (controls)
         m_Controls = Insert(controls->GetLayer());
 
-    HmiItem* aux = a_hmi->GetAuxilliary();
+    HmiItem* aux = in->GetAuxilliary();
     if (aux)
         m_Auxilliary = Insert(aux->GetLayer());
 }

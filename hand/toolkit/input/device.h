@@ -12,7 +12,7 @@ extern const std::string DriverNames[];
 
 class Hand;
 
-class Device : public virtual Module
+class Device : public Module
 {
 public:
     enum Driver
@@ -29,7 +29,6 @@ public:
     static const std::string& GetDriverName(Driver id);
 
     virtual void SetUser(Hand* hand) { m_Hand = hand; }
-    Interface* GetHmi() override { return m_Hmi; }
 
     const std::string& GetTypeName() { return GetDriverName(m_Type); }
     Driver GetTypeId() { return m_Type; }
@@ -42,7 +41,6 @@ public:
 protected:
     Driver m_Type;
     Hand* m_Hand = nullptr;
-    Interface* m_Hmi = nullptr;
 };
 
 

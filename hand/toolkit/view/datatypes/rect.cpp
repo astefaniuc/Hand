@@ -5,8 +5,8 @@
 Rect::Rect(
     const std::string& a_name,
     const std::string& a_description,
-    const Rel_Rect& a_value,
-    Module* a_manipulator) : Collection(a_name, a_description, a_manipulator), m_Value(a_value)
+    double x, double y, double w, double h)
+    : Collection(a_name, a_description), m_Value(x, y, w, h)
 {
     // For now add plain data directly
     Add(new TData<double>("x", "", m_Value.x));

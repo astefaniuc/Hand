@@ -6,7 +6,7 @@
 #include "view/theme/theme.h"
 #include "view/datatypes/rect.h"
 #include "view/datatypes/rgb.h"
-#include "view/datatypes/layout.h"
+#include "view/drawer.h"
 #include "view/layer/virtualsurface.h"
 
 #endif // HAND_INCLUDE_THEME_H

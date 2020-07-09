@@ -6,8 +6,26 @@
 #include "graph/collection.h"
 
 
+enum default_number_of_items
+{
+    NUMBER_OF_BUTTONS = 5,
+    MAX_NUMBER_OF_BUTTONS = 10
+};
+
+
+enum key_position
+{
+    THUMB,
+    FOREFINGER,
+    MIDDLEFINGER,
+    RINGFINGER,
+    LITTLEFINGER
+};
+
+
 class Device;
 class InputState;
+class Interface;
 
 class Hand : public Module
 {
@@ -15,7 +33,7 @@ public:
     Hand(Device* dev);
     ~Hand();
 
-    Interface* GetHmi() override;
+    HmiItem* GetHmi() override;
     // Sets the key map
     bool Init();
 

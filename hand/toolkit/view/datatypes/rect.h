@@ -26,8 +26,7 @@ public:
     Rect(
         const std::string& name,
         const std::string& description,
-        const Rel_Rect& value,
-        Module* manipulator = nullptr);
+        double x, double y, double w, double h);
 
     void SetValue(const Rel_Rect& value);
     const Rel_Rect& GetValue() { return m_Value; }

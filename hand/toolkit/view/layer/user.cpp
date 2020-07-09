@@ -21,7 +21,7 @@ CUser::CUser(EventHandler* a_input, Screen* a_output)
     Hand* right = m_Input->CreateHand(Device::Keyboard);
     if (!right->Init())
         // Show init screen
-        dynamic_cast<MasterLayer*>(right->GetHmi()->GetLayer())->Show(right->GetHmi());
+        SetContent(right->GetHmi());
     // Add the exit function to the tree of available funcs
     // Request command at highest level
 //    GetCommand(m_Exit, _Device->GetNumberOfKeys());

@@ -36,7 +36,7 @@ public:
 
     void MapSurface(Rel_Rect* src_rect, SDL_Rect& tgt_rect, SDL_Surface*& tgt_surface);
 
-    void SetParent(VirtualSurface* parent);
+    void SetParent(VirtualSurface* parent) { m_Parent = parent; }
 
     void BlitSurface(
             SDL_Surface* source, SDL_Rect* source_pos,

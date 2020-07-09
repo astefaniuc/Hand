@@ -4,7 +4,6 @@
 #include <string>
 #include <sstream>
 #include <vector>
-#include "include/defines.h"
 
 
 class HmiItem;

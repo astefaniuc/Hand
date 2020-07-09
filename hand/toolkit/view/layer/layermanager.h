@@ -22,7 +22,7 @@ public:
     void SetSize(SDL_Rect size) override { CoordinatesOnBuffer = size; }
     void SetBufferType(buffer_type bt) { BufferType = bt; }
 
-    void Show(Interface* hmi);
+    void SetContent(HmiItem* hmi) override;
 
 private:
     void Exit(HmiItem*);

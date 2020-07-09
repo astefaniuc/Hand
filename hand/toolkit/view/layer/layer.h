@@ -25,8 +25,6 @@ public:
 
     void Collapse();
 
-    virtual bool SetCommand(HmiItem* cmd);
-
     virtual void NotifyChanged() { Changed = true; }
 
     virtual void Draw(bool forced);

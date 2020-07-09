@@ -1,7 +1,8 @@
 #include "default.h"
+#include "view/defines.h"
 
 
-extern "C" HmiItem* Create()
+extern "C" Module* Create()
 {
     return (new Default());
 }
@@ -13,13 +14,13 @@ extern "C" void Destroy(Theme* theme)
 }
 
 
-typedef Method<Default> Drawer;
-typedef LayoutFactory<Default> LayoutF;
+typedef Action<Default> Drawer;
 
 
-Default::Default() : m_Hmi(a_name)
+Default::Default() : m_Hmi("Default", "Default visual theme")
 {
     // Drawers
+    /*
     HmiItem* folder = get(DRAWER);
     folder->set(new Drawer(BACKGROUND, this, &Default::ColorSurface));
     folder->set(new Drawer(FRAME, this, &Default::DrawFrame));
@@ -35,26 +36,27 @@ Default::Default() : m_Hmi(a_name)
     folder->set(new LayoutF(LIST, this, &Default::GetListLayout));
     folder->get(LIST)->set(new LayoutF(FRAMEDLIST, this, &Default::GetFramedListLayout));
     folder->get(LIST)->set(new LayoutF(VIEW, this, &Default::GetViewLayout));
-    folder->set(new LayoutF(TEXT, this, &Default::GetTextLayout));
+    folder->set(new LayoutF(TEXT, this, &Default::GetTextLayout));*/
 
     // Properties
     // Dimensions
-    folder = get(RECT);
-    folder->set(new RectFactory(FRAME,  .01, .03, .98, .94));
-    folder->set(new RectFactory(FULL,     0,   0,   1,   1));
-    folder->set(new RectFactory(SCALED, .05, .05,  .9,  .9));
+    Collection* folder = new Collection(RECT, "Fields scalings");
+    folder->Add(new Rect(FRAME, "Relative frame size [%]", .01, .03, .98, .94));
+    folder->Add(new Rect(FULL, "TODO", 0, 0, 1, 1));
+    folder->Add(new Rect(SCALED, "TODO",.05, .05, .9, .9));
+    m_Hmi.Add(folder);
 
-    folder = get(ALIGNMENT);
-    folder->set(new RectFactory(HORIZONTAL,         1,   0,   1,   0));
-    folder->set(new RectFactory(VERTICAL,           0,   1,   0,   1));
-    folder->set(new AlternateFactory(ALTERNATE, folder->get(VERTICAL), folder->get(HORIZONTAL)));
-    folder->set(new RectFactory(SCALEDHORIZONTAL,   1,   0,  .5,   0));
+    folder = new Collection(ALIGNMENT, "layout / placement settings");
+    folder->Add(new Rect(HORIZONTAL, "TODO",.1, 0, 1, 0));
+    folder->Add(new Rect(VERTICAL, "TODO",.0, 1, 0, 1));
+    folder->Add(new AlternateFactory(ALTERNATE, folder->get(VERTICAL), folder->get(HORIZONTAL)));
+    folder->Add(new Rect(SCALEDHORIZONTAL, "TODO", 1, 0, .5, 0));
     // Colors
     folder = get(COLOR);
-    folder->get(BACKGROUND)->set(new Rgb(BUTTON,  40,  40, 100));
-    folder->get(BACKGROUND)->set(new Rgb(LIST,    20,  20,  50));
-    folder->set(new Rgb(FONT,   200, 200, 200));
-    folder->set(new Rgb(FRAME,   30,  30,  75));
+    folder->Add(BACKGROUND)->set(new Rgb(BUTTON,  40,  40, 100));
+    folder->Add(BACKGROUND)->set(new Rgb(LIST,    20,  20,  50));
+    folder->Add(new Rgb(FONT,   200, 200, 200));
+    folder->Add(new Rgb(FRAME,   30,  30,  75));
 }
 
 

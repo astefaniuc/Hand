@@ -16,7 +16,7 @@ VirtualSurface::~VirtualSurface()
 
 void VirtualSurface::MapSurface(Rel_Rect* src_rect, SDL_Rect& tgt_rect, SDL_Surface*& tgt_surface)
 {
-    if(BufferType == COLLECTOR)
+    if (BufferType == COLLECTOR)
     {
         // Get the absolute position on the current buffer
         tgt_rect = CoordinatesOnBuffer;
@@ -32,7 +32,7 @@ void VirtualSurface::MapSurface(Rel_Rect* src_rect, SDL_Rect& tgt_rect, SDL_Surf
     Rel_Rect sap = GetCoordinates();
     Multiply(*src_rect, sap);
     SetCoordinates(sap);
-    if(m_Parent)
+    if (m_Parent)
         m_Parent->MapSurface(src_rect, tgt_rect, tgt_surface);
 }
 
@@ -47,7 +47,7 @@ void VirtualSurface::Show(SDL_Rect* a_absOnBuffer, Rel_Rect* a_relativeToParent)
     SDL_Surface* tgt_surface = nullptr;
     m_Parent->MapSurface(a_relativeToParent, tgt_rect, tgt_surface);
 
-    if(m_Parent->BufferType == OVERLAY)
+    if (m_Parent->BufferType == OVERLAY)
         m_Parent->Show(&tgt_rect, a_relativeToParent);
 
     // DrawObject as parameter for positioning and alpha values

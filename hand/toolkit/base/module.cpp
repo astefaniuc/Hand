@@ -21,7 +21,7 @@ bool ModuleLib::Load()
 }
 
 
-Interface* ModuleLib::GetHmi()
+HmiItem* ModuleLib::GetHmi()
 {
     if (!m_Module)
         m_Module = Create();

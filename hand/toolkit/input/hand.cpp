@@ -25,7 +25,7 @@ Hand::~Hand()
 }
 
 
-Interface* Hand::GetHmi()
+HmiItem* Hand::GetHmi()
 {
     if (!m_Hmi)
     {
