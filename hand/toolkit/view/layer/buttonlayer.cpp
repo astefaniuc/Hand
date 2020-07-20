@@ -1,12 +1,10 @@
 #include "view/layer/buttonlayer.h"
 #include "view/layer/textlayer.h"
 #include "graph/method.h"
-#include "graph/data.h"
 
 
 ButtonLayer::ButtonLayer() : Layer()
 {
-    BufferType = COLLECTOR;
     // TODO: make this configurable
     m_Name = new TextLayer();
     m_Description = new TextLayer();

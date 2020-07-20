@@ -7,8 +7,6 @@
 class ListLayer : public Layer
 {
 public:
-    ListLayer() { BufferType = COLLECTOR; }
-
     // Set pointer to a data tree node
     void SetContent(HmiItem* focus) override;
     void Show(HmiItem* hmi);

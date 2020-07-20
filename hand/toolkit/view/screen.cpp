@@ -81,7 +81,6 @@ SDL_Rect Screen::GetResolution()
 void Screen::Add(CUser* a_user)
 {
     m_Users.push_back(a_user);
-    a_user->SetBuffer(m_Surface);
     SplitScreen();
 }
 
@@ -114,6 +113,7 @@ void Screen::SplitScreen()
         screen.w = newWidth;
         screen.x = newWidth * (i - 1);
         m_Users[i]->SetSize(screen);
+        // TODO: else, generic way to pass size and position
     }
 }
 

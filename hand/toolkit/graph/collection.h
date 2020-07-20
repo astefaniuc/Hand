@@ -21,7 +21,7 @@ public:
     /// Removes the item from the children list. If it is the owner of the child it destroys it.
     void Remove(HmiItem* a_child);
 
-    HmiItem* GetChild(const std::string& a_name);
+    HmiItem* GetChild(const std::string& a_name) const;
     HmiItem* GetChild(unsigned a_position) { return m_Value[a_position]; }
 
     /// Returns the number of children.

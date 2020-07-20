@@ -18,10 +18,6 @@ class MasterLayer : public Layer
 public:
     MasterLayer();
 
-    // VirtualSurface overloads
-    void SetSize(SDL_Rect size) override { CoordinatesOnBuffer = size; }
-    void SetBufferType(buffer_type bt) { BufferType = bt; }
-
     void SetContent(HmiItem* hmi) override;
 
 private:

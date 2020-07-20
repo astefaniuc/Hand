@@ -4,7 +4,6 @@ target_sources(${LIBNAME} PRIVATE
     layermanager.cpp
     listlayer.cpp
     textlayer.cpp
-    user.cpp
-    virtualsurface.cpp)
+    user.cpp)
 
 target_include_directories(${LIBNAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})

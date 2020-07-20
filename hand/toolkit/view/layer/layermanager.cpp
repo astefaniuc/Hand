@@ -6,8 +6,6 @@
 
 MasterLayer::MasterLayer()
 {
-    BufferType = COLLECTOR;
-
     m_Exit = new Action<MasterLayer>("Exit", "Close interface", this, &MasterLayer::Exit);
 }
 

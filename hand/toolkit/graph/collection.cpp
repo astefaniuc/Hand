@@ -25,7 +25,7 @@ void Collection::Remove(HmiItem* a_child)
 }
 
 
-HmiItem* Collection::GetChild(const std::string& a_name)
+HmiItem* Collection::GetChild(const std::string& a_name) const
 {
     for (HmiItem* item : m_Value)
         if (item->GetName() == a_name)

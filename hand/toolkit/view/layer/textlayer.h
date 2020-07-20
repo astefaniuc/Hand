@@ -2,12 +2,12 @@
 #define HAND_VIEW_LAYER_TEXTLAYER_H
 
 #include "layer.h"
+#include <string>
 
 
 class TextLayer : public Layer
 {
 public:
-    TextLayer();
     void SetData(const std::string& text) { m_Text = text; }
 
 private:

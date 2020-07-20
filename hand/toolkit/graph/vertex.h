@@ -51,10 +51,7 @@ public:
     };
 
     HmiItem(const std::string& a_name, const std::string& a_description)
-        : m_Name(a_name),
-          m_Description(a_description)
-    {}
-
+        : m_Name(a_name), m_Description(a_description) {}
     virtual ~HmiItem();
 
     void SetName(const std::string& a_name) { m_Name = a_name; }

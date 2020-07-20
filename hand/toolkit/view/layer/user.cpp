@@ -34,8 +34,6 @@ CUser::~CUser()
         delete app;
     for (Hand* h : m_Hands)
         delete h;
-    // Don't delete screen
-    Buffer = nullptr;
 }
 
 

@@ -1,36 +1,41 @@
 #ifndef HAND_THEMES_DEFAULT_H
 #define HAND_THEMES_DEFAULT_H
 
-#include "include/theme.h"
+#include "view/theme.h"
 #include "graph/collection.h"
+#include <SDL/SDL_ttf.h>
+#include <map>
+
+
+#define FONT_FILE "/usr/share/fonts/truetype/freefont/FreeSans.ttf"
+
 
 class Default : public Theme
 {
 public:
     Default();
+    ~Default();
+
     HmiItem* GetHmi() override { return &m_Hmi; }
 
+    virtual TTF_Font* GetFont(int size);
+//    virtual void GetFontHeight(HmiItem* layout, unsigned& max_size);
+
+    Drawer* GetButtonDrawer() override;
+    Drawer* GetListDrawer() override;
+    Drawer* GetTextDrawer() override;
+    Drawer* GetViewDrawer() override;
+
 protected:
-    // Layout creators
-    bool GetViewLayout(Layout* a_out);
-    bool GetFramedListLayout(Layout* a_out);
-    bool GetListLayout(Layout* a_out);
-    bool GetButtonLayout(Layout* a_out);
-    bool GetContainerLayout(Layout* a_out);
-    bool GetFrameLayout(Layout* a_out);
-    bool GetBackgroundLayout(Layout* a_out);
-    bool GetTextLayout(Layout* a_out);
-
-    // Drawing methods
-    bool ColorSurface(HmiItem* drawing);
-    bool DrawList(HmiItem* drawing);
-    bool DrawText(HmiItem* drawing);
-
-    bool DrawView(HmiItem* drawing);
-
-    std::string GetString(HmiItem* vs);
-
     Collection m_Hmi;
+    Collection m_Buttons;
+    Collection m_Lists;
+    Collection m_Texts;
+    Collection m_Views;
+
+private:
+    // Stores once rendered fonts
+    std::map<int, TTF_Font*> Fonts;
 };
 
 #endif // HAND_THEMES_DEFAULT_H
