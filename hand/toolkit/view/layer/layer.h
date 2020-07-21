@@ -50,7 +50,6 @@ protected:
     Layer* m_Parent = nullptr;
     std::vector<Layer*> m_Sublayers;
     Drawer* m_Drawer = nullptr;
-    Layout* m_Layout = nullptr;
 
     SDL_Rect CoordinatesOnBuffer = { 0, 0, 0, 0 };
 
@@ -60,6 +59,9 @@ protected:
     bool IsExpanded = false;
 
     bool Changed = true;
+
+private:
+    Layout* m_Layout = nullptr;
 };
 
 #endif // HAND_VIEW_LAYER_LAYER_H

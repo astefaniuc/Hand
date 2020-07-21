@@ -28,7 +28,7 @@ void Layer::SetContent(HmiItem* data)
 void Layer::SetSize(SDL_Rect size)
 {
     // Store only the size, position from layout
-    Multiply(m_Layout->GetCoordinates(), size);
+    Multiply(GetLayout()->GetCoordinates(), size);
     if ((size.w != CoordinatesOnBuffer.w) || (size.h != CoordinatesOnBuffer.h))
     {
         CoordinatesOnBuffer.w = size.w;

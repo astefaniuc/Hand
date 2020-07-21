@@ -7,7 +7,8 @@ set(LIBDIR ${CMAKE_INSTALL_PREFIX}/lib)
 set(APPSDIR ${LIBDIR}/apps/)
 set(THEMESDIR ${LIBDIR}/themes/)
 
-
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0")
+set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -O0")
 
 add_subdirectory(toolkit)
 add_subdirectory(apps)
