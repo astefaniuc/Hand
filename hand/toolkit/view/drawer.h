@@ -3,14 +3,16 @@
 
 
 class Layer;
+class Theme;
 
 class Drawer
 {
 public:
-    Drawer(Layer* layer) : m_Layer(layer) {}
     virtual ~Drawer() {}
 
     virtual void Draw(bool forced) = 0;
+    virtual Theme* GetParentTheme() = 0;
+    virtual void SetLayer(Layer* layer) { m_Layer = layer; }
 
 protected:
     Layer* m_Layer = nullptr;

@@ -10,6 +10,8 @@
 #define FONT_FILE "/usr/share/fonts/truetype/freefont/FreeSans.ttf"
 
 
+class Drawer;
+
 class Default : public Theme
 {
 public:

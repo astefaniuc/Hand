@@ -7,7 +7,7 @@
 class ButtonDrawer : public VirtualSurface
 {
 public:
-    ButtonDrawer(Layer* layer, Default* theme) : VirtualSurface(layer, theme) {}
+    ButtonDrawer(Default* theme) : VirtualSurface(theme) {}
 
 protected:
     void DrawSurface() override;
@@ -17,7 +17,7 @@ protected:
 class ListDrawer : public VirtualSurface
 {
 public:
-    ListDrawer(Layer* layer, Default* theme) : VirtualSurface(layer, theme) {}
+    ListDrawer(Default* theme) : VirtualSurface(theme) {}
 
 protected:
     void DrawSurface() override;
@@ -27,8 +27,8 @@ protected:
 class TextDrawer : public VirtualSurface
 {
 public:
-    TextDrawer(Layer* layer, Default* theme)
-        : VirtualSurface(layer, theme) { SetBufferType(OVERLAY); }
+    TextDrawer(Default* theme)
+        : VirtualSurface(theme) { SetBufferType(OVERLAY); }
 
     void SetText(const std::string& item) { m_ViewItem = item; }
 
@@ -45,7 +45,7 @@ private:
 class ViewDrawer : public VirtualSurface
 {
 public:
-    ViewDrawer(Layer* layer, Default* theme) : VirtualSurface(layer, theme) {}
+    ViewDrawer(Default* theme) : VirtualSurface(theme) {}
 
 protected:
     void DrawSurface() override;

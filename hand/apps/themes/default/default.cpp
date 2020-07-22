@@ -1,4 +1,5 @@
 #include "default.h"
+#include "drawers.h"
 #include "defines.h"
 #include "virtualsurface.h"
 #include <iostream>
@@ -99,3 +100,34 @@ void Default::GetFontHeight(HmiItem* layout, unsigned& max_size)
     }
 }*/
 
+
+Drawer* Default::GetButtonDrawer()
+{
+    VirtualSurface* ret = new ButtonDrawer(this);
+    ret->SetProperties(&m_Buttons);
+    return ret;
+}
+
+
+Drawer* Default::GetListDrawer()
+{
+    VirtualSurface* ret = new ListDrawer(this);
+    ret->SetProperties(&m_Lists);
+    return ret;
+}
+
+
+Drawer* Default::GetTextDrawer()
+{
+    VirtualSurface* ret = new TextDrawer(this);
+    ret->SetProperties(&m_Texts);
+    return ret;
+}
+
+
+Drawer* Default::GetViewDrawer()
+{
+    VirtualSurface* ret = new ViewDrawer(this);
+    ret->SetProperties(&m_Views);
+    return ret;
+}

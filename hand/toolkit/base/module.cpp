@@ -17,6 +17,7 @@ bool ModuleLib::Load()
     }
 
     std::cout << dlerror() << std::endl;
+    Close();
     return false;
 }
 
@@ -31,9 +32,9 @@ HmiItem* ModuleLib::GetHmi()
 
 void ModuleLib::Close()
 {
-    if(Library)
+    if (Library)
     {
-        if(Destroy && m_Module)
+        if (Destroy && m_Module)
             Destroy(m_Module);
         dlclose(Library);
     }
@@ -47,4 +48,13 @@ void ModuleLib::Close()
 bool ModuleLib::IsValid(const std::string& a_ignore)
 {
     return (File::IsValid(a_ignore) && (GetExtension() == LIBRARY_FILE_EXTENSION));
+}
+
+
+Module* ModuleLib::GetObject()
+{
+    if (!m_Module && (Create || Load()))
+        m_Module = Create();
+
+    return m_Module;
 }

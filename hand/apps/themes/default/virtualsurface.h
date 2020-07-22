@@ -4,6 +4,7 @@
 #include <SDL/SDL.h>
 //#include "graph/collection.h"
 #include "view/drawer.h"
+#include "default.h"
 #include "view/datatypes/rect.h"
 #include "view/datatypes/rgb.h"
 #include "graph/collection.h"
@@ -17,16 +18,15 @@ enum buffer_type
 };
 
 
-class Default;
-
 class VirtualSurface : public Drawer
 {
 public:
-    VirtualSurface(Layer* layer, Default* theme)
-        : Drawer(layer), m_Theme(theme) { SetBufferType(COLLECTOR); }
+    VirtualSurface(Default* theme)
+        : m_Theme(theme) { SetBufferType(COLLECTOR); }
     virtual ~VirtualSurface();
 
     void SetProperties(Collection* config) { m_Properties = config; }
+    Theme* GetParentTheme() override { return m_Theme; }
 
     void Draw(bool forced) override;
     void Show(SDL_Rect* rect_abs_on_buffer, Rel_Rect* rect_relative_to_parent);

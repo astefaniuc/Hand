@@ -1,9 +1,8 @@
 #ifndef HAND_VIEW_LAYER_USER_H
 #define HAND_VIEW_LAYER_USER_H
 
-#include "graph/interface.h"
 #include "view/layer/layer.h"
-#include "graph/data.h"
+#include "graph/collection.h"
 
 
 class EventHandler;
@@ -23,10 +22,12 @@ public:
 
 private:
     EventHandler* m_Input;
+    ModuleLib* m_ThemeLoader;
+    Theme* m_Theme = nullptr;
     // May be one or two hands, using a vector is overdosed (TODO)
     std::vector<Hand*> m_Hands;
     std::vector<ModuleLib*> m_RunningApps;
-    Interface m_UI;
+    Collection m_UI;
 };
 
 #endif // HAND_VIEW_LAYER_USER_H

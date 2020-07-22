@@ -20,6 +20,7 @@ public:
 
     bool Load();
     void Close();
+    Module* GetObject();
 
 private:
     typedef Module* creator();
