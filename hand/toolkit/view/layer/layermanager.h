@@ -18,6 +18,7 @@ public:
     MasterLayer();
 
     void SetContent(HmiItem* hmi) override;
+    Drawer* CreatetDrawer() override;
 
 private:
     void Exit(HmiItem*);

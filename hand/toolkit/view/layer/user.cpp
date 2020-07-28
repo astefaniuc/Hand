@@ -6,6 +6,7 @@
 #include "graph/method.h"
 #include "graph/data.h"
 #include "base/modulelib.h"
+#include "view/layer/layer.h"
 
 
 CUser::CUser(EventHandler* a_input)
@@ -23,7 +24,7 @@ CUser::CUser(EventHandler* a_input)
             "./binaries/lib/themes/default.so", m_ThemeLoader));
 
     // TODO: load settings
-    m_Theme = dynamic_cast<Theme*>(m_ThemeLoader->GetObject());
+    m_View.GetLayer()->SetTheme(dynamic_cast<Theme*>(m_ThemeLoader->GetObject()));
 
     Hand* right = m_Input->CreateHand(Device::Keyboard);
     if (!right->Init())

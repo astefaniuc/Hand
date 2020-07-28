@@ -9,6 +9,7 @@
 
 class Drawer;
 class HmiItem;
+class Theme;
 
 class Layer
 {
@@ -32,7 +33,10 @@ public:
     virtual Layout* GetLayout();
     void SetLayout(Layout* layout);
 
-    Drawer* GetDrawer() const { return m_Drawer; }
+    void SetTheme(Theme* theme);
+    Theme* GetTheme();
+
+    Drawer* GetDrawer();
     void SetDrawer(Drawer* drawer);
 
     void Collapse();
@@ -42,13 +46,16 @@ public:
     SDL_Rect GetSize() { return CoordinatesOnBuffer; }
 
 protected:
-    // Insert "data" as layer of type layer_type at "position"
     Layer* Insert(Layer* child);
 
     virtual void Exit(HmiItem*);
 
+    virtual Drawer* CreatetDrawer() = 0;
+
     Layer* m_Parent = nullptr;
     std::vector<Layer*> m_Sublayers;
+
+    Theme* m_Theme = nullptr;
     Drawer* m_Drawer = nullptr;
 
     SDL_Rect CoordinatesOnBuffer = { 0, 0, 0, 0 };

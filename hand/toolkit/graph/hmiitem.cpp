@@ -47,7 +47,7 @@ void HmiItem::Execute(const Listeners& a_list)
 Layer* HmiItem::GetLayer()
 {
     if (!m_Visualization)
-        m_Visualization = CreateLayer();
+        SetLayer(CreateLayer());
     return m_Visualization;
 }
 
@@ -56,4 +56,5 @@ void HmiItem::SetLayer(Layer* a_visualization)
 {
     delete m_Visualization;
     m_Visualization = a_visualization;
+    m_Visualization->SetContent(this);
 }

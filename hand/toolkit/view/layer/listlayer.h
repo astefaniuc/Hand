@@ -11,6 +11,8 @@ public:
     void SetContent(HmiItem* focus) override;
     void Show(HmiItem* hmi);
 
+    Drawer* CreatetDrawer() override;
+
     void SetMaxItemsToShow(unsigned count) { m_MaxItemsToShow = count; }
     unsigned GetMaxItemsToShow() { return m_MaxItemsToShow; }
 

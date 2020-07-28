@@ -1,4 +1,5 @@
 #include "view/layer/layer.h"
+#include "view/theme.h"
 
 
 void Layer::Exit(HmiItem*)
@@ -10,8 +11,8 @@ void Layer::Exit(HmiItem*)
 
 bool Layer::Update(bool forced)
 {
-    if (m_Drawer && (Changed || forced))
-        m_Drawer->Draw(forced);
+    if (Changed || forced)
+        GetDrawer()->Draw(forced);
 
     return Changed;
 }
@@ -53,10 +54,36 @@ void Layer::SetLayout(Layout* a_layout)
 }
 
 
+void Layer::SetTheme(Theme* a_theme)
+{
+    delete m_Theme;
+    m_Theme = a_theme;
+}
+
+
+Theme* Layer::GetTheme()
+{
+    if (m_Theme)
+        return m_Theme;
+    return GetParent()->GetTheme();
+}
+
+
 void Layer::SetDrawer(Drawer* a_drawer)
 {
     delete m_Drawer;
     m_Drawer = a_drawer;
+}
+
+
+Drawer* Layer::GetDrawer()
+{
+    if (!m_Drawer)
+    {
+        SetDrawer(CreatetDrawer());
+        m_Drawer->SetLayer(this);
+    }
+    return m_Drawer;
 }
 
 

@@ -11,6 +11,7 @@ public:
     ButtonLayer();
 
     void SetContent(HmiItem* data) override;
+    Drawer* CreatetDrawer() override;
 
 protected:
     TextLayer* m_Name = nullptr;

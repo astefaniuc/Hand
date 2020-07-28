@@ -1,5 +1,6 @@
 #include "view/layer/listlayer.h"
 #include "graph/collection.h"
+#include "view/theme.h"
 
 
 void ListLayer::SetContent(HmiItem* a_data)
@@ -25,6 +26,12 @@ void ListLayer::Show(HmiItem* a_hmi)
     }
     else
         Insert(a_hmi->GetLayer());
+}
+
+
+Drawer* ListLayer::CreatetDrawer()
+{
+    return GetTheme()->GetListDrawer();
 }
 
 

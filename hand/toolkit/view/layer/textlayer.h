@@ -8,6 +8,7 @@
 class TextLayer : public Layer
 {
 public:
+    Drawer* CreatetDrawer() override;
     void SetData(const std::string& text) { m_Text = text; }
 
 private:

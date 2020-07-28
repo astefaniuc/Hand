@@ -1,16 +1,29 @@
-#include <iostream>
 #include "view/screen.h"
 #include "view/layer/layer.h"
 #include "graph/data.h"
 #include "graph/method.h"
+#include "base/modulelib.h"
+#include "view/theme.h"
+#include <iostream>
 
 
-Screen::Screen() : m_Users("Users", "Views")
+Screen::Screen() : m_View("Screen", ""), m_Users("Users", "Views"), m_Menu("Menu", "Settings")
 {
     m_IsFullscreen = false;
     // Start SDL as the default drawing engine:
     InitSDL();
     SetWindowed();
+
+    m_View.SetView(m_Users.GetLayer());
+    m_View.SetControls(&m_Menu);
+
+    m_ThemeLoader = new ModuleLib();
+    m_Menu.Add(new Note(
+            "Theme", "Select default visualization theme for all users.",
+            "./binaries/lib/themes/default.so", m_ThemeLoader));
+
+    // TODO: load settings
+    m_View.GetLayer()->SetTheme(dynamic_cast<Theme*>(m_ThemeLoader->GetObject()));
 
     // Add a func to toggle fullscreen <-> windowed mode
     // TODO
@@ -84,15 +97,15 @@ SDL_Rect Screen::GetResolution()
 }
 
 
-void Screen::Add(CUser* a_user)
+void Screen::AddView(HmiItem* a_viewItem)
 {
-    m_Users.Attach(a_user->GetHmi());
+    m_Users.Attach(a_viewItem);
 }
 
 
-void Screen::Remove(CUser* a_user)
+void Screen::RemoveView(HmiItem* a_viewItem)
 {
-    m_Users.Remove(a_user->GetHmi());
+    m_Users.Remove(a_viewItem);
 }
 
 

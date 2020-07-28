@@ -2,6 +2,7 @@
 #include "input/device.h"
 #include "input/inputstate.h"
 #include "graph/method.h"
+#include "view/theme.h"
 
 
 MasterLayer::MasterLayer()
@@ -24,6 +25,13 @@ void MasterLayer::SetContent(HmiItem* a_hmi)
     if (aux)
         m_Auxilliary = Insert(aux->GetLayer());
 }
+
+
+Drawer* MasterLayer::CreatetDrawer()
+{
+    return GetTheme()->GetButtonDrawer();
+}
+
 
 void MasterLayer::Clear()
 {

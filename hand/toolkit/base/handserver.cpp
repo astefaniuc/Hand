@@ -35,7 +35,7 @@ CUser* HandServer::CreateUser()
 {
     CUser* user = new CUser(m_Input);
     m_Users.push_back(user);
-    m_Screen->Add(user);
+    m_Screen->AddView(user->GetHmi());
     return user;
 }
 
