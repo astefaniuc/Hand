@@ -1,9 +1,16 @@
-#include "graph/vertex.h"
+#include "graph/hmiitem.h"
+#include "graph/collection.h"
 #include "view/layer/layer.h"
 
 
 HmiItem::~HmiItem()
 {
+    if (m_Parent)
+    {
+        Collection* tmp = m_Parent;
+        m_Parent = nullptr;
+        tmp->Remove(this);
+    }
     delete m_Visualization;
 }
 

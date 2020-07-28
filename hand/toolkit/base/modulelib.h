@@ -1,5 +1,5 @@
-#ifndef HAND_APPLOADER_H
-#define HAND_APPLOADER_H
+#ifndef HAND_MODULELIB_H
+#define HAND_MODULELIB_H
 
 #include "base/module.h"
 #include "base/filesystem.h"
@@ -34,4 +34,4 @@ private:
     Module* m_Module = nullptr;
 };
 
-#endif // HAND_APPLOADER_H
+#endif // HAND_MODULELIB_H

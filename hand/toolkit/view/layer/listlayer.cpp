@@ -16,7 +16,7 @@ void ListLayer::Show(HmiItem* a_hmi)
     if (listData)
     {
         unsigned count = listData->Size() - m_StartPosition;
-        if(GetMaxItemsToShow() < count)
+        if (GetMaxItemsToShow() < count)
             count = GetMaxItemsToShow();
 
         for (unsigned i = 0; i < count; ++i)
@@ -31,7 +31,7 @@ void ListLayer::Show(HmiItem* a_hmi)
 bool ListLayer::SetFocus(HmiItem*)
 {
     HmiItem* tgt= GetControlsList();
-    if(!tgt)
+    if (!tgt)
         return false;
 
     // TODO
@@ -41,7 +41,7 @@ bool ListLayer::SetFocus(HmiItem*)
 
 HmiItem* ListLayer::GetControlsList()
 {
-    if(!m_Data)
+    if (!m_Data)
         return nullptr;
 
     // TODO

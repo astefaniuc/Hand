@@ -42,10 +42,10 @@ bool Hand::Init()
     {
         // Do we have keys to load?
         Note* data = GetKey(i);
-        if(!data)
+        if (!data)
             return false;
         std::string key_str = data->GetValue();
-        if(key_str.empty())
+        if (key_str.empty())
             return false;
         // Translate list entries to device keys
         m_Keys.push_back(atoi(key_str.c_str()));
@@ -61,7 +61,7 @@ bool Hand::Press(int k)
         AddKey(k);
 
     int index = GetKeyIndex(k);
-    if(index == -1)
+    if (index == -1)
         return false;
 
     m_StateMachine->Press(index);

@@ -1,7 +1,7 @@
 #ifndef HAND_GRAPH_METHOD_H
 #define HAND_GRAPH_METHOD_H
 
-#include "graph/vertex.h"
+#include "graph/hmiitem.h"
 #include "view/layer/buttonlayer.h"
 
 

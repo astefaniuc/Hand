@@ -16,7 +16,7 @@ public:
     virtual ~Layer() { Collapse(); }
 
     // Checks and updates content and triggers a re-draw if needed
-    bool Update(bool force);
+    virtual bool Update(bool force);
 
     // Methods to (re-)set links to external objects:
     void SetParent(Layer* parent) { m_Parent = parent; }

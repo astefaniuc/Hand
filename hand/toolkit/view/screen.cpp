@@ -5,7 +5,7 @@
 #include "graph/method.h"
 
 
-Screen::Screen()
+Screen::Screen() : m_Users("Users", "Views")
 {
     m_IsFullscreen = false;
     // Start SDL as the default drawing engine:
@@ -47,6 +47,9 @@ bool Screen::SetFullscreen()
         std::cout << SDL_GetError() << std::endl;
         exit(23);
     }
+    // TODO: generic way to pass size and position
+    m_Users.GetLayer()->SetSize(GetResolution());
+
     return (m_IsFullscreen = true);
 }
 
@@ -59,6 +62,9 @@ bool Screen::SetWindowed()
         std::cout << SDL_GetError() << std::endl;
         exit(24);
     }
+    // TODO: generic way to pass size and position
+    m_Users.GetLayer()->SetSize(GetResolution());
+
     return (m_IsFullscreen = false);
 }
 
@@ -80,53 +86,23 @@ SDL_Rect Screen::GetResolution()
 
 void Screen::Add(CUser* a_user)
 {
-    m_Users.push_back(a_user);
-    SplitScreen();
+    m_Users.Attach(a_user->GetHmi());
 }
 
 
 void Screen::Remove(CUser* a_user)
 {
-    for (unsigned i = 0; i < m_Users.size(); ++i)
-    {
-        if (m_Users[i] == a_user)
-        {
-            m_Users.erase(m_Users.begin() + i);
-            // Recalculate areas for remaining users
-            SplitScreen();
-            return;
-        }
-    }
-}
-
-
-void Screen::SplitScreen()
-{
-    if (!m_Users.size())
-        return;
-
-    SDL_Rect screen = GetResolution();
-    Uint16 newWidth = screen.w / m_Users.size();
-
-    for (unsigned i = 0; i < m_Users.size(); ++i)
-    {
-        screen.w = newWidth;
-        screen.x = newWidth * (i - 1);
-        m_Users[i]->SetSize(screen);
-        // TODO: else, generic way to pass size and position
-    }
+    m_Users.Remove(a_user->GetHmi());
 }
 
 
 bool Screen::ShowSurface()
 {
-    if (!m_Users.size())
+    if (!m_Users.Size())
         return false;
 
-    for (CUser* user : m_Users)
-        user->Update(false);
+    m_Users.GetLayer()->Update(false);
 
-    // Need to call this extra as BuildSurface is called recursively
     SDL_Flip(m_Surface);
     return true;
 }

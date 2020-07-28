@@ -1,5 +1,5 @@
-#ifndef HAND_GRAPH_VERTEX_H
-#define HAND_GRAPH_VERTEX_H
+#ifndef HAND_GRAPH_HMIITEM_H
+#define HAND_GRAPH_HMIITEM_H
 
 #include <string>
 #include <sstream>
@@ -38,6 +38,7 @@ private:
 
 
 class Layer;
+class Collection;
 
 class HmiItem
 {
@@ -61,8 +62,8 @@ public:
     virtual Type GetType() const { return EBase; }
 
     /// The parent is the object owner; HmiItems without a parent have to be explicitly deleted.
-    void SetParent(HmiItem* a_parent) { m_Parent = a_parent; }
-    HmiItem* GetParent() const { return m_Parent; }
+    void SetParent(Collection* a_parent) { m_Parent = a_parent; }
+    Collection* GetParent() const { return m_Parent; }
 
     Layer* GetLayer();
     void SetLayer(Layer* visualization);
@@ -107,7 +108,7 @@ private:
     std::string m_Name;
     std::string m_Description;
 
-    HmiItem* m_Parent = nullptr;
+    Collection* m_Parent = nullptr;
     Layer* m_Visualization = nullptr;
     bool m_IsSelected = false;
 
@@ -115,4 +116,4 @@ private:
     Listeners m_Activation;
 };
 
-#endif // HAND_GRAPH_VERTEX_H
+#endif // HAND_GRAPH_HMIITEM_H

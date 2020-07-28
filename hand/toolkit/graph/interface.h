@@ -1,7 +1,7 @@
 #ifndef HAND_GRAPH_INTERFACE_H
 #define HAND_GRAPH_INTERFACE_H
 
-#include "graph/vertex.h"
+#include "graph/hmiitem.h"
 
 
 class Layer;

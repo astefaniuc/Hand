@@ -1,6 +1,6 @@
 #include "input/inputstate.h"
 #include "input/statetree.h"
-#include "graph/vertex.h"
+#include "graph/hmiitem.h"
 
 
 InputState::InputState(unsigned a_numberOfKeys)

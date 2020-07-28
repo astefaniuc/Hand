@@ -33,8 +33,9 @@ HandServer::~HandServer()
 
 CUser* HandServer::CreateUser()
 {
-    CUser* user = new CUser(m_Input, m_Screen);
+    CUser* user = new CUser(m_Input);
     m_Users.push_back(user);
+    m_Screen->Add(user);
     return user;
 }
 

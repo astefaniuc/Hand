@@ -1,29 +1,34 @@
 #include "user.h"
 #include "input/device.h"
 #include "input/hand.h"
-#include "view/screen.h"
 #include "view/theme.h"
 #include "input/inputstate.h"
 #include "graph/method.h"
 #include "graph/data.h"
-#include "base/handapploader.h"
+#include "base/modulelib.h"
 
 
-CUser::CUser(EventHandler* a_input, Screen* a_output)
-    : m_Input(a_input), m_UI("User", "System interface")
+CUser::CUser(EventHandler* a_input)
+    : m_Input(a_input),
+      m_View("User", "User view"),
+      m_ViewStack("Views", ""),
+      m_Menu("Menu", "System")
 {
+    m_View.SetView(m_ViewStack.GetLayer());
+    m_View.SetControls(&m_Menu);
+
     m_ThemeLoader = new ModuleLib();
-    m_UI.Add(new Note(
-            "Theme", "Select visualization theme", "./binaries/lib/themes/default.so", m_ThemeLoader));
+    m_Menu.Add(new Note(
+            "Theme", "Select visualization theme",
+            "./binaries/lib/themes/default.so", m_ThemeLoader));
 
     // TODO: load settings
     m_Theme = dynamic_cast<Theme*>(m_ThemeLoader->GetObject());
-    a_output->Add(this);
 
     Hand* right = m_Input->CreateHand(Device::Keyboard);
     if (!right->Init())
         // Show init screen
-        SetContent(right->GetHmi());
+        m_ViewStack.Attach(right->GetHmi());
     // Add the exit function to the tree of available funcs
     // Request command at highest level
 //    GetCommand(m_Exit, _Device->GetNumberOfKeys());
@@ -46,13 +51,14 @@ bool CUser::LoadApp(Note* a_path)
     if (app->Load())
     {
         m_RunningApps.push_back(app);
-        SetContent(app->GetHmi());
+        m_ViewStack.Attach(app->GetHmi());
         return true;
     }
 
     delete app;
     return false;
 }
+
 
 bool CUser::GetCommand(HmiItem* f, int level)
 {
