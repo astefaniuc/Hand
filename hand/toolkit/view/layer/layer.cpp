@@ -9,12 +9,27 @@ void Layer::Exit(HmiItem*)
 }
 
 
-bool Layer::Update(bool forced)
+bool Layer::Show(bool a_forced)
 {
-    if (Changed || forced)
-        GetDrawer()->Draw(forced);
+    if (Changed)
+        Update();
+    if (Changed || a_forced)
+        GetDrawer()->Draw(a_forced);
 
     return Changed;
+}
+
+
+
+bool Layer::ShowChildren(bool forced)
+{
+    bool ret = false;
+    for (Layer* layer : m_Sublayers)
+    {
+        layer->SetSize(GetSize());
+        ret = (ret || layer->Show(forced));
+    }
+    return ret;
 }
 
 

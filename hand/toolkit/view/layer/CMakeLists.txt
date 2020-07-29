@@ -1,8 +1,8 @@
 target_sources(${LIBNAME} PRIVATE
     buttonlayer.cpp
     layer.cpp
-    layermanager.cpp
     listlayer.cpp
+    masterlayer.cpp
     textlayer.cpp
     user.cpp)
 

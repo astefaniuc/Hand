@@ -19,11 +19,9 @@ Drawer* ButtonLayer::CreatetDrawer()
 }
 
 
-void ButtonLayer::SetContent(HmiItem* a_data)
+void ButtonLayer::Update()
 {
-    Layer::SetContent(a_data);
-
-    m_Name->SetData(a_data->GetName());
-    m_Description->SetData(a_data->GetDescription());
+    m_Name->SetData(m_Data->GetName());
+    m_Description->SetData(m_Data->GetDescription());
     // TODO: m_Command
 }

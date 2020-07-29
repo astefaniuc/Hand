@@ -61,7 +61,7 @@ bool Screen::SetFullscreen()
         exit(23);
     }
     // TODO: generic way to pass size and position
-    m_Users.GetLayer()->SetSize(GetResolution());
+    m_View.GetLayer()->SetSize(GetResolution());
 
     return (m_IsFullscreen = true);
 }
@@ -76,7 +76,7 @@ bool Screen::SetWindowed()
         exit(24);
     }
     // TODO: generic way to pass size and position
-    m_Users.GetLayer()->SetSize(GetResolution());
+    m_View.GetLayer()->SetSize(GetResolution());
 
     return (m_IsFullscreen = false);
 }
@@ -114,7 +114,7 @@ bool Screen::ShowSurface()
     if (!m_Users.Size())
         return false;
 
-    m_Users.GetLayer()->Update(false);
+    m_View.GetLayer()->Show(false);
 
     SDL_Flip(m_Surface);
     return true;

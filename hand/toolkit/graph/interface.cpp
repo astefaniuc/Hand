@@ -1,5 +1,5 @@
 #include "graph/interface.h"
-#include "view/layer/layermanager.h"
+#include "view/layer/masterlayer.h"
 
 
 Layer* Interface::CreateLayer()

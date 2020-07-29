@@ -1,12 +1,9 @@
-#ifndef HAND_VIEW_LAYER_LAYERMANAGER_H
-#define HAND_VIEW_LAYER_LAYERMANAGER_H
+#ifndef HAND_VIEW_LAYER_MASTERLAYER_H
+#define HAND_VIEW_LAYER_MASTERLAYER_H
 
 #include "graph/interface.h"
 #include "graph/method.h"
 
-
-class Device;
-class InputState;
 
 /// The MasterLayer is a composed Layer, managing the basic layout and theme.
 /// For the sub-layers, the main command list is mandatory; other layers may be
@@ -17,7 +14,8 @@ class MasterLayer : public Layer
 public:
     MasterLayer();
 
-    void SetContent(HmiItem* hmi) override;
+protected:
+    void Update() override;
     Drawer* CreatetDrawer() override;
 
 private:
@@ -31,4 +29,4 @@ private:
     Action<MasterLayer>* m_Exit;
 };
 
-#endif // HAND_VIEW_LAYER_LAYERMANAGER_H
+#endif // HAND_VIEW_LAYER_MASTERLAYER_H

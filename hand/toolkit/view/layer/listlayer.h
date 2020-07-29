@@ -7,16 +7,13 @@
 class ListLayer : public Layer
 {
 public:
-    // Set pointer to a data tree node
-    void SetContent(HmiItem* focus) override;
-    void Show(HmiItem* hmi);
-
-    Drawer* CreatetDrawer() override;
-
     void SetMaxItemsToShow(unsigned count) { m_MaxItemsToShow = count; }
     unsigned GetMaxItemsToShow() { return m_MaxItemsToShow; }
 
 protected:
+    void Update();
+    Drawer* CreatetDrawer() override;
+
     bool SetFocus(HmiItem*);
     // Returns the list which should be mapped to the InputState
     HmiItem* GetControlsList();

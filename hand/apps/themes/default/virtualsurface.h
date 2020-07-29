@@ -49,7 +49,6 @@ protected:
 
     void FillRect(SDL_Surface* sf, SDL_Rect* r, const Rgb& color);
 
-    virtual void DrawChildren(bool forced);
     virtual void DrawFrame();
     virtual void DrawBackground();
     // Drawing interface

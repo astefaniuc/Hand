@@ -8,8 +8,11 @@
 class TextLayer : public Layer
 {
 public:
-    Drawer* CreatetDrawer() override;
     void SetData(const std::string& text) { m_Text = text; }
+
+protected:
+    void Update() override {} // TODO
+    Drawer* CreatetDrawer() override;
 
 private:
     std::string m_Text;

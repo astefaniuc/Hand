@@ -10,10 +10,10 @@ class ButtonLayer : public Layer
 public:
     ButtonLayer();
 
-    void SetContent(HmiItem* data) override;
+protected:
+    void Update() override;
     Drawer* CreatetDrawer() override;
 
-protected:
     TextLayer* m_Name = nullptr;
     TextLayer* m_Description = nullptr;
     TextLayer* m_Command = nullptr;

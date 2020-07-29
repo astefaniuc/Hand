@@ -3,17 +3,10 @@
 #include "view/theme.h"
 
 
-void ListLayer::SetContent(HmiItem* a_data)
+void ListLayer::Update()
 {
-    // Connect list and layer
-    Layer::SetContent(a_data);
-    m_StartPosition = 0;
-}
-
-
-void ListLayer::Show(HmiItem* a_hmi)
-{
-    Collection* listData = dynamic_cast<Collection*>(a_hmi);
+    m_Sublayers.clear();
+    Collection* listData = dynamic_cast<Collection*>(GetContent());
     if (listData)
     {
         unsigned count = listData->Size() - m_StartPosition;
@@ -25,7 +18,7 @@ void ListLayer::Show(HmiItem* a_hmi)
             Insert(listData->GetChild(i + m_StartPosition)->GetLayer());
     }
     else
-        Insert(a_hmi->GetLayer());
+        Insert(GetContent()->GetLayer());
 }
 
 

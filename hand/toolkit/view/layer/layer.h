@@ -17,7 +17,8 @@ public:
     virtual ~Layer() { Collapse(); }
 
     // Checks and updates content and triggers a re-draw if needed
-    virtual bool Update(bool force);
+    bool Show(bool forced);
+    bool ShowChildren(bool forced);
 
     // Methods to (re-)set links to external objects:
     void SetParent(Layer* parent) { m_Parent = parent; }
@@ -27,7 +28,7 @@ public:
     const std::vector<Layer*>& GetSubLayers() const { return m_Sublayers; }
 
     // Set pointer to a data tree node
-    virtual void SetContent(HmiItem* data);
+    void SetContent(HmiItem* data);
     HmiItem* GetContent() const { return m_Data; }
 
     virtual Layout* GetLayout();
@@ -50,6 +51,7 @@ protected:
 
     virtual void Exit(HmiItem*);
 
+    virtual void Update() = 0;
     virtual Drawer* CreatetDrawer() = 0;
 
     Layer* m_Parent = nullptr;

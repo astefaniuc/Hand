@@ -29,7 +29,7 @@ void VirtualSurface::Draw(bool forced)
 
     if (GetBufferType() == COLLECTOR)
         // Draw first the child on the buffer
-        DrawChildren(forced);
+        m_Layer->ShowChildren(forced);
 
     Rel_Rect tmp = m_Layer->GetLayout()->GetCoordinates();
     SDL_Rect tgtRect = m_Layer->GetSize();
@@ -38,19 +38,8 @@ void VirtualSurface::Draw(bool forced)
     if (GetBufferType() == OVERLAY)
     {
         // Draw childs afterwards (not buffered)
-        DrawChildren(forced);
+        m_Layer->ShowChildren(forced);
 //        Updated = true;
-    }
-}
-
-
-void VirtualSurface::DrawChildren(bool forced)
-{
-    const std::vector<Layer*>& subs = m_Layer->GetSubLayers();
-    for (Layer* layer : subs)
-    {
-        layer->SetSize(m_Layer->GetSize());
-        layer->Update(forced);
     }
 }
 
