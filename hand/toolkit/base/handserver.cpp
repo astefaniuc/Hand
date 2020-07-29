@@ -1,5 +1,5 @@
-#include "base/handserver.h"
-#include "view/layer/user.h"
+#include "handserver.h"
+#include "user.h"
 #include "input/device.h"
 #include "view/screen.h"
 #include <unistd.h>

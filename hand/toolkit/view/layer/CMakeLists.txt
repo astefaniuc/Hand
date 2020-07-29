@@ -3,7 +3,6 @@ target_sources(${LIBNAME} PRIVATE
     layer.cpp
     listlayer.cpp
     masterlayer.cpp
-    textlayer.cpp
-    user.cpp)
+    textlayer.cpp)
 
 target_include_directories(${LIBNAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
