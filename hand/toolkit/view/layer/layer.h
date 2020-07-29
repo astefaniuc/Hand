@@ -31,7 +31,7 @@ public:
     void SetContent(HmiItem* data);
     HmiItem* GetContent() const { return m_Data; }
 
-    virtual Layout* GetLayout();
+    Layout* GetLayout();
     void SetLayout(Layout* layout);
 
     void SetTheme(Theme* theme);
@@ -52,6 +52,7 @@ protected:
     virtual void Exit(HmiItem*);
 
     virtual void Update() = 0;
+    virtual Layout* CreateLayout() { return new Layout(); }
     virtual Drawer* CreatetDrawer() = 0;
 
     Layer* m_Parent = nullptr;

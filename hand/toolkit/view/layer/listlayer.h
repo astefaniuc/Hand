@@ -11,8 +11,9 @@ public:
     unsigned GetMaxItemsToShow() { return m_MaxItemsToShow; }
 
 protected:
-    void Update();
+    void Update() override;
     Drawer* CreatetDrawer() override;
+    Layout* CreateLayout() override { return new ListLayout(); }
 
     bool SetFocus(HmiItem*);
     // Returns the list which should be mapped to the InputState

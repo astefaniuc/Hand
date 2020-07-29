@@ -57,7 +57,7 @@ void Layer::SetSize(SDL_Rect size)
 Layout* Layer::GetLayout()
 {
     if (!m_Layout)
-        m_Layout = new Layout();
+        m_Layout = CreateLayout();
      return m_Layout;
 }
 

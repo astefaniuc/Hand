@@ -16,7 +16,11 @@ void MasterLayer::Update()
     Clear();
 
     Interface* in = dynamic_cast<Interface*>(m_Data);
-    m_View = Insert(in->GetView());
+
+    m_View = in->GetView();
+    if (m_View)
+        Insert(m_View);
+
     HmiItem* controls = in->GetControls();
     if (controls)
         m_Controls = Insert(controls->GetLayer());
