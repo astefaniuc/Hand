@@ -33,7 +33,7 @@ void MasterLayer::Update()
 
 Drawer* MasterLayer::CreatetDrawer()
 {
-    return GetTheme()->GetButtonDrawer();
+    return GetTheme()->GetViewDrawer();
 }
 
 

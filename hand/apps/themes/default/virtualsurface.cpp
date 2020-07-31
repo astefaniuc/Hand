@@ -24,6 +24,7 @@ void VirtualSurface::Draw(bool forced)
     }*/
     // Call the Theme function for drawing with the current settings
 
+    DrawBackground();
     // derived drawing
     DrawSurface();
 
@@ -95,7 +96,7 @@ void VirtualSurface::DrawFrame()
 
 const Rel_Rect& VirtualSurface::GetFrameSize()
 {
-    return *((Rel_Rect*)m_Properties->GetChild(FRAMESIZE));
+    return ((Rect*)(m_Properties->GetChild(FRAMESIZE)))->GetValue();
 }
 
 const Rgb& VirtualSurface::GetFrameColor()
