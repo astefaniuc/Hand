@@ -11,7 +11,7 @@ public:
     ButtonLayer();
 
 protected:
-    void Update() override;
+    void Rebuild() override;
     Drawer* CreatetDrawer() override;
 
     TextLayer* m_Name = nullptr;

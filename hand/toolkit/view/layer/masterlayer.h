@@ -15,7 +15,7 @@ public:
     MasterLayer();
 
 protected:
-    void Update() override;
+    void Rebuild() override;
     Drawer* CreatetDrawer() override;
 
 private:

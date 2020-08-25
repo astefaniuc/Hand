@@ -11,7 +11,7 @@ public:
     void SetData(const std::string& text) { m_Text = text; }
 
 protected:
-    void Update() override {} // TODO
+    void Rebuild() override {} // TODO
     Drawer* CreatetDrawer() override;
 
 private:

@@ -27,8 +27,7 @@ protected:
 class TextDrawer : public VirtualSurface
 {
 public:
-    TextDrawer(Default* theme)
-        : VirtualSurface(theme) { SetBufferType(OVERLAY); }
+    TextDrawer(Default* theme) : VirtualSurface(theme) {}
 
     void SetText(const std::string& item) { m_ViewItem = item; }
 

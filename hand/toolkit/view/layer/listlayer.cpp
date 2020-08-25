@@ -3,7 +3,7 @@
 #include "view/theme.h"
 
 
-void ListLayer::Update()
+void ListLayer::Rebuild()
 {
     m_Sublayers.clear();
     Collection* listData = dynamic_cast<Collection*>(GetContent());

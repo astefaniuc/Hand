@@ -11,7 +11,7 @@ public:
     unsigned GetMaxItemsToShow() { return m_MaxItemsToShow; }
 
 protected:
-    void Update() override;
+    void Rebuild() override;
     Drawer* CreatetDrawer() override;
     Layout* CreateLayout() override { return new ListLayout(); }
 

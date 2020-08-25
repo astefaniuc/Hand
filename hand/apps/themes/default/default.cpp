@@ -2,6 +2,7 @@
 #include "drawers.h"
 #include "defines.h"
 #include "virtualsurface.h"
+#include "view/layer/layer.h"
 #include <iostream>
 
 
@@ -25,12 +26,6 @@ Default::Default()
       m_Texts("Text fields", "Customize"),
       m_Views("Views", "Customize")
 {
-    if (TTF_Init() == -1)
-    {
-        std::cout << TTF_GetError() << std::endl;
-        exit(22);
-    }
-
     // Properties
     m_Buttons.Add(new Rgb(BACKGROUNDCOLOR, "", 40, 40, 100));
     m_Buttons.Add(new Rgb(FRAMECOLOR, "", 30, 30, 75));
@@ -49,7 +44,6 @@ Default::Default()
     m_Views.Add(new Rgb(FRAMECOLOR, "", 30, 30, 75));
     m_Views.Add(new Rect(FRAMESIZE, "Relative frame size [%]", .01, .03, .98, .94));
 
-
     m_Hmi.Attach(&m_Buttons);
     m_Hmi.Attach(&m_Lists);
     m_Hmi.Attach(&m_Texts);
@@ -59,12 +53,11 @@ Default::Default()
 
 Default::~Default()
 {
-    std::map<int, TTF_Font*>::iterator curr = Fonts.begin();
-    while(curr!=Fonts.end())
-    {
+    for (auto curr = Fonts.begin(); curr != Fonts.end(); ++curr)
         TTF_CloseFont((*curr).second);
-        curr++;
-    }
+
+    // TODO: what if multiple SDL themes are loaded?
+    atexit(SDL_Quit);
 }
 
 
@@ -99,6 +92,93 @@ void Default::GetFontHeight(HmiItem* layout, unsigned& max_size)
             max_size = max;
     }
 }*/
+
+
+void Default::ToggleFullscreen(HmiItem*)
+{
+    m_IsFullscreen ? SetWindowed() : SetFullscreen();
+}
+
+
+void Default::SetFullscreen()
+{
+    // This is the only way to get the HW screen resolution
+    const SDL_VideoInfo* info = SDL_GetVideoInfo();
+    m_Surface = SDL_SetVideoMode(
+            info->current_w, info->current_h, 32,
+            SDL_DOUBLEBUF | SDL_HWSURFACE | SDL_FULLSCREEN);
+    UpdateRoot();
+
+    m_IsFullscreen = true;
+}
+
+
+void Default::SetWindowed()
+{
+    m_Surface = SDL_SetVideoMode(1280, 1024, 32, SDL_DOUBLEBUF | SDL_HWSURFACE);
+    UpdateRoot();
+
+    m_IsFullscreen = false;
+}
+
+
+void Default::UpdateRoot()
+{
+    if (!m_Surface)
+    {
+        std::cout << SDL_GetError() << std::endl;
+        exit(23);
+    }
+    // TODO: generic way to pass size and position
+    m_ScreenRoot->SetSize(GetResolution());
+
+    dynamic_cast<VirtualSurface*>(m_ScreenRoot->GetDrawer())->SetBuffer(m_Surface);
+}
+
+
+SDL_Rect Default::GetResolution()
+{
+    const Uint16 maxUint16 = 65535;
+    const SDL_VideoInfo* inf = SDL_GetVideoInfo();
+
+    SDL_Rect tmp = { 0, 0, 0, 0 };
+    if ((inf->current_w <= maxUint16) && (inf->current_h <= maxUint16))
+    {
+        tmp.w = inf->current_w;
+        tmp.h = inf->current_h;
+    }
+    return tmp;
+}
+
+
+void Default::InitScreen(Layer* a_root)
+{
+    m_ScreenRoot = a_root;
+    // Start SDL as the default drawing engine:
+    // Initialize the SDL library:
+    if (SDL_Init(SDL_INIT_VIDEO|SDL_INIT_TIMER) < 0)
+    {
+        std::cout << SDL_GetError() << std::endl;
+        exit(21);
+    }
+    SetWindowed();
+
+    // Add a func to toggle fullscreen <-> windowed mode
+    // TODO
+//    new Action<Screen>("Toggle full screen", "", this, &Screen::ToggleFullscreen);
+    if (TTF_Init() == -1)
+    {
+        std::cout << TTF_GetError() << std::endl;
+        exit(22);
+    }
+}
+
+
+void Default::UpdateScreen()
+{
+    m_ScreenRoot->Draw(false);
+    SDL_Flip(m_Surface);
+}
 
 
 Drawer* Default::GetButtonDrawer()

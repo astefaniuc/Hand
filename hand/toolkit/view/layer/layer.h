@@ -17,8 +17,8 @@ public:
     virtual ~Layer() { Collapse(); }
 
     // Checks and updates content and triggers a re-draw if needed
-    bool Show(bool forced);
-    bool ShowChildren(bool forced);
+    void Update();
+    bool Draw(bool forced);
 
     // Methods to (re-)set links to external objects:
     void SetParent(Layer* parent) { m_Parent = parent; }
@@ -51,9 +51,9 @@ protected:
 
     virtual void Exit(HmiItem*);
 
-    virtual void Update() = 0;
     virtual Layout* CreateLayout() { return new Layout(); }
     virtual Drawer* CreatetDrawer() = 0;
+    virtual void Rebuild() = 0;
 
     Layer* m_Parent = nullptr;
     std::vector<Layer*> m_Sublayers;

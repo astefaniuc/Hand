@@ -1,15 +1,18 @@
 #ifndef HAND_BASE_SERVER_H
 #define HAND_BASE_SERVER_H
 
+#include "graph/data.h"
+#include "graph/interface.h"
+#include "graph/collection.h"
 #include <SDL/SDL.h>
 #include <string>
 #include <vector>
-#include "graph/data.h"
 
 
 class CUser;
 class EventHandler;
-class Screen;
+class ModuleLib;
+
 
 class HandServer
 {
@@ -27,10 +30,15 @@ public:
 
 private:
     // TODO: multiple screens e.g. touch screen device
-    Screen* m_Screen = nullptr;
     EventHandler* m_Input;
+    ModuleLib* m_ThemeLoader;
+
     std::vector<CUser*> m_Users;
     Note* m_AppPath = nullptr;
+    // This is the entry point for the whole visualization tree.
+    Interface m_View;
+    Collection m_UserViews;
+    Collection m_Menu;
 
     // The queue for system device events
     SDL_TimerID Timer = nullptr;

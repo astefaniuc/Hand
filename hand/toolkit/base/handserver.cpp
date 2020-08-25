@@ -1,14 +1,28 @@
 #include "handserver.h"
+#include "modulelib.h"
 #include "user.h"
 #include "input/device.h"
-#include "view/screen.h"
+#include "view/layer/layer.h"
+#include "view/theme.h"
 #include <unistd.h>
 #include <iostream>
 
 
 HandServer::HandServer(const std::string& a_startApp)
+    : m_View("Screen", ""), m_UserViews("Users", "Views"), m_Menu("Menu", "Settings")
 {
-    m_Screen = new Screen();
+    m_View.SetView(m_UserViews.GetLayer());
+    m_View.SetControls(&m_Menu);
+
+    m_ThemeLoader = new ModuleLib();
+    m_Menu.Add(new Note(
+            "Theme", "Select default visualization theme for all users.",
+            "./binaries/lib/themes/default.so", m_ThemeLoader));
+
+    // TODO: load settings
+    m_View.GetLayer()->SetTheme(dynamic_cast<Theme*>(m_ThemeLoader->GetObject()));
+    m_View.GetLayer()->GetTheme()->InitScreen(m_View.GetLayer());
+
     m_Input = new EventHandler();
 
     CUser* user = CreateUser();
@@ -23,11 +37,11 @@ HandServer::HandServer(const std::string& a_startApp)
 
 HandServer::~HandServer()
 {
-    for (CUser* user : m_Users)
-        delete user;
+    delete m_ThemeLoader;
     delete m_AppPath;
     delete m_Input;
-    delete m_Screen;
+    for (CUser* user : m_Users)
+        delete user;
 }
 
 
@@ -35,7 +49,7 @@ CUser* HandServer::CreateUser()
 {
     CUser* user = new CUser(m_Input);
     m_Users.push_back(user);
-    m_Screen->AddView(user->GetHmi());
+    m_UserViews.Attach(user->GetHmi());
     return user;
 }
 
@@ -56,7 +70,7 @@ void HandServer::Start()
         return;
     // 25 pix per sec
     Uint32 interval = 1000/25;
-    Timer = SDL_AddTimer(interval, &CallServerPump, (void*)(this));
+    Timer = SDL_AddTimer(interval, &CallServerPump, this);
     if (!Timer)
         exit(1);
     // Stop the main execution line
@@ -70,12 +84,17 @@ void HandServer::Pump()
     if (ExecNotFinished)
         return;
     ExecNotFinished = true;
+
+    if (!m_UserViews.Size())
+        // Nothing to show, the normal exit
+        exit(0);
+
     // Wait till next cycle before setting the next content
     // because this deletes the calling object
     m_Input->GetUserInput();
-    if (!m_Screen->ShowSurface())
-        // Nothing to show, the normal exit
-        exit(0);
+
+    m_View.GetLayer()->Update();
+    m_View.GetLayer()->GetDrawer()->GetParentTheme()->UpdateScreen();
 
     ExecNotFinished = false;
 }

@@ -8,6 +8,9 @@
 class Theme : public Module
 {
 public:
+    virtual void InitScreen(Layer* root) = 0;
+    virtual void UpdateScreen() = 0;
+
     virtual Drawer* GetButtonDrawer() = 0;
     virtual Drawer* GetListDrawer() = 0;
     virtual Drawer* GetTextDrawer() = 0;

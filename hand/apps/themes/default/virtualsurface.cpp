@@ -12,48 +12,40 @@ VirtualSurface::~VirtualSurface()
 }
 
 
-void VirtualSurface::Draw(bool forced)
+void VirtualSurface::Draw(bool a_forced)
 {
-/*  if(BufferType == NONE)
-    {
-        // TODO: this crashes in MasterLayer during "write through"
-        Parent->MapSurface(_Layout->Coordinates,
-                            CoordinatesOnBuffer,
-                            GetBuffer());
-        Updated = true; // ?
-    }*/
-    // Call the Theme function for drawing with the current settings
-
     DrawBackground();
-    // derived drawing
     DrawSurface();
+    DrawChildren(a_forced);
+}
 
-    if (GetBufferType() == COLLECTOR)
-        // Draw first the child on the buffer
-        m_Layer->ShowChildren(forced);
 
-    Rel_Rect tmp = m_Layer->GetLayout()->GetCoordinates();
-    SDL_Rect tgtRect = m_Layer->GetSize();
-    Show(&tgtRect, &tmp);
-
-    if (GetBufferType() == OVERLAY)
+bool VirtualSurface::DrawChildren(bool a_forced)
+{
+    bool ret = false;
+    for (Layer* sublayer : m_Layer->GetSubLayers())
     {
-        // Draw childs afterwards (not buffered)
-        m_Layer->ShowChildren(forced);
-//        Updated = true;
+        ret |= sublayer->Draw(a_forced);
+
+        SDL_Rect srcRect = sublayer->GetSize();
+        SDL_Rect tgtPos = m_Layer->GetSize();
+
+        VirtualSurface* src = dynamic_cast<VirtualSurface*>(sublayer->GetDrawer());
+        if (src)
+            BlitSurface(src->GetBuffer(), &srcRect, GetBuffer(), &tgtPos);
+        // TODO: else
     }
+    return ret;
 }
 
 
 void VirtualSurface::DrawBackground()
 {
-    SDL_Surface* sf = GetBuffer();
     SDL_Rect size = m_Layer->GetSize();
+    Multiply(GetFrameSize(), size);
 
-    const Rel_Rect& csap = GetFrameSize();
-    Multiply(csap, size);
-    SDL_SetClipRect(sf, &size);
-    FillRect(sf, &size, GetBackgroundColor());
+    SDL_SetClipRect(GetBuffer(), &size);
+    FillRect(GetBuffer(), &size, GetBackgroundColor());
 }
 
 
@@ -94,6 +86,7 @@ void VirtualSurface::DrawFrame()
     }
 }
 
+
 const Rel_Rect& VirtualSurface::GetFrameSize()
 {
     return ((Rect*)(m_Properties->GetChild(FRAMESIZE)))->GetValue();
@@ -110,48 +103,6 @@ const Rgb& VirtualSurface::GetBackgroundColor()
 }
 
 
-void VirtualSurface::MapSurface(Rel_Rect* src_rect, SDL_Rect& tgt_rect, SDL_Surface*& tgt_surface)
-{
-    if (BufferType == COLLECTOR)
-    {
-        // Get the absolute position on the current buffer
-        tgt_rect = m_Layer->GetSize();
-        Multiply(*src_rect, tgt_rect);
-        tgt_surface = GetBuffer();
-        // "Updated" must be true in this case
-        return;
-    }
-
-    // TODO: surface mapped incorrectly for Collection having BufferType OVERLAY
-
-    // Get the next layers buffer and absolute position
-    Rel_Rect sap = m_Layer->GetLayout()->GetCoordinates();
-    Multiply(*src_rect, sap);
-    if (m_Parent)
-        m_Parent->MapSurface(src_rect, tgt_rect, tgt_surface);
-    else
-        tgt_surface = SDL_GetVideoSurface();
-}
-
-
-void VirtualSurface::Show(SDL_Rect* a_absOnBuffer, Rel_Rect* a_relativeToParent)
-{
-    if (Updated || !m_Parent)
-        return;
-
-    SDL_Rect tgt_rect;
-    // Calculate position of the excerpt on the parent layer
-    SDL_Surface* tgt_surface = nullptr;
-    m_Parent->MapSurface(a_relativeToParent, tgt_rect, tgt_surface);
-
-    if (m_Parent->BufferType == OVERLAY)
-        m_Parent->Show(&tgt_rect, a_relativeToParent);
-
-    // DrawObject as parameter for positioning and alpha values
-    BlitSurface(Buffer, a_absOnBuffer, tgt_surface, &tgt_rect);
-}
-
-
 void VirtualSurface::BlitSurface(
     SDL_Surface* source, SDL_Rect* src_pos, SDL_Surface* target, SDL_Rect* tgt_pos)
 {
@@ -159,8 +110,8 @@ void VirtualSurface::BlitSurface(
     SDL_SetClipRect(target, tgt_pos);
     if (source && target)
     {
-//                SDL_SetAlpha(source, SDL_SRCALPHA, 128);
-//                SDL_SetAlpha(target, SDL_SRCALPHA, 128);
+//        SDL_SetAlpha(source, SDL_SRCALPHA, 128);
+//        SDL_SetAlpha(target, SDL_SRCALPHA, 128);
         SDL_BlitSurface(source, src_pos, target, tgt_pos);
     }
 }
@@ -188,15 +139,6 @@ void VirtualSurface::PlaceCentered(SDL_Surface* source, SDL_Rect& target, Rel_Re
     out.h = double(source->h) / double(target.h);
     out.x = (1 - out.w) / 2;
     out.y = (1 - out.h) / 2;
-}
-
-
-void VirtualSurface::SetBufferType(buffer_type bt)
-{
-    if ((BufferType != NONE) && (bt == NONE))
-        SDL_FreeSurface(Buffer);
-
-    BufferType = bt;
 }
 
 

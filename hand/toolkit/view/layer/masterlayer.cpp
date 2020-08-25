@@ -11,7 +11,7 @@ MasterLayer::MasterLayer()
 }
 
 
-void MasterLayer::Update()
+void MasterLayer::Rebuild()
 {
     Clear();
 

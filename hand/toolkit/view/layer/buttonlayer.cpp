@@ -19,7 +19,7 @@ Drawer* ButtonLayer::CreatetDrawer()
 }
 
 
-void ButtonLayer::Update()
+void ButtonLayer::Rebuild()
 {
     m_Name->SetData(m_Data->GetName());
     m_Description->SetData(m_Data->GetDescription());
