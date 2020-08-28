@@ -129,10 +129,11 @@ void Default::UpdateRoot()
         std::cout << SDL_GetError() << std::endl;
         exit(23);
     }
-    // TODO: generic way to pass size and position
+
+    VirtualSurface* root = VirtualSurface::GetDrawer(m_ScreenRoot);
     m_ScreenRoot->SetSize(GetResolution());
 
-    dynamic_cast<VirtualSurface*>(m_ScreenRoot->GetDrawer())->SetBuffer(m_Surface);
+    root->SetBuffer(m_Surface);
 }
 
 

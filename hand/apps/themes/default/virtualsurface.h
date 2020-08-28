@@ -23,6 +23,7 @@ public:
     SDL_Surface* GetBuffer();
     virtual void SetBuffer(SDL_Surface* buffer);
 
+    static VirtualSurface* GetDrawer(Layer* from);
     void BlitSurface(
             SDL_Surface* source, SDL_Rect* source_pos,
             SDL_Surface* target, SDL_Rect* target_pos);
@@ -48,7 +49,8 @@ protected:
     Default* m_Theme;
     Collection* m_Properties = nullptr;
 
-    SDL_Surface* Buffer = nullptr;
+private:
+    SDL_Surface* m_Buffer = nullptr;
 };
 
 #endif // HAND_VIEW_VIRTUALSURFACE_H

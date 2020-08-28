@@ -25,7 +25,7 @@ void ListDrawer::DrawSurface()
 
     for (unsigned i = 0; i < cnt; ++i)
     {
-        double c = double(cnt - i) / double(cnt-i+1);
+        double c = double(cnt - i) / double(cnt - i + 1);
         calc.w = (1 - (c * align.w)) * (1 - calc.x);
         calc.h = (1 - (c * align.h)) * (1 - calc.y);
 
@@ -60,13 +60,13 @@ void TextDrawer::DrawSurface()
     if((w > size.w) || (h > size.h))
         fh = h * double(size.w) * 0.7 / w;
 
-    SDL_Surface* source = RenderText(m_ViewItem, fh, GetFontColor());
+    SDL_Surface* txt = RenderText(m_ViewItem, fh, GetFontColor());
 
     Rel_Rect sub;
-    PlaceCentered(source, size, sub);
+    PlaceCentered(txt, size, sub);
 //    Multiply(&sub, GetFrameSize());
 
-    SetBuffer(source);
+    SetBuffer(txt);
 }
 
 const Rgb& TextDrawer::GetFontColor()

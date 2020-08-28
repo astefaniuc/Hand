@@ -8,7 +8,7 @@
 VirtualSurface::~VirtualSurface()
 {
     // TODO: Don't delete screen
-    SDL_FreeSurface(Buffer);
+    SDL_FreeSurface(m_Buffer);
 }
 
 
@@ -17,6 +17,12 @@ void VirtualSurface::Draw(bool a_forced)
     DrawBackground();
     DrawSurface();
     DrawChildren(a_forced);
+}
+
+
+VirtualSurface* VirtualSurface::GetDrawer(Layer* a_from)
+{
+    return dynamic_cast<VirtualSurface*>(a_from->GetDrawer());
 }
 
 
@@ -30,7 +36,7 @@ bool VirtualSurface::DrawChildren(bool a_forced)
         SDL_Rect srcRect = sublayer->GetSize();
         SDL_Rect tgtPos = m_Layer->GetSize();
 
-        VirtualSurface* src = dynamic_cast<VirtualSurface*>(sublayer->GetDrawer());
+        VirtualSurface* src = GetDrawer(sublayer);
         if (src)
             BlitSurface(src->GetBuffer(), &srcRect, GetBuffer(), &tgtPos);
         // TODO: else
@@ -145,31 +151,31 @@ void VirtualSurface::PlaceCentered(SDL_Surface* source, SDL_Rect& target, Rel_Re
 SDL_Surface* VirtualSurface::GetBuffer()
 {
     SDL_Rect surfaceSize = m_Layer->GetSize();
-    if (Buffer && (Buffer->w != surfaceSize.w) && (Buffer->h != surfaceSize.h))
+    if (m_Buffer && (m_Buffer->w != surfaceSize.w) && (m_Buffer->h != surfaceSize.h))
     {
-        SDL_FreeSurface(Buffer);
-        Buffer = nullptr;
+        SDL_FreeSurface(m_Buffer);
+        m_Buffer = nullptr;
     }
 
-    if (!Buffer)
+    if (!m_Buffer)
     {
         // TODO ...
-        Buffer = SDL_GetVideoSurface();
-        const SDL_PixelFormat& fmt = *(Buffer->format);
+        m_Buffer = SDL_GetVideoSurface();
+        const SDL_PixelFormat& fmt = *(m_Buffer->format);
         SDL_Rect surfSize = m_Layer->GetSize();
         // Draw on buffer independent of the position
-        Buffer = SDL_CreateRGBSurface(
+        m_Buffer = SDL_CreateRGBSurface(
                 SDL_DOUBLEBUF|SDL_HWSURFACE,
                 surfSize.w, surfSize.h,
                 fmt.BitsPerPixel,
                 fmt.Rmask, fmt.Gmask, fmt.Bmask, fmt.Amask);
     }
-    return Buffer;
+    return m_Buffer;
 }
 
 
 void VirtualSurface::SetBuffer(SDL_Surface* buffer)
 {
-    SDL_FreeSurface(Buffer);
-    Buffer = buffer;
+    SDL_FreeSurface(m_Buffer);
+    m_Buffer = buffer;
 }
