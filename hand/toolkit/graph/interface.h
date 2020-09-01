@@ -18,15 +18,11 @@ public:
     void SetControls(HmiItem* controls) { m_Controls = controls; }
     HmiItem* GetControls() const { return m_Controls; }
 
-    void SetAuxilliary(HmiItem* aux) { m_Auxilliary = aux; }
-    HmiItem* GetAuxilliary() const { return m_Auxilliary; }
-
 private:
     Layer* CreateLayer() override;
 
     Layer* m_View = nullptr;
     HmiItem* m_Controls = nullptr;
-    HmiItem* m_Auxilliary = nullptr;
 };
 
 #endif // HAND_GRAPH_INTERFACE_H

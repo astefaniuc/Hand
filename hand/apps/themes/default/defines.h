@@ -3,7 +3,6 @@
 
 
 // Tags
-#define ALIGNMENT        "Alignment"
 #define ALTERNATE        "alternate"
 #define BACK             "back"
 #define BACKGROUNDCOLOR  "Background color"
@@ -13,14 +12,8 @@
 #define CONTENT          "Content"
 #define CONTROLID        "Control ID"
 #define COORDINATES      "Coordinates"
-#define DEFAULT          "Default"
-#define DESCRIPTION      "Description"
 #define DIM_FONT_MAX     "DIM_FONT_MAX"
 #define DIM_FONT_PREFERRED "DIM_FONT_PREFERRED"
-#define DRAWER           "Drawer"
-#define ELEMENT          "Element"
-#define FIELD            "Field"
-#define FIELDS           "Fields"
 #define FOCUS            "Focus"
 #define FONT             "Font"
 #define FONTCOLOR        "Font color"
@@ -29,10 +22,8 @@
 #define FRAMESIZE        "Frame size"
 #define FULL             "full"
 #define HORIZONTAL       "horizontal"
-#define ICON             "Icon"
 #define LAYER            "Layer"
 #define LAYER_FACTORIES  "Layer Factories"
-#define NAME             "Name"
 #define PARENT           "Parent"
 #define PREVIEW          "Preview"
 #define RECT             "Rect"
@@ -45,7 +36,6 @@
 #define THEME            "Theme"
 #define THEMES           "Themes"
 #define VERTICAL         "vertical"
-#define VIEW             "View"
 
 
 #endif // HAND_VIEW_DEFINES_H

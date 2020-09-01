@@ -14,11 +14,8 @@ void Layer::Update()
     if (Changed)
         Rebuild();
 
-    for (Layer* layer : m_Sublayers)
-    {
-        layer->SetSize(GetSize());
-        layer->Update();
-    }
+    for (Layer* sub : m_Sublayers)
+        sub->Update();
 }
 
 
@@ -41,9 +38,7 @@ void Layer::SetContent(HmiItem* data)
 
 void Layer::SetSize(SDL_Rect size)
 {
-    // Store only the size, position from layout
-    Multiply(GetLayout()->GetCoordinates(), size);
-    if ((size.w != CoordinatesOnBuffer.w) || (size.h != CoordinatesOnBuffer.h))
+     if ((size.w != CoordinatesOnBuffer.w) || (size.h != CoordinatesOnBuffer.h))
     {
         CoordinatesOnBuffer.w = size.w;
         CoordinatesOnBuffer.h = size.h;
@@ -106,10 +101,8 @@ void Layer::Collapse()
 }
 
 
-Layer* Layer::Insert(Layer* a_child)
+void Layer::Insert(Layer* a_child)
 {
     m_Sublayers.push_back(a_child);
     a_child->SetParent(this);
-
-    return a_child;
 }

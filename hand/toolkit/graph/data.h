@@ -106,7 +106,11 @@ public:
         Execute(m_DataChanged);
         return true;
     }
-    virtual const DataType& GetValue() { return m_Value; }
+    bool operator=(const DataType& val) { return SetValue(val); }
+
+    const DataType& GetValue() const { return m_Value; }
+    const DataType& operator()() const { return GetValue(); }
+
     /// Get the value as a human readable string.
     virtual std::string GetValueString()
     {

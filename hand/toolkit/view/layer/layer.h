@@ -47,7 +47,7 @@ public:
     SDL_Rect GetSize() { return CoordinatesOnBuffer; }
 
 protected:
-    Layer* Insert(Layer* child);
+    void Insert(Layer* child);
 
     virtual void Exit(HmiItem*);
 

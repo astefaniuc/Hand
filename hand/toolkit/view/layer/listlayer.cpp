@@ -6,12 +6,14 @@
 void ListLayer::Rebuild()
 {
     m_Sublayers.clear();
+
+    ListLayout* layout = dynamic_cast<ListLayout*>(GetLayout());
     Collection* listData = dynamic_cast<Collection*>(GetContent());
     if (listData)
     {
         unsigned count = listData->Size() - m_StartPosition;
-        if (GetMaxItemsToShow() < count)
-            count = GetMaxItemsToShow();
+        if (layout->GetMaxItemsToShow() < count)
+            count = layout->GetMaxItemsToShow();
 
         for (unsigned i = 0; i < count; ++i)
             // Create the sub-objects
@@ -19,6 +21,10 @@ void ListLayer::Rebuild()
     }
     else
         Insert(GetContent()->GetLayer());
+
+    for (unsigned i = 0; i < m_Sublayers.size(); ++i)
+        m_Sublayers[i]->SetSize(Multiply(
+            layout->GetSizeAndPosition(i, m_Sublayers.size()), GetSize()));
 }
 
 

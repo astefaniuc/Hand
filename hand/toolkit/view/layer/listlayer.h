@@ -6,10 +6,6 @@
 
 class ListLayer : public Layer
 {
-public:
-    void SetMaxItemsToShow(unsigned count) { m_MaxItemsToShow = count; }
-    unsigned GetMaxItemsToShow() { return m_MaxItemsToShow; }
-
 protected:
     void Rebuild() override;
     Drawer* CreatetDrawer() override;
@@ -20,7 +16,6 @@ protected:
     HmiItem* GetControlsList();
 
 private:
-    unsigned m_MaxItemsToShow = 5;
     unsigned m_StartPosition = 0;
 };
 

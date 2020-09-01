@@ -8,6 +8,7 @@
 class TextLayer : public Layer
 {
 public:
+    explicit TextLayer(const std::string& data = std::string()) { SetData(data); }
     void SetData(const std::string& text) { m_Text = text; }
 
 protected:

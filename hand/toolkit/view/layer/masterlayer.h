@@ -17,14 +17,21 @@ public:
 protected:
     void Rebuild() override;
     Drawer* CreatetDrawer() override;
+    Layout* CreateLayout() override { return new ViewLayout(); }
+
+    /// Returns 'sub'.
+    Layer* AddField(Layer* sub, const std::string& field);
+//    void SetFocus(to or not to ...?);
+//    void Keep(enum mode)
 
 private:
     void Exit(HmiItem*);
     void Clear();
 
+    Layer* m_Control = nullptr;
+    Layer* m_Description = nullptr;
+    Layer* m_Title = nullptr;
     Layer* m_View = nullptr;
-    Layer* m_Controls = nullptr;
-    Layer* m_Auxilliary = nullptr;
 
     Action<MasterLayer>* m_Exit;
 };

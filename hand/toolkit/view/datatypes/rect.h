@@ -43,6 +43,6 @@ private:
 
 
 void Multiply(const Rel_Rect& src, Rel_Rect& tgt);
-void Multiply(const Rel_Rect& src, SDL_Rect& tgt);
+SDL_Rect Multiply(const Rel_Rect& a_clipping, const SDL_Rect& a_absSrc);
 
 #endif // HAND_VIEW_DATATYPES_RECT_H

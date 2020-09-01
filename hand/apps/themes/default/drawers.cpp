@@ -13,34 +13,6 @@ void ButtonDrawer::DrawSurface()
 
 void ListDrawer::DrawSurface()
 {
-    const std::vector<Layer*>& fields = m_Layer->GetSubLayers();
-    unsigned cnt = fields.size();
-    if (!cnt)
-        return;
-
-    ListLayout* layout = dynamic_cast<ListLayout*>(m_Layer->GetLayout());
-    const Rel_Rect& align = layout->GetAlignment();
-    const Rel_Rect& size = layout->GetCoordinates();
-    Rel_Rect calc;
-
-    for (unsigned i = 0; i < cnt; ++i)
-    {
-        double c = double(cnt - i) / double(cnt - i + 1);
-        calc.w = (1 - (c * align.w)) * (1 - calc.x);
-        calc.h = (1 - (c * align.h)) * (1 - calc.y);
-
-        const Rel_Rect& sub = fields[i]->GetLayout()->GetCoordinates();
-
-        // The Rect multiplication is NOT commutative, the order is important
-        Rel_Rect tmp = calc;
-        Multiply(sub, tmp);
-//        *sub = tmp;
-//        Multiply(size, sub);
-
-        // Set the coordinates for the next iteration
-        calc.x += (calc.w * align.x);
-        calc.y += (calc.h * align.y);
-    }
 }
 
 
