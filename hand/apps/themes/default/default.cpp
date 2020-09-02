@@ -130,10 +130,8 @@ void Default::UpdateRoot()
         exit(23);
     }
 
-    VirtualSurface* root = VirtualSurface::GetDrawer(m_ScreenRoot);
     m_ScreenRoot->SetSize(GetResolution());
-
-    root->SetBuffer(m_Surface);
+    VirtualSurface::GetDrawer(m_ScreenRoot)->SetBuffer(m_Surface);
 }
 
 

@@ -2,6 +2,14 @@
 #include "view/theme.h"
 
 
+ Layer::~Layer()
+ {
+     Collapse();
+     delete m_Drawer;
+     delete m_Layout;
+}
+
+
 void Layer::Exit(HmiItem*)
 {
     // Check if the default location is currently active

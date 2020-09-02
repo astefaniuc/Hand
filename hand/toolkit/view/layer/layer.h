@@ -14,7 +14,7 @@ class Theme;
 class Layer
 {
 public:
-    virtual ~Layer() { Collapse(); }
+    virtual ~Layer();
 
     // Checks and updates content and triggers a re-draw if needed
     void Update();
