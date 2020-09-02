@@ -22,6 +22,7 @@ void VirtualSurface::Draw(bool a_forced)
     }
 
     DrawBackground();
+    DrawFrame();
     DrawSurface();
     DrawChildren(a_forced);
 }
@@ -63,29 +64,29 @@ void VirtualSurface::DrawBackground()
 
 void VirtualSurface::DrawFrame()
 {
-    SDL_Rect content_size = GetContentSize();
-    SDL_Rect total_size = m_Layer->GetSize();
-
+    SDL_Rect total = m_Layer->GetSize();
+    SDL_Rect content = GetContentSize();
     // Draw each frame line separately
     SDL_Rect up, down, left, right;
-    up.x = total_size.x;
-    up.y = total_size.y;
-    up.w = total_size.w;
-    up.h = content_size.y - total_size.y;
 
-    down.x = total_size.x;
-    down.y = content_size.y + content_size.h;
-    down.w = total_size.w;
-    down.h = total_size.h - content_size.h - up.h;
+    up.x = 0;
+    up.y = 0;
+    up.w = total.w;
+    up.h = content.y;
 
-    left.x = total_size.x;
-    left.y = content_size.y;
-    left.w = content_size.x - total_size.x;
-    left.h = content_size.h;
+    down.x = 0;
+    down.y = content.y + content.h;
+    down.w = total.w;
+    down.h = total.h - content.h - up.h;
 
-    right.x = content_size.x + content_size.w;
+    left.x = 0;
+    left.y = content.y;
+    left.w = content.x;
+    left.h = content.h;
+
+    right.x = content.x + content.w;
     right.y = left.y;
-    right.w = total_size.w - left.w - content_size.w;
+    right.w = total.w - left.w - content.w;
     right.h = left.h;
 
     SDL_Surface* buffer = GetBuffer();
