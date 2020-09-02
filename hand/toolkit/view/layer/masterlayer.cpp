@@ -63,6 +63,7 @@ Layer* MasterLayer::AddField(Layer* sub, const std::string& field)
 {
     Insert(sub);
     sub->SetSize(Multiply(
-        dynamic_cast<ViewLayout*>(GetLayout())->GetSizeAndPosition(field), GetSize()));
+        dynamic_cast<ViewLayout*>(GetLayout())->GetField(field),
+        GetDrawer()->GetContentSize(GetSize())));
     return sub;
 }

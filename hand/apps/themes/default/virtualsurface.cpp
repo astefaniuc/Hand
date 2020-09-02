@@ -14,6 +14,13 @@ VirtualSurface::~VirtualSurface()
 
 void VirtualSurface::Draw(bool a_forced)
 {
+    SDL_Rect surfaceSize = m_Layer->GetSize();
+    if (m_Buffer && (m_Buffer->w != surfaceSize.w) && (m_Buffer->h != surfaceSize.h))
+    {
+        SDL_FreeSurface(m_Buffer);
+        m_Buffer = nullptr;
+    }
+
     DrawBackground();
     DrawSurface();
     DrawChildren(a_forced);
@@ -47,7 +54,7 @@ bool VirtualSurface::DrawChildren(bool a_forced)
 
 void VirtualSurface::DrawBackground()
 {
-    SDL_Rect size = Multiply(GetFrameSize(), m_Layer->GetSize());
+    SDL_Rect size = GetContentSize(m_Layer->GetSize());
 
     SDL_SetClipRect(GetBuffer(), &size);
     FillRect(GetBuffer(), &size, GetBackgroundColor());
@@ -57,7 +64,7 @@ void VirtualSurface::DrawBackground()
 void VirtualSurface::DrawFrame()
 {
     SDL_Rect total_size = m_Layer->GetSize();
-    SDL_Rect content_size = Multiply(GetFrameSize(), total_size);
+    SDL_Rect content_size = GetContentSize(total_size);
 
     // Draw each frame line separately
     SDL_Rect up, down, left, right;
@@ -107,16 +114,25 @@ const Rgb& VirtualSurface::GetBackgroundColor()
 }
 
 
+SDL_Rect VirtualSurface::GetContentSize(const SDL_Rect& totalSpace)
+{
+    SDL_Rect tmp = totalSpace;
+    // Remove the parent positioning, the returned rect is relative to the current rect
+    tmp.x = tmp.y = 0;
+    return Multiply(GetFrameSize(), tmp);
+}
+
+
 void VirtualSurface::BlitSurface(
     SDL_Surface* source, SDL_Rect* src_pos, SDL_Surface* target, SDL_Rect* tgt_pos)
 {
     // Recalculate also the position
-    SDL_SetClipRect(target, tgt_pos);
+    SDL_SetClipRect(target, src_pos);
     if (source && target)
     {
 //        SDL_SetAlpha(source, SDL_SRCALPHA, 128);
 //        SDL_SetAlpha(target, SDL_SRCALPHA, 128);
-        SDL_BlitSurface(source, src_pos, target, tgt_pos);
+        SDL_BlitSurface(source, nullptr, target, src_pos);
     }
 }
 
@@ -137,24 +153,17 @@ SDL_Surface* VirtualSurface::RenderText(const std::string& text, int size, const
 }
 
 
-void VirtualSurface::PlaceCentered(SDL_Surface* source, SDL_Rect& target, Rel_Rect& out)
+void VirtualSurface::PlaceCentered(SDL_Surface* a_src, SDL_Rect& a_tgt)
 {
-    out.w = double(source->w) / double(target.w);
-    out.h = double(source->h) / double(target.h);
-    out.x = (1 - out.w) / 2;
-    out.y = (1 - out.h) / 2;
+    a_tgt.x += (a_tgt.w - a_src->w) / 2;
+    a_tgt.y += (a_tgt.h - a_src->h) / 2;
+    a_tgt.w = a_src->w;
+    a_tgt.h = a_src->h;
 }
 
 
 SDL_Surface* VirtualSurface::GetBuffer()
 {
-    SDL_Rect surfaceSize = m_Layer->GetSize();
-    if (m_Buffer && (m_Buffer->w != surfaceSize.w) && (m_Buffer->h != surfaceSize.h))
-    {
-        SDL_FreeSurface(m_Buffer);
-        m_Buffer = nullptr;
-    }
-
     if (!m_Buffer)
     {
         // TODO ...

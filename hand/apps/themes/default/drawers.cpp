@@ -1,6 +1,7 @@
 #include "drawers.h"
 #include "defines.h"
 #include "view/layer/layer.h"
+#include "view/layer/textlayer.h"
 #include "view/layout.h"
 // #include "SDL/SDL_Image.h"
 
@@ -18,7 +19,8 @@ void ListDrawer::DrawSurface()
 
 void TextDrawer::DrawSurface()
 {
-    if (m_ViewItem.empty())
+    const std::string& text = dynamic_cast<TextLayer*>(m_Layer)->GetData();
+    if (text.empty())
     {
         SetBuffer(nullptr);
         return;
@@ -28,18 +30,15 @@ void TextDrawer::DrawSurface()
     // Calculate the fitting font size
     int w, h;
     int fh = size.h * 0.7;
-    TTF_SizeText(m_Theme->GetFont(fh), m_ViewItem.c_str(), &w, &h);
-    if((w > size.w) || (h > size.h))
+    TTF_SizeText(m_Theme->GetFont(fh), text.c_str(), &w, &h);
+    if ((w > size.w) || (h > size.h))
         fh = h * double(size.w) * 0.7 / w;
 
-    SDL_Surface* txt = RenderText(m_ViewItem, fh, GetFontColor());
-
-    Rel_Rect sub;
-    PlaceCentered(txt, size, sub);
-//    Multiply(&sub, GetFrameSize());
-
-    SetBuffer(txt);
+    SetBuffer(RenderText(text, fh, GetFontColor()));
+    PlaceCentered(GetBuffer(), size);
+    m_Layer->SetSize(size);
 }
+
 
 const Rgb& TextDrawer::GetFontColor()
 {

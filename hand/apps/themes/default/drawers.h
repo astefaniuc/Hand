@@ -29,12 +29,8 @@ class TextDrawer : public VirtualSurface
 public:
     TextDrawer(Default* theme) : VirtualSurface(theme) {}
 
-    void SetText(const std::string& item) { m_ViewItem = item; }
-
 protected:
     void DrawSurface() override;
-
-    std::string m_ViewItem;
 
 private:
     const Rgb& GetFontColor();

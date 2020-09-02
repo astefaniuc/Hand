@@ -24,7 +24,7 @@ void ListLayer::Rebuild()
 
     for (unsigned i = 0; i < m_Sublayers.size(); ++i)
         m_Sublayers[i]->SetSize(Multiply(
-            layout->GetSizeAndPosition(i, m_Sublayers.size()), GetSize()));
+            layout->GetField(i, m_Sublayers.size()), GetDrawer()->GetContentSize(GetSize())));
 }
 
 

@@ -20,6 +20,8 @@ public:
 
     void Draw(bool forced) override;
 
+    SDL_Rect GetContentSize(const SDL_Rect& totalSpace) override;
+
     SDL_Surface* GetBuffer();
     virtual void SetBuffer(SDL_Surface* buffer);
 
@@ -39,7 +41,7 @@ protected:
     // Drawing interface
     virtual SDL_Surface* RenderText(const std::string& text, int size, const Rgb& color);
     // Changes x and y of source
-    void PlaceCentered(SDL_Surface* source, SDL_Rect& target, Rel_Rect& out);
+    void PlaceCentered(SDL_Surface* source, SDL_Rect& target);
 
     const Rel_Rect& GetFrameSize();
 

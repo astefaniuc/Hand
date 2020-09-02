@@ -49,8 +49,8 @@ void Multiply(const Rel_Rect& src, Rel_Rect& tgt)
 SDL_Rect Multiply(const Rel_Rect& a_rel, const SDL_Rect& a_abs)
 {
     SDL_Rect ret;
-    ret.x = a_rel.x * a_abs.x;
-    ret.y = a_rel.y * a_abs.y;
+    ret.x = a_abs.x + a_rel.x * a_abs.w;
+    ret.y = a_abs.y + a_rel.y * a_abs.h;
     ret.w = a_rel.w * a_abs.w;
     ret.h = a_rel.h * a_abs.h;
 

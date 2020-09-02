@@ -36,14 +36,13 @@ void Layer::SetContent(HmiItem* data)
 }
 
 
-void Layer::SetSize(SDL_Rect size)
+void Layer::SetSize(const SDL_Rect& a_size)
 {
-     if ((size.w != CoordinatesOnBuffer.w) || (size.h != CoordinatesOnBuffer.h))
-    {
-        CoordinatesOnBuffer.w = size.w;
-        CoordinatesOnBuffer.h = size.h;
+    if ((a_size.w != m_Coordinates.w) || (a_size.h != m_Coordinates.h))
+        // needs redrawing
         Changed = true;
-    }
+
+    m_Coordinates = a_size;
 }
 
 

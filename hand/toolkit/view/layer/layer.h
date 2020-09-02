@@ -43,8 +43,8 @@ public:
     void Collapse();
 
     // Set coordinates and size relative to the parent layer
-    virtual void SetSize(SDL_Rect size);
-    SDL_Rect GetSize() { return CoordinatesOnBuffer; }
+    void SetSize(const SDL_Rect& size);
+    const SDL_Rect& GetSize() { return m_Coordinates; }
 
 protected:
     void Insert(Layer* child);
@@ -61,7 +61,7 @@ protected:
     Theme* m_Theme = nullptr;
     Drawer* m_Drawer = nullptr;
 
-    SDL_Rect CoordinatesOnBuffer = { 0, 0, 0, 0 };
+    SDL_Rect m_Coordinates = { 0, 0, 0, 0 };
 
     HmiItem* m_Data = nullptr;
 
