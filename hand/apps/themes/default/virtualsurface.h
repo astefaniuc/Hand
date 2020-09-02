@@ -20,7 +20,7 @@ public:
 
     void Draw(bool forced) override;
 
-    SDL_Rect GetContentSize(const SDL_Rect& totalSpace) override;
+    SDL_Rect GetContentSize() override;
 
     SDL_Surface* GetBuffer();
     virtual void SetBuffer(SDL_Surface* buffer);

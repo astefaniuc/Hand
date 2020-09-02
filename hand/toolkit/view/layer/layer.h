@@ -47,7 +47,8 @@ public:
     const SDL_Rect& GetSize() { return m_Coordinates; }
 
 protected:
-    void Insert(Layer* child);
+    void Insert(Layer* sub);
+    void SetSubSize(Layer* sub, const Rel_Rect& fieldSize);
 
     virtual void Exit(HmiItem*);
 

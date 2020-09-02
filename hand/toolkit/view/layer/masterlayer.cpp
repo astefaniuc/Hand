@@ -62,8 +62,6 @@ void MasterLayer::Exit(HmiItem*)
 Layer* MasterLayer::AddField(Layer* sub, const std::string& field)
 {
     Insert(sub);
-    sub->SetSize(Multiply(
-        dynamic_cast<ViewLayout*>(GetLayout())->GetField(field),
-        GetDrawer()->GetContentSize(GetSize())));
+    SetSubSize(sub, GetLayout()->GetField(field));
     return sub;
 }

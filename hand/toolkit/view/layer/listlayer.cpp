@@ -23,8 +23,7 @@ void ListLayer::Rebuild()
         Insert(GetContent()->GetLayer());
 
     for (unsigned i = 0; i < m_Sublayers.size(); ++i)
-        m_Sublayers[i]->SetSize(Multiply(
-            layout->GetField(i, m_Sublayers.size()), GetDrawer()->GetContentSize(GetSize())));
+        SetSubSize(m_Sublayers[i], layout->GetField(i, m_Sublayers.size()));
 }
 
 

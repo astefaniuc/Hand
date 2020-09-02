@@ -54,7 +54,7 @@ bool VirtualSurface::DrawChildren(bool a_forced)
 
 void VirtualSurface::DrawBackground()
 {
-    SDL_Rect size = GetContentSize(m_Layer->GetSize());
+    SDL_Rect size = GetContentSize();
 
     SDL_SetClipRect(GetBuffer(), &size);
     FillRect(GetBuffer(), &size, GetBackgroundColor());
@@ -63,8 +63,8 @@ void VirtualSurface::DrawBackground()
 
 void VirtualSurface::DrawFrame()
 {
+    SDL_Rect content_size = GetContentSize();
     SDL_Rect total_size = m_Layer->GetSize();
-    SDL_Rect content_size = GetContentSize(total_size);
 
     // Draw each frame line separately
     SDL_Rect up, down, left, right;
@@ -114,9 +114,9 @@ const Rgb& VirtualSurface::GetBackgroundColor()
 }
 
 
-SDL_Rect VirtualSurface::GetContentSize(const SDL_Rect& totalSpace)
+SDL_Rect VirtualSurface::GetContentSize()
 {
-    SDL_Rect tmp = totalSpace;
+    SDL_Rect tmp = m_Layer->GetSize();
     // Remove the parent positioning, the returned rect is relative to the current rect
     tmp.x = tmp.y = 0;
     return Multiply(GetFrameSize(), tmp);

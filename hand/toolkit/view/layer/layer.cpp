@@ -46,6 +46,12 @@ void Layer::SetSize(const SDL_Rect& a_size)
 }
 
 
+void Layer::SetSubSize(Layer* sub, const Rel_Rect& fieldSize)
+{
+    sub->SetSize(Multiply(fieldSize, GetDrawer()->GetContentSize()));
+}
+
+
 Layout* Layer::GetLayout()
 {
     if (!m_Layout)
