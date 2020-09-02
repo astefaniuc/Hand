@@ -48,7 +48,12 @@ void Layer::SetSize(const SDL_Rect& a_size)
 
 void Layer::SetSubSize(Layer* sub, const Rel_Rect& fieldSize)
 {
-    sub->SetSize(Multiply(fieldSize, GetDrawer()->GetContentSize()));
+    // Add the parent positioning, the returned rect is relative to the current rect
+    SDL_Rect parent = GetDrawer()->GetContentSize();
+    SDL_Rect child = Multiply(fieldSize, parent);
+    child.x += parent.x;
+    child.y += parent.y;
+    sub->SetSize(child);
 }
 
 

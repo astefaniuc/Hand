@@ -116,10 +116,7 @@ const Rgb& VirtualSurface::GetBackgroundColor()
 
 SDL_Rect VirtualSurface::GetContentSize()
 {
-    SDL_Rect tmp = m_Layer->GetSize();
-    // Remove the parent positioning, the returned rect is relative to the current rect
-    tmp.x = tmp.y = 0;
-    return Multiply(GetFrameSize(), tmp);
+    return Multiply(GetFrameSize(), m_Layer->GetSize());
 }
 
 
