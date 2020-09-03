@@ -21,7 +21,7 @@ public:
 
     void SetProperties(Collection* config) { m_Properties = config; }
 
-    SDL_Surface* GetBuffer();
+    SDL_Surface* GetBuffer() const { return m_Buffer; }
     virtual void SetBuffer(SDL_Surface* buffer);
 
     static VirtualSurface* GetDrawer(Layer* from);
@@ -31,6 +31,7 @@ public:
 protected:
     virtual void DrawSurface() = 0;
 
+    void InitBuffer();
     virtual void DrawFrame();
     virtual void DrawBackground();
     bool DrawChildren(bool forced);

@@ -14,13 +14,7 @@ VirtualSurface::~VirtualSurface()
 
 void VirtualSurface::Draw(bool a_forced)
 {
-    SDL_Rect surfaceSize = m_Layer->GetSize();
-    if (m_Buffer && (m_Buffer->w != surfaceSize.w) && (m_Buffer->h != surfaceSize.h))
-    {
-        SDL_FreeSurface(m_Buffer);
-        m_Buffer = nullptr;
-    }
-
+    InitBuffer();
     DrawBackground();
     DrawFrame();
     DrawSurface();
@@ -31,6 +25,21 @@ void VirtualSurface::Draw(bool a_forced)
 VirtualSurface* VirtualSurface::GetDrawer(Layer* a_from)
 {
     return dynamic_cast<VirtualSurface*>(a_from->GetDrawer());
+}
+
+
+void VirtualSurface::InitBuffer()
+{
+    const SDL_Rect& size = m_Layer->GetSize();
+    if (m_Buffer && (m_Buffer->w == size.w) && (m_Buffer->h == size.h))
+        return; // OK
+
+    SDL_FreeSurface(m_Buffer);
+
+    const SDL_PixelFormat& fmt = *(SDL_GetVideoSurface()->format);
+    m_Buffer = SDL_CreateRGBSurface(
+            SDL_DOUBLEBUF|SDL_HWSURFACE, size.w, size.h,
+            fmt.BitsPerPixel, fmt.Rmask, fmt.Gmask, fmt.Bmask, fmt.Amask);
 }
 
 
@@ -127,9 +136,9 @@ void VirtualSurface::BlitSurface(
     SDL_Surface* source, SDL_Rect* src_pos, SDL_Surface* target, SDL_Rect* tgt_pos)
 {
     // Recalculate also the position
-    SDL_SetClipRect(target, src_pos);
     if (source && target)
     {
+        SDL_SetClipRect(target, src_pos);
 //        SDL_SetAlpha(source, SDL_SRCALPHA, 128);
 //        SDL_SetAlpha(target, SDL_SRCALPHA, 128);
         SDL_BlitSurface(source, nullptr, target, src_pos);
@@ -159,25 +168,6 @@ void VirtualSurface::PlaceCentered(SDL_Surface* a_src, SDL_Rect& a_tgt)
     a_tgt.y += (a_tgt.h - a_src->h) / 2;
     a_tgt.w = a_src->w;
     a_tgt.h = a_src->h;
-}
-
-
-SDL_Surface* VirtualSurface::GetBuffer()
-{
-    if (!m_Buffer)
-    {
-        // TODO ...
-        m_Buffer = SDL_GetVideoSurface();
-        const SDL_PixelFormat& fmt = *(m_Buffer->format);
-        SDL_Rect surfSize = m_Layer->GetSize();
-        // Draw on buffer independent of the position
-        m_Buffer = SDL_CreateRGBSurface(
-                SDL_DOUBLEBUF|SDL_HWSURFACE,
-                surfSize.w, surfSize.h,
-                fmt.BitsPerPixel,
-                fmt.Rmask, fmt.Gmask, fmt.Bmask, fmt.Amask);
-    }
-    return m_Buffer;
 }
 
 
