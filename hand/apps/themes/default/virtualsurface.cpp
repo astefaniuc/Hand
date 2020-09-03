@@ -117,6 +117,8 @@ const Rgb& VirtualSurface::GetBackgroundColor()
 
 SDL_Rect VirtualSurface::GetContentSize()
 {
+    if (!m_ShowFrame)
+        return m_Layer->GetSize();
     return Multiply(GetFrameSize(), m_Layer->GetSize());
 }
 

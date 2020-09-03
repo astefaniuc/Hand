@@ -153,6 +153,7 @@ SDL_Rect Default::GetResolution()
 void Default::InitScreen(Layer* a_root)
 {
     m_ScreenRoot = a_root;
+    VirtualSurface::GetDrawer(m_ScreenRoot)->RemoveFrame();
     // Start SDL as the default drawing engine:
     // Initialize the SDL library:
     if (SDL_Init(SDL_INIT_VIDEO|SDL_INIT_TIMER) < 0)

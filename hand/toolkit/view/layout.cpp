@@ -4,7 +4,6 @@
 
 Layout::Layout() : m_Settings("Layout", "Settings")
 {
-    m_Settings.Add(m_ShowFrame);
     m_Settings.Add(m_ShowName);
     m_Settings.Add(m_ShowDescription);
 

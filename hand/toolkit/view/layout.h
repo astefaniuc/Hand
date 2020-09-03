@@ -22,9 +22,6 @@ public:
     Rel_Rect GetField(const std::string& a_name) const;
     void SetField(const std::string& a_name, const Rel_Rect& coordinates);
 
-    bool ShowFrame() const { return m_ShowFrame->GetValue(); }
-    void SetShowFrame(bool enabled) { m_ShowFrame->SetValue(enabled); }
-
     bool ShowName() const { return m_ShowName->GetValue(); }
     void SetShowName(bool enabled) { m_ShowName->SetValue(enabled); }
 
@@ -36,7 +33,6 @@ protected:
     Collection* m_Fields = new Collection("Fields", "");
 
 private:
-    TData<bool>* m_ShowFrame = new TData<bool>("Show frame", "", true);
     TData<bool>* m_ShowName = new TData<bool>("Show name", "", true);
     TData<bool>* m_ShowDescription = new TData<bool>("Show description", "", true);
 };
