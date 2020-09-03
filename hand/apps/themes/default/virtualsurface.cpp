@@ -39,7 +39,7 @@ void VirtualSurface::InitBuffer()
     const SDL_PixelFormat& fmt = *(SDL_GetVideoSurface()->format);
     m_Buffer = SDL_CreateRGBSurface(
             SDL_DOUBLEBUF|SDL_HWSURFACE, size.w, size.h,
-            fmt.BitsPerPixel, fmt.Rmask, fmt.Gmask, fmt.Bmask, fmt.Amask);
+            fmt.BitsPerPixel, fmt.Rmask, fmt.Gmask, fmt.Bmask, 0xFF000000);
 }
 
 
@@ -64,61 +64,71 @@ bool VirtualSurface::DrawChildren(bool a_forced)
 
 void VirtualSurface::DrawBackground()
 {
-    SDL_Rect size = GetContentSize();
-
-    SDL_SetClipRect(GetBuffer(), &size);
-    FillRect(GetBuffer(), &size, GetBackgroundColor());
+    FillRect(GetContentSize(), GetBackgroundColor());
 }
 
 
 void VirtualSurface::DrawFrame()
 {
+    if (!GetDrawFrame())
+        return;
+
     SDL_Rect total = m_Layer->GetSize();
     SDL_Rect content = GetContentSize();
-    // Draw each frame line separately
-    SDL_Rect up, down, left, right;
-
-    up.x = 0;
-    up.y = 0;
-    up.w = total.w;
-    up.h = content.y;
-
-    down.x = 0;
-    down.y = content.y + content.h;
-    down.w = total.w;
-    down.h = total.h - content.h - up.h;
-
-    left.x = 0;
-    left.y = content.y;
-    left.w = content.x;
-    left.h = content.h;
-
-    right.x = content.x + content.w;
-    right.y = left.y;
-    right.w = total.w - left.w - content.w;
-    right.h = left.h;
-
-    SDL_Surface* buffer = GetBuffer();
-    SDL_Rect* border[4] = { &up, &down, &left, &right };
-    for (unsigned i = 0; i < 4; ++i)
+    // Line width
+    int16_t width = (total.w > total.h ? total.w - content.w : total.h - content.h) * 0.25;
+    const Rgb& color = GetFrameColor();
+    // Draw each line separately
     {
-        SDL_SetClipRect(buffer, border[i]);
-        FillRect(buffer, border[i], GetFrameColor());
+        SDL_Rect top = content;
+        top.x -= width;
+        top.y -= width;
+        top.w += 2 * width;
+        top.h = width;
+        FillRect(top, color);
+    }
+    {
+        SDL_Rect down = content;
+        down.x -= width;
+        down.y += content.h;
+        down.w += 2 * width;
+        down.h = width;
+        FillRect(down, color);
+    }
+    {
+        SDL_Rect left = content;
+        left.x -= width;
+        left.w = width;
+        FillRect(left, color);
+    }
+    {
+        SDL_Rect right = content;
+        right.x += content.w;
+        right.w = width;
+        FillRect(right, color);
     }
 }
 
 
-const Rel_Rect& VirtualSurface::GetFrameSize()
+bool VirtualSurface::GetDrawFrame() const
+{
+    TData<bool>* data = dynamic_cast<TData<bool>*>(m_Properties->GetChild(DRAWFRAME));
+    if (data)
+        return data->GetValue();
+    return true;
+}
+
+const Rel_Rect& VirtualSurface::GetFrameSize() const
 {
     return ((Rect*)(m_Properties->GetChild(FRAMESIZE)))->GetValue();
 }
 
-const Rgb& VirtualSurface::GetFrameColor()
+const Rgb& VirtualSurface::GetFrameColor() const
 {
     return *((Rgb*)m_Properties->GetChild(FRAMECOLOR));
 }
 
-const Rgb& VirtualSurface::GetBackgroundColor()
+const Rgb& VirtualSurface::GetBackgroundColor() const
 {
     return *((Rgb*)m_Properties->GetChild(BACKGROUNDCOLOR));
 }
@@ -135,30 +145,18 @@ SDL_Rect VirtualSurface::GetContentSize()
 void VirtualSurface::BlitSurface(
     SDL_Surface* source, SDL_Rect* src_pos, SDL_Surface* target, SDL_Rect* tgt_pos)
 {
-    // Recalculate also the position
     if (source && target)
     {
         SDL_SetClipRect(target, src_pos);
-//        SDL_SetAlpha(source, SDL_SRCALPHA, 128);
-//        SDL_SetAlpha(target, SDL_SRCALPHA, 128);
         SDL_BlitSurface(source, nullptr, target, src_pos);
     }
 }
 
 
-void VirtualSurface::FillRect(SDL_Surface* sf, SDL_Rect* r, const Rgb& c)
+void VirtualSurface::FillRect(SDL_Rect r, const Rgb& c)
 {
-    SDL_FillRect(sf, r, SDL_MapRGB(sf->format, c.m_r, c.m_g, c.m_b));
-}
-
-
-SDL_Surface* VirtualSurface::RenderText(const std::string& text, int size, const Rgb& color)
-{
-    SDL_Color sdl_color;
-    sdl_color.r = color.m_r;
-    sdl_color.g = color.m_g;
-    sdl_color.b = color.m_b;
-    return TTF_RenderText_Blended(m_Theme->GetFont(size), text.c_str(), sdl_color);
+    SDL_SetClipRect(m_Buffer, &r);
+    SDL_FillRect(m_Buffer, &r, SDL_MapRGB(m_Buffer->format, c.m_r, c.m_g, c.m_b));
 }
 
 

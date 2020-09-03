@@ -26,6 +26,7 @@ public:
 
     static VirtualSurface* GetDrawer(Layer* from);
 
+    /// Removes the visual frame and its allocated spacing, content is extended.
     void RemoveFrame() { m_ShowFrame = false; }
 
 protected:
@@ -37,17 +38,17 @@ protected:
     bool DrawChildren(bool forced);
 
     // Drawing interface
-    void FillRect(SDL_Surface* sf, SDL_Rect* r, const Rgb& color);
+    void FillRect(SDL_Rect r, const Rgb& color);
     void BlitSurface(
             SDL_Surface* source, SDL_Rect* source_pos,
             SDL_Surface* target, SDL_Rect* target_pos);
-    virtual SDL_Surface* RenderText(const std::string& text, int size, const Rgb& color);
     /// Changes x and y of source
     void PlaceCentered(SDL_Surface* source, SDL_Rect& target);
 
-    const Rel_Rect& GetFrameSize();
-    const Rgb& GetFrameColor();
-    const Rgb& GetBackgroundColor();
+    bool GetDrawFrame() const;
+    const Rel_Rect& GetFrameSize() const;
+    const Rgb& GetFrameColor() const;
+    const Rgb& GetBackgroundColor() const;
 
     Default* m_Theme;
     Collection* m_Properties = nullptr;

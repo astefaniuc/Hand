@@ -32,8 +32,8 @@ public:
 protected:
     void DrawSurface() override;
 
-private:
-    const Rgb& GetFontColor();
+    SDL_Surface* RenderText(const std::string& text, int size, const Rgb& color) const;
+    const Rgb& GetFontColor() const;
 };
 
 

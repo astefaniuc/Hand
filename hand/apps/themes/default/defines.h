@@ -14,6 +14,7 @@
 #define COORDINATES      "Coordinates"
 #define DIM_FONT_MAX     "DIM_FONT_MAX"
 #define DIM_FONT_PREFERRED "DIM_FONT_PREFERRED"
+#define DRAWFRAME        "Draw frame"
 #define FOCUS            "Focus"
 #define FONT             "Font"
 #define FONTCOLOR        "Font color"

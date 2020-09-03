@@ -40,7 +40,17 @@ void TextDrawer::DrawSurface()
 }
 
 
-const Rgb& TextDrawer::GetFontColor()
+SDL_Surface* TextDrawer::RenderText(const std::string& text, int size, const Rgb& color) const
+{
+    SDL_Color sdl_color;
+    sdl_color.r = color.m_r;
+    sdl_color.g = color.m_g;
+    sdl_color.b = color.m_b;
+    return TTF_RenderText_Blended(m_Theme->GetFont(size), text.c_str(), sdl_color);
+}
+
+
+const Rgb& TextDrawer::GetFontColor() const
 {
     return *((Rgb*)m_Properties->GetChild(FONTCOLOR));
 }
