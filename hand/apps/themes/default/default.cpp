@@ -29,21 +29,21 @@ Default::Default()
     // Properties
     m_Buttons.Add(new Rgb(BACKGROUNDCOLOR, "", 40, 40, 100));
     m_Buttons.Add(new Rgb(FRAMECOLOR, "", 30, 30, 75));
-    m_Buttons.Add(new Rect(FRAMESIZE, "Relative frame size [%]", .01, .03, .98, .94));
+    m_Buttons.Add(new Rect(FRAMESIZE, "Relative frame size [%]", .01, .01, .98, .98));
 
     m_Lists.Add(new Rgb(BACKGROUNDCOLOR, "", 20, 20, 50));
     m_Lists.Add(new Rgb(FRAMECOLOR, "", 80, 80, 105));
-    m_Lists.Add(new Rect(FRAMESIZE, "Relative frame size [%]", .01, .03, .98, .94));
+    m_Lists.Add(new Rect(FRAMESIZE, "Relative frame size [%]", .01, .01, .98, .98));
     m_Lists.Add(new TData<bool>(DRAWFRAME, "Draw a visible frame around item", true));
 
     m_Texts.Add(new Rgb(BACKGROUNDCOLOR, "", 40, 40, 100));
     m_Texts.Add(new Rgb(FRAMECOLOR, "", 30, 30, 75));
-    m_Texts.Add(new Rect(FRAMESIZE, "Relative frame size [%]", .01, .03, .98, .94));
+    m_Texts.Add(new Rect(FRAMESIZE, "Relative frame size [%]", .01, .01, .98, .98));
     m_Texts.Add(new Rgb(FONTCOLOR, "", 200, 200, 200));
 
     m_Views.Add(new Rgb(BACKGROUNDCOLOR, "", 30, 30, 60));
     m_Views.Add(new Rgb(FRAMECOLOR, "", 30, 30, 75));
-    m_Views.Add(new Rect(FRAMESIZE, "Relative frame size [%]", .01, .03, .98, .94));
+    m_Views.Add(new Rect(FRAMESIZE, "Relative frame size [%]", .01, .01, .98, .98));
     m_Views.Add(new TData<bool>(DRAWFRAME, "Draw a visible frame around item", true));
 
     m_Hmi.Attach(&m_Buttons);

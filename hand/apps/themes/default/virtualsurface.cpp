@@ -76,7 +76,7 @@ void VirtualSurface::DrawFrame()
     SDL_Rect total = m_Layer->GetSize();
     SDL_Rect content = GetContentSize();
     // Line width
-    int16_t width = (total.w > total.h ? total.w - content.w : total.h - content.h) * 0.25;
+    int16_t width = (total.w > total.h ? total.w - content.w : total.h - content.h) * 0.1;
     const Rgb& color = GetFrameColor();
     // Draw each line separately
     {
