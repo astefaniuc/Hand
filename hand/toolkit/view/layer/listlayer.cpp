@@ -22,8 +22,18 @@ void ListLayer::Rebuild()
     else
         Insert(GetContent()->GetLayer());
 
+    ListLayout::Alignment align = layout->GetAlignment();
+    if (align == ListLayout::Auto)
+    {
+        SDL_Rect space = GetDrawer()->GetContentSize();
+        if (space.w > 2 * space.h)
+            align = ListLayout::Horizontal;
+        else
+            align = ListLayout::Vertical;
+    }
+
     for (unsigned i = 0; i < m_Sublayers.size(); ++i)
-        SetSubSize(m_Sublayers[i], layout->GetField(i, m_Sublayers.size()));
+        SetSubSize(m_Sublayers[i], layout->GetField(i, m_Sublayers.size(), align));
 }
 
 

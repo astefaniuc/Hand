@@ -41,20 +41,21 @@ private:
 class ListLayout : public Layout
 {
 public:
+    enum Alignment { Auto, Horizontal, Vertical };
     ListLayout() { m_Settings.Add(m_Alignment); }
 
     void SetMaxItemsToShow(unsigned count) { m_MaxItemsToShow->SetValue(count); }
     unsigned GetMaxItemsToShow() { return m_MaxItemsToShow->GetValue(); }
 
-    // Returns the size and position as values relative to the parent.
-    // Values between 0.0 and 1.0.
-    Rel_Rect GetField(unsigned field, unsigned numFields) const;
+    /// Returns the size and position as values relative to the parent.
+    /// Values between 0.0 and 1.0. 'alignment' can't be 'Auto'.
+    Rel_Rect GetField(unsigned field, unsigned numFields, Alignment align) const;
 
-    const Rel_Rect& GetAlignment() const { return m_Alignment->GetValue(); }
-    void SetAlignment(const Rel_Rect& value) { m_Alignment->SetValue(value); }
+    Alignment GetAlignment() const { return m_Alignment->GetValue(); }
+    void SetAlignment(Alignment value) { m_Alignment->SetValue(value); }
 
 private:
-    Rect* m_Alignment = new Rect("Alignment", "", 1.0, 0.0, 1.0, 0.0);
+    TData<Alignment>* m_Alignment = new TData<Alignment>("Alignment", "", Auto);
     TData<unsigned>* m_MaxItemsToShow = new TData<unsigned>("List max", "Items to show", 5);
 };
 

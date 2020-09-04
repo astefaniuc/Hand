@@ -1,5 +1,4 @@
 #include "layout.h"
-#include <assert.h>
 
 
 Layout::Layout() : m_Settings("Layout", "Settings")
@@ -33,17 +32,20 @@ void Layout::SetField(const std::string& a_name, const Rel_Rect& a_coordinates)
 }
 
 
-Rel_Rect ListLayout::GetField(unsigned a_field, unsigned a_numFields) const
+Rel_Rect ListLayout::GetField(
+    unsigned a_field, unsigned a_numFields, Alignment a_align) const
 {
-    assert(a_field < a_numFields);
-
-    const Rel_Rect& align = GetAlignment();
     Rel_Rect ret;
-    ret.x = a_field * align.x / a_numFields;
-    ret.y = a_field * align.y / a_numFields;
-    ret.w = align.w / a_numFields;
-    ret.h = align.h / a_numFields;
-
+    if (a_align == Horizontal)
+    {
+        ret.w /= a_numFields;
+        ret.x = a_field * ret.w;
+    }
+    else
+    {
+        ret.h /= a_numFields;
+        ret.y = a_field * ret.h;
+    }
     return ret;
 }
 
