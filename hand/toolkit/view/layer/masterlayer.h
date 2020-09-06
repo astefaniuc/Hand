@@ -19,8 +19,6 @@ protected:
     Drawer* CreatetDrawer() override;
     Layout* CreateLayout() override { return new ViewLayout(); }
 
-    /// Returns 'sub'.
-    Layer* AddField(Layer* sub, const std::string& field);
 //    void SetFocus(to or not to ...?);
 //    void Keep(enum mode)
 

@@ -16,6 +16,7 @@ public:
 protected:
     void Rebuild() override {} // TODO
     Drawer* CreatetDrawer() override;
+    Layout* CreateLayout() override { return nullptr; } // TODO?
 
 private:
     std::string m_Text;

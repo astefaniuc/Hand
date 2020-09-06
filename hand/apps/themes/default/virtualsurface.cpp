@@ -1,7 +1,6 @@
 #include "virtualsurface.h"
 #include "view/layer/layer.h"
 #include "defines.h"
-#include "default.h"
 #include <SDL/SDL_ttf.h>
 
 

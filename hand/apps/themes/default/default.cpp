@@ -1,14 +1,12 @@
 #include "default.h"
-#include "drawers.h"
 #include "defines.h"
-#include "virtualsurface.h"
 #include "view/layer/layer.h"
 #include <iostream>
 
 
 extern "C" Module* Create()
 {
-    return (new Default());
+    return new Default();
 }
 
 
@@ -22,6 +20,7 @@ extern "C" void Destroy(Theme* theme)
 Default::Default()
     : m_Hmi("Default", "Default visual theme"),
       m_Buttons("Buttons", "Customize"),
+      m_Datas("Datas", "Customize"),
       m_Lists("Lists", "Customize"),
       m_Texts("Text fields", "Customize"),
       m_Views("Views", "Customize")
@@ -30,6 +29,11 @@ Default::Default()
     m_Buttons.Add(new Rgb(BACKGROUNDCOLOR, "", 40, 40, 100));
     m_Buttons.Add(new Rgb(FRAMECOLOR, "", 30, 30, 75));
     m_Buttons.Add(new Rect(FRAMESIZE, "Relative frame size [%]", .01, .01, .98, .98));
+
+    m_Datas.Add(new Rgb(BACKGROUNDCOLOR, "", 40, 40, 100));
+    m_Datas.Add(new Rgb(FRAMECOLOR, "", 30, 30, 75));
+    m_Datas.Add(new Rect(FRAMESIZE, "Relative frame size [%]", .01, .01, .98, .98));
+    m_Datas.Add(new TData<bool>(DRAWFRAME, "Draw a visible frame around item", true));
 
     m_Lists.Add(new Rgb(BACKGROUNDCOLOR, "", 20, 20, 50));
     m_Lists.Add(new Rgb(FRAMECOLOR, "", 80, 80, 105));
@@ -180,36 +184,4 @@ void Default::UpdateScreen()
 {
     m_ScreenRoot->Draw(false);
     SDL_Flip(m_Surface);
-}
-
-
-Drawer* Default::GetButtonDrawer()
-{
-    VirtualSurface* ret = new ButtonDrawer(this);
-    ret->SetProperties(&m_Buttons);
-    return ret;
-}
-
-
-Drawer* Default::GetListDrawer()
-{
-    VirtualSurface* ret = new ListDrawer(this);
-    ret->SetProperties(&m_Lists);
-    return ret;
-}
-
-
-Drawer* Default::GetTextDrawer()
-{
-    VirtualSurface* ret = new TextDrawer(this);
-    ret->SetProperties(&m_Texts);
-    return ret;
-}
-
-
-Drawer* Default::GetViewDrawer()
-{
-    VirtualSurface* ret = new ViewDrawer(this);
-    ret->SetProperties(&m_Views);
-    return ret;
 }

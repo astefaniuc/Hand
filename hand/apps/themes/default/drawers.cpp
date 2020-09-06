@@ -1,20 +1,11 @@
 #include "drawers.h"
 #include "defines.h"
+#include "default.h"
 #include "view/layer/layer.h"
 #include "view/layer/textlayer.h"
 #include "view/layout.h"
 // #include "SDL/SDL_Image.h"
 
-
-void ButtonDrawer::DrawSurface()
-{
-    // TODO
-}
-
-
-void ListDrawer::DrawSurface()
-{
-}
 
 
 void TextDrawer::DrawSurface()
@@ -53,11 +44,5 @@ SDL_Surface* TextDrawer::RenderText(const std::string& text, int size, const Rgb
 const Rgb& TextDrawer::GetFontColor() const
 {
     return *((Rgb*)m_Properties->GetChild(FONTCOLOR));
-}
-
-
-void ViewDrawer::DrawSurface()
-{
-    // TODO
 }
 

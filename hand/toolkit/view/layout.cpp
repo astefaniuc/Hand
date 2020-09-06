@@ -50,11 +50,29 @@ Rel_Rect ListLayout::GetField(
 }
 
 
+ButtonLayout::ButtonLayout()
+{
+    SetField(CONTROL, { 0.8, 0.6, 0.2, 0.4 });
+    SetField(DESCRIPTION, { 0.0, 0.6, 0.8, 0.4 });
+    SetField(TITLE, { 0.25, 0.0, 0.75, 0.6 });
+    SetField(VIEW, { 0.0, 0.0, 0.25, 0.6 });
+}
+
+
+DataLayout::DataLayout()
+{
+    SetField(CONTROL, { 0.8, 0.6, 0.2, 0.4 });
+    SetField(DESCRIPTION, { 0.0, 0.6, 0.8, 0.4 });
+    SetField(TITLE, { 0.0, 0.0, 0.25, 0.6 });
+    SetField(VIEW, { 0.25, 0.0, 0.75, 0.6 });
+}
+
+
 ViewLayout::ViewLayout()
 {
+    SetField(CONTROL, { 0.2, 0.8, 0.6, 0.2 });
     SetField(DESCRIPTION, { 0.8, 0.3, 0.2, 0.4 });
     SetField(TITLE, { 0.0, 0.0, 1.0, 0.04 });
-
-    SetField(CONTROL, { 0.2, 0.8, 0.6, 0.2 });
     SetField(VIEW, { 0.0, 0.04, 0.8, 0.76 });
 }
+

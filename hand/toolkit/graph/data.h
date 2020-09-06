@@ -32,6 +32,8 @@ public:
     }
     ~Data() { delete m_Manipulator; }
 
+    virtual std::string GetValueString() = 0;
+
     /// The callback is executed whenever the selection changes.
     void AddDataChangedClient(ICallback* a_client)
     {
@@ -112,7 +114,7 @@ public:
     const DataType& operator()() const { return GetValue(); }
 
     /// Get the value as a human readable string.
-    virtual std::string GetValueString()
+    std::string GetValueString() override
     {
         std::ostringstream s;
         s << m_Value;

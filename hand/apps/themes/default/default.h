@@ -3,6 +3,7 @@
 
 #include "view/theme.h"
 #include "graph/collection.h"
+#include "drawers.h"
 #include <SDL/SDL_ttf.h>
 #include <map>
 
@@ -26,10 +27,11 @@ public:
     virtual TTF_Font* GetFont(int size);
 //    virtual void GetFontHeight(HmiItem* layout, unsigned& max_size);
 
-    Drawer* GetButtonDrawer() override;
-    Drawer* GetListDrawer() override;
-    Drawer* GetTextDrawer() override;
-    Drawer* GetViewDrawer() override;
+    Drawer* GetButtonDrawer() override { return new VirtualSurface(&m_Buttons); }
+    Drawer* GetDataDrawer() override { return new VirtualSurface(&m_Datas); }
+    Drawer* GetListDrawer() override { return new VirtualSurface(&m_Lists); }
+    Drawer* GetTextDrawer() override { return new TextDrawer(this, &m_Texts); }
+    Drawer* GetViewDrawer() override { return new VirtualSurface(&m_Views); }
 
 protected:
     // App mode interface
@@ -41,6 +43,7 @@ protected:
 
     Collection m_Hmi;
     Collection m_Buttons;
+    Collection m_Datas;
     Collection m_Lists;
     Collection m_Texts;
     Collection m_Views;

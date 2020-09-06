@@ -94,7 +94,7 @@ void HandServer::Pump()
     m_Input->GetUserInput();
 
     m_View.GetLayer()->Update();
-    m_View.GetLayer()->GetDrawer()->GetParentTheme()->UpdateScreen();
+    m_View.GetLayer()->GetTheme()->UpdateScreen();
 
     ExecNotFinished = false;
 }

@@ -46,13 +46,16 @@ public:
     void SetSize(const SDL_Rect& size);
     const SDL_Rect& GetSize() { return m_Coordinates; }
 
+    /// Returns 'sub'.
+    Layer* AddField(Layer* sub, const std::string& field);
+
 protected:
     void Insert(Layer* sub);
     void SetSubSize(Layer* sub, const Rel_Rect& fieldSize);
 
     virtual void Exit(HmiItem*);
 
-    virtual Layout* CreateLayout() { return new Layout(); }
+    virtual Layout* CreateLayout() = 0;
     virtual Drawer* CreatetDrawer() = 0;
     virtual void Rebuild() = 0;
 

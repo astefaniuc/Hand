@@ -29,6 +29,8 @@ public:
     /// Removes all child items; own items are destroyed.
     void Clear();
 
+    std::string GetValueString() override { return "TODO"; }
+
     HmiItem::Type GetType() const override { return HmiItem::EList; }
 
 private:

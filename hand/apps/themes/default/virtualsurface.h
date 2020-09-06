@@ -1,8 +1,7 @@
-#ifndef HAND_VIEW_VIRTUALSURFACE_H
-#define HAND_VIEW_VIRTUALSURFACE_H
+#ifndef HAND_THEME_SDL_BASE_VIRTUALSURFACE_H
+#define HAND_THEME_SDL_BASE_VIRTUALSURFACE_H
 
 #include <SDL/SDL.h>
-#include "default.h"
 #include "graph/collection.h"
 #include "view/drawer.h"
 #include "view/datatypes/rect.h"
@@ -12,10 +11,9 @@
 class VirtualSurface : public Drawer
 {
 public:
-    VirtualSurface(Default* theme) : m_Theme(theme) {}
+    VirtualSurface(Collection* config) : m_Properties(config) {}
     virtual ~VirtualSurface();
 
-    Theme* GetParentTheme() override { return m_Theme; }
     void Draw(bool forced) override;
     SDL_Rect GetContentSize() override;
 
@@ -30,7 +28,7 @@ public:
     void RemoveFrame() { m_ShowFrame = false; }
 
 protected:
-    virtual void DrawSurface() = 0;
+    virtual void DrawSurface() {}
 
     void InitBuffer();
     virtual void DrawFrame();
@@ -50,7 +48,6 @@ protected:
     const Rgb& GetFrameColor() const;
     const Rgb& GetBackgroundColor() const;
 
-    Default* m_Theme;
     Collection* m_Properties = nullptr;
     bool m_ShowFrame = true;
 
@@ -58,4 +55,4 @@ private:
     SDL_Surface* m_Buffer = nullptr;
 };
 
-#endif // HAND_VIEW_VIRTUALSURFACE_H
+#endif // HAND_THEME_SDL_BASE_VIRTUALSURFACE_H

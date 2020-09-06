@@ -57,11 +57,3 @@ void MasterLayer::Exit(HmiItem*)
     // Suicide
     delete this;
 }
-
-
-Layer* MasterLayer::AddField(Layer* sub, const std::string& field)
-{
-    Insert(sub);
-    SetSubSize(sub, GetLayout()->GetField(field));
-    return sub;
-}

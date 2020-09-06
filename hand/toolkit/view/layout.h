@@ -64,6 +64,20 @@ private:
 #define VIEW "View"
 
 
+class ButtonLayout : public Layout
+{
+public:
+    ButtonLayout();
+};
+
+
+class DataLayout : public Layout
+{
+public:
+    DataLayout();
+};
+
+
 class ViewLayout : public Layout
 {
 public:

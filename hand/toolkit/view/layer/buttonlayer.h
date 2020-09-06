@@ -5,18 +5,37 @@
 #include "view/layer/textlayer.h"
 
 
-class ButtonLayer : public Layer
+class DataLayer : public Layer
 {
 public:
-    ButtonLayer();
+    ~DataLayer() { Clear(); }
 
 protected:
     void Rebuild() override;
+    void Clear();
     Drawer* CreatetDrawer() override;
+    Layout* CreateLayout() override { return new DataLayout(); }
+
+    TextLayer* m_Name = nullptr;
+    TextLayer* m_DataText = nullptr;
+    TextLayer* m_Description = nullptr;
+};
+
+
+class ButtonLayer : public Layer
+{
+public:
+    ~ButtonLayer() { Clear(); }
+
+protected:
+    void Rebuild() override;
+    void Clear();
+    Drawer* CreatetDrawer() override;
+    Layout* CreateLayout() override { return new ButtonLayout(); }
 
     TextLayer* m_Name = nullptr;
     TextLayer* m_Description = nullptr;
-    TextLayer* m_Command = nullptr;
 };
+
 
 #endif // HAND_VIEW_LAYER_BUTTONLAYER_H

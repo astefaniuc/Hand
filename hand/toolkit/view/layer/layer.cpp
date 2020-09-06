@@ -41,6 +41,15 @@ void Layer::SetContent(HmiItem* data)
     // ReleaseContent
     m_Data = data;
     Changed = true;
+//    Rebuild();
+}
+
+
+Layer* Layer::AddField(Layer* sub, const std::string& field)
+{
+    Insert(sub);
+    SetSubSize(sub, GetLayout()->GetField(field));
+    return sub;
 }
 
 
