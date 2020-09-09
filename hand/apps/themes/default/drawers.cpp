@@ -8,7 +8,7 @@
 
 
 
-void TextDrawer::DrawSurface()
+void TextDrawer::Draw(bool)
 {
     const std::string& text = dynamic_cast<TextLayer*>(m_Layer)->GetData();
     if (text.empty())

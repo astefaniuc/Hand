@@ -16,7 +16,6 @@ void VirtualSurface::Draw(bool a_forced)
     InitBuffer();
     DrawBackground();
     DrawFrame();
-    DrawSurface();
     DrawChildren(a_forced);
 }
 
@@ -50,11 +49,9 @@ bool VirtualSurface::DrawChildren(bool a_forced)
         ret |= sublayer->Draw(a_forced);
 
         SDL_Rect srcRect = sublayer->GetSize();
-        SDL_Rect tgtPos = m_Layer->GetSize();
-
         VirtualSurface* src = GetDrawer(sublayer);
         if (src)
-            BlitSurface(src->GetBuffer(), &srcRect, GetBuffer(), &tgtPos);
+            BlitSurface(src->GetBuffer(), &srcRect, GetBuffer());
         // TODO: else
     }
     return ret;
@@ -141,8 +138,7 @@ SDL_Rect VirtualSurface::GetContentSize()
 }
 
 
-void VirtualSurface::BlitSurface(
-    SDL_Surface* source, SDL_Rect* src_pos, SDL_Surface* target, SDL_Rect* tgt_pos)
+void VirtualSurface::BlitSurface(SDL_Surface* source, SDL_Rect* src_pos, SDL_Surface* target)
 {
     if (source && target)
     {

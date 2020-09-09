@@ -12,7 +12,7 @@ public:
     TextDrawer(Default* theme, Collection* config) : VirtualSurface(config), m_Theme(theme) {}
 
 protected:
-    void DrawSurface() override;
+    void Draw(bool) override;
 
     SDL_Surface* RenderText(const std::string& text, int size, const Rgb& color) const;
     const Rgb& GetFontColor() const;
