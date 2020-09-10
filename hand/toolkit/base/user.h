@@ -19,6 +19,7 @@ public:
     bool LoadApp(Note* path);
     HmiItem* GetHmi() { return &m_View; }
     bool GetCommand(HmiItem* func, int level);
+    void Update();
 
 private:
     EventHandler* m_Input;

@@ -15,10 +15,10 @@ void MasterLayer::Rebuild()
 {
     Clear();
 
-    if (GetLayout()->ShowName())
+    if (GetLayout()->GetShowName())
         m_Title = AddField(new TextLayer(m_Data->GetName()), TITLE);
 
-    if (GetLayout()->ShowDescription())
+    if (GetLayout()->GetShowDescription())
         m_Description = AddField(new TextLayer(m_Data->GetDescription()), DESCRIPTION);
 
     Interface* in = dynamic_cast<Interface*>(m_Data);

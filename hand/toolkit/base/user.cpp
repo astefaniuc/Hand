@@ -1,4 +1,5 @@
 #include "user.h"
+#include "base/handserver.h"
 #include "input/device.h"
 #include "input/hand.h"
 #include "view/theme.h"
@@ -15,6 +16,9 @@ CUser::CUser(EventHandler* a_input)
       m_ViewStack("Views", ""),
       m_Menu("Menu", "System")
 {
+    m_View.GetLayer()->GetLayout()->SetShowName(false);
+    m_View.GetLayer()->GetLayout()->SetShowDescription(false);
+
     m_View.SetView(m_ViewStack.GetLayer());
     m_View.SetControls(&m_Menu);
 
@@ -25,14 +29,18 @@ CUser::CUser(EventHandler* a_input)
 
     // TODO: load settings
     m_View.GetLayer()->SetTheme(dynamic_cast<Theme*>(m_ThemeLoader->GetObject()));
+    m_View.GetLayer()->GetTheme()->InitScreen(m_View.GetLayer());
 
-    Hand* right = m_Input->CreateHand(Device::Keyboard);
+    Hand* right =  new Hand(m_Input->GetDevice(Device::Keyboard));
     if (!right->Init())
         // Show init screen
         m_ViewStack.Attach(right->GetHmi());
     // Add the exit function to the tree of available funcs
     // Request command at highest level
 //    GetCommand(m_Exit, _Device->GetNumberOfKeys());
+
+    m_Input->SetUser(this);
+    m_Input->Start();
 }
 
 
@@ -58,6 +66,13 @@ bool CUser::LoadApp(Note* a_path)
 
     delete app;
     return false;
+}
+
+
+void CUser::Update()
+{
+    m_View.GetLayer()->Update();
+    m_View.GetLayer()->GetTheme()->UpdateScreen();
 }
 
 

@@ -22,10 +22,10 @@ public:
     Rel_Rect GetField(const std::string& a_name) const;
     void SetField(const std::string& a_name, const Rel_Rect& coordinates);
 
-    bool ShowName() const { return m_ShowName->GetValue(); }
+    bool GetShowName() const { return m_ShowName->GetValue(); }
     void SetShowName(bool enabled) { m_ShowName->SetValue(enabled); }
 
-    bool ShowDescription() const { return m_ShowDescription->GetValue(); }
+    bool GetShowDescription() const { return m_ShowDescription->GetValue(); }
     void SetShowDescription(bool enabled) { m_ShowDescription->SetValue(enabled); }
 
 protected:

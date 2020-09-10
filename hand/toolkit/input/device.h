@@ -43,17 +43,4 @@ protected:
     Hand* m_Hand = nullptr;
 };
 
-
-class EventHandler
-{
-public:
-    ~EventHandler();
-
-    Hand* CreateHand(Device::Driver device);
-    void GetUserInput();
-
-private:
-    std::vector<Device*> m_Devices;
-};
-
 #endif // HAND_INPUT_DEVICE_H

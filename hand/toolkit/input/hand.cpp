@@ -111,6 +111,7 @@ void Hand::AddKey(int k)
     m_Device->GetKeyName(k, GetKey(index));
 }
 
+
 void Hand::DeleteKey(unsigned index)
 {
     // Adjust UI literals

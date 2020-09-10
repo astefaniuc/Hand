@@ -1,44 +1,43 @@
 #ifndef HAND_BASE_SERVER_H
 #define HAND_BASE_SERVER_H
 
-#include "graph/data.h"
-#include "graph/interface.h"
-#include "graph/collection.h"
+#include "input/device.h"
 #include <SDL/SDL.h>
-#include <string>
 #include <vector>
 
 
 class CUser;
-class EventHandler;
-class ModuleLib;
 
-
-class HandServer
+class EventHandler
 {
 public:
-    HandServer(const std::string& startApp);
-    ~HandServer();
+    virtual ~EventHandler() {}
 
-    // Initializes all subsystems:
-    CUser* CreateUser();
-    // Starts timer (infinite loop)
-    void Start();
+    // Store the event consumer.
+    virtual void SetUser(CUser*) = 0;
+    virtual Device* GetDevice(Device::Driver device) = 0;
 
-    // Called from C callback
+    virtual void Start() = 0;
+};
+
+
+class EventHandlerSDL : public EventHandler
+{
+public:
+    ~EventHandlerSDL();
+
+    void SetUser(CUser* consumer) override { m_User = consumer; }
+    /// Creates a new device.
+    Device* GetDevice(Device::Driver device) override;
+    /// Starts timer (infinite loop)
+    void Start() override;
+
+    /// Called from C callback
     void Pump();
 
 private:
-    // TODO: multiple screens e.g. touch screen device
-    EventHandler* m_Input;
-    ModuleLib* m_ThemeLoader;
-
-    std::vector<CUser*> m_Users;
-    Note* m_AppPath = nullptr;
-    // This is the entry point for the whole visualization tree.
-    Interface m_View;
-    Collection m_UserViews;
-    Collection m_Menu;
+    CUser* m_User = nullptr;
+    std::vector<Device*> m_Devices;
 
     // The queue for system device events
     SDL_TimerID Timer = nullptr;
