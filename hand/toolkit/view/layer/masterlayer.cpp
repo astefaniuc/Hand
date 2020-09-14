@@ -1,6 +1,4 @@
 #include "view/layer/masterlayer.h"
-#include "input/device.h"
-#include "input/inputstate.h"
 #include "graph/method.h"
 #include "view/theme.h"
 

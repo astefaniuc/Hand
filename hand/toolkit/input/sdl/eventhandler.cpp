@@ -1,34 +1,33 @@
-#include "handserver.h"
-#include "user.h"
-#include "input/device.h"
-#include "input/keyboard.h"
+#include "input/sdl/eventhandler.h"
+#include "base/user.h"
+#include "input/sdl/keyboard.h"
 #include <unistd.h>
 
 
-// C callback used in HandServer::Start()
-Uint32 CallServerPump(Uint32 i, void* a_handler)
+// C callback used in EventHandlerSdl::Start()
+Uint32 PumpCallback(Uint32 i, void* a_handler)
 {
-    reinterpret_cast<EventHandlerSDL*>(a_handler)->Pump();
+    reinterpret_cast<EventHandlerSdl*>(a_handler)->Pump();
     return i;
 }
 
 
 
-EventHandlerSDL::~EventHandlerSDL()
+EventHandlerSdl::~EventHandlerSdl()
 {
     for (Device* d : m_Devices)
         delete d;
 }
 
 
-void EventHandlerSDL::Start()
+void EventHandlerSdl::Start()
 {
     // Start only once
     if (Timer)
         return;
     // 25 pix per sec
     uint32_t interval = 1000/25;
-    Timer = SDL_AddTimer(interval, &CallServerPump, this);
+    Timer = SDL_AddTimer(interval, &PumpCallback, this);
     if (!Timer)
         exit(1);
     // Stop the main execution line
@@ -36,7 +35,7 @@ void EventHandlerSDL::Start()
 }
 
 
-void EventHandlerSDL::Pump()
+void EventHandlerSdl::Pump()
 {
     // Executed 25x per sec
     if (ExecNotFinished)
@@ -45,22 +44,23 @@ void EventHandlerSDL::Pump()
 
     SDL_Event event;
     while (SDL_PollEvent(&event))
-        for (Device* device : m_Devices)
+        for (DeviceSdl* device : m_Devices)
             if (device->Process(event))
                 break;
 
+    // Trigger screen refresh.
     m_User->Update();
     ExecNotFinished = false;
 }
 
 
-Device* EventHandlerSDL::GetDevice(Device::Driver a_deviceId)
+Device* EventHandlerSdl::GetDevice(Device::Driver a_deviceId)
 {
-    Device* device = nullptr;
+    DeviceSdl* device = nullptr;
     if (a_deviceId == Device::Keyboard)
     {
         // We have only one keyboard spawning multiple hands
-        for (Device* d : m_Devices)
+        for (DeviceSdl* d : m_Devices)
         {
             if (d->GetTypeId() == Device::Keyboard)
             {

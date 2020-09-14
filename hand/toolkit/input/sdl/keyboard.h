@@ -1,13 +1,13 @@
 #ifndef HAND_INPUT_KEYBOARD_H
 #define HAND_INPUT_KEYBOARD_H
 
-#include "input/device.h"
+#include "input/sdl/device.h"
 
 
-class Keyboard : public Device
+class Keyboard : public DeviceSdl
 {
 public:
-    Keyboard() : Device(Device::Keyboard) {}
+    Keyboard() : DeviceSdl(Device::Keyboard) {}
 
     HmiItem* GetHmi() override { return nullptr; }
     /// Keyboards may have multiple Hands per Device.

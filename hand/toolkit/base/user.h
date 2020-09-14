@@ -10,11 +10,11 @@ class Hand;
 class ModuleLib;
 
 /// Manages the items to be shown on screen and the input modes.
-class CUser : public Module
+class User : public Module
 {
 public:
-    CUser(EventHandler* input);
-    virtual ~CUser();
+    User(EventHandler* input);
+    virtual ~User();
 
     bool LoadApp(Note* path);
     HmiItem* GetHmi() { return &m_View; }

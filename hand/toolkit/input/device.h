@@ -1,8 +1,6 @@
 #ifndef HAND_INPUT_DEVICE_H
 #define HAND_INPUT_DEVICE_H
 
-#include <vector>
-#include <SDL/SDL.h>
 #include "base/module.h"
 #include "graph/data.h"
 
@@ -35,8 +33,6 @@ public:
 
     // Returns the Key symbol at specified position
     virtual void GetKeyName(int k, Note* a_out) = 0;
-
-    virtual bool Process(const SDL_Event& event) = 0;
 
 protected:
     Driver m_Type;

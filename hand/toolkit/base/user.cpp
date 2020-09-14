@@ -1,5 +1,5 @@
 #include "user.h"
-#include "base/handserver.h"
+#include "input/eventhandler.h"
 #include "input/device.h"
 #include "input/hand.h"
 #include "view/theme.h"
@@ -10,7 +10,7 @@
 #include "view/layer/layer.h"
 
 
-CUser::CUser(EventHandler* a_input)
+User::User(EventHandler* a_input)
     : m_Input(a_input),
       m_View("User", "User view"),
       m_ViewStack("Views", ""),
@@ -44,7 +44,7 @@ CUser::CUser(EventHandler* a_input)
 }
 
 
-CUser::~CUser()
+User::~User()
 {
     for (ModuleLib* app : m_RunningApps)
         delete app;
@@ -53,7 +53,7 @@ CUser::~CUser()
 }
 
 
-bool CUser::LoadApp(Note* a_path)
+bool User::LoadApp(Note* a_path)
 {
     ModuleLib* app = new ModuleLib();
     app->SetItem(a_path);
@@ -69,14 +69,14 @@ bool CUser::LoadApp(Note* a_path)
 }
 
 
-void CUser::Update()
+void User::Update()
 {
     m_View.GetLayer()->Update();
     m_View.GetLayer()->GetTheme()->UpdateScreen();
 }
 
 
-bool CUser::GetCommand(HmiItem* f, int level)
+bool User::GetCommand(HmiItem* f, int level)
 {
     if (f)
         // TODO: two hands

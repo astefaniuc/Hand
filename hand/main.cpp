@@ -1,4 +1,4 @@
-#include "base/handserver.h"
+#include "input/sdl/eventhandler.h"
 #include "base/user.h"
 #include <iostream>
 
@@ -9,7 +9,7 @@ int main(int argc, const char *argv[])
     if (argc == 2)
         app = argv[1];
 
-    CUser user(new EventHandlerSDL());
+    User user(new EventHandlerSdl());
     // Start the timer driven (callback) execution and stop
     // the current thread if not already done
     if (!app.empty())
