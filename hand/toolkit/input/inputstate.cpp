@@ -15,7 +15,7 @@ bool InputState::Press(unsigned k)
     PressedKey = ReleasedKey = ReleasedKey->GetChild(k);
     if (!PressedKey)
     {
-        reset();
+        Reset();
         return false;
     }
 
@@ -32,7 +32,7 @@ bool InputState::Release(unsigned k)
         ((ReleasedKey = ReleasedKey->GetParent(k)) == nullptr))
     {
         // Some events get lost, this command is corrupted
-        reset();
+        Reset();
         return false;
     }
 
@@ -44,13 +44,13 @@ bool InputState::Release(unsigned k)
         if (action)
             action->Activate();
 
-        reset();
+        Reset();
     }
     return true;
 }
 
 
-void InputState::reset(void)
+void InputState::Reset(void)
 {
     PressedKey = ReleasedKey = NullKey;
 }
@@ -98,7 +98,7 @@ StateNode::PeersList* InputState::GetCommands(unsigned level)
     // Search from bottom up
     StateNode* node = NullKey;
     for (unsigned i = 0; i < level; ++i)
-        node = node->GetChild(i);
+        node = node->GetFirstChild();
 
     return node->GetPeersList();
 }

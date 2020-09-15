@@ -49,9 +49,3 @@ void MasterLayer::Clear()
 
     m_Sublayers.clear();
 }
-
-void MasterLayer::Exit(HmiItem*)
-{
-    // Suicide
-    delete this;
-}

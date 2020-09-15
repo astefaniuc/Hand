@@ -58,7 +58,6 @@ private:
     Collection* m_KeysHmi;
     Device* m_Device;
     InputState* m_StateMachine = nullptr;
-    Interface* m_Hmi = nullptr;
 };
 
 #endif //HAND_INPUT_HAND_H

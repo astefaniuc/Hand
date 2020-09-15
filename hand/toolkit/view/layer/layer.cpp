@@ -4,16 +4,21 @@
 
  Layer::~Layer()
  {
-     Collapse();
-     delete m_Drawer;
-     delete m_Layout;
+    Collapse();
+    for (Layer* sub : m_Sublayers)
+        sub->SetParent(nullptr);
+
+    delete m_Drawer;
+    delete m_Layout;
 }
 
 
 void Layer::Exit(HmiItem*)
 {
-    // Check if the default location is currently active
-    m_Parent->Exit(nullptr);
+    if (m_Parent)
+        m_Parent->Remove(this);
+     delete m_Drawer;
+     m_Drawer = nullptr;
 }
 
 
@@ -132,4 +137,17 @@ void Layer::Insert(Layer* a_child)
 {
     m_Sublayers.push_back(a_child);
     a_child->SetParent(this);
+}
+
+
+void Layer::Remove(Layer* a_child)
+{
+    for (unsigned i = 0; i < m_Sublayers.size(); ++i)
+    {
+        if (m_Sublayers[i] == a_child)
+        {
+            m_Sublayers.erase(m_Sublayers.begin() + i);
+            return;
+        }
+    }
 }

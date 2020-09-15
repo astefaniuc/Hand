@@ -44,3 +44,13 @@ StateNode* StateNode::GetChild(unsigned pos)
 
     return nullptr;
 }
+
+
+StateNode* StateNode::GetFirstChild() const
+{
+    for (const Link& ret : m_Links)
+        if (!ret.IsParent && ret.Item)
+            return ret.Item;
+    // Never happens
+    return nullptr;
+}

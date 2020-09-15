@@ -22,8 +22,8 @@ public:
     // Stores information about released keys by moving down the ReleasedKey ptr
     bool Release(unsigned index);
     // Resets "pressed" and "released" information
-    void reset();
-    StateNode* GetKey(key_pointer);
+    void Reset();
+    StateNode* GetKey(key_pointer kind);
     StateNode::PeersList* GetCommands(unsigned level);
     // Maps a command node to the given list
     bool GetCommand(HmiItem* method, unsigned level);

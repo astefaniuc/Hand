@@ -6,20 +6,16 @@ StateNode* StateGraph::Create(unsigned a_numberOfKeys)
     m_NumberOfKeys = a_numberOfKeys;
     // Create the root/null key
     m_Root = new StateNode(m_NumberOfKeys, new StateNode::PeersList());
-    // Build the key tree on top
     for (unsigned i = 0; i < m_NumberOfKeys; ++i)
-        // Build the key tree bellow
         AddNodes(1, i);
 
     return m_Root;
 }
 
 
-void StateGraph::AddNodes(unsigned level, unsigned key_nr)
+void StateGraph::AddNodes(unsigned level, unsigned a_pos)
 {
-    // Previous level nodes
     StateNode::PeersList* parentNodes = GetPeersList(level-1);
-    // Current level nodes
     StateNode::PeersList* currentNodes = GetPeersList(level);
     if (!currentNodes)
         currentNodes = new StateNode::PeersList();
@@ -29,22 +25,20 @@ void StateGraph::AddNodes(unsigned level, unsigned key_nr)
     {
         StateNode* parent = (*parentNodes)[i];
         // Ignore nodes inserted for the current key
-        if (parent->GetParent(key_nr))
+        if (parent->GetParent(a_pos))
             continue;
 
-        // Appends also the new node to c_nodes
-        StateNode* new_node = new StateNode(m_NumberOfKeys, currentNodes);
-        // Connect new and old node at key number position
-        ConnectNodes(parent, new_node, key_nr);
+        StateNode* child = new StateNode(m_NumberOfKeys, currentNodes);
+        ConnectNodes(parent, child, a_pos);
         // The new node inherits from the old one the position of the parents
-        for (unsigned j = 0; j < key_nr; ++j)
+        for (unsigned j = 0; j < a_pos; ++j)
             if (parent->GetParent(j))
-                ConnectNodes(GetParentNode(level-1, j), new_node, j);
+                ConnectNodes(GetParentNode(level-1, j), child, j);
     }
 
-    if (key_nr == level)
+    if (a_pos >= level)
         // Next level
-        AddNodes(level + 1, key_nr);
+        AddNodes(level + 1, a_pos);
 }
 
 
@@ -53,7 +47,7 @@ StateNode* StateGraph::GetParentNode(unsigned level, unsigned pos)
 {
     StateNode::PeersList* peers = GetPeersList(level);
     for (StateNode* node : *peers)
-        if (!node->GetParent(pos))
+        if (!node->GetParent(pos) && !node->GetChild(pos))
             return node;
 
     return nullptr;
@@ -64,7 +58,7 @@ StateNode::PeersList* StateGraph::GetPeersList(unsigned level)
 {
     StateNode* node = m_Root;
     for (unsigned i = 0; i < level; ++i)
-        node = node->GetChild(i);
+        node = node->GetFirstChild();
 
     if (node)
         return node->GetPeersList();

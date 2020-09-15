@@ -2,6 +2,7 @@
 #include "input/device.h"
 #include "input/inputstate.h"
 #include "graph/interface.h"
+#include "view/layer/layer.h"
 
 
 Hand::Hand(Device* dev) : Module(), m_Device(dev)
@@ -13,7 +14,8 @@ Hand::Hand(Device* dev) : Module(), m_Device(dev)
     m_KeysHmi->Add(new Note("Middle finger", "", ""));
     m_KeysHmi->Add(new Note("Ring finger", "", ""));
     m_KeysHmi->Add(new Note("Little finger", "", ""));
-
+    ((ListLayout*)m_KeysHmi->GetLayer()->GetLayout())->SetAlignment(ListLayout::Horizontal);
+    m_KeysHmi->AddActivationClient(new CCallback<Layer>(m_KeysHmi->GetLayer(), &Layer::Exit));
     m_StateMachine = new InputState(m_NumberOfKeys);
 }
 
@@ -27,12 +29,8 @@ Hand::~Hand()
 
 HmiItem* Hand::GetHmi()
 {
-    if (!m_Hmi)
-    {
-        m_Hmi = new Interface("Input device", "Keyboard initialization");
-        m_Hmi->SetControls(m_KeysHmi);
-    }
-    return m_Hmi;
+    GetInputState()->GetCommand(m_KeysHmi, m_NumberOfKeys);
+    return m_KeysHmi;
 }
 
 
@@ -79,7 +77,7 @@ bool Hand::Release(int k)
     {
         // Device is during initialization
         DeleteKey(index);
-        m_StateMachine->reset();
+        m_StateMachine->Reset();
         for (unsigned i = 0; i < m_Keys.size(); ++i)
             m_StateMachine->Press(i);
         return true;

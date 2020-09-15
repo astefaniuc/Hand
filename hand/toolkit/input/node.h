@@ -13,18 +13,20 @@ public:
 
     StateNode(unsigned size, PeersList* peers);
 
-    // The action to be executed
+    /// The action to be executed
     void SetAction(HmiItem* action) { m_Action = action; }
     HmiItem* GetAction() { return m_Action; }
-    // Shortcut.
+    /// Shortcut.
     void ClearAction() { m_Action = nullptr; }
 
     void SetParent(StateNode* parent, unsigned pos);
-    // Returns the sub-node at given position if it's a parent
+    /// Returns the sub-node at given position if it's a parent
     StateNode* GetParent(unsigned pos);
     void SetChild(StateNode* child, unsigned pos);
-    // Returns the sub-node at given position if it's a child
+    /// Returns the sub-node at given position if it's a child
     StateNode* GetChild(unsigned pos);
+
+    StateNode* GetFirstChild() const;
 
     PeersList* GetPeersList() { return m_Peers; }
 

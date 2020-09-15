@@ -23,7 +23,6 @@ protected:
 //    void Keep(enum mode)
 
 private:
-    void Exit(HmiItem*);
     void Clear();
 
     Layer* m_Control = nullptr;

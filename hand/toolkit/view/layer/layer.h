@@ -1,10 +1,10 @@
 #ifndef HAND_VIEW_LAYER_LAYER_H
 #define HAND_VIEW_LAYER_LAYER_H
 
-#include <SDL/SDL.h> // TODO: remove SDL dependency here
-#include <vector>
 #include "view/drawer.h"
 #include "view/layout.h"
+#include <SDL/SDL.h> // TODO: remove SDL dependency here
+#include <vector>
 
 
 class Drawer;
@@ -49,11 +49,12 @@ public:
     /// Returns 'sub'.
     Layer* AddField(Layer* sub, const std::string& field);
 
+    virtual void Exit(HmiItem*);
+
 protected:
     void Insert(Layer* sub);
+    void Remove(Layer* sub);
     void SetSubSize(Layer* sub, const Rel_Rect& fieldSize);
-
-    virtual void Exit(HmiItem*);
 
     virtual Layout* CreateLayout() = 0;
     virtual Drawer* CreatetDrawer() = 0;
