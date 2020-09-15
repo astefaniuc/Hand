@@ -1,8 +1,8 @@
 #!/bin/bash
 
 base_dir="$(pwd)"
-
 build_type="Release"
+
 # Parse the script argument case insensitive.
 if [ "${1,,}" = "debug" ]; then
     build_type="Debug"
