@@ -3,6 +3,14 @@
 #include "view/theme.h"
 
 
+void DataLayer::SetContent(HmiItem* data)
+{
+    Layer::SetContent(data);
+    ((Data*)data)->AddDataChangedClient(
+        new CCallback<DataLayer>(this, &DataLayer::NotifyChanged));
+}
+
+
 void DataLayer::Rebuild()
 {
     Clear();

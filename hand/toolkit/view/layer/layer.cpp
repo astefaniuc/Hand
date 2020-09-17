@@ -1,5 +1,6 @@
 #include "view/layer/layer.h"
 #include "view/theme.h"
+#include <assert.h>
 
 
  Layer::~Layer()
@@ -47,7 +48,8 @@ void Layer::Draw(bool a_forced)
 
 void Layer::SetContent(HmiItem* data)
 {
-    // ReleaseContent
+    // Layer-Data is a lifelong 1:1 relation.
+    assert(!m_Data);
     m_Data = data;
     m_ChangedContent = true;
 }

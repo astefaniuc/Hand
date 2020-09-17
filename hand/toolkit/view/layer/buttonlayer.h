@@ -10,12 +10,17 @@ public:
     ~DataLayer() { Clear(); }
 
 protected:
+    void SetContent(HmiItem* data) override;
+
     void Rebuild() override;
     void UpdateSubSizes() override;
 
     void Clear();
     Drawer* CreatetDrawer() override;
     Layout* CreateLayout() override { return new DataLayout(); }
+
+    /// Callback.
+    void NotifyChanged(HmiItem*) { m_ChangedContent = true; }
 
     Layer* m_Name = nullptr;
     Layer* m_DataText = nullptr;

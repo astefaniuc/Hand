@@ -32,7 +32,7 @@ public:
     const std::vector<Layer*>& GetSubLayers() const { return m_Sublayers; }
 
     // Set pointer to a data tree node
-    void SetContent(HmiItem* data);
+    virtual void SetContent(HmiItem* data);
     HmiItem* GetContent() const { return m_Data; }
 
     Layout* GetLayout();
