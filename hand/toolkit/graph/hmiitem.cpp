@@ -5,12 +5,18 @@
 
 HmiItem::~HmiItem()
 {
+    for (ICallback* ic : m_SelectionChange)
+        delete ic;
+    for (ICallback* ic : m_Activation)
+        delete ic;
+
     if (m_Parent)
     {
         Collection* tmp = m_Parent;
         m_Parent = nullptr;
         tmp->Remove(this);
     }
+
     delete m_Visualization;
 }
 

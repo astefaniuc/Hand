@@ -2,6 +2,14 @@
 #include "view/layer/buttonlayer.h"
 
 
+Data::~Data()
+{
+    delete m_Manipulator;
+    for (ICallback* ic : m_DataChanged)
+        delete ic;
+}
+
+
 void Data::SetManipulator(Module* a_manipulator)
 {
     delete m_Manipulator;

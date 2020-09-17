@@ -30,7 +30,7 @@ public:
 //        if (m_Manipulator)
 //            AddActivationClient(m_Manipulator->GetHmi());
     }
-    ~Data() { delete m_Manipulator; }
+    ~Data();
 
     virtual std::string GetValueString() = 0;
 
