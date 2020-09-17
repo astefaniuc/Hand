@@ -21,7 +21,12 @@ void ListLayer::Rebuild()
     }
     else
         Insert(GetContent()->GetLayer());
+}
 
+
+void ListLayer::UpdateSubSizes()
+{
+    ListLayout* layout = dynamic_cast<ListLayout*>(GetLayout());
     ListLayout::Alignment align = layout->GetAlignment();
     if (align == ListLayout::Auto)
     {

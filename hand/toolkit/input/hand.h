@@ -33,7 +33,7 @@ public:
     Hand(Device* dev);
     ~Hand();
 
-    HmiItem* GetHmi() override;
+    Layer* GetHmi() override;
     // Sets the key map
     bool Init();
 

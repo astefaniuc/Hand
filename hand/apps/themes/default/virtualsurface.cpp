@@ -41,12 +41,11 @@ void VirtualSurface::InitBuffer()
 }
 
 
-bool VirtualSurface::DrawChildren(bool a_forced)
+void VirtualSurface::DrawChildren(bool a_forced)
 {
-    bool ret = false;
     for (Layer* sublayer : m_Layer->GetSubLayers())
     {
-        ret |= sublayer->Draw(a_forced);
+        sublayer->Draw(a_forced);
 
         SDL_Rect srcRect = sublayer->GetSize();
         VirtualSurface* src = GetDrawer(sublayer);
@@ -54,7 +53,6 @@ bool VirtualSurface::DrawChildren(bool a_forced)
             BlitSurface(src->GetBuffer(), &srcRect, GetBuffer());
         // TODO: else
     }
-    return ret;
 }
 
 

@@ -2,7 +2,6 @@
 #define HAND_VIEW_LAYER_BUTTONLAYER_H
 
 #include "view/layer/layer.h"
-#include "view/layer/textlayer.h"
 
 
 class DataLayer : public Layer
@@ -12,13 +11,15 @@ public:
 
 protected:
     void Rebuild() override;
+    void UpdateSubSizes() override;
+
     void Clear();
     Drawer* CreatetDrawer() override;
     Layout* CreateLayout() override { return new DataLayout(); }
 
-    TextLayer* m_Name = nullptr;
-    TextLayer* m_DataText = nullptr;
-    TextLayer* m_Description = nullptr;
+    Layer* m_Name = nullptr;
+    Layer* m_DataText = nullptr;
+    Layer* m_Description = nullptr;
 };
 
 
@@ -29,12 +30,14 @@ public:
 
 protected:
     void Rebuild() override;
+    void UpdateSubSizes() override;
+
     void Clear();
     Drawer* CreatetDrawer() override;
     Layout* CreateLayout() override { return new ButtonLayout(); }
 
-    TextLayer* m_Name = nullptr;
-    TextLayer* m_Description = nullptr;
+    Layer* m_Name = nullptr;
+    Layer* m_Description = nullptr;
 };
 
 

@@ -2,14 +2,14 @@
 #define HAND_BASE_HANDAPP_H
 
 
-class HmiItem;
+class Layer;
 
 class Module
 {
 public:
     virtual ~Module() = default;
 
-    virtual HmiItem* GetHmi() = 0;
+    virtual Layer* GetHmi() = 0;
 };
 
 #endif // HAND_BASE_HANDAPP_H

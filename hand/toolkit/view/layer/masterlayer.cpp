@@ -1,4 +1,5 @@
 #include "view/layer/masterlayer.h"
+#include "view/layer/textlayer.h"
 #include "graph/method.h"
 #include "view/theme.h"
 
@@ -14,20 +15,29 @@ void MasterLayer::Rebuild()
     Clear();
 
     if (GetLayout()->GetShowName())
-        m_Title = AddField(new TextLayer(m_Data->GetName()), TITLE);
+        m_Title = Insert(new TextLayer(m_Data->GetName()));
 
     if (GetLayout()->GetShowDescription())
-        m_Description = AddField(new TextLayer(m_Data->GetDescription()), DESCRIPTION);
+        m_Description = Insert(new TextLayer(m_Data->GetDescription()));
 
     Interface* in = dynamic_cast<Interface*>(m_Data);
 
     m_View = in->GetView();
     if (m_View)
-        AddField(m_View, VIEW);
+        Insert(m_View);
 
     HmiItem* controls = in->GetControls();
     if (controls)
-        m_Control = AddField(controls->GetLayer(), CONTROL);
+        m_Control = Insert(controls->GetLayer());
+}
+
+
+void MasterLayer::UpdateSubSizes()
+{
+    SetSubSize(m_Title, TITLE);
+    SetSubSize(m_Description, DESCRIPTION);
+    SetSubSize(m_View, VIEW);
+    SetSubSize(m_Control, CONTROL);
 }
 
 

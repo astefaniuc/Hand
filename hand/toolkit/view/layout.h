@@ -15,7 +15,7 @@ class Layout : public Module
 public:
     Layout();
 
-    HmiItem* GetHmi() override { return &m_Settings; }
+    Layer* GetHmi() override { return m_Settings.GetLayer(); }
 
     // Returns the size and position as values relative to the parent.
     // Values between 0.0 and 1.0.

@@ -16,6 +16,8 @@ public:
 
 protected:
     void Rebuild() override;
+    void UpdateSubSizes() override;
+
     Drawer* CreatetDrawer() override;
     Layout* CreateLayout() override { return new ViewLayout(); }
 

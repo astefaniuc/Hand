@@ -27,10 +27,10 @@ Hand::~Hand()
 }
 
 
-HmiItem* Hand::GetHmi()
+Layer* Hand::GetHmi()
 {
     GetInputState()->GetCommand(m_KeysHmi, m_NumberOfKeys);
-    return m_KeysHmi;
+    return m_KeysHmi->GetLayer();
 }
 
 

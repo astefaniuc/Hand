@@ -17,13 +17,17 @@ public:
     virtual ~Layer();
 
     // Checks and updates content and triggers a re-draw if needed
-    void Update();
-    bool Draw(bool forced);
+    bool Update();
+    void Draw(bool forced);
 
     // Methods to (re-)set links to external objects:
     void SetParent(Layer* parent) { m_Parent = parent; }
     // TODO: any use for this?
     Layer* GetParent() { return m_Parent; }
+
+    /// Returns 'sub'.
+    Layer* Insert(Layer* sub);
+    void Remove(Layer* sub);
 
     const std::vector<Layer*>& GetSubLayers() const { return m_Sublayers; }
 
@@ -47,18 +51,19 @@ public:
     const SDL_Rect& GetSize() { return m_Coordinates; }
 
     /// Returns 'sub'.
-    Layer* AddField(Layer* sub, const std::string& field);
+    void SetSubSize(Layer* sub, const std::string& field);
 
     virtual void Exit(HmiItem*);
 
 protected:
-    void Insert(Layer* sub);
-    void Remove(Layer* sub);
     void SetSubSize(Layer* sub, const Rel_Rect& fieldSize);
 
     virtual Layout* CreateLayout() = 0;
     virtual Drawer* CreatetDrawer() = 0;
+    /// Rebuild sub-layer structure on content or layout changes.
     virtual void Rebuild() = 0;
+    /// Update all sub-layers sizes.
+    virtual void UpdateSubSizes() = 0;
 
     Layer* m_Parent = nullptr;
     std::vector<Layer*> m_Sublayers;
@@ -73,7 +78,8 @@ protected:
     bool IsVisible = true;
     bool IsExpanded = false;
 
-    bool Changed = true;
+    bool m_ChangedContent = false;
+    bool m_IsChanged = false;
 
 private:
     Layout* m_Layout = nullptr;

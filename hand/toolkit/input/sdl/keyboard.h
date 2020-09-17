@@ -9,7 +9,7 @@ class Keyboard : public DeviceSdl
 public:
     Keyboard() : DeviceSdl(Device::Keyboard) {}
 
-    HmiItem* GetHmi() override { return nullptr; }
+    Layer* GetHmi() override { return nullptr; }
     /// Keyboards may have multiple Hands per Device.
     void SetUser(Hand* hand) override { m_Hands.push_back(hand); }
     /// Writes the name of the key at position 'k' in 'out'.

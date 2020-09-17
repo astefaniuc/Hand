@@ -19,7 +19,7 @@ public:
     Default();
     ~Default();
 
-    HmiItem* GetHmi() override { return &m_Hmi; }
+    Layer* GetHmi() override { return m_Hmi.GetLayer(); }
 
     void InitScreen(Layer* root) override;
     void UpdateScreen() override;

@@ -15,6 +15,8 @@ public:
 
 protected:
     void Rebuild() override {} // TODO
+    void UpdateSubSizes() override {}
+
     Drawer* CreatetDrawer() override;
     Layout* CreateLayout() override { return nullptr; } // TODO?
 

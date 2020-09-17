@@ -7,17 +7,17 @@
 
 class EventHandler;
 class Hand;
+class ListLayer;
 class ModuleLib;
 
 /// Manages the items to be shown on screen and the input modes.
-class User : public Module
+class User
 {
 public:
     User(EventHandler* input);
     virtual ~User();
 
     bool LoadApp(Note* path);
-    HmiItem* GetHmi() { return &m_View; }
     bool GetCommand(HmiItem* func, int level);
     void Update();
 
@@ -28,7 +28,7 @@ private:
     std::vector<Hand*> m_Hands;
     std::vector<ModuleLib*> m_RunningApps;
     Interface m_View;
-    Collection m_ViewStack;
+    ListLayer* m_ViewStack;
     Collection m_Menu;
 };
 

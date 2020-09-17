@@ -31,7 +31,7 @@ protected:
     void InitBuffer();
     virtual void DrawFrame();
     virtual void DrawBackground();
-    bool DrawChildren(bool forced);
+    void DrawChildren(bool forced);
 
     // Drawing interface
     void FillRect(SDL_Rect r, const Rgb& color);

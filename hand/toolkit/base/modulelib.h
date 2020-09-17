@@ -16,7 +16,7 @@ public:
 
     bool IsValid(const std::string&) override;
 
-    HmiItem* GetHmi() override;
+    Layer* GetHmi() override;
 
     bool Load();
     void Close();

@@ -8,6 +8,8 @@ class ListLayer : public Layer
 {
 protected:
     void Rebuild() override;
+    void UpdateSubSizes() override;
+
     Drawer* CreatetDrawer() override;
     Layout* CreateLayout() override { return new ListLayout(); }
 

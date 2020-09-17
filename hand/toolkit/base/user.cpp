@@ -1,5 +1,6 @@
 #include "user.h"
 #include "input/eventhandler.h"
+#include "view/layer/listlayer.h"
 #include "input/device.h"
 #include "input/hand.h"
 #include "view/theme.h"
@@ -13,13 +14,13 @@
 User::User(EventHandler* a_input)
     : m_Input(a_input),
       m_View("User", "User view"),
-      m_ViewStack("Views", ""),
+      m_ViewStack(new ListLayer()),
       m_Menu("Menu", "System")
 {
     m_View.GetLayer()->GetLayout()->SetShowName(false);
     m_View.GetLayer()->GetLayout()->SetShowDescription(false);
 
-    m_View.SetView(m_ViewStack.GetLayer());
+    m_View.SetView(m_ViewStack);
     m_View.SetControls(&m_Menu);
 
     m_ThemeLoader = new ModuleLib();
@@ -34,7 +35,7 @@ User::User(EventHandler* a_input)
     Hand* right =  new Hand(m_Input->GetDevice(Device::Keyboard));
     if (!right->Init())
         // Show init screen
-        m_ViewStack.Attach(right->GetHmi());
+        m_ViewStack->Insert(right->GetHmi());
     // Add the exit function to the tree of available funcs
     // Request command at highest level
 //    GetCommand(m_Exit, _Device->GetNumberOfKeys());
@@ -50,6 +51,7 @@ User::~User()
         delete app;
     for (Hand* h : m_Hands)
         delete h;
+    delete m_ViewStack;
 }
 
 
@@ -60,7 +62,7 @@ bool User::LoadApp(Note* a_path)
     if (app->Load())
     {
         m_RunningApps.push_back(app);
-        m_ViewStack.Attach(app->GetHmi());
+        m_ViewStack->Insert(app->GetHmi());
         return true;
     }
 

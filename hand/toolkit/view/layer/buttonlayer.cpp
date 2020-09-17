@@ -1,24 +1,24 @@
 #include "view/layer/buttonlayer.h"
 #include "view/layer/textlayer.h"
 #include "view/theme.h"
-#include "graph/method.h"
 
 
 void DataLayer::Rebuild()
 {
     Clear();
 
-    m_Name = new TextLayer();
-    AddField(m_Name, TITLE);
-    m_Description = new TextLayer();
-    AddField(m_Description, DESCRIPTION);
-    m_DataText = new TextLayer();
-    AddField(m_DataText, VIEW);
-
-    m_Name->SetData(m_Data->GetName() + ":");
-    m_Description->SetData(m_Data->GetDescription());
-    m_DataText->SetData(dynamic_cast<Data*>(m_Data)->GetValueString());
+    m_Name = Insert(new TextLayer(m_Data->GetName() + ":"));
+    m_Description = Insert(new TextLayer(m_Data->GetDescription()));
+    m_DataText = Insert(new TextLayer(dynamic_cast<Data*>(m_Data)->GetValueString()));
     // TODO: m_Command
+}
+
+
+void DataLayer::UpdateSubSizes()
+{
+    SetSubSize(m_Name, TITLE);
+    SetSubSize(m_Description, DESCRIPTION);
+    SetSubSize(m_DataText, VIEW);
 }
 
 
@@ -46,16 +46,16 @@ void ButtonLayer::Rebuild()
 {
     Clear();
 
-    m_Name = new TextLayer();
-    AddField(m_Name, TITLE);
-    m_Description = new TextLayer();
-    AddField(m_Description, DESCRIPTION);
-    // TODO: external layer
-    // AddField(m_Control, CONTROL);
-
-    m_Name->SetData(m_Data->GetName());
-    m_Description->SetData(m_Data->GetDescription());
+    m_Name = Insert(new TextLayer(m_Data->GetName()));
+    m_Description = Insert(new TextLayer(m_Data->GetDescription()));
     // TODO: m_Control
+}
+
+
+void ButtonLayer::UpdateSubSizes()
+{
+    SetSubSize(m_Name, TITLE);
+    SetSubSize(m_Description, DESCRIPTION);
 }
 
 
