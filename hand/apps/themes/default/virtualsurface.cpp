@@ -1,32 +1,33 @@
 #include "virtualsurface.h"
 #include "view/layer/layer.h"
 #include "defines.h"
+#include "default.h"
 #include <SDL/SDL_ttf.h>
 
 
-VirtualSurface::~VirtualSurface()
+DrawerSdl::~DrawerSdl()
 {
     // TODO: Don't delete screen
     SDL_FreeSurface(m_Buffer);
 }
 
 
-void VirtualSurface::Draw(bool a_forced)
+void DrawerSdl::Draw(bool a_forced)
 {
     InitBuffer();
     DrawBackground();
     DrawFrame();
-    DrawChildren(a_forced);
+    m_Layer->DrawChildren(a_forced);
 }
 
 
-VirtualSurface* VirtualSurface::GetDrawer(Layer* a_from)
+DrawerSdl* DrawerSdl::GetDrawer(Layer* a_from)
 {
-    return dynamic_cast<VirtualSurface*>(a_from->GetDrawer());
+    return static_cast<DrawerSdl*>(a_from->GetDrawer());
 }
 
 
-void VirtualSurface::InitBuffer()
+void DrawerSdl::InitBuffer()
 {
     const SDL_Rect& size = m_Layer->GetSize();
     if (m_Buffer && (m_Buffer->w == size.w) && (m_Buffer->h == size.h))
@@ -41,34 +42,31 @@ void VirtualSurface::InitBuffer()
 }
 
 
-void VirtualSurface::DrawChildren(bool a_forced)
+void DrawerSdl::DrawChild(Layer* child, bool a_forced)
 {
-    for (Layer* sublayer : m_Layer->GetSubLayers())
-    {
-        sublayer->Draw(a_forced);
+    child->Draw(a_forced);
 
-        SDL_Rect srcRect = sublayer->GetSize();
-        VirtualSurface* src = GetDrawer(sublayer);
-        if (src)
-            BlitSurface(src->GetBuffer(), &srcRect, GetBuffer());
-        // TODO: else
-    }
+    SDL_Rect srcRect = child->GetSize();
+    DrawerSdl* src = GetDrawer(child);
+    if (src)
+        BlitSurface(src->GetBuffer(), &srcRect, GetBuffer());
+    // TODO: else
 }
 
 
-void VirtualSurface::DrawBackground()
+void DrawerSdl::DrawBackground()
 {
-    FillRect(GetContentSize(), GetBackgroundColor());
+    FillRect(m_Layer->GetContentSize(), GetBackgroundColor());
 }
 
 
-void VirtualSurface::DrawFrame()
+void DrawerSdl::DrawFrame()
 {
     if (!GetDrawFrame())
         return;
 
     SDL_Rect total = m_Layer->GetSize();
-    SDL_Rect content = GetContentSize();
+    SDL_Rect content = m_Layer->GetContentSize();
     // Line width
     int16_t width = (total.w > total.h ? total.w - content.w : total.h - content.h) * 0.1;
     const Rgb& color = GetFrameColor();
@@ -104,7 +102,7 @@ void VirtualSurface::DrawFrame()
 }
 
 
-bool VirtualSurface::GetDrawFrame() const
+bool DrawerSdl::GetDrawFrame() const
 {
     TData<bool>* data = dynamic_cast<TData<bool>*>(m_Properties->GetChild(DRAWFRAME));
     if (data)
@@ -112,31 +110,46 @@ bool VirtualSurface::GetDrawFrame() const
     return true;
 }
 
-const Rel_Rect& VirtualSurface::GetFrameSize() const
+const Rel_Rect& DrawerSdl::GetFrameSize() const
 {
     return ((Rect*)(m_Properties->GetChild(FRAMESIZE)))->GetValue();
 }
 
-const Rgb& VirtualSurface::GetFrameColor() const
+const Rgb& DrawerSdl::GetFrameColor() const
 {
     return *((Rgb*)m_Properties->GetChild(FRAMECOLOR));
 }
 
-const Rgb& VirtualSurface::GetBackgroundColor() const
+const Rgb& DrawerSdl::GetBackgroundColor() const
 {
     return *((Rgb*)m_Properties->GetChild(BACKGROUNDCOLOR));
 }
 
 
-SDL_Rect VirtualSurface::GetContentSize()
+SDL_Rect DrawerSdl::CalculateSize(const SDL_Rect& offset)
 {
-    if (!m_ShowFrame)
-        return m_Layer->GetSize();
-    return Multiply(GetFrameSize(), m_Layer->GetSize());
+    return m_Layer->GetLayoutSize(offset);
 }
 
 
-void VirtualSurface::BlitSurface(SDL_Surface* source, SDL_Rect* src_pos, SDL_Surface* target)
+SDL_Rect DrawerSdl::GetFrameOffset()
+{
+    if (!m_ShowFrame)
+        return { 0, 0, 0, 0 };
+
+    SDL_Rect ret;
+    const Rel_Rect& frame = GetFrameSize();
+    unsigned base = m_Theme->GetBaseSize();
+
+    ret.w = base * frame.w;
+    ret.h = base * frame.h;
+    ret.x = ret.w * frame.x;
+    ret.y = ret.h * frame.y;
+
+    return ret;
+}
+
+void DrawerSdl::BlitSurface(SDL_Surface* source, SDL_Rect* src_pos, SDL_Surface* target)
 {
     if (source && target)
     {
@@ -146,14 +159,14 @@ void VirtualSurface::BlitSurface(SDL_Surface* source, SDL_Rect* src_pos, SDL_Sur
 }
 
 
-void VirtualSurface::FillRect(SDL_Rect r, const Rgb& c)
+void DrawerSdl::FillRect(SDL_Rect r, const Rgb& c)
 {
     SDL_SetClipRect(m_Buffer, &r);
     SDL_FillRect(m_Buffer, &r, SDL_MapRGB(m_Buffer->format, c.m_r, c.m_g, c.m_b));
 }
 
 
-void VirtualSurface::PlaceCentered(SDL_Surface* a_src, SDL_Rect& a_tgt)
+void DrawerSdl::PlaceCentered(SDL_Surface* a_src, SDL_Rect& a_tgt)
 {
     a_tgt.x += (a_tgt.w - a_src->w) / 2;
     a_tgt.y += (a_tgt.h - a_src->h) / 2;
@@ -162,7 +175,7 @@ void VirtualSurface::PlaceCentered(SDL_Surface* a_src, SDL_Rect& a_tgt)
 }
 
 
-void VirtualSurface::SetBuffer(SDL_Surface* buffer)
+void DrawerSdl::SetBuffer(SDL_Surface* buffer)
 {
     SDL_FreeSurface(m_Buffer);
     m_Buffer = buffer;

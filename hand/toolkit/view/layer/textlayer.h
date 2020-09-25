@@ -14,11 +14,15 @@ public:
     const std::string& GetData() { return m_Text; }
 
 protected:
-    void Rebuild() override {} // TODO
-    void UpdateSubSizes() override {}
-
     Drawer* CreatetDrawer() override;
-    Layout* CreateLayout() override { return nullptr; } // TODO?
+
+    // Terminal layer. TODO: remove all this from base class.
+    void Rebuild() override {}
+    void UpdateSubContent() override {}
+    void Remove(Layer*) override {}
+    Layout::Node* CreateLayout() override { return nullptr; }
+    SDL_Rect GetLayoutSize(const SDL_Rect&) override { return {1,2,3,4}; }
+    void DrawChildren(bool forced) override {}
 
 private:
     std::string m_Text;

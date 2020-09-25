@@ -5,10 +5,6 @@
 
  Layer::~Layer()
  {
-    Collapse();
-    for (Layer* sub : m_Sublayers)
-        sub->SetParent(nullptr);
-
     delete m_Drawer;
     delete m_Layout;
 }
@@ -28,10 +24,7 @@ bool Layer::Update()
     if (m_ChangedContent)
         Rebuild();
 
-    UpdateSubSizes();
-    for (Layer* sub : m_Sublayers)
-        m_IsChanged |= sub->Update();
-
+    UpdateSubContent();
     return m_IsChanged;
 }
 
@@ -65,25 +58,7 @@ void Layer::SetSize(const SDL_Rect& a_size)
 }
 
 
-void Layer::SetSubSize(Layer* sub, const std::string& field)
-{
-    if (sub)
-        SetSubSize(sub, GetLayout()->GetField(field));
-}
-
-
-void Layer::SetSubSize(Layer* sub, const Rel_Rect& fieldSize)
-{
-    // Add the parent positioning, the returned rect is relative to the current rect
-    SDL_Rect parent = GetDrawer()->GetContentSize();
-    SDL_Rect child = Multiply(fieldSize, parent);
-    child.x += parent.x;
-    child.y += parent.y;
-    sub->SetSize(child);
-}
-
-
-Layout* Layer::GetLayout()
+Layout::Node* Layer::GetLayout()
 {
     if (!m_Layout)
         m_Layout = CreateLayout();
@@ -91,7 +66,7 @@ Layout* Layer::GetLayout()
 }
 
 
-void Layer::SetLayout(Layout* a_layout)
+void Layer::SetLayout(Layout::Node* a_layout)
 {
     delete m_Layout;
     m_Layout = a_layout;
@@ -139,24 +114,79 @@ void Layer::Collapse()
 }
 
 
-Layer* Layer::Insert(Layer* a_child)
+SDL_Rect Layer::GetFramedSize(SDL_Rect& content, const SDL_Rect& offset)
 {
-    m_Sublayers.push_back(a_child);
-    a_child->SetParent(this);
-    m_IsChanged = true;
-    return a_child;
+    SDL_Rect total = content;
+    total.w += offset.w;
+    total.h += offset.h;
+    content.x += offset.x;
+    content.y += offset.y;
+    return total;
+}
+
+SDL_Rect Layer::UpdateSize(const SDL_Rect& offset)
+{
+    SDL_Rect content = GetDrawer()->CalculateSize(offset);
+    SDL_Rect total = GetFramedSize(content, GetDrawer()->GetFrameOffset());
+
+    total.x += offset.x;
+    total.y += offset.y;
+    SetContentSize(content);
+    SetSize(total);
+
+    return total;
 }
 
 
-void Layer::Remove(Layer* a_child)
+
+LayerMap::~LayerMap()
 {
-    for (unsigned i = 0; i < m_Sublayers.size(); ++i)
+    for (auto entry : m_Sublayers)
+        entry.second->SetParent(nullptr);
+}
+
+
+void LayerMap::DrawChildren(bool forced)
+{
+    for (auto entry : m_Sublayers)
+        GetDrawer()->DrawChild(entry.second, forced);
+}
+
+
+Layer* LayerMap::Insert(const std::string& field, Layer* child)
+{
+    m_Sublayers[field] = child;
+    child->SetParent(this);
+    m_IsChanged = true;
+    return child;
+}
+
+
+void LayerMap::Remove(Layer* child)
+{
+    for (auto it = m_Sublayers.begin(); it != m_Sublayers.end(); ++it)
     {
-        if (m_Sublayers[i] == a_child)
+        if (it->second == child)
         {
-            m_Sublayers.erase(m_Sublayers.begin() + i);
+            m_Sublayers.erase(it);
             m_IsChanged = true;
             return;
         }
     }
+}
+
+
+Layer* LayerMap::GetField(const std::string& name)
+{
+    auto it = m_Sublayers.find(name);
+    if (it != m_Sublayers.end())
+        return it->second;
+    return nullptr;
+}
+
+
+void LayerMap::UpdateSubContent()
+{
+    for (auto sub : m_Sublayers)
+        m_IsChanged |= sub.second->Update();
 }

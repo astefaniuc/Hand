@@ -18,6 +18,7 @@
 #define FOCUS            "Focus"
 #define FONT             "Font"
 #define FONTCOLOR        "Font color"
+#define FONTSIZE         "Font size"
 #define FRAMECOLOR       "Frame color"
 #define FRAMEDLIST       "Framed list"
 #define FRAMESIZE        "Frame size"

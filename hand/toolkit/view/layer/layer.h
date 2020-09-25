@@ -4,7 +4,7 @@
 #include "view/drawer.h"
 #include "view/layout.h"
 #include <SDL/SDL.h> // TODO: remove SDL dependency here
-#include <vector>
+#include <map>
 
 
 class Drawer;
@@ -19,24 +19,21 @@ public:
     // Checks and updates content and triggers a re-draw if needed
     bool Update();
     void Draw(bool forced);
+    virtual void DrawChildren(bool forced) = 0;
 
     // Methods to (re-)set links to external objects:
     void SetParent(Layer* parent) { m_Parent = parent; }
     // TODO: any use for this?
     Layer* GetParent() { return m_Parent; }
 
-    /// Returns 'sub'.
-    Layer* Insert(Layer* sub);
-    void Remove(Layer* sub);
-
-    const std::vector<Layer*>& GetSubLayers() const { return m_Sublayers; }
+    virtual void Remove(Layer* sub) = 0;
 
     // Set pointer to a data tree node
     virtual void SetContent(HmiItem* data);
     HmiItem* GetContent() const { return m_Data; }
 
-    Layout* GetLayout();
-    void SetLayout(Layout* layout);
+    Layout::Node* GetLayout();
+    void SetLayout(Layout::Node* layout);
 
     void SetTheme(Theme* theme);
     Theme* GetTheme();
@@ -50,28 +47,31 @@ public:
     void SetSize(const SDL_Rect& size);
     const SDL_Rect& GetSize() { return m_Coordinates; }
 
-    /// Returns 'sub'.
-    void SetSubSize(Layer* sub, const std::string& field);
+    void SetContentSize(const SDL_Rect& size) { m_ContentSize = size; }
+    const SDL_Rect& GetContentSize() { return m_ContentSize; }
+
+    SDL_Rect UpdateSize(const SDL_Rect& offset);
+    virtual SDL_Rect GetLayoutSize(const SDL_Rect& offset) = 0;
 
     virtual void Exit(HmiItem*);
 
 protected:
-    void SetSubSize(Layer* sub, const Rel_Rect& fieldSize);
+    SDL_Rect GetFramedSize(SDL_Rect& content, const SDL_Rect& offset);
 
-    virtual Layout* CreateLayout() = 0;
+    virtual Layout::Node* CreateLayout() = 0;
     virtual Drawer* CreatetDrawer() = 0;
     /// Rebuild sub-layer structure on content or layout changes.
     virtual void Rebuild() = 0;
     /// Update all sub-layers sizes.
-    virtual void UpdateSubSizes() = 0;
+    virtual void UpdateSubContent() = 0;
 
     Layer* m_Parent = nullptr;
-    std::vector<Layer*> m_Sublayers;
-
     Theme* m_Theme = nullptr;
     Drawer* m_Drawer = nullptr;
 
+    /// Total size plus position.
     SDL_Rect m_Coordinates = { 0, 0, 0, 0 };
+    SDL_Rect m_ContentSize = { 0, 0, 0, 0 };
 
     HmiItem* m_Data = nullptr;
 
@@ -82,7 +82,32 @@ protected:
     bool m_IsChanged = false;
 
 private:
-    Layout* m_Layout = nullptr;
+    Layout::Node* m_Layout = nullptr;
 };
+
+
+class LayerMap : public Layer
+{
+public:
+    ~LayerMap();
+
+    void DrawChildren(bool forced) override;
+    /// Returns 'sub'.
+    Layer* Insert(const std::string& field, Layer* sub);
+    void Remove(Layer* sub) override;
+
+    SDL_Rect GetLayoutSize(const SDL_Rect& offset) override {
+        return GetMap()->GetFieldSize(this, GetDrawer()->GetFrameOffset());
+    }
+
+    Layout::MapNode* GetMap() { return static_cast<Layout::MapNode*>(GetLayout()); }
+    Layer* GetField(const std::string& name);
+
+    void UpdateSubContent() override;
+
+protected:
+    std::map<std::string, Layer*> m_Sublayers;
+};
+
 
 #endif // HAND_VIEW_LAYER_LAYER_H

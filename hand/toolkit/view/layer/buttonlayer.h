@@ -4,7 +4,7 @@
 #include "view/layer/layer.h"
 
 
-class DataLayer : public Layer
+class DataLayer : public LayerMap
 {
 public:
     ~DataLayer() { Clear(); }
@@ -13,11 +13,10 @@ protected:
     void SetContent(HmiItem* data) override;
 
     void Rebuild() override;
-    void UpdateSubSizes() override;
 
     void Clear();
     Drawer* CreatetDrawer() override;
-    Layout* CreateLayout() override { return new DataLayout(); }
+    Layout::Node* CreateLayout() override { return Layout::CreateData(); }
 
     /// Callback.
     void NotifyChanged(HmiItem*) { m_ChangedContent = true; }
@@ -28,18 +27,17 @@ protected:
 };
 
 
-class ButtonLayer : public Layer
+class ButtonLayer : public LayerMap
 {
 public:
     ~ButtonLayer() { Clear(); }
 
 protected:
     void Rebuild() override;
-    void UpdateSubSizes() override;
 
     void Clear();
     Drawer* CreatetDrawer() override;
-    Layout* CreateLayout() override { return new ButtonLayout(); }
+    Layout::Node* CreateLayout() override { return Layout::CreateButton(); }
 
     Layer* m_Name = nullptr;
     Layer* m_Description = nullptr;

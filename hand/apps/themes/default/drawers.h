@@ -4,19 +4,18 @@
 #include "virtualsurface.h"
 
 
-class Default;
-
-class TextDrawer : public VirtualSurface
+class TextDrawer : public DrawerSdl
 {
 public:
-    TextDrawer(Default* theme, Collection* config) : VirtualSurface(config), m_Theme(theme) {}
+    TextDrawer(Default* theme, Collection* config) : DrawerSdl(theme, config) {}
+    SDL_Rect CalculateSize(const SDL_Rect& offset) override;
 
-protected:
     void Draw(bool) override;
 
+protected:
     SDL_Surface* RenderText(const std::string& text, int size, const Rgb& color) const;
     const Rgb& GetFontColor() const;
-    Default* m_Theme;
+    unsigned GetFontSize() const;
 };
 
 #endif // HAND_THEMES_BASIC_DRAWERS_H

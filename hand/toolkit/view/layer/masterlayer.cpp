@@ -14,30 +14,21 @@ void MasterLayer::Rebuild()
 {
     Clear();
 
-    if (GetLayout()->GetShowName())
-        m_Title = Insert(new TextLayer(m_Data->GetName()));
+    if (GetLayout()->GetField(TITLE)->IsVisible())
+        m_Title = Insert(TITLE, new TextLayer(m_Data->GetName()));
 
-    if (GetLayout()->GetShowDescription())
-        m_Description = Insert(new TextLayer(m_Data->GetDescription()));
+    if (GetLayout()->GetField(DESCRIPTION)->IsVisible())
+        m_Description = Insert(DESCRIPTION, new TextLayer(m_Data->GetDescription()));
 
-    Interface* in = dynamic_cast<Interface*>(m_Data);
+    Interface* in = static_cast<Interface*>(m_Data);
 
     m_View = in->GetView();
     if (m_View)
-        Insert(m_View);
+        Insert(VIEW, m_View);
 
     HmiItem* controls = in->GetControls();
     if (controls)
-        m_Control = Insert(controls->GetLayer());
-}
-
-
-void MasterLayer::UpdateSubSizes()
-{
-    SetSubSize(m_Title, TITLE);
-    SetSubSize(m_Description, DESCRIPTION);
-    SetSubSize(m_View, VIEW);
-    SetSubSize(m_Control, CONTROL);
+        m_Control = Insert(CONTROL, controls->GetLayer());
 }
 
 

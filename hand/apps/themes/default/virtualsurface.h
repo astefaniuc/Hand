@@ -8,21 +8,27 @@
 #include "view/datatypes/rgb.h"
 
 
-class VirtualSurface : public Drawer
+class Default;
+
+class DrawerSdl : public Drawer
 {
 public:
-    VirtualSurface(Collection* config) : m_Properties(config) {}
-    virtual ~VirtualSurface();
+    DrawerSdl(Default* theme, Collection* config) : m_Theme(theme), m_Properties(config) {}
+    virtual ~DrawerSdl();
 
     void Draw(bool forced) override;
-    SDL_Rect GetContentSize() override;
+    void DrawChild(Layer* child, bool forced) override;
+
+    SDL_Rect CalculateSize(const SDL_Rect& offset) override;
+    SDL_Rect GetFrameOffset() override;
 
     void SetProperties(Collection* config) { m_Properties = config; }
 
     SDL_Surface* GetBuffer() const { return m_Buffer; }
     virtual void SetBuffer(SDL_Surface* buffer);
 
-    static VirtualSurface* GetDrawer(Layer* from);
+    static DrawerSdl* GetDrawer(Layer* from);
+    static void BlitSurface(SDL_Surface* source, SDL_Rect* source_pos, SDL_Surface* target);
 
     /// Removes the visual frame and its allocated spacing, content is extended.
     void RemoveFrame() { m_ShowFrame = false; }
@@ -31,11 +37,9 @@ protected:
     void InitBuffer();
     virtual void DrawFrame();
     virtual void DrawBackground();
-    void DrawChildren(bool forced);
 
     // Drawing interface
     void FillRect(SDL_Rect r, const Rgb& color);
-    void BlitSurface(SDL_Surface* source, SDL_Rect* source_pos, SDL_Surface* target);
     /// Changes x and y of source
     void PlaceCentered(SDL_Surface* source, SDL_Rect& target);
 
@@ -44,7 +48,8 @@ protected:
     const Rgb& GetFrameColor() const;
     const Rgb& GetBackgroundColor() const;
 
-    Collection* m_Properties = nullptr;
+    Default* m_Theme;
+    Collection* m_Properties;
     bool m_ShowFrame = true;
 
 private:

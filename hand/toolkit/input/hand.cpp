@@ -14,7 +14,7 @@ Hand::Hand(Device* dev) : Module(), m_Device(dev)
     m_KeysHmi->Add(new Note("Middle finger", "", ""));
     m_KeysHmi->Add(new Note("Ring finger", "", ""));
     m_KeysHmi->Add(new Note("Little finger", "", ""));
-    ((ListLayout*)m_KeysHmi->GetLayer()->GetLayout())->SetAlignment(ListLayout::Horizontal);
+    ((Layout::List*)m_KeysHmi->GetLayer()->GetLayout())->SetOrientation(Layout::Horizontal);
     m_KeysHmi->AddActivationClient(new CCallback<Layer>(m_KeysHmi->GetLayer(), &Layer::Exit));
     m_StateMachine = new InputState(m_NumberOfKeys);
 }
@@ -98,7 +98,7 @@ int Hand::GetKeyIndex(int k)
 
 Note* Hand::GetKey(unsigned pos)
 {
-    return dynamic_cast<Note*>(m_KeysHmi->GetChild(pos));
+    return static_cast<Note*>(m_KeysHmi->GetChild(pos));
 }
 
 

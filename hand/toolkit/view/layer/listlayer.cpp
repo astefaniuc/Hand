@@ -3,17 +3,30 @@
 #include "view/theme.h"
 
 
+ListLayer::~ListLayer()
+{
+    for (Layer* sub : m_Sublayers)
+        sub->SetParent(nullptr);
+}
+
+
+void ListLayer::DrawChildren(bool forced)
+{
+    for (Layer* sub : GetSubLayers())
+        GetDrawer()->DrawChild(sub, forced);
+}
+
+
 void ListLayer::Rebuild()
 {
     m_Sublayers.clear();
 
-    ListLayout* layout = dynamic_cast<ListLayout*>(GetLayout());
     Collection* listData = dynamic_cast<Collection*>(GetContent());
     if (listData)
     {
         unsigned count = listData->Size() - m_StartPosition;
-        if (layout->GetMaxItemsToShow() < count)
-            count = layout->GetMaxItemsToShow();
+        if (GetListLayout()->GetMaxItemsToShow() < count)
+            count = GetListLayout()->GetMaxItemsToShow();
 
         for (unsigned i = 0; i < count; ++i)
             // Create the sub-objects
@@ -24,21 +37,33 @@ void ListLayer::Rebuild()
 }
 
 
-void ListLayer::UpdateSubSizes()
+Layer* ListLayer::Insert(Layer* a_child)
 {
-    ListLayout* layout = dynamic_cast<ListLayout*>(GetLayout());
-    ListLayout::Alignment align = layout->GetAlignment();
-    if (align == ListLayout::Auto)
-    {
-        SDL_Rect space = GetDrawer()->GetContentSize();
-        if (space.w > 2 * space.h)
-            align = ListLayout::Horizontal;
-        else
-            align = ListLayout::Vertical;
-    }
+    m_Sublayers.push_back(a_child);
+    a_child->SetParent(this);
+    m_IsChanged = true;
+    return a_child;
+}
 
+
+void ListLayer::Remove(Layer* a_child)
+{
     for (unsigned i = 0; i < m_Sublayers.size(); ++i)
-        SetSubSize(m_Sublayers[i], layout->GetField(i, m_Sublayers.size(), align));
+    {
+        if (m_Sublayers[i] == a_child)
+        {
+            m_Sublayers.erase(m_Sublayers.begin() + i);
+            m_IsChanged = true;
+            return;
+        }
+    }
+}
+
+
+void ListLayer::UpdateSubContent()
+{
+    for (Layer* sub : m_Sublayers)
+        m_IsChanged |= sub->Update();
 }
 
 

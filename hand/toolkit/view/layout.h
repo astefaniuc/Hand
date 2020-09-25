@@ -5,84 +5,117 @@
 #include "base/module.h"
 
 
+#define CONTROL "Control"
 #define DESCRIPTION "Description"
 #define ICON "Icon"
 #define TITLE "Title"
+#define VIEW "View"
 
 
-class Layout : public Module
+
+
+class LayerMap;
+class ListLayer;
+
+
+namespace Layout {
+
+
+enum Orientation
 {
-public:
-    Layout();
-
-    Layer* GetHmi() override { return m_Settings.GetLayer(); }
-
-    // Returns the size and position as values relative to the parent.
-    // Values between 0.0 and 1.0.
-    Rel_Rect GetField(const std::string& a_name) const;
-    void SetField(const std::string& a_name, const Rel_Rect& coordinates);
-
-    bool GetShowName() const { return m_ShowName->GetValue(); }
-    void SetShowName(bool enabled) { m_ShowName->SetValue(enabled); }
-
-    bool GetShowDescription() const { return m_ShowDescription->GetValue(); }
-    void SetShowDescription(bool enabled) { m_ShowDescription->SetValue(enabled); }
-
-protected:
-    Collection m_Settings;
-    Collection* m_Fields = new Collection("Fields", "");
-
-private:
-    TData<bool>* m_ShowName = new TData<bool>("Show name", "", true);
-    TData<bool>* m_ShowDescription = new TData<bool>("Show description", "", true);
+    Auto,
+    Horizontal,
+    Vertical
 };
 
 
-class ListLayout : public Layout
+class Field;
+
+class Node
 {
 public:
-    enum Alignment { Auto, Horizontal, Vertical };
-    ListLayout() { m_Settings.Add(m_Alignment); }
+    virtual ~Node() = default;
+
+//    virtual SDL_Rect GetSize(Layer* tgt) = 0;
+    virtual Field* GetField(const std::string& name) const { return nullptr; }
+};
+
+
+class MapNode : public Node
+{
+public:
+    virtual SDL_Rect GetFieldSize(LayerMap* tgt, SDL_Rect offset) = 0;
+};
+
+// "Link" for the Layer
+class Separator : public MapNode
+{
+public:
+    Separator(MapNode* field1, MapNode* field2, Orientation orientation)
+        : m_Field1(field1), m_Field2(field2), m_Orientation(orientation) {}
+
+    SDL_Rect GetFieldSize(LayerMap* tgt, SDL_Rect offset) override;
+    Field* GetField(const std::string& name) const override;
+
+protected:
+    MapNode* m_Field1;
+    MapNode* m_Field2;
+    Orientation m_Orientation;
+};
+
+
+class Field : public MapNode
+{
+public:
+    Field(const std::string& name) : m_Name(name) {}
+
+    SDL_Rect GetFieldSize(LayerMap* tgt, SDL_Rect offset) override;
+    Field* GetField(const std::string& name) const override;
+
+    void SetVisible(bool visible) { m_IsVisble = visible; }
+    bool IsVisible() { return m_IsVisble; }
+
+private:
+    std::string m_Name;
+    bool m_IsVisble;
+};
+
+
+class List : public Node
+{
+public:
+    SDL_Rect GetFieldSize(ListLayer* tgt, SDL_Rect offset);
 
     void SetMaxItemsToShow(unsigned count) { m_MaxItemsToShow->SetValue(count); }
     unsigned GetMaxItemsToShow() { return m_MaxItemsToShow->GetValue(); }
 
-    /// Returns the size and position as values relative to the parent.
-    /// Values between 0.0 and 1.0. 'alignment' can't be 'Auto'.
-    Rel_Rect GetField(unsigned field, unsigned numFields, Alignment align) const;
-
-    Alignment GetAlignment() const { return m_Alignment->GetValue(); }
-    void SetAlignment(Alignment value) { m_Alignment->SetValue(value); }
+    Orientation GetOrientation() const { return m_Orientation->GetValue(); }
+    void SetOrientation(Orientation value) { m_Orientation->SetValue(value); }
 
 private:
-    TData<Alignment>* m_Alignment = new TData<Alignment>("Alignment", "", Auto);
+    TData<Orientation>* m_Orientation = new TData<Orientation>("Orientation", "", Horizontal);
     TData<unsigned>* m_MaxItemsToShow = new TData<unsigned>("List max", "Items to show", 5);
 };
 
 
-#define CONTROL "Control"
-#define VIEW "View"
 
+Node* CreateButton();
+Node* CreateData();
+Node* CreateView();
 
-class ButtonLayout : public Layout
-{
-public:
-    ButtonLayout();
-};
+MapNode* AssureNode(MapNode* in);
+MapNode* AssureNode(const std::string& in);
 
+template<class T1, class T2>
+Separator* SplitV(T1 field1, T2 field2) {
+    return new Separator(AssureNode(field1), AssureNode(field2), Horizontal);
+}
 
-class DataLayout : public Layout
-{
-public:
-    DataLayout();
-};
+template<class T1, class T2>
+Separator* SplitH(T1* field1, T2* field2) {
+    return new Separator(AssureNode(field1), AssureNode(field2), Vertical);
+}
 
-
-class ViewLayout : public Layout
-{
-public:
-    ViewLayout();
-};
-
+}
 
 #endif //HAND_VIEW_LAYOUT_H

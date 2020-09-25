@@ -25,13 +25,14 @@ public:
     void UpdateScreen() override;
 
     virtual TTF_Font* GetFont(int size);
-//    virtual void GetFontHeight(HmiItem* layout, unsigned& max_size);
+    /// Frames are scaled based on this.
+    unsigned GetBaseSize();
 
-    Drawer* GetButtonDrawer() override { return new VirtualSurface(&m_Buttons); }
-    Drawer* GetDataDrawer() override { return new VirtualSurface(&m_Datas); }
-    Drawer* GetListDrawer() override { return new VirtualSurface(&m_Lists); }
+    Drawer* GetButtonDrawer() override { return new DrawerSdl(this, &m_Buttons); }
+    Drawer* GetDataDrawer() override { return new DrawerSdl(this, &m_Datas); }
+    Drawer* GetListDrawer() override { return new DrawerSdl(this, &m_Lists); }
     Drawer* GetTextDrawer() override { return new TextDrawer(this, &m_Texts); }
-    Drawer* GetViewDrawer() override { return new VirtualSurface(&m_Views); }
+    Drawer* GetViewDrawer() override { return new DrawerSdl(this, &m_Views); }
 
 protected:
     // App mode interface
@@ -39,7 +40,6 @@ protected:
     void SetFullscreen();
     void SetWindowed();
     SDL_Rect GetResolution();
-    void UpdateRoot();
 
     Collection m_Hmi;
     Collection m_Buttons;

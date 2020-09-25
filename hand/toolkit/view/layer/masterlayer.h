@@ -9,17 +9,16 @@
 /// For the sub-layers, the main command list is mandatory; other layers may be
 /// additional (system) command lists, a title, a main view, and a secondary view e.g.
 /// an info box or help.
-class MasterLayer : public Layer
+class MasterLayer : public LayerMap
 {
 public:
     MasterLayer();
 
 protected:
     void Rebuild() override;
-    void UpdateSubSizes() override;
 
     Drawer* CreatetDrawer() override;
-    Layout* CreateLayout() override { return new ViewLayout(); }
+    Layout::Node* CreateLayout() override { return Layout::CreateView(); }
 
 //    void SetFocus(to or not to ...?);
 //    void Keep(enum mode)

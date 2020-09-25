@@ -17,8 +17,8 @@ User::User(EventHandler* a_input)
       m_ViewStack(new ListLayer()),
       m_Menu("Menu", "System")
 {
-    m_View.GetLayer()->GetLayout()->SetShowName(false);
-    m_View.GetLayer()->GetLayout()->SetShowDescription(false);
+    m_View.GetLayer()->GetLayout()->GetField(TITLE)->SetVisible(false);
+    m_View.GetLayer()->GetLayout()->GetField(DESCRIPTION)->SetVisible(false);
 
     m_View.SetView(m_ViewStack);
     m_View.SetControls(&m_Menu);
@@ -29,7 +29,7 @@ User::User(EventHandler* a_input)
             "./binaries/lib/themes/default.so", m_ThemeLoader));
 
     // TODO: load settings
-    m_View.GetLayer()->SetTheme(dynamic_cast<Theme*>(m_ThemeLoader->GetObject()));
+    m_View.GetLayer()->SetTheme(static_cast<Theme*>(m_ThemeLoader->GetObject()));
     m_View.GetLayer()->GetTheme()->InitScreen(m_View.GetLayer());
 
     Hand* right =  new Hand(m_Input->GetDevice(Device::Keyboard));

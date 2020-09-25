@@ -15,18 +15,10 @@ void DataLayer::Rebuild()
 {
     Clear();
 
-    m_Name = Insert(new TextLayer(m_Data->GetName() + ":"));
-    m_Description = Insert(new TextLayer(m_Data->GetDescription()));
-    m_DataText = Insert(new TextLayer(dynamic_cast<Data*>(m_Data)->GetValueString()));
+    m_Name = Insert(TITLE, new TextLayer(m_Data->GetName() + ":"));
+    m_Description = Insert(DESCRIPTION, new TextLayer(m_Data->GetDescription()));
+    m_DataText = Insert(VIEW, new TextLayer(static_cast<Data*>(m_Data)->GetValueString()));
     // TODO: m_Command
-}
-
-
-void DataLayer::UpdateSubSizes()
-{
-    SetSubSize(m_Name, TITLE);
-    SetSubSize(m_Description, DESCRIPTION);
-    SetSubSize(m_DataText, VIEW);
 }
 
 
@@ -54,16 +46,9 @@ void ButtonLayer::Rebuild()
 {
     Clear();
 
-    m_Name = Insert(new TextLayer(m_Data->GetName()));
-    m_Description = Insert(new TextLayer(m_Data->GetDescription()));
+    m_Name = Insert(TITLE, new TextLayer(m_Data->GetName()));
+    m_Description = Insert(DESCRIPTION, new TextLayer(m_Data->GetDescription()));
     // TODO: m_Control
-}
-
-
-void ButtonLayer::UpdateSubSizes()
-{
-    SetSubSize(m_Name, TITLE);
-    SetSubSize(m_Description, DESCRIPTION);
 }
 
 

@@ -1,78 +1,126 @@
-#include "layout.h"
+#include "view/layout.h"
+#include "view/layer/layer.h"
+#include "view/layer/listlayer.h"
 
 
-Layout::Layout() : m_Settings("Layout", "Settings")
+namespace Layout {
+
+
+MapNode* AssureNode(MapNode* in) { return in; }
+MapNode* AssureNode(const std::string& in) { return new Field(in); }
+
+
+void AddH(const SDL_Rect& in, SDL_Rect& out)
 {
-    m_Settings.Add(m_ShowName);
-    m_Settings.Add(m_ShowDescription);
+    out.h += in.h;
+    if (in.w > out.w)
+        out.w = in.w;
+}
 
-    m_Settings.Add(m_Fields);
-    SetField(TITLE, { 0.0, 0.0, 1.0, 0.4 });
-    SetField(DESCRIPTION, { 0.0, 0.4, 1.0, 0.6 });
+void AddV(const SDL_Rect& in, SDL_Rect& out)
+{
+    out.w += in.w;
+    if (in.h > out.h)
+        out.h = in.h;
 }
 
 
-Rel_Rect Layout::GetField(const std::string& a_name) const
+
+SDL_Rect Field::GetFieldSize(LayerMap* tgt, SDL_Rect offset)
 {
-    Rect* field = dynamic_cast<Rect*>(m_Fields->GetChild(a_name));
-    if (field)
-        return field->GetValue();
-    return Rel_Rect();
+    Layer* sub = tgt->GetField(m_Name);
+    if (sub)
+        return sub->UpdateSize(offset);
+    return { 0, 0, 0, 0 };
 }
 
 
-void Layout::SetField(const std::string& a_name, const Rel_Rect& a_coordinates)
+Field* Field::GetField(const std::string& a_name) const
 {
-    Rect* field = dynamic_cast<Rect*>(m_Fields->GetChild(a_name));
-    if (field)
-        field->SetValue(a_coordinates);
-    else
-        m_Fields->Add(new Rect(a_name, "",
-            a_coordinates.x, a_coordinates.y, a_coordinates.w, a_coordinates.h));
+    if (a_name == m_Name)
+        return (Field*)this;
+    return nullptr;
 }
 
 
-Rel_Rect ListLayout::GetField(
-    unsigned a_field, unsigned a_numFields, Alignment a_align) const
+SDL_Rect Separator::GetFieldSize(LayerMap* a_tgt, SDL_Rect offset)
 {
-    Rel_Rect ret;
-    if (a_align == Horizontal)
+    SDL_Rect size = { 0, 0, 0, 0 };
+    //  Remove the first childs offset from the total size:
+    AddH(m_Field1->GetFieldSize(a_tgt, offset), size);
+
+    if (m_Orientation == Horizontal)
     {
-        ret.w /= a_numFields;
-        ret.x = a_field * ret.w;
+        offset.y += size.h;
+        AddH(m_Field2->GetFieldSize(a_tgt, offset), size);
     }
     else
     {
-        ret.h /= a_numFields;
-        ret.y = a_field * ret.h;
+        offset.x += size.w;
+        AddV(m_Field2->GetFieldSize(a_tgt, offset), size);
     }
-    return ret;
+
+    return size;
 }
 
 
-ButtonLayout::ButtonLayout()
+Field* Separator::GetField(const std::string& a_name) const
 {
-    SetField(CONTROL, { 0.8, 0.6, 0.2, 0.4 });
-    SetField(DESCRIPTION, { 0.0, 0.6, 0.8, 0.4 });
-    SetField(TITLE, { 0.25, 0.0, 0.75, 0.6 });
-    SetField(VIEW, { 0.0, 0.0, 0.25, 0.6 });
+    Field* ret = m_Field1->GetField(a_name);
+    if (ret)
+        return ret;
+    return m_Field2->GetField(a_name);
 }
 
 
-DataLayout::DataLayout()
+SDL_Rect List::GetFieldSize(ListLayer* tgt, SDL_Rect offset)
 {
-    SetField(CONTROL, { 0.8, 0.6, 0.2, 0.4 });
-    SetField(DESCRIPTION, { 0.0, 0.6, 0.8, 0.4 });
-    SetField(TITLE, { 0.0, 0.0, 0.25, 0.6 });
-    SetField(VIEW, { 0.25, 0.0, 0.75, 0.6 });
+    SDL_Rect size = { 0, 0, 0, 0 };
+    if (GetOrientation() != Horizontal)
+        for (Layer* sub : tgt->GetSubLayers())
+        {
+            SDL_Rect subSize = sub->UpdateSize(offset);
+            AddH(subSize, size);
+            offset.y += subSize.h;
+        }
+    else
+        for (Layer* sub : tgt->GetSubLayers())
+        {
+            SDL_Rect subSize = sub->UpdateSize(offset);
+            AddV(subSize, size);
+            offset.x += subSize.w;
+        }
+
+    return size;
 }
 
 
-ViewLayout::ViewLayout()
+Node* CreateButton()
 {
-    SetField(CONTROL, { 0.2, 0.8, 0.6, 0.2 });
-    SetField(DESCRIPTION, { 0.8, 0.3, 0.2, 0.4 });
-    SetField(TITLE, { 0.0, 0.0, 1.0, 0.04 });
-    SetField(VIEW, { 0.0, 0.04, 0.8, 0.76 });
+    return
+        SplitV(
+            SplitH(VIEW, TITLE),
+            SplitH(DESCRIPTION, CONTROL));
 }
 
+
+Node* CreateData()
+{
+    return
+        SplitV(
+            SplitH(TITLE, VIEW),
+            SplitH(DESCRIPTION, CONTROL));
+}
+
+
+Node* CreateView()
+{
+    return
+        SplitV(
+            TITLE,
+            SplitH(
+                SplitV(VIEW, DESCRIPTION),
+                CONTROL));
+}
+
+}

@@ -13,7 +13,9 @@ public:
     virtual ~Drawer() {}
 
     virtual void Draw(bool forced) = 0;
-    virtual SDL_Rect GetContentSize() = 0;
+    virtual void DrawChild(Layer* child, bool forced) = 0;
+    virtual SDL_Rect CalculateSize(const SDL_Rect& offset) = 0;
+    virtual SDL_Rect GetFrameOffset() = 0;
     virtual void SetLayer(Layer* layer) { m_Layer = layer; }
 
 protected:
