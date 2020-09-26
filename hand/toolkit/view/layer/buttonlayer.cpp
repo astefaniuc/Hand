@@ -16,7 +16,8 @@ void DataLayer::Rebuild()
     Clear();
 
     m_Name = Insert(TITLE, new TextLayer(m_Data->GetName() + ":"));
-    m_Description = Insert(DESCRIPTION, new TextLayer(m_Data->GetDescription()));
+    if (!m_Data->GetDescription().empty())
+        m_Description = Insert(DESCRIPTION, new TextLayer(m_Data->GetDescription()));
     m_DataText = Insert(VIEW, new TextLayer(static_cast<Data*>(m_Data)->GetValueString()));
     // TODO: m_Command
 }
@@ -47,7 +48,8 @@ void ButtonLayer::Rebuild()
     Clear();
 
     m_Name = Insert(TITLE, new TextLayer(m_Data->GetName()));
-    m_Description = Insert(DESCRIPTION, new TextLayer(m_Data->GetDescription()));
+    if (!m_Data->GetDescription().empty())
+        m_Description = Insert(DESCRIPTION, new TextLayer(m_Data->GetDescription()));
     // TODO: m_Control
 }
 

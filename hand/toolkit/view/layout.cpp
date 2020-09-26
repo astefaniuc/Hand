@@ -118,8 +118,8 @@ Node* CreateView()
     return
         SplitV(
             TITLE,
-            SplitH(
-                SplitV(VIEW, DESCRIPTION),
+            SplitV(
+                SplitH(VIEW, DESCRIPTION),
                 CONTROL));
 }
 

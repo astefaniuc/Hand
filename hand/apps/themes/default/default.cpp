@@ -162,10 +162,14 @@ void Default::UpdateScreen()
 {
     m_ScreenRoot->UpdateSize({ 0,0,0,0 });
     m_ScreenRoot->Draw(false);
-    SDL_Rect srcRect = m_ScreenRoot->GetSize();
-    DrawerSdl* src = DrawerSdl::GetDrawer(m_ScreenRoot);
-    if (src)
-        DrawerSdl::BlitSurface(src->GetBuffer(), &srcRect, m_Surface);
+
+    // Clear screen.
+    SDL_FillRect(m_Surface, nullptr, 0x000000);
+
+    SDL_Rect srcRect = GetResolution();
+    SDL_Surface* src = DrawerSdl::GetDrawer(m_ScreenRoot)->GetBuffer();
+    DrawerSdl::PlaceCentered(src, srcRect);
+    DrawerSdl::BlitSurface(src, &srcRect, m_Surface);
 
     SDL_Flip(m_Surface);
 }

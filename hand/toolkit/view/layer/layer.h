@@ -7,7 +7,6 @@
 #include <map>
 
 
-class Drawer;
 class HmiItem;
 class Theme;
 
@@ -24,7 +23,7 @@ public:
     // Methods to (re-)set links to external objects:
     void SetParent(Layer* parent) { m_Parent = parent; }
     // TODO: any use for this?
-    Layer* GetParent() { return m_Parent; }
+    Layer* GetParent() const { return m_Parent; }
 
     virtual void Remove(Layer* sub) = 0;
 
@@ -45,10 +44,10 @@ public:
 
     // Set coordinates and size relative to the parent layer
     void SetSize(const SDL_Rect& size);
-    const SDL_Rect& GetSize() { return m_Coordinates; }
+    const SDL_Rect& GetSize() const { return m_Coordinates; }
 
     void SetContentSize(const SDL_Rect& size) { m_ContentSize = size; }
-    const SDL_Rect& GetContentSize() { return m_ContentSize; }
+    const SDL_Rect& GetContentSize() const { return m_ContentSize; }
 
     SDL_Rect UpdateSize(const SDL_Rect& externalOffset);
     virtual SDL_Rect GetLayoutSize() = 0;

@@ -29,6 +29,7 @@ public:
 
     static DrawerSdl* GetDrawer(Layer* from);
     static void BlitSurface(SDL_Surface* source, SDL_Rect* source_pos, SDL_Surface* target);
+    static void PlaceCentered(SDL_Surface* source, SDL_Rect& target);
 
     /// Removes the visual frame and its allocated spacing, content is extended.
     void RemoveFrame() { m_ShowFrame = false; }
@@ -42,7 +43,6 @@ protected:
     // Drawing interface
     void FillRect(SDL_Rect r, const Rgb& color);
     /// Changes x and y of source
-    void PlaceCentered(SDL_Surface* source, SDL_Rect& target);
 
     bool GetDrawFrame() const;
     const Rel_Rect& GetFrameSize() const;
