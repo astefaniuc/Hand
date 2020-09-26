@@ -114,27 +114,15 @@ void Layer::Collapse()
 }
 
 
-SDL_Rect Layer::GetFramedSize(SDL_Rect& content, const SDL_Rect& offset)
+SDL_Rect Layer::UpdateSize(const SDL_Rect& externalOffset)
 {
-    SDL_Rect total = content;
-    total.w += offset.w;
-    total.h += offset.h;
-    content.x += offset.x;
-    content.y += offset.y;
-    return total;
-}
+    SDL_Rect total = { 0, 0, 0, 0 };
+    SDL_Rect ret = GetDrawer()->CalculateSize(m_ContentSize, total);
 
-SDL_Rect Layer::UpdateSize(const SDL_Rect& offset)
-{
-    SDL_Rect content = GetDrawer()->CalculateSize(offset);
-    SDL_Rect total = GetFramedSize(content, GetDrawer()->GetFrameOffset());
-
-    total.x += offset.x;
-    total.y += offset.y;
-    SetContentSize(content);
+    total.x += externalOffset.x;
+    total.y += externalOffset.y;
     SetSize(total);
-
-    return total;
+    return ret;
 }
 
 

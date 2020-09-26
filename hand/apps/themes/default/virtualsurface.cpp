@@ -42,6 +42,53 @@ void DrawerSdl::InitBuffer()
 }
 
 
+SDL_Rect DrawerSdl::GetFramedSize(SDL_Rect& content, const SDL_Rect& offset)
+{
+    SDL_Rect total = content;
+    total.w += offset.w;
+    total.h += offset.h;
+    content.x += offset.x;
+    content.y += offset.y;
+    return total;
+}
+
+
+SDL_Rect DrawerSdl::CalculateSize(SDL_Rect& content, SDL_Rect& total)
+{
+    content = m_Layer->GetLayoutSize();
+    total = GetFramedSize(content, GetFrameOffset());
+
+    return total;
+}
+
+
+SDL_Rect DrawerSdl::GetFrameOffset()
+{
+    if (!m_ShowFrame)
+        return { 0, 0, 0, 0 };
+
+    SDL_Rect ret;
+    const Rel_Rect& frame = GetFrameSize();
+    unsigned base = m_Theme->GetBaseSize();
+
+    ret.w = base * frame.w;
+    ret.h = base * frame.h;
+    ret.x = ret.w * frame.x;
+    ret.y = ret.h * frame.y;
+
+    return ret;
+}
+
+void DrawerSdl::BlitSurface(SDL_Surface* source, SDL_Rect* src_pos, SDL_Surface* target)
+{
+    if (source && target)
+    {
+        SDL_SetClipRect(target, src_pos);
+        SDL_BlitSurface(source, nullptr, target, src_pos);
+    }
+}
+
+
 void DrawerSdl::DrawChild(Layer* child, bool a_forced)
 {
     child->Draw(a_forced);
@@ -123,39 +170,6 @@ const Rgb& DrawerSdl::GetFrameColor() const
 const Rgb& DrawerSdl::GetBackgroundColor() const
 {
     return *((Rgb*)m_Properties->GetChild(BACKGROUNDCOLOR));
-}
-
-
-SDL_Rect DrawerSdl::CalculateSize(const SDL_Rect& offset)
-{
-    return m_Layer->GetLayoutSize(offset);
-}
-
-
-SDL_Rect DrawerSdl::GetFrameOffset()
-{
-    if (!m_ShowFrame)
-        return { 0, 0, 0, 0 };
-
-    SDL_Rect ret;
-    const Rel_Rect& frame = GetFrameSize();
-    unsigned base = m_Theme->GetBaseSize();
-
-    ret.w = base * frame.w;
-    ret.h = base * frame.h;
-    ret.x = ret.w * frame.x;
-    ret.y = ret.h * frame.y;
-
-    return ret;
-}
-
-void DrawerSdl::BlitSurface(SDL_Surface* source, SDL_Rect* src_pos, SDL_Surface* target)
-{
-    if (source && target)
-    {
-        SDL_SetClipRect(target, src_pos);
-        SDL_BlitSurface(source, nullptr, target, src_pos);
-    }
 }
 
 

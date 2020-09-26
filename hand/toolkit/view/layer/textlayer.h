@@ -21,7 +21,7 @@ protected:
     void UpdateSubContent() override {}
     void Remove(Layer*) override {}
     Layout::Node* CreateLayout() override { return nullptr; }
-    SDL_Rect GetLayoutSize(const SDL_Rect&) override { return {1,2,3,4}; }
+    SDL_Rect GetLayoutSize() override { return {1,2,3,4}; }
     void DrawChildren(bool forced) override {}
 
 private:

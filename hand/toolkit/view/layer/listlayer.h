@@ -15,7 +15,7 @@ public:
     Layer* Insert(Layer* sub);
     void Remove(Layer* sub) override;
 
-    SDL_Rect GetLayoutSize(const SDL_Rect& offset) override {
+    SDL_Rect GetLayoutSize() override {
         return GetListLayout()->GetFieldSize(this, GetDrawer()->GetFrameOffset());
     }
     const std::vector<Layer*>& GetSubLayers() const { return m_Sublayers; }

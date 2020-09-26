@@ -5,9 +5,9 @@
 // #include "SDL/SDL_Image.h"
 
 
-SDL_Rect TextDrawer::CalculateSize(const SDL_Rect& offset)
+SDL_Rect TextDrawer::CalculateSize(SDL_Rect& content, SDL_Rect& total)
 {
-    SDL_Rect content = { 0, 0, 0, 0 };
+    content = { 0, 0, 0, 0 };
     const std::string& text = static_cast<TextLayer*>(m_Layer)->GetData();
 
     if (!text.empty())
@@ -19,7 +19,9 @@ SDL_Rect TextDrawer::CalculateSize(const SDL_Rect& offset)
         content.h = (uint16_t)h;
     }
 
-    return content;
+    SDL_Rect ret = GetFramedSize(content, GetFrameOffset());
+    total = content;
+    return ret;
 }
 
 
@@ -31,13 +33,8 @@ void TextDrawer::Draw(bool)
         SetBuffer(nullptr);
         return;
     }
-    InitBuffer();
-    DrawBackground();
 
-    SDL_Surface* render = RenderText(text, GetFontSize(), GetFontColor());
-    SDL_Rect srcRect = m_Layer->GetContentSize();
-    BlitSurface(render, &srcRect, GetBuffer());
-    SDL_FreeSurface(render);
+    SetBuffer(RenderText(text, GetFontSize(), GetFontColor()));
 }
 
 

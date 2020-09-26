@@ -50,14 +50,12 @@ public:
     void SetContentSize(const SDL_Rect& size) { m_ContentSize = size; }
     const SDL_Rect& GetContentSize() { return m_ContentSize; }
 
-    SDL_Rect UpdateSize(const SDL_Rect& offset);
-    virtual SDL_Rect GetLayoutSize(const SDL_Rect& offset) = 0;
+    SDL_Rect UpdateSize(const SDL_Rect& externalOffset);
+    virtual SDL_Rect GetLayoutSize() = 0;
 
     virtual void Exit(HmiItem*);
 
 protected:
-    SDL_Rect GetFramedSize(SDL_Rect& content, const SDL_Rect& offset);
-
     virtual Layout::Node* CreateLayout() = 0;
     virtual Drawer* CreatetDrawer() = 0;
     /// Rebuild sub-layer structure on content or layout changes.
@@ -69,8 +67,9 @@ protected:
     Theme* m_Theme = nullptr;
     Drawer* m_Drawer = nullptr;
 
-    /// Total size plus position.
+    /// The layers rectangle including the frame and spacing around it, and its position.
     SDL_Rect m_Coordinates = { 0, 0, 0, 0 };
+    /// The layers content/active rectangle and its position.
     SDL_Rect m_ContentSize = { 0, 0, 0, 0 };
 
     HmiItem* m_Data = nullptr;
@@ -96,7 +95,7 @@ public:
     Layer* Insert(const std::string& field, Layer* sub);
     void Remove(Layer* sub) override;
 
-    SDL_Rect GetLayoutSize(const SDL_Rect& offset) override {
+    SDL_Rect GetLayoutSize() override {
         return GetMap()->GetFieldSize(this, GetDrawer()->GetFrameOffset());
     }
 

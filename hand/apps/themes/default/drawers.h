@@ -8,7 +8,8 @@ class TextDrawer : public DrawerSdl
 {
 public:
     TextDrawer(Default* theme, Collection* config) : DrawerSdl(theme, config) {}
-    SDL_Rect CalculateSize(const SDL_Rect& offset) override;
+
+    SDL_Rect CalculateSize(SDL_Rect& content, SDL_Rect& total) override;
 
     void Draw(bool) override;
 
