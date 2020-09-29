@@ -21,21 +21,21 @@ void Layer::Exit(HmiItem*)
 
 bool Layer::Update()
 {
-    if (m_ChangedContent)
+    if (m_ModifiedContent)
         Rebuild();
 
     UpdateSubContent();
-    return m_IsChanged;
+    return m_IsModified;
 }
 
 
 void Layer::Draw(bool a_forced)
 {
-    if (m_ChangedContent || m_IsChanged || a_forced)
+    if (IsModified() || a_forced)
         GetDrawer()->Draw(a_forced);
 
-    m_ChangedContent = false;
-    m_IsChanged = false;
+    m_ModifiedContent = false;
+    m_IsModified = false;
 }
 
 
@@ -44,7 +44,7 @@ void Layer::SetContent(HmiItem* data)
     // Layer-Data is a lifelong 1:1 relation.
     assert(!m_Data);
     m_Data = data;
-    m_ChangedContent = true;
+    m_ModifiedContent = true;
 }
 
 
@@ -52,7 +52,7 @@ void Layer::SetSize(const SDL_Rect& a_size)
 {
     if ((a_size.w != m_Coordinates.w) || (a_size.h != m_Coordinates.h))
         // needs redrawing
-        m_IsChanged = true;
+        m_IsModified = true;
 
     m_Coordinates = a_size;
 }
@@ -70,7 +70,7 @@ void Layer::SetLayout(Layout::Node* a_layout)
 {
     delete m_Layout;
     m_Layout = a_layout;
-    m_ChangedContent = true;
+    m_ModifiedContent = true;
 }
 
 
@@ -110,7 +110,7 @@ Drawer* Layer::GetDrawer()
 void Layer::Collapse()
 {
     IsExpanded = false;
-    m_ChangedContent = true;
+    m_ModifiedContent = true;
 }
 
 
@@ -145,7 +145,7 @@ Layer* LayerMap::Insert(const std::string& field, Layer* child)
 {
     m_Sublayers[field] = child;
     child->SetParent(this);
-    m_IsChanged = true;
+    m_IsModified = true;
     return child;
 }
 
@@ -157,7 +157,7 @@ void LayerMap::Remove(Layer* child)
         if (it->second == child)
         {
             m_Sublayers.erase(it);
-            m_IsChanged = true;
+            m_IsModified = true;
             return;
         }
     }
@@ -176,5 +176,5 @@ Layer* LayerMap::GetField(const std::string& name)
 void LayerMap::UpdateSubContent()
 {
     for (auto sub : m_Sublayers)
-        m_IsChanged |= sub.second->Update();
+        m_IsModified |= sub.second->Update();
 }

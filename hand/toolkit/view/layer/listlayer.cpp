@@ -41,7 +41,7 @@ Layer* ListLayer::Insert(Layer* a_child)
 {
     m_Sublayers.push_back(a_child);
     a_child->SetParent(this);
-    m_IsChanged = true;
+    m_IsModified = true;
     return a_child;
 }
 
@@ -53,7 +53,7 @@ void ListLayer::Remove(Layer* a_child)
         if (m_Sublayers[i] == a_child)
         {
             m_Sublayers.erase(m_Sublayers.begin() + i);
-            m_IsChanged = true;
+            m_IsModified = true;
             return;
         }
     }
@@ -63,7 +63,7 @@ void ListLayer::Remove(Layer* a_child)
 void ListLayer::UpdateSubContent()
 {
     for (Layer* sub : m_Sublayers)
-        m_IsChanged |= sub->Update();
+        m_IsModified |= sub->Update();
 }
 
 

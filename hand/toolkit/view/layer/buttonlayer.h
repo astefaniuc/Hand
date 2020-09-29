@@ -19,7 +19,7 @@ protected:
     Layout::Node* CreateLayout() override { return Layout::CreateData(); }
 
     /// Callback.
-    void NotifyChanged(HmiItem*) { m_ChangedContent = true; }
+    void NotifyChanged(HmiItem*) { m_ModifiedContent = true; }
 
     Layer* m_Name = nullptr;
     Layer* m_DataText = nullptr;

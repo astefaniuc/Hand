@@ -52,6 +52,7 @@ public:
     SDL_Rect UpdateSize(const SDL_Rect& externalOffset);
     virtual SDL_Rect GetLayoutSize() = 0;
 
+    bool IsModified() { return (m_IsModified || m_ModifiedContent); }
     virtual void Exit(HmiItem*);
 
 protected:
@@ -76,8 +77,8 @@ protected:
     bool IsVisible = true;
     bool IsExpanded = false;
 
-    bool m_ChangedContent = false;
-    bool m_IsChanged = false;
+    bool m_ModifiedContent = false;
+    bool m_IsModified = false;
 
 private:
     Layout::Node* m_Layout = nullptr;
