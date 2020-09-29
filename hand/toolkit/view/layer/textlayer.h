@@ -22,7 +22,8 @@ protected:
     void Remove(Layer*) override {}
     Layout::Node* CreateLayout() override { return nullptr; }
     SDL_Rect GetLayoutSize() override { return {1,2,3,4}; }
-    void DrawChildren(bool forced) override {}
+    void DrawChildren(SDL_Surface* buffer, bool) override {}
+    void SetLayoutSize(const SDL_Rect& outer) override {}
 
 private:
     std::string m_Text;

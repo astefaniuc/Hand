@@ -5,40 +5,18 @@
 #include <SDL/SDL_ttf.h>
 
 
-DrawerSdl::~DrawerSdl()
+void DrawerSdl::Draw(SDL_Surface* buffer, bool forced)
 {
-    // TODO: Don't delete screen
-    SDL_FreeSurface(m_Buffer);
-}
-
-
-void DrawerSdl::Draw(bool a_forced)
-{
-    InitBuffer();
+    m_Buffer = buffer;
     DrawBackground();
     DrawFrame();
-    m_Layer->DrawChildren(a_forced);
+    m_Layer->DrawChildren(buffer, forced);
 }
 
 
 DrawerSdl* DrawerSdl::GetDrawer(Layer* a_from)
 {
     return static_cast<DrawerSdl*>(a_from->GetDrawer());
-}
-
-
-void DrawerSdl::InitBuffer()
-{
-    const SDL_Rect& size = m_Layer->GetSize();
-    if (m_Buffer && (m_Buffer->w == size.w) && (m_Buffer->h == size.h))
-        return; // OK
-
-    SDL_FreeSurface(m_Buffer);
-
-    const SDL_PixelFormat& fmt = *(SDL_GetVideoSurface()->format);
-    m_Buffer = SDL_CreateRGBSurface(
-            SDL_DOUBLEBUF|SDL_HWSURFACE, size.w, size.h,
-            fmt.BitsPerPixel, fmt.Rmask, fmt.Gmask, fmt.Bmask, 0xFF000000);
 }
 
 
@@ -89,21 +67,15 @@ void DrawerSdl::BlitSurface(SDL_Surface* source, SDL_Rect* src_pos, SDL_Surface*
 }
 
 
-void DrawerSdl::DrawChild(Layer* child, bool a_forced)
+void DrawerSdl::DrawChild(SDL_Surface* buffer, Layer* child, bool forced)
 {
-    child->Draw(a_forced);
-
-    SDL_Rect srcRect = child->GetSize();
-    DrawerSdl* src = GetDrawer(child);
-    if (src)
-        BlitSurface(src->GetBuffer(), &srcRect, GetBuffer());
-    // TODO: else
+    child->Draw(buffer, forced);
 }
 
 
 void DrawerSdl::DrawBackground()
 {
-    FillRect(m_Layer->GetContentSize(), GetBackgroundColor());
+    FillRect(m_Layer->GetFieldSize(), GetBackgroundColor());
 }
 
 
@@ -112,11 +84,11 @@ void DrawerSdl::DrawFrame()
     if (!GetDrawFrame())
         return;
 
-    SDL_Rect total = m_Layer->GetSize();
-    SDL_Rect content = m_Layer->GetContentSize();
     // Line width
-    int16_t width = (total.w > total.h ? total.w - content.w : total.h - content.h) * 0.1;
+    int16_t width = m_Theme->GetBaseSize() * 0.1;
     const Rgb& color = GetFrameColor();
+
+    SDL_Rect content = m_Layer->GetFieldSize();
     // Draw each line separately
     {
         SDL_Rect top = content;
@@ -180,17 +152,10 @@ void DrawerSdl::FillRect(SDL_Rect r, const Rgb& c)
 }
 
 
-void DrawerSdl::PlaceCentered(SDL_Surface* a_src, SDL_Rect& a_tgt)
+void DrawerSdl::PlaceCentered(const SDL_Rect& src, SDL_Rect& tgt)
 {
-    a_tgt.x += (a_tgt.w - a_src->w) / 2;
-    a_tgt.y += (a_tgt.h - a_src->h) / 2;
-    a_tgt.w = a_src->w;
-    a_tgt.h = a_src->h;
-}
-
-
-void DrawerSdl::SetBuffer(SDL_Surface* buffer)
-{
-    SDL_FreeSurface(m_Buffer);
-    m_Buffer = buffer;
+    tgt.x += (tgt.w - src.w) / 2;
+    tgt.y += (tgt.h - src.h) / 2;
+    tgt.w = src.w;
+    tgt.h = src.h;
 }

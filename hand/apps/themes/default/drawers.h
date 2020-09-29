@@ -8,10 +8,11 @@ class TextDrawer : public DrawerSdl
 {
 public:
     TextDrawer(Default* theme, Collection* config) : DrawerSdl(theme, config) {}
+    ~TextDrawer() { SDL_FreeSurface(m_Buffer); }
 
     SDL_Rect CalculateSize(SDL_Rect& content, SDL_Rect& total) override;
 
-    void Draw(bool) override;
+    void Draw(SDL_Surface* buffer, bool) override;
 
 protected:
     SDL_Surface* RenderText(const std::string& text, int size, const Rgb& color) const;

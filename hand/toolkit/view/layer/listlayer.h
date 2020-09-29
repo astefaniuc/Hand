@@ -10,14 +10,16 @@ class ListLayer : public Layer
 public:
     ~ListLayer();
 
-    void DrawChildren(bool forced) override;
+    void DrawChildren(SDL_Surface* buffer, bool forced) override;
     /// Returns 'sub'.
     Layer* Insert(Layer* sub);
     void Remove(Layer* sub) override;
 
     SDL_Rect GetLayoutSize() override {
-        return GetListLayout()->GetFieldSize(this, GetDrawer()->GetFrameOffset());
+        return GetListLayout()->GetFieldSize(this, { 0, 0, 0, 0 });
     }
+    void SetLayoutSize(const SDL_Rect& outer) override;
+
     const std::vector<Layer*>& GetSubLayers() const { return m_Sublayers; }
 
 protected:

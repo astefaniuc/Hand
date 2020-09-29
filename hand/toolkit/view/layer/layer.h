@@ -17,8 +17,8 @@ public:
 
     // Checks and updates content and triggers a re-draw if needed
     bool Update();
-    void Draw(bool forced);
-    virtual void DrawChildren(bool forced) = 0;
+    void Draw(SDL_Surface* buffer, bool forced);
+    virtual void DrawChildren(SDL_Surface* buffer, bool forced) = 0;
 
     // Methods to (re-)set links to external objects:
     void SetParent(Layer* parent) { m_Parent = parent; }
@@ -42,15 +42,21 @@ public:
 
     void Collapse();
 
-    // Set coordinates and size relative to the parent layer
-    void SetSize(const SDL_Rect& size);
-    const SDL_Rect& GetSize() const { return m_Coordinates; }
+    /// Set size and position relative to the parent layer.
+    void SetPreferredSize(const SDL_Rect& size);
+    const SDL_Rect& GetPreferredSize() const { return m_PreferredSize; }
 
     void SetContentSize(const SDL_Rect& size) { m_ContentSize = size; }
     const SDL_Rect& GetContentSize() const { return m_ContentSize; }
 
-    SDL_Rect UpdateSize(const SDL_Rect& externalOffset);
+    /// Set the available space and absolute position for drawing.
+    void SetFieldSize(const SDL_Rect& outer);
+    const SDL_Rect& GetFieldSize() const { return m_FieldSize; }
+
+    SDL_Rect UpdateSize(const SDL_Rect& offset);
+
     virtual SDL_Rect GetLayoutSize() = 0;
+    virtual void SetLayoutSize(const SDL_Rect& outer) = 0;
 
     bool IsModified() { return (m_IsModified || m_ModifiedContent); }
     virtual void Exit(HmiItem*);
@@ -68,9 +74,12 @@ protected:
     Drawer* m_Drawer = nullptr;
 
     /// The layers rectangle including the frame and spacing around it, and its position.
-    SDL_Rect m_Coordinates = { 0, 0, 0, 0 };
+    /// This is calculated in the UpdateSize() method and used in the parent layer size calculation.
+    SDL_Rect m_PreferredSize = { 0, 0, 0, 0 };
     /// The layers content/active rectangle and its position.
     SDL_Rect m_ContentSize = { 0, 0, 0, 0 };
+    /// The total available size.
+    SDL_Rect m_FieldSize = { 0, 0, 0, 0 };
 
     HmiItem* m_Data = nullptr;
 
@@ -90,15 +99,16 @@ class LayerMap : public Layer
 public:
     ~LayerMap();
 
-    void DrawChildren(bool forced) override;
+    void DrawChildren(SDL_Surface* buffer, bool forced) override;
     /// Returns 'sub'.
     Layer* Insert(const std::string& field, Layer* sub);
     void Remove(Layer* sub) override;
 
     SDL_Rect GetLayoutSize() override {
-        return GetMap()->GetFieldSize(this, GetDrawer()->GetFrameOffset());
+        return GetMap()->GetFieldSize(this, { 0, 0, 0, 0 });
     }
 
+    void SetLayoutSize(const SDL_Rect& outer) override;
     Layout::MapNode* GetMap() { return static_cast<Layout::MapNode*>(GetLayout()); }
     Layer* GetField(const std::string& name);
 

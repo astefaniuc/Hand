@@ -10,10 +10,10 @@ ListLayer::~ListLayer()
 }
 
 
-void ListLayer::DrawChildren(bool forced)
+void ListLayer::DrawChildren(SDL_Surface* buffer, bool forced)
 {
     for (Layer* sub : GetSubLayers())
-        GetDrawer()->DrawChild(sub, forced);
+        GetDrawer()->DrawChild(buffer, sub, forced);
 }
 
 
@@ -64,6 +64,13 @@ void ListLayer::UpdateSubContent()
 {
     for (Layer* sub : m_Sublayers)
         m_IsModified |= sub->Update();
+}
+
+
+void ListLayer::SetLayoutSize(const SDL_Rect& outer)
+{
+    for (auto sub : m_Sublayers)
+        sub->SetFieldSize(m_FieldSize);
 }
 
 

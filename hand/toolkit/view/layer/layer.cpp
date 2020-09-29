@@ -29,10 +29,9 @@ bool Layer::Update()
 }
 
 
-void Layer::Draw(bool a_forced)
+void Layer::Draw(SDL_Surface* buffer, bool a_forced)
 {
-    if (IsModified() || a_forced)
-        GetDrawer()->Draw(a_forced);
+    GetDrawer()->Draw(buffer, a_forced);
 
     m_ModifiedContent = false;
     m_IsModified = false;
@@ -48,13 +47,22 @@ void Layer::SetContent(HmiItem* data)
 }
 
 
-void Layer::SetSize(const SDL_Rect& a_size)
+void Layer::SetPreferredSize(const SDL_Rect& a_size)
 {
-    if ((a_size.w != m_Coordinates.w) || (a_size.h != m_Coordinates.h))
+    if ((a_size.w != m_PreferredSize.w) || (a_size.h != m_PreferredSize.h))
         // needs redrawing
         m_IsModified = true;
 
-    m_Coordinates = a_size;
+    m_PreferredSize = a_size;
+}
+
+
+void Layer::SetFieldSize(const SDL_Rect& outer)
+{
+    m_FieldSize = m_ContentSize;
+    m_FieldSize.x += m_PreferredSize.x + outer.x;
+    m_FieldSize.y += m_PreferredSize.y + outer.y;
+    SetLayoutSize(m_FieldSize);
 }
 
 
@@ -121,7 +129,7 @@ SDL_Rect Layer::UpdateSize(const SDL_Rect& externalOffset)
 
     total.x += externalOffset.x;
     total.y += externalOffset.y;
-    SetSize(total);
+    SetPreferredSize(total);
     return ret;
 }
 
@@ -134,10 +142,10 @@ LayerMap::~LayerMap()
 }
 
 
-void LayerMap::DrawChildren(bool forced)
+void LayerMap::DrawChildren(SDL_Surface* buffer, bool forced)
 {
     for (auto entry : m_Sublayers)
-        GetDrawer()->DrawChild(entry.second, forced);
+        GetDrawer()->DrawChild(buffer, entry.second, forced);
 }
 
 
@@ -177,4 +185,11 @@ void LayerMap::UpdateSubContent()
 {
     for (auto sub : m_Sublayers)
         m_IsModified |= sub.second->Update();
+}
+
+
+void LayerMap::SetLayoutSize(const SDL_Rect& outer)
+{
+    for (auto sub : m_Sublayers)
+        sub.second->SetFieldSize(m_FieldSize);
 }

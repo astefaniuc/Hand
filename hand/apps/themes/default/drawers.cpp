@@ -19,22 +19,25 @@ SDL_Rect TextDrawer::CalculateSize(SDL_Rect& content, SDL_Rect& total)
         content.h = (uint16_t)h;
     }
 
-    SDL_Rect ret = GetFramedSize(content, GetFrameOffset());
-    total = content;
-    return ret;
+    total = GetFramedSize(content, GetFrameOffset());
+    return total;
 }
 
 
-void TextDrawer::Draw(bool)
+void TextDrawer::Draw(SDL_Surface* buffer, bool)
 {
     const std::string& text = static_cast<TextLayer*>(m_Layer)->GetData();
     if (text.empty())
-    {
-        SetBuffer(nullptr);
         return;
+
+    if (m_Layer->IsModified())
+    {
+        SDL_FreeSurface(m_Buffer);
+        m_Buffer = RenderText(text, GetFontSize(), GetFontColor());
     }
 
-    SetBuffer(RenderText(text, GetFontSize(), GetFontColor()));
+    SDL_Rect srcRect = m_Layer->GetFieldSize();
+    BlitSurface(m_Buffer, &srcRect, buffer);
 }
 
 
