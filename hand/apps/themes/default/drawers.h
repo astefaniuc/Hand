@@ -12,7 +12,7 @@ public:
 
     SDL_Rect CalculateSize(SDL_Rect& content, SDL_Rect& total) override;
 
-    void Draw(SDL_Surface* buffer, bool) override;
+    void Draw(SDL_Surface* buffer) override;
 
 protected:
     SDL_Surface* RenderText(const std::string& text, int size, const Rgb& color) const;

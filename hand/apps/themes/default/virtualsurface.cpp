@@ -5,12 +5,12 @@
 #include <SDL/SDL_ttf.h>
 
 
-void DrawerSdl::Draw(SDL_Surface* buffer, bool forced)
+void DrawerSdl::Draw(SDL_Surface* buffer)
 {
     m_Buffer = buffer;
     DrawBackground();
     DrawFrame();
-    m_Layer->DrawChildren(buffer, forced);
+    m_Layer->DrawChildren();
 }
 
 
@@ -67,9 +67,9 @@ void DrawerSdl::BlitSurface(SDL_Surface* source, SDL_Rect* src_pos, SDL_Surface*
 }
 
 
-void DrawerSdl::DrawChild(SDL_Surface* buffer, Layer* child, bool forced)
+void DrawerSdl::DrawChild(Layer* child)
 {
-    child->Draw(buffer, forced);
+    child->Draw(m_Buffer);
 }
 
 

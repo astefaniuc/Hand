@@ -17,8 +17,8 @@ public:
 
     // Checks and updates content and triggers a re-draw if needed
     bool Update();
-    void Draw(SDL_Surface* buffer, bool forced);
-    virtual void DrawChildren(SDL_Surface* buffer, bool forced) = 0;
+    void Draw(SDL_Surface* buffer);
+    virtual void DrawChildren() = 0;
 
     // Methods to (re-)set links to external objects:
     void SetParent(Layer* parent) { m_Parent = parent; }
@@ -99,7 +99,7 @@ class LayerMap : public Layer
 public:
     ~LayerMap();
 
-    void DrawChildren(SDL_Surface* buffer, bool forced) override;
+    void DrawChildren() override;
     /// Returns 'sub'.
     Layer* Insert(const std::string& field, Layer* sub);
     void Remove(Layer* sub) override;

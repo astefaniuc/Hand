@@ -12,8 +12,8 @@ class Drawer
 public:
     virtual ~Drawer() {}
 
-    virtual void Draw(SDL_Surface* buffer, bool forced) = 0;
-    virtual void DrawChild(SDL_Surface* buffer, Layer* child, bool forced) = 0;
+    virtual void Draw(SDL_Surface* buffer) = 0;
+    virtual void DrawChild(Layer* child) = 0;
     virtual SDL_Rect CalculateSize(SDL_Rect& content, SDL_Rect& total) = 0;
     virtual SDL_Rect GetFrameOffset() = 0;
     virtual void SetLayer(Layer* layer) { m_Layer = layer; }

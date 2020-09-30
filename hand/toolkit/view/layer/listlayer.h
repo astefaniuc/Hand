@@ -10,7 +10,7 @@ class ListLayer : public Layer
 public:
     ~ListLayer();
 
-    void DrawChildren(SDL_Surface* buffer, bool forced) override;
+    void DrawChildren() override;
     /// Returns 'sub'.
     Layer* Insert(Layer* sub);
     void Remove(Layer* sub) override;

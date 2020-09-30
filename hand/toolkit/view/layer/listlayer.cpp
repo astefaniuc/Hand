@@ -10,10 +10,10 @@ ListLayer::~ListLayer()
 }
 
 
-void ListLayer::DrawChildren(SDL_Surface* buffer, bool forced)
+void ListLayer::DrawChildren()
 {
     for (Layer* sub : GetSubLayers())
-        GetDrawer()->DrawChild(buffer, sub, forced);
+        GetDrawer()->DrawChild(sub);
 }
 
 

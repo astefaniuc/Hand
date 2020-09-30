@@ -29,9 +29,9 @@ bool Layer::Update()
 }
 
 
-void Layer::Draw(SDL_Surface* buffer, bool a_forced)
+void Layer::Draw(SDL_Surface* buffer)
 {
-    GetDrawer()->Draw(buffer, a_forced);
+    GetDrawer()->Draw(buffer);
 
     m_ModifiedContent = false;
     m_IsModified = false;
@@ -142,10 +142,10 @@ LayerMap::~LayerMap()
 }
 
 
-void LayerMap::DrawChildren(SDL_Surface* buffer, bool forced)
+void LayerMap::DrawChildren()
 {
     for (auto entry : m_Sublayers)
-        GetDrawer()->DrawChild(buffer, entry.second, forced);
+        GetDrawer()->DrawChild(entry.second);
 }
 
 

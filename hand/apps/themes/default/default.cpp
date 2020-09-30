@@ -172,7 +172,7 @@ void Default::UpdateScreen()
         DrawerSdl::PlaceCentered(src, tgt);
         m_ScreenRoot->SetFieldSize(tgt);
 
-        m_ScreenRoot->Draw(m_Surface, false);
+        m_ScreenRoot->Draw(m_Surface);
         SDL_Flip(m_Surface);
     }
 }

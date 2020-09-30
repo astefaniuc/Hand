@@ -24,7 +24,7 @@ SDL_Rect TextDrawer::CalculateSize(SDL_Rect& content, SDL_Rect& total)
 }
 
 
-void TextDrawer::Draw(SDL_Surface* buffer, bool)
+void TextDrawer::Draw(SDL_Surface* buffer)
 {
     const std::string& text = static_cast<TextLayer*>(m_Layer)->GetData();
     if (text.empty())
