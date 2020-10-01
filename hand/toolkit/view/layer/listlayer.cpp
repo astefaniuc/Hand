@@ -67,7 +67,7 @@ void ListLayer::UpdateSubContent()
 }
 
 
-void ListLayer::SetLayoutSize(const SDL_Rect& outer)
+void ListLayer::SetChildrenSizes()
 {
     for (auto sub : m_Sublayers)
         sub->SetFieldSize(m_FieldSize);

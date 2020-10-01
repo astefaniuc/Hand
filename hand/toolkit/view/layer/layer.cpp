@@ -62,7 +62,7 @@ void Layer::SetFieldSize(const SDL_Rect& outer)
     m_FieldSize = m_ContentSize;
     m_FieldSize.x += m_PreferredSize.x + outer.x;
     m_FieldSize.y += m_PreferredSize.y + outer.y;
-    SetLayoutSize(m_FieldSize);
+    SetChildrenSizes();
 }
 
 
@@ -122,14 +122,13 @@ void Layer::Collapse()
 }
 
 
-SDL_Rect Layer::UpdateSize(const SDL_Rect& externalOffset)
+SDL_Rect Layer::UpdateSize(const SDL_Rect& offset)
 {
-    SDL_Rect total = { 0, 0, 0, 0 };
-    SDL_Rect ret = GetDrawer()->CalculateSize(m_ContentSize, total);
+    SDL_Rect ret = GetDrawer()->CalculateSize(m_ContentSize);
 
-    total.x += externalOffset.x;
-    total.y += externalOffset.y;
-    SetPreferredSize(total);
+    ret.x += offset.x;
+    ret.y += offset.y;
+    SetPreferredSize(ret);
     return ret;
 }
 
@@ -188,7 +187,7 @@ void LayerMap::UpdateSubContent()
 }
 
 
-void LayerMap::SetLayoutSize(const SDL_Rect& outer)
+void LayerMap::SetChildrenSizes()
 {
     for (auto sub : m_Sublayers)
         sub.second->SetFieldSize(m_FieldSize);

@@ -20,8 +20,9 @@ DrawerSdl* DrawerSdl::GetDrawer(Layer* a_from)
 }
 
 
-SDL_Rect DrawerSdl::GetFramedSize(SDL_Rect& content, const SDL_Rect& offset)
+SDL_Rect DrawerSdl::GetFramedSize(SDL_Rect& content)
 {
+    SDL_Rect offset = GetFrameOffset();
     SDL_Rect total = content;
     total.w += offset.w;
     total.h += offset.h;
@@ -31,12 +32,10 @@ SDL_Rect DrawerSdl::GetFramedSize(SDL_Rect& content, const SDL_Rect& offset)
 }
 
 
-SDL_Rect DrawerSdl::CalculateSize(SDL_Rect& content, SDL_Rect& total)
+SDL_Rect DrawerSdl::CalculateSize(SDL_Rect& content)
 {
     content = m_Layer->GetLayoutSize();
-    total = GetFramedSize(content, GetFrameOffset());
-
-    return total;
+    return GetFramedSize(content);
 }
 
 

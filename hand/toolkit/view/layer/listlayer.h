@@ -18,7 +18,7 @@ public:
     SDL_Rect GetLayoutSize() override {
         return GetListLayout()->GetFieldSize(this, { 0, 0, 0, 0 });
     }
-    void SetLayoutSize(const SDL_Rect& outer) override;
+    void SetChildrenSizes() override;
 
     const std::vector<Layer*>& GetSubLayers() const { return m_Sublayers; }
 

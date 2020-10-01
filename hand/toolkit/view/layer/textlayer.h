@@ -1,8 +1,7 @@
 #ifndef HAND_VIEW_LAYER_TEXTLAYER_H
 #define HAND_VIEW_LAYER_TEXTLAYER_H
 
-#include "layer.h"
-#include <string>
+#include "view/layer/layer.h"
 
 
 class TextLayer : public Layer
@@ -23,7 +22,7 @@ protected:
     Layout::Node* CreateLayout() override { return nullptr; }
     SDL_Rect GetLayoutSize() override { return {1,2,3,4}; }
     void DrawChildren() override {}
-    void SetLayoutSize(const SDL_Rect& outer) override {}
+    void SetChildrenSizes() override {}
 
 private:
     std::string m_Text;

@@ -42,6 +42,8 @@ public:
 
     void Collapse();
 
+    SDL_Rect UpdateSize(const SDL_Rect& offset);
+
     /// Set size and position relative to the parent layer.
     void SetPreferredSize(const SDL_Rect& size);
     const SDL_Rect& GetPreferredSize() const { return m_PreferredSize; }
@@ -53,15 +55,13 @@ public:
     void SetFieldSize(const SDL_Rect& outer);
     const SDL_Rect& GetFieldSize() const { return m_FieldSize; }
 
-    SDL_Rect UpdateSize(const SDL_Rect& offset);
-
     virtual SDL_Rect GetLayoutSize() = 0;
-    virtual void SetLayoutSize(const SDL_Rect& outer) = 0;
 
     bool IsModified() { return (m_IsModified || m_ModifiedContent); }
     virtual void Exit(HmiItem*);
 
 protected:
+    virtual void SetChildrenSizes() = 0;
     virtual Layout::Node* CreateLayout() = 0;
     virtual Drawer* CreatetDrawer() = 0;
     /// Rebuild sub-layer structure on content or layout changes.
@@ -108,7 +108,7 @@ public:
         return GetMap()->GetFieldSize(this, { 0, 0, 0, 0 });
     }
 
-    void SetLayoutSize(const SDL_Rect& outer) override;
+    void SetChildrenSizes() override;
     Layout::MapNode* GetMap() { return static_cast<Layout::MapNode*>(GetLayout()); }
     Layer* GetField(const std::string& name);
 

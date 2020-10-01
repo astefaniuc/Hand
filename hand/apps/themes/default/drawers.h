@@ -10,7 +10,7 @@ public:
     TextDrawer(Default* theme, Collection* config) : DrawerSdl(theme, config) {}
     ~TextDrawer() { SDL_FreeSurface(m_Buffer); }
 
-    SDL_Rect CalculateSize(SDL_Rect& content, SDL_Rect& total) override;
+    SDL_Rect CalculateSize(SDL_Rect& content) override;
 
     void Draw(SDL_Surface* buffer) override;
 

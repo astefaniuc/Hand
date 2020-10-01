@@ -5,7 +5,7 @@
 // #include "SDL/SDL_Image.h"
 
 
-SDL_Rect TextDrawer::CalculateSize(SDL_Rect& content, SDL_Rect& total)
+SDL_Rect TextDrawer::CalculateSize(SDL_Rect& content)
 {
     content = { 0, 0, 0, 0 };
     const std::string& text = static_cast<TextLayer*>(m_Layer)->GetData();
@@ -19,8 +19,7 @@ SDL_Rect TextDrawer::CalculateSize(SDL_Rect& content, SDL_Rect& total)
         content.h = (uint16_t)h;
     }
 
-    total = GetFramedSize(content, GetFrameOffset());
-    return total;
+    return GetFramedSize(content);
 }
 
 

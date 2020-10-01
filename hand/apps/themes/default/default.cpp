@@ -160,7 +160,7 @@ void Default::InitScreen(Layer* a_root)
 
 void Default::UpdateScreen()
 {
-    m_ScreenRoot->UpdateSize({ 0,0,0,0 });
+    SDL_Rect src = m_ScreenRoot->UpdateSize({ 0,0,0,0 });
     if (m_ScreenRoot->IsModified())
     {
         SDL_Rect tgt = GetResolution();
@@ -168,7 +168,6 @@ void Default::UpdateScreen()
         SDL_SetClipRect(m_Surface, &tgt);
         SDL_FillRect(m_Surface, nullptr, 0x000000);
 
-        SDL_Rect src = m_ScreenRoot->GetPreferredSize();
         DrawerSdl::PlaceCentered(src, tgt);
         m_ScreenRoot->SetFieldSize(tgt);
 
