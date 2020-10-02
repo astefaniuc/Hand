@@ -15,12 +15,12 @@ public:
 protected:
     Drawer* CreatetDrawer() override;
 
+    SDL_Rect GetLayoutSize() override { return { 0, 0, 0, 0 }; }
     // Terminal layer. TODO: remove all this from base class.
     void Rebuild() override {}
     void UpdateSubContent() override {}
     void Remove(Layer*) override {}
     Layout::Node* CreateLayout() override { return nullptr; }
-    SDL_Rect GetLayoutSize() override { return {1,2,3,4}; }
     void DrawChildren() override {}
     void SetChildrenSizes() override {}
 

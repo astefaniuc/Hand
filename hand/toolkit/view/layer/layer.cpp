@@ -47,25 +47,6 @@ void Layer::SetContent(HmiItem* data)
 }
 
 
-void Layer::SetPreferredSize(const SDL_Rect& a_size)
-{
-    if ((a_size.w != m_PreferredSize.w) || (a_size.h != m_PreferredSize.h))
-        // needs redrawing
-        m_IsModified = true;
-
-    m_PreferredSize = a_size;
-}
-
-
-void Layer::SetFieldSize(const SDL_Rect& outer)
-{
-    m_FieldSize = m_ContentSize;
-    m_FieldSize.x += m_PreferredSize.x + outer.x;
-    m_FieldSize.y += m_PreferredSize.y + outer.y;
-    SetChildrenSizes();
-}
-
-
 Layout::Node* Layer::GetLayout()
 {
     if (!m_Layout)
@@ -124,12 +105,19 @@ void Layer::Collapse()
 
 SDL_Rect Layer::UpdateSize(const SDL_Rect& offset)
 {
-    SDL_Rect ret = GetDrawer()->CalculateSize(m_ContentSize);
+    m_ContentSize = GetLayoutSize();
+    m_ContentSize.x += offset.x;
+    m_ContentSize.y += offset.y;
+    return GetDrawer()->CalculateSize(m_ContentSize);
+}
 
-    ret.x += offset.x;
-    ret.y += offset.y;
-    SetPreferredSize(ret);
-    return ret;
+
+void Layer::SetSize(const SDL_Rect& outer)
+{
+    m_Size = m_ContentSize;
+    m_Size.x += outer.x;
+    m_Size.y += outer.y;
+    SetChildrenSizes();
 }
 
 
@@ -190,5 +178,5 @@ void LayerMap::UpdateSubContent()
 void LayerMap::SetChildrenSizes()
 {
     for (auto sub : m_Sublayers)
-        sub.second->SetFieldSize(m_FieldSize);
+        sub.second->SetSize(m_Size);
 }

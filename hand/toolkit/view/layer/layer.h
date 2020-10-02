@@ -42,25 +42,21 @@ public:
 
     void Collapse();
 
+    /// Returns the layers rectangle including the frame and spacing around it.
     SDL_Rect UpdateSize(const SDL_Rect& offset);
-
-    /// Set size and position relative to the parent layer.
-    void SetPreferredSize(const SDL_Rect& size);
-    const SDL_Rect& GetPreferredSize() const { return m_PreferredSize; }
 
     void SetContentSize(const SDL_Rect& size) { m_ContentSize = size; }
     const SDL_Rect& GetContentSize() const { return m_ContentSize; }
 
     /// Set the available space and absolute position for drawing.
-    void SetFieldSize(const SDL_Rect& outer);
-    const SDL_Rect& GetFieldSize() const { return m_FieldSize; }
-
-    virtual SDL_Rect GetLayoutSize() = 0;
+    void SetSize(const SDL_Rect& outer);
+    const SDL_Rect& GetSize() const { return m_Size; }
 
     bool IsModified() { return (m_IsModified || m_ModifiedContent); }
     virtual void Exit(HmiItem*);
 
 protected:
+    virtual SDL_Rect GetLayoutSize() = 0;
     virtual void SetChildrenSizes() = 0;
     virtual Layout::Node* CreateLayout() = 0;
     virtual Drawer* CreatetDrawer() = 0;
@@ -73,13 +69,10 @@ protected:
     Theme* m_Theme = nullptr;
     Drawer* m_Drawer = nullptr;
 
-    /// The layers rectangle including the frame and spacing around it, and its position.
-    /// This is calculated in the UpdateSize() method and used in the parent layer size calculation.
-    SDL_Rect m_PreferredSize = { 0, 0, 0, 0 };
     /// The layers content/active rectangle and its position.
     SDL_Rect m_ContentSize = { 0, 0, 0, 0 };
     /// The total available size.
-    SDL_Rect m_FieldSize = { 0, 0, 0, 0 };
+    SDL_Rect m_Size = { 0, 0, 0, 0 };
 
     HmiItem* m_Data = nullptr;
 
@@ -87,7 +80,7 @@ protected:
     bool IsExpanded = false;
 
     bool m_ModifiedContent = false;
-    bool m_IsModified = false;
+    bool m_IsModified = true;
 
 private:
     Layout::Node* m_Layout = nullptr;
@@ -104,10 +97,6 @@ public:
     Layer* Insert(const std::string& field, Layer* sub);
     void Remove(Layer* sub) override;
 
-    SDL_Rect GetLayoutSize() override {
-        return GetMap()->GetFieldSize(this, { 0, 0, 0, 0 });
-    }
-
     void SetChildrenSizes() override;
     Layout::MapNode* GetMap() { return static_cast<Layout::MapNode*>(GetLayout()); }
     Layer* GetField(const std::string& name);
@@ -115,6 +104,10 @@ public:
     void UpdateSubContent() override;
 
 protected:
+    SDL_Rect GetLayoutSize() override {
+        return GetMap()->GetFieldSize(this, { 0, 0, 0, 0 });
+    }
+
     std::map<std::string, Layer*> m_Sublayers;
 };
 

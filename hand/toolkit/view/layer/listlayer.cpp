@@ -21,6 +21,9 @@ void ListLayer::Rebuild()
 {
     m_Sublayers.clear();
 
+    if (!GetContent())
+        return;
+
     Collection* listData = dynamic_cast<Collection*>(GetContent());
     if (listData)
     {
@@ -70,7 +73,7 @@ void ListLayer::UpdateSubContent()
 void ListLayer::SetChildrenSizes()
 {
     for (auto sub : m_Sublayers)
-        sub->SetFieldSize(m_FieldSize);
+        sub->SetSize(m_Size);
 }
 
 

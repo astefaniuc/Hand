@@ -14,10 +14,6 @@ public:
     /// Returns 'sub'.
     Layer* Insert(Layer* sub);
     void Remove(Layer* sub) override;
-
-    SDL_Rect GetLayoutSize() override {
-        return GetListLayout()->GetFieldSize(this, { 0, 0, 0, 0 });
-    }
     void SetChildrenSizes() override;
 
     const std::vector<Layer*>& GetSubLayers() const { return m_Sublayers; }
@@ -25,6 +21,10 @@ public:
 protected:
     void Rebuild() override;
     void UpdateSubContent() override;
+
+    SDL_Rect GetLayoutSize() override {
+        return GetListLayout()->GetFieldSize(this, { 0, 0, 0, 0 });
+    }
 
     Drawer* CreatetDrawer() override;
     Layout::Node* CreateLayout() override { return new Layout::List(); }

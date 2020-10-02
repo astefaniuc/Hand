@@ -18,8 +18,7 @@ public:
     void Draw(SDL_Surface* buffer) override;
     void DrawChild(Layer* child) override;
 
-    SDL_Rect CalculateSize(SDL_Rect& content) override;
-    SDL_Rect GetFrameOffset() override;
+    SDL_Rect CalculateSize(SDL_Rect& content) override { return GetFramedSize(content); }
 
     void SetProperties(Collection* config) { m_Properties = config; }
 
@@ -34,6 +33,7 @@ protected:
     virtual void DrawFrame();
     virtual void DrawBackground();
 
+    SDL_Rect GetFrameOffset();
     SDL_Rect GetFramedSize(SDL_Rect& content);
     // Drawing interface
     void FillRect(SDL_Rect r, const Rgb& color);

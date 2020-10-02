@@ -7,7 +7,6 @@
 
 SDL_Rect TextDrawer::CalculateSize(SDL_Rect& content)
 {
-    content = { 0, 0, 0, 0 };
     const std::string& text = static_cast<TextLayer*>(m_Layer)->GetData();
 
     if (!text.empty())
@@ -35,7 +34,7 @@ void TextDrawer::Draw(SDL_Surface* buffer)
         m_Buffer = RenderText(text, GetFontSize(), GetFontColor());
     }
 
-    SDL_Rect srcRect = m_Layer->GetFieldSize();
+    SDL_Rect srcRect = m_Layer->GetSize();
     BlitSurface(m_Buffer, &srcRect, buffer);
 }
 
