@@ -70,13 +70,6 @@ void ListLayer::UpdateSubContent()
 }
 
 
-void ListLayer::SetChildrenSizes()
-{
-    for (auto sub : m_Sublayers)
-        sub->SetSize(m_Size);
-}
-
-
 Drawer* ListLayer::CreatetDrawer()
 {
     return GetTheme()->GetListDrawer();

@@ -12,11 +12,8 @@
 #define VIEW "View"
 
 
-
-
 class LayerMap;
 class ListLayer;
-
 
 namespace Layout {
 
@@ -36,40 +33,35 @@ class Node
 public:
     virtual ~Node() = default;
 
-//    virtual SDL_Rect GetSize(Layer* tgt) = 0;
     virtual Field* GetField(const std::string& name) const { return nullptr; }
-};
-
-
-class MapNode : public Node
-{
-public:
-    virtual SDL_Rect GetFieldSize(LayerMap* tgt, SDL_Rect offset) = 0;
+    virtual SDL_Rect GetSize(Layer* tgt, SDL_Rect offset) {
+        return { offset.x, offset.y, 0, 0 };
+    }
 };
 
 // "Link" for the Layer
-class Separator : public MapNode
+class Separator : public Node
 {
 public:
-    Separator(MapNode* field1, MapNode* field2, Orientation orientation)
+    Separator(Node* field1, Node* field2, Orientation orientation)
         : m_Field1(field1), m_Field2(field2), m_Orientation(orientation) {}
 
-    SDL_Rect GetFieldSize(LayerMap* tgt, SDL_Rect offset) override;
+    SDL_Rect GetSize(Layer* tgt, SDL_Rect offset) override;
     Field* GetField(const std::string& name) const override;
 
 protected:
-    MapNode* m_Field1;
-    MapNode* m_Field2;
+    Node* m_Field1;
+    Node* m_Field2;
     Orientation m_Orientation;
 };
 
 
-class Field : public MapNode
+class Field : public Node
 {
 public:
     Field(const std::string& name) : m_Name(name) {}
 
-    SDL_Rect GetFieldSize(LayerMap* tgt, SDL_Rect offset) override;
+    SDL_Rect GetSize(Layer* tgt, SDL_Rect offset) override;
     Field* GetField(const std::string& name) const override;
 
     void SetVisible(bool visible) { m_IsVisble = visible; }
@@ -84,7 +76,7 @@ private:
 class List : public Node
 {
 public:
-    SDL_Rect GetFieldSize(ListLayer* tgt, SDL_Rect offset);
+    SDL_Rect GetSize(Layer* tgt, SDL_Rect offset);
 
     void SetMaxItemsToShow(unsigned count) { m_MaxItemsToShow->SetValue(count); }
     unsigned GetMaxItemsToShow() { return m_MaxItemsToShow->GetValue(); }
@@ -103,8 +95,8 @@ Node* CreateButton();
 Node* CreateData();
 Node* CreateView();
 
-MapNode* AssureNode(MapNode* in);
-MapNode* AssureNode(const std::string& in);
+Node* AssureNode(Node* in);
+Node* AssureNode(const std::string& in);
 
 template<class T1, class T2>
 Separator* SplitV(T1 field1, T2 field2) {

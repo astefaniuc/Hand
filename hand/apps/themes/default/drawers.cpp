@@ -34,7 +34,7 @@ void TextDrawer::Draw(SDL_Surface* buffer)
         m_Buffer = RenderText(text, GetFontSize(), GetFontColor());
     }
 
-    SDL_Rect srcRect = m_Layer->GetSize();
+    SDL_Rect srcRect = m_Layer->GetContentSize();
     BlitSurface(m_Buffer, &srcRect, buffer);
 }
 

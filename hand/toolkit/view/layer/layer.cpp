@@ -103,21 +103,11 @@ void Layer::Collapse()
 }
 
 
-SDL_Rect Layer::UpdateSize(const SDL_Rect& offset)
+SDL_Rect Layer::UpdateSize(const SDL_Rect& outer)
 {
-    m_ContentSize = GetLayoutSize();
-    m_ContentSize.x += offset.x;
-    m_ContentSize.y += offset.y;
-    return GetDrawer()->CalculateSize(m_ContentSize);
-}
-
-
-void Layer::SetSize(const SDL_Rect& outer)
-{
-    m_Size = m_ContentSize;
-    m_Size.x += outer.x;
-    m_Size.y += outer.y;
-    SetChildrenSizes();
+    SDL_Rect content = GetDrawer()->GetContentSize(outer);
+    m_Size = GetLayout()->GetSize(this, content);
+    return GetDrawer()->CalculateSize(m_Size);
 }
 
 
@@ -172,11 +162,4 @@ void LayerMap::UpdateSubContent()
 {
     for (auto sub : m_Sublayers)
         m_IsModified |= sub.second->Update();
-}
-
-
-void LayerMap::SetChildrenSizes()
-{
-    for (auto sub : m_Sublayers)
-        sub.second->SetSize(m_Size);
 }

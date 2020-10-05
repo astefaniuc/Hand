@@ -20,14 +20,24 @@ DrawerSdl* DrawerSdl::GetDrawer(Layer* a_from)
 }
 
 
-SDL_Rect DrawerSdl::GetFramedSize(SDL_Rect& content)
+SDL_Rect DrawerSdl::GetContentSize(const SDL_Rect& outer)
+{
+    SDL_Rect offset = GetFrameOffset();
+    SDL_Rect content = outer;
+    content.w -= offset.w;
+    content.h -= offset.h;
+    content.x += offset.x;
+    content.y += offset.y;
+    return content;
+}
+
+
+SDL_Rect DrawerSdl::GetFramedSize(const SDL_Rect& content)
 {
     SDL_Rect offset = GetFrameOffset();
     SDL_Rect total = content;
     total.w += offset.w;
     total.h += offset.h;
-    content.x += offset.x;
-    content.y += offset.y;
     return total;
 }
 
@@ -67,7 +77,7 @@ void DrawerSdl::DrawChild(Layer* child)
 
 void DrawerSdl::DrawBackground()
 {
-    FillRect(m_Layer->GetSize(), GetBackgroundColor());
+    FillRect(m_Layer->GetContentSize(), GetBackgroundColor());
 }
 
 
@@ -80,7 +90,7 @@ void DrawerSdl::DrawFrame()
     int16_t width = m_Theme->GetBaseSize() * 0.1;
     const Rgb& color = GetFrameColor();
 
-    SDL_Rect content = m_Layer->GetSize();
+    SDL_Rect content = m_Layer->GetContentSize();
     // Draw each line separately
     {
         SDL_Rect top = content;

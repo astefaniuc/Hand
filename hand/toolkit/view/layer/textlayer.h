@@ -14,15 +14,13 @@ public:
 
 protected:
     Drawer* CreatetDrawer() override;
+    Layout::Node* CreateLayout() override { return new Layout::Node(); }
 
-    SDL_Rect GetLayoutSize() override { return { 0, 0, 0, 0 }; }
     // Terminal layer. TODO: remove all this from base class.
     void Rebuild() override {}
     void UpdateSubContent() override {}
     void Remove(Layer*) override {}
-    Layout::Node* CreateLayout() override { return nullptr; }
     void DrawChildren() override {}
-    void SetChildrenSizes() override {}
 
 private:
     std::string m_Text;

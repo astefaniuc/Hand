@@ -44,20 +44,13 @@ public:
 
     /// Returns the layers rectangle including the frame and spacing around it.
     SDL_Rect UpdateSize(const SDL_Rect& offset);
-
-    void SetContentSize(const SDL_Rect& size) { m_ContentSize = size; }
-    const SDL_Rect& GetContentSize() const { return m_ContentSize; }
-
-    /// Set the available space and absolute position for drawing.
-    void SetSize(const SDL_Rect& outer);
-    const SDL_Rect& GetSize() const { return m_Size; }
+    /// Returns the size without the frame and spacing.
+    const SDL_Rect& GetContentSize() const { return m_Size; }
 
     bool IsModified() { return (m_IsModified || m_ModifiedContent); }
     virtual void Exit(HmiItem*);
 
 protected:
-    virtual SDL_Rect GetLayoutSize() = 0;
-    virtual void SetChildrenSizes() = 0;
     virtual Layout::Node* CreateLayout() = 0;
     virtual Drawer* CreatetDrawer() = 0;
     /// Rebuild sub-layer structure on content or layout changes.
@@ -70,8 +63,6 @@ protected:
     Drawer* m_Drawer = nullptr;
 
     /// The layers content/active rectangle and its position.
-    SDL_Rect m_ContentSize = { 0, 0, 0, 0 };
-    /// The total available size.
     SDL_Rect m_Size = { 0, 0, 0, 0 };
 
     HmiItem* m_Data = nullptr;
@@ -97,17 +88,12 @@ public:
     Layer* Insert(const std::string& field, Layer* sub);
     void Remove(Layer* sub) override;
 
-    void SetChildrenSizes() override;
-    Layout::MapNode* GetMap() { return static_cast<Layout::MapNode*>(GetLayout()); }
+    Layout::Node* GetMap() { return static_cast<Layout::Node*>(GetLayout()); }
     Layer* GetField(const std::string& name);
 
     void UpdateSubContent() override;
 
 protected:
-    SDL_Rect GetLayoutSize() override {
-        return GetMap()->GetFieldSize(this, { 0, 0, 0, 0 });
-    }
-
     std::map<std::string, Layer*> m_Sublayers;
 };
 

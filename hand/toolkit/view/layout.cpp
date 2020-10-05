@@ -6,8 +6,8 @@
 namespace Layout {
 
 
-MapNode* AssureNode(MapNode* in) { return in; }
-MapNode* AssureNode(const std::string& in) { return new Field(in); }
+Node* AssureNode(Node* in) { return in; }
+Node* AssureNode(const std::string& in) { return new Field(in); }
 
 
 void AddH(const SDL_Rect& in, SDL_Rect& out)
@@ -26,8 +26,9 @@ void AddV(const SDL_Rect& in, SDL_Rect& out)
 
 
 
-SDL_Rect Field::GetFieldSize(LayerMap* tgt, SDL_Rect offset)
+SDL_Rect Field::GetSize(Layer* a_tgt, SDL_Rect offset)
 {
+    LayerMap* tgt = static_cast<LayerMap*>(a_tgt);
     Layer* sub = tgt->GetField(m_Name);
     if (sub)
         return sub->UpdateSize(offset);
@@ -43,21 +44,21 @@ Field* Field::GetField(const std::string& a_name) const
 }
 
 
-SDL_Rect Separator::GetFieldSize(LayerMap* a_tgt, SDL_Rect offset)
+SDL_Rect Separator::GetSize(Layer* tgt, SDL_Rect offset)
 {
-    SDL_Rect size = { 0, 0, 0, 0 };
+    SDL_Rect size = Node::GetSize(tgt, offset);
     //  Remove the first childs offset from the total size:
-    AddH(m_Field1->GetFieldSize(a_tgt, offset), size);
+    AddH(m_Field1->GetSize(tgt, offset), size);
 
     if (m_Orientation == Horizontal)
     {
         offset.y += size.h;
-        AddH(m_Field2->GetFieldSize(a_tgt, offset), size);
+        AddH(m_Field2->GetSize(tgt, offset), size);
     }
     else
     {
         offset.x += size.w;
-        AddV(m_Field2->GetFieldSize(a_tgt, offset), size);
+        AddV(m_Field2->GetSize(tgt, offset), size);
     }
 
     return size;
@@ -73,9 +74,10 @@ Field* Separator::GetField(const std::string& a_name) const
 }
 
 
-SDL_Rect List::GetFieldSize(ListLayer* tgt, SDL_Rect offset)
+SDL_Rect List::GetSize(Layer* a_tgt, SDL_Rect offset)
 {
-    SDL_Rect size = { 0, 0, 0, 0 };
+    SDL_Rect size = Node::GetSize(a_tgt, offset);
+    ListLayer* tgt = static_cast<ListLayer*>(a_tgt);
     if (GetOrientation() != Horizontal)
         for (Layer* sub : tgt->GetSubLayers())
         {
