@@ -16,7 +16,6 @@ public:
     DrawerSdl(Default* theme, Collection* config) : m_Theme(theme), m_Properties(config) {}
 
     void Draw(SDL_Surface* buffer) override;
-    void DrawChild(Layer* child) override;
 
     SDL_Rect CalculateSize(SDL_Rect& content) override { return GetFramedSize(content); }
     SDL_Rect GetContentSize(const SDL_Rect& outer) override;

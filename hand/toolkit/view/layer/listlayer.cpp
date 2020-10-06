@@ -10,10 +10,20 @@ ListLayer::~ListLayer()
 }
 
 
-void ListLayer::DrawChildren()
+Layer* ListLayer::GetFirstChild()
 {
-    for (Layer* sub : GetSubLayers())
-        GetDrawer()->DrawChild(sub);
+    m_CurrentChild = m_Sublayers.cbegin();
+    if (m_CurrentChild != m_Sublayers.cend())
+        return *m_CurrentChild;
+    return nullptr;
+}
+
+Layer* ListLayer::GetNextChild()
+{
+    ++m_CurrentChild;
+    if (m_CurrentChild != m_Sublayers.cend())
+        return *m_CurrentChild;
+    return nullptr;
 }
 
 
@@ -60,13 +70,6 @@ void ListLayer::Remove(Layer* a_child)
             return;
         }
     }
-}
-
-
-void ListLayer::UpdateSubContent()
-{
-    for (Layer* sub : m_Sublayers)
-        m_IsModified |= sub->Update();
 }
 
 

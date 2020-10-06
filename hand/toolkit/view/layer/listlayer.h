@@ -10,16 +10,15 @@ class ListLayer : public Layer
 public:
     ~ListLayer();
 
-    void DrawChildren() override;
     /// Returns 'sub'.
     Layer* Insert(Layer* sub);
     void Remove(Layer* sub) override;
 
-    const std::vector<Layer*>& GetSubLayers() const { return m_Sublayers; }
+    Layer* GetFirstChild() override;
+    Layer* GetNextChild() override;
 
 protected:
     void Rebuild() override;
-    void UpdateSubContent() override;
 
     Drawer* CreatetDrawer() override;
     Layout::Node* CreateLayout() override { return new Layout::List(); }
@@ -32,6 +31,7 @@ protected:
 
 private:
     std::vector<Layer*> m_Sublayers;
+    std::vector<Layer*>::const_iterator m_CurrentChild = m_Sublayers.cbegin();
     unsigned m_StartPosition = 0;
 };
 

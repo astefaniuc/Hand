@@ -18,12 +18,14 @@ public:
     // Checks and updates content and triggers a re-draw if needed
     bool Update();
     void Draw(SDL_Surface* buffer);
-    virtual void DrawChildren() = 0;
 
     // Methods to (re-)set links to external objects:
     void SetParent(Layer* parent) { m_Parent = parent; }
     // TODO: any use for this?
     Layer* GetParent() const { return m_Parent; }
+
+    virtual Layer* GetFirstChild() { return nullptr; }
+    virtual Layer* GetNextChild() { return nullptr; }
 
     virtual void Remove(Layer* sub) = 0;
 
@@ -56,7 +58,6 @@ protected:
     /// Rebuild sub-layer structure on content or layout changes.
     virtual void Rebuild() = 0;
     /// Update all sub-layers sizes.
-    virtual void UpdateSubContent() = 0;
 
     Layer* m_Parent = nullptr;
     Theme* m_Theme = nullptr;
@@ -83,18 +84,18 @@ class LayerMap : public Layer
 public:
     ~LayerMap();
 
-    void DrawChildren() override;
+    Layer* GetFirstChild() override;
+    Layer* GetNextChild() override;
+
     /// Returns 'sub'.
     Layer* Insert(const std::string& field, Layer* sub);
     void Remove(Layer* sub) override;
 
-    Layout::Node* GetMap() { return static_cast<Layout::Node*>(GetLayout()); }
     Layer* GetField(const std::string& name);
-
-    void UpdateSubContent() override;
 
 protected:
     std::map<std::string, Layer*> m_Sublayers;
+    std::map<std::string, Layer*>::const_iterator m_CurrentChild = m_Sublayers.cbegin();
 };
 
 

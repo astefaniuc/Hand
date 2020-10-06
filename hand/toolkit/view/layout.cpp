@@ -74,24 +74,31 @@ Field* Separator::GetField(const std::string& a_name) const
 }
 
 
-SDL_Rect List::GetSize(Layer* a_tgt, SDL_Rect offset)
+SDL_Rect List::GetSize(Layer* tgt, SDL_Rect offset)
 {
-    SDL_Rect size = Node::GetSize(a_tgt, offset);
-    ListLayer* tgt = static_cast<ListLayer*>(a_tgt);
+    SDL_Rect size = Node::GetSize(tgt, offset);
+    Layer* sub = tgt->GetFirstChild();
+
     if (GetOrientation() != Horizontal)
-        for (Layer* sub : tgt->GetSubLayers())
+    {
+        while (sub)
         {
             SDL_Rect subSize = sub->UpdateSize(offset);
             AddH(subSize, size);
             offset.y += subSize.h;
+            sub = tgt->GetNextChild();
         }
+    }
     else
-        for (Layer* sub : tgt->GetSubLayers())
+    {
+        while (sub)
         {
             SDL_Rect subSize = sub->UpdateSize(offset);
             AddV(subSize, size);
             offset.x += subSize.w;
+            sub = tgt->GetNextChild();
         }
+    }
 
     return size;
 }

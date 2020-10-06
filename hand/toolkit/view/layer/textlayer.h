@@ -18,9 +18,7 @@ protected:
 
     // Terminal layer. TODO: remove all this from base class.
     void Rebuild() override {}
-    void UpdateSubContent() override {}
     void Remove(Layer*) override {}
-    void DrawChildren() override {}
 
 private:
     std::string m_Text;

@@ -24,7 +24,12 @@ bool Layer::Update()
     if (m_ModifiedContent)
         Rebuild();
 
-    UpdateSubContent();
+    Layer* sub = GetFirstChild();
+    while (sub)
+    {
+        m_IsModified |= sub->Update();
+        sub = GetNextChild();
+    }
     return m_IsModified;
 }
 
@@ -119,10 +124,20 @@ LayerMap::~LayerMap()
 }
 
 
-void LayerMap::DrawChildren()
+Layer* LayerMap::GetFirstChild()
 {
-    for (auto entry : m_Sublayers)
-        GetDrawer()->DrawChild(entry.second);
+    m_CurrentChild = m_Sublayers.cbegin();
+    if (m_CurrentChild != m_Sublayers.cend())
+        return m_CurrentChild->second;
+    return nullptr;
+}
+
+Layer* LayerMap::GetNextChild()
+{
+    ++m_CurrentChild;
+    if (m_CurrentChild != m_Sublayers.cend())
+        return m_CurrentChild->second;
+    return nullptr;
 }
 
 
@@ -155,11 +170,4 @@ Layer* LayerMap::GetField(const std::string& name)
     if (it != m_Sublayers.end())
         return it->second;
     return nullptr;
-}
-
-
-void LayerMap::UpdateSubContent()
-{
-    for (auto sub : m_Sublayers)
-        m_IsModified |= sub.second->Update();
 }

@@ -10,7 +10,13 @@ void DrawerSdl::Draw(SDL_Surface* buffer)
     m_Buffer = buffer;
     DrawBackground();
     DrawFrame();
-    m_Layer->DrawChildren();
+
+    Layer* sub = m_Layer->GetFirstChild();
+    while (sub)
+    {
+        sub->Draw(buffer);
+        sub = m_Layer->GetNextChild();
+    }
 }
 
 
@@ -66,12 +72,6 @@ void DrawerSdl::BlitSurface(SDL_Surface* source, SDL_Rect* src_pos, SDL_Surface*
         SDL_SetClipRect(target, src_pos);
         SDL_BlitSurface(source, nullptr, target, src_pos);
     }
-}
-
-
-void DrawerSdl::DrawChild(Layer* child)
-{
-    child->Draw(m_Buffer);
 }
 
 
