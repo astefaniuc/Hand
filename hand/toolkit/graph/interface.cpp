@@ -1,8 +1,8 @@
 #include "graph/interface.h"
-#include "view/layer/masterlayer.h"
+#include "view/layers/view.h"
 
 
 Layer* Interface::CreateLayer()
 {
-    return new MasterLayer();
+    return new Layers::View();
 }

@@ -2,7 +2,7 @@
 #include "input/device.h"
 #include "input/inputstate.h"
 #include "graph/interface.h"
-#include "view/layer/layer.h"
+#include "view/layer.h"
 
 
 Hand::Hand(Device* dev) : Module(), m_Device(dev)
@@ -14,7 +14,7 @@ Hand::Hand(Device* dev) : Module(), m_Device(dev)
     m_KeysHmi->Add(new Note("Middle finger", "", ""));
     m_KeysHmi->Add(new Note("Ring finger", "", ""));
     m_KeysHmi->Add(new Note("Little finger", "", ""));
-    ((Layout::List*)m_KeysHmi->GetLayer()->GetLayout())->SetOrientation(Layout::Horizontal);
+    ((Layouts::List*)m_KeysHmi->GetLayer()->GetLayout())->SetOrientation(Layouts::Horizontal);
     m_KeysHmi->AddActivationClient(new CCallback<Layer>(m_KeysHmi->GetLayer(), &Layer::Exit));
     m_StateMachine = new InputState(m_NumberOfKeys);
 }

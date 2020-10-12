@@ -1,5 +1,5 @@
 #include "graph/data.h"
-#include "view/layer/buttonlayer.h"
+#include "view/layers/data.h"
 
 
 Data::~Data()
@@ -26,5 +26,5 @@ void Data::SetPersistence(Persistence* a_storage)
 
 Layer* Data::CreateLayer()
 {
-    return new DataLayer();
+    return new Layers::DataLayer();
 }

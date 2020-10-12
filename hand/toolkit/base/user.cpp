@@ -1,6 +1,6 @@
 #include "user.h"
 #include "input/eventhandler.h"
-#include "view/layer/listlayer.h"
+#include "view/layers/list.h"
 #include "input/device.h"
 #include "input/hand.h"
 #include "view/theme.h"
@@ -8,13 +8,13 @@
 #include "graph/method.h"
 #include "graph/data.h"
 #include "base/modulelib.h"
-#include "view/layer/layer.h"
+#include "view/layer.h"
 
 
 User::User(EventHandler* a_input)
     : m_Input(a_input),
       m_View("User", "User view"),
-      m_ViewStack(new ListLayer()),
+      m_ViewStack(new Layers::List()),
       m_Menu("Menu", "System")
 {
     m_View.GetLayer()->GetLayout()->GetField(TITLE)->SetVisible(false);
@@ -26,7 +26,7 @@ User::User(EventHandler* a_input)
     m_ThemeLoader = new ModuleLib();
     m_Menu.Add(new Note(
             "Theme", "Select visualization theme",
-            "./binaries/lib/themes/default.so", m_ThemeLoader));
+            "./binaries/lib/themes/basicsdl1.so", m_ThemeLoader));
 
     // TODO: load settings
     m_View.GetLayer()->SetTheme(static_cast<Theme*>(m_ThemeLoader->GetObject()));

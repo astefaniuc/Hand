@@ -1,12 +1,12 @@
-#include "default.h"
+#include "basicsdl1.h"
 #include "defines.h"
-#include "view/layer/layer.h"
+#include "view/layer.h"
 #include <iostream>
 
 
 extern "C" Module* Create()
 {
-    return new Default();
+    return new BasicSdl1();
 }
 
 
@@ -17,8 +17,8 @@ extern "C" void Destroy(Theme* theme)
 
 
 
-Default::Default()
-    : m_Hmi("Default", "Default visual theme"),
+BasicSdl1::BasicSdl1()
+    : m_Hmi("BasicSdl1", "Basic SDL1 visual theme"),
       m_Buttons("Buttons", "Customize"),
       m_Datas("Datas", "Customize"),
       m_Lists("Lists", "Customize"),
@@ -58,7 +58,7 @@ Default::Default()
 }
 
 
-Default::~Default()
+BasicSdl1::~BasicSdl1()
 {
     for (auto curr = Fonts.begin(); curr != Fonts.end(); ++curr)
         TTF_CloseFont((*curr).second);
@@ -68,7 +68,7 @@ Default::~Default()
 }
 
 
-TTF_Font* Default::GetFont(int size)
+TTF_Font* BasicSdl1::GetFont(int size)
 {
     // Loading font:
     TTF_Font* font = Fonts[size];
@@ -87,19 +87,19 @@ TTF_Font* Default::GetFont(int size)
 }
 
 
-unsigned Default::GetBaseSize()
+unsigned BasicSdl1::GetBaseSize()
 {
     return ((TData<unsigned>*)(m_Texts.GetChild(FONTSIZE)))->GetValue();
 }
 
 
-void Default::ToggleFullscreen(HmiItem*)
+void BasicSdl1::ToggleFullscreen(HmiItem*)
 {
     m_IsFullscreen ? SetWindowed() : SetFullscreen();
 }
 
 
-void Default::SetFullscreen()
+void BasicSdl1::SetFullscreen()
 {
     // This is the only way to get the HW screen resolution
     const SDL_VideoInfo* info = SDL_GetVideoInfo();
@@ -111,14 +111,14 @@ void Default::SetFullscreen()
 }
 
 
-void Default::SetWindowed()
+void BasicSdl1::SetWindowed()
 {
     m_Surface = SDL_SetVideoMode(1280, 1024, 32, SDL_DOUBLEBUF | SDL_HWSURFACE);
     m_IsFullscreen = false;
 }
 
 
-SDL_Rect Default::GetResolution()
+SDL_Rect BasicSdl1::GetResolution()
 {
     const Uint16 maxUint16 = 65535;
     const SDL_VideoInfo* inf = SDL_GetVideoInfo();
@@ -133,7 +133,7 @@ SDL_Rect Default::GetResolution()
 }
 
 
-void Default::InitScreen(Layer* a_root)
+void BasicSdl1::InitScreen(Layer* a_root)
 {
     m_ScreenRoot = a_root;
     DrawerSdl::GetDrawer(m_ScreenRoot)->RemoveFrame();
@@ -158,7 +158,7 @@ void Default::InitScreen(Layer* a_root)
 }
 
 
-void Default::UpdateScreen()
+void BasicSdl1::UpdateScreen()
 {
     if (m_ScreenRoot->IsModified())
     {

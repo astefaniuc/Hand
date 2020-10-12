@@ -1,10 +1,9 @@
-#ifndef HAND_VIEW_LAYER_LAYER_H
-#define HAND_VIEW_LAYER_LAYER_H
+#ifndef HAND_VIEW_LAYER_H
+#define HAND_VIEW_LAYER_H
 
 #include "view/drawer.h"
 #include "view/layout.h"
 #include <SDL/SDL.h> // TODO: remove SDL dependency here
-#include <map>
 
 
 class HmiItem;
@@ -33,8 +32,8 @@ public:
     virtual void SetContent(HmiItem* data);
     HmiItem* GetContent() const { return m_Data; }
 
-    Layout::Node* GetLayout();
-    void SetLayout(Layout::Node* layout);
+    Layout* GetLayout();
+    void SetLayout(Layout* layout);
 
     void SetTheme(Theme* theme);
     Theme* GetTheme();
@@ -53,7 +52,7 @@ public:
     virtual void Exit(HmiItem*);
 
 protected:
-    virtual Layout::Node* CreateLayout() = 0;
+    virtual Layout* CreateLayout() = 0;
     virtual Drawer* CreatetDrawer() = 0;
     /// Rebuild sub-layer structure on content or layout changes.
     virtual void Rebuild() = 0;
@@ -75,28 +74,8 @@ protected:
     bool m_IsModified = true;
 
 private:
-    Layout::Node* m_Layout = nullptr;
+    Layout* m_Layout = nullptr;
 };
 
 
-class LayerMap : public Layer
-{
-public:
-    ~LayerMap();
-
-    Layer* GetFirstChild() override;
-    Layer* GetNextChild() override;
-
-    /// Returns 'sub'.
-    Layer* Insert(const std::string& field, Layer* sub);
-    void Remove(Layer* sub) override;
-
-    Layer* GetField(const std::string& name);
-
-protected:
-    std::map<std::string, Layer*> m_Sublayers;
-    std::map<std::string, Layer*>::const_iterator m_CurrentChild = m_Sublayers.cbegin();
-};
-
-
-#endif // HAND_VIEW_LAYER_LAYER_H
+#endif // HAND_VIEW_LAYER_H

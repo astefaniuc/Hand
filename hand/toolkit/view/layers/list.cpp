@@ -1,16 +1,19 @@
-#include "view/layer/listlayer.h"
+#include "view/layers/list.h"
 #include "graph/collection.h"
 #include "view/theme.h"
 
 
-ListLayer::~ListLayer()
+namespace Layers {
+
+
+List::~List()
 {
     for (Layer* sub : m_Sublayers)
         sub->SetParent(nullptr);
 }
 
 
-Layer* ListLayer::GetFirstChild()
+Layer* List::GetFirstChild()
 {
     m_CurrentChild = m_Sublayers.cbegin();
     if (m_CurrentChild != m_Sublayers.cend())
@@ -18,7 +21,7 @@ Layer* ListLayer::GetFirstChild()
     return nullptr;
 }
 
-Layer* ListLayer::GetNextChild()
+Layer* List::GetNextChild()
 {
     ++m_CurrentChild;
     if (m_CurrentChild != m_Sublayers.cend())
@@ -27,7 +30,7 @@ Layer* ListLayer::GetNextChild()
 }
 
 
-void ListLayer::Rebuild()
+void List::Rebuild()
 {
     m_Sublayers.clear();
 
@@ -50,7 +53,7 @@ void ListLayer::Rebuild()
 }
 
 
-Layer* ListLayer::Insert(Layer* a_child)
+Layer* List::Insert(Layer* a_child)
 {
     m_Sublayers.push_back(a_child);
     a_child->SetParent(this);
@@ -59,7 +62,7 @@ Layer* ListLayer::Insert(Layer* a_child)
 }
 
 
-void ListLayer::Remove(Layer* a_child)
+void List::Remove(Layer* a_child)
 {
     for (unsigned i = 0; i < m_Sublayers.size(); ++i)
     {
@@ -73,13 +76,13 @@ void ListLayer::Remove(Layer* a_child)
 }
 
 
-Drawer* ListLayer::CreatetDrawer()
+Drawer* List::CreatetDrawer()
 {
     return GetTheme()->GetListDrawer();
 }
 
 
-bool ListLayer::SetFocus(HmiItem*)
+bool List::SetFocus(HmiItem*)
 {
     HmiItem* tgt= GetControlsList();
     if (!tgt)
@@ -90,11 +93,13 @@ bool ListLayer::SetFocus(HmiItem*)
 }
 
 
-HmiItem* ListLayer::GetControlsList()
+HmiItem* List::GetControlsList()
 {
     if (!m_Data)
         return nullptr;
 
     // TODO
     return nullptr;
+}
+
 }

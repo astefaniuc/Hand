@@ -1,24 +1,27 @@
-#include "view/layer/masterlayer.h"
-#include "view/layer/textlayer.h"
+#include "view/layers/view.h"
+#include "view/layers/text.h"
 #include "graph/method.h"
 #include "view/theme.h"
 
 
-MasterLayer::MasterLayer()
+namespace Layers {
+
+
+View::View()
 {
-    m_Exit = new Action<MasterLayer>("Exit", "Close interface", this, &MasterLayer::Exit);
+    m_Exit = new Action<View>("Exit", "Close interface", this, &View::Exit);
 }
 
 
-void MasterLayer::Rebuild()
+void View::Rebuild()
 {
     Clear();
 
     if (GetLayout()->GetField(TITLE)->IsVisible())
-        m_Title = Insert(TITLE, new TextLayer(m_Data->GetName()));
+        m_Title = Insert(TITLE, new Text(m_Data->GetName()));
 
     if (GetLayout()->GetField(DESCRIPTION)->IsVisible())
-        m_Description = Insert(DESCRIPTION, new TextLayer(m_Data->GetDescription()));
+        m_Description = Insert(DESCRIPTION, new Text(m_Data->GetDescription()));
 
     Interface* in = static_cast<Interface*>(m_Data);
 
@@ -32,13 +35,13 @@ void MasterLayer::Rebuild()
 }
 
 
-Drawer* MasterLayer::CreatetDrawer()
+Drawer* View::CreatetDrawer()
 {
     return GetTheme()->GetViewDrawer();
 }
 
 
-void MasterLayer::Clear()
+void View::Clear()
 {
     delete m_Title;
     delete m_Description;
@@ -49,4 +52,6 @@ void MasterLayer::Clear()
     m_View = nullptr;
 
     m_Sublayers.clear();
+}
+
 }

@@ -1,13 +1,13 @@
-#include "drawers.h"
+#include "text.h"
 #include "defines.h"
-#include "default.h"
-#include "view/layer/textlayer.h"
+#include "basicsdl1.h"
+#include "view/layers/text.h"
 // #include "SDL/SDL_Image.h"
 
 
-SDL_Rect TextDrawer::CalculateSize(SDL_Rect& content)
+SDL_Rect Text::CalculateSize(SDL_Rect& content)
 {
-    const std::string& text = static_cast<TextLayer*>(m_Layer)->GetData();
+    const std::string& text = static_cast<Layers::Text*>(m_Layer)->GetData();
 
     if (!text.empty())
     {
@@ -22,9 +22,9 @@ SDL_Rect TextDrawer::CalculateSize(SDL_Rect& content)
 }
 
 
-void TextDrawer::Draw(SDL_Surface* buffer)
+void Text::Draw(SDL_Surface* buffer)
 {
-    const std::string& text = static_cast<TextLayer*>(m_Layer)->GetData();
+    const std::string& text = static_cast<Layers::Text*>(m_Layer)->GetData();
     if (text.empty())
         return;
 
@@ -39,7 +39,7 @@ void TextDrawer::Draw(SDL_Surface* buffer)
 }
 
 
-SDL_Surface* TextDrawer::RenderText(const std::string& text, int size, const Rgb& color) const
+SDL_Surface* Text::RenderText(const std::string& text, int size, const Rgb& color) const
 {
     SDL_Color sdl_color;
     sdl_color.r = color.m_r;
@@ -49,13 +49,13 @@ SDL_Surface* TextDrawer::RenderText(const std::string& text, int size, const Rgb
 }
 
 
-const Rgb& TextDrawer::GetFontColor() const
+const Rgb& Text::GetFontColor() const
 {
     return *((Rgb*)m_Properties->GetChild(FONTCOLOR));
 }
 
 
-unsigned TextDrawer::GetFontSize() const
+unsigned Text::GetFontSize() const
 {
     return ((TData<unsigned>*)(m_Properties->GetChild(FONTSIZE)))->GetValue();
 }

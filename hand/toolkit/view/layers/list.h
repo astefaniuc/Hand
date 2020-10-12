@@ -1,14 +1,18 @@
-#ifndef HAND_VIEW_LAYER_LISTLAYER_H
-#define HAND_VIEW_LAYER_LISTLAYER_H
+#ifndef HAND_VIEW_LAYERS_LIST_H
+#define HAND_VIEW_LAYERS_LIST_H
 
-#include "view/layer/layer.h"
+#include "view/layer.h"
+#include "view/layouts/compact.h"
 #include <vector>
 
 
-class ListLayer : public Layer
+namespace Layers {
+
+
+class List : public Layer
 {
 public:
-    ~ListLayer();
+    ~List();
 
     /// Returns 'sub'.
     Layer* Insert(Layer* sub);
@@ -21,13 +25,13 @@ protected:
     void Rebuild() override;
 
     Drawer* CreatetDrawer() override;
-    Layout::Node* CreateLayout() override { return new Layout::List(); }
+    Layout* CreateLayout() override { return new Layouts::CompactList(); }
 
     bool SetFocus(HmiItem*);
     // Returns the list which should be mapped to the InputState
     HmiItem* GetControlsList();
 
-    Layout::List* GetListLayout() { return static_cast<Layout::List*>(GetLayout()); }
+    Layouts::List* GetListLayout() { return static_cast<Layouts::List*>(GetLayout()); }
 
 private:
     std::vector<Layer*> m_Sublayers;
@@ -35,4 +39,5 @@ private:
     unsigned m_StartPosition = 0;
 };
 
-#endif // HAND_VIEW_LAYER_LISTLAYER_H
+}
+#endif // HAND_VIEW_LAYERS_LIST_H

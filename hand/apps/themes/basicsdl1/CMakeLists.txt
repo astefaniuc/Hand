@@ -1,9 +1,9 @@
-project(default)
+project(basicsdl1)
 
-add_library(${PROJECT_NAME} SHARED 
-    default.cpp 
-    drawers.cpp
-    virtualsurface.cpp)
+add_library(${PROJECT_NAME} SHARED
+    basicsdl1.cpp
+    drawersdl.cpp
+    text.cpp)
 target_link_libraries(${PROJECT_NAME} ${LIBNAME})
 
 install(TARGETS ${PROJECT_NAME} DESTINATION ${THEMESDIR})

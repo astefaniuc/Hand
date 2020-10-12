@@ -1,5 +1,5 @@
-#ifndef HAND_VIEW_LAYER_USER_H
-#define HAND_VIEW_LAYER_USER_H
+#ifndef HAND_BASE_USER_H
+#define HAND_BASE_USER_H
 
 #include "graph/collection.h"
 #include "graph/interface.h"
@@ -7,7 +7,7 @@
 
 class EventHandler;
 class Hand;
-class ListLayer;
+namespace Layers { class List; }
 class ModuleLib;
 
 /// Manages the items to be shown on screen and the input modes.
@@ -28,8 +28,8 @@ private:
     std::vector<Hand*> m_Hands;
     std::vector<ModuleLib*> m_RunningApps;
     Interface m_View;
-    ListLayer* m_ViewStack;
+    Layers::List* m_ViewStack;
     Collection m_Menu;
 };
 
-#endif // HAND_VIEW_LAYER_USER_H
+#endif // HAND_BASE_USER_H

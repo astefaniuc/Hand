@@ -1,13 +1,13 @@
-#include "view/layout.h"
-#include "view/layer/layer.h"
-#include "view/layer/listlayer.h"
+#include "view/layouts/compact.h"
+#include "view/layer.h"
+#include "view/layers/map.h"
 
 
-namespace Layout {
+namespace Layouts {
 
 
-Node* AssureNode(Node* in) { return in; }
-Node* AssureNode(const std::string& in) { return new Field(in); }
+Layout* AssureNode(Layout* in) { return in; }
+Layout* AssureNode(const std::string& in) { return new Field(in); }
 
 
 void AddH(const SDL_Rect& in, SDL_Rect& out)
@@ -28,7 +28,7 @@ void AddV(const SDL_Rect& in, SDL_Rect& out)
 
 SDL_Rect Field::GetSize(Layer* a_tgt, SDL_Rect offset)
 {
-    LayerMap* tgt = static_cast<LayerMap*>(a_tgt);
+    Layers::Map* tgt = static_cast<Layers::Map*>(a_tgt);
     Layer* sub = tgt->GetField(m_Name);
     if (sub)
         return sub->UpdateSize(offset);
@@ -46,7 +46,7 @@ Field* Field::GetField(const std::string& a_name) const
 
 SDL_Rect Separator::GetSize(Layer* tgt, SDL_Rect offset)
 {
-    SDL_Rect size = Node::GetSize(tgt, offset);
+    SDL_Rect size = Layout::GetSize(tgt, offset);
     //  Remove the first childs offset from the total size:
     AddH(m_Field1->GetSize(tgt, offset), size);
 
@@ -74,9 +74,9 @@ Field* Separator::GetField(const std::string& a_name) const
 }
 
 
-SDL_Rect List::GetSize(Layer* tgt, SDL_Rect offset)
+SDL_Rect CompactList::GetSize(Layer* tgt, SDL_Rect offset)
 {
-    SDL_Rect size = Node::GetSize(tgt, offset);
+    SDL_Rect size = Layout::GetSize(tgt, offset);
     Layer* sub = tgt->GetFirstChild();
 
     if (GetOrientation() != Horizontal)
@@ -104,7 +104,7 @@ SDL_Rect List::GetSize(Layer* tgt, SDL_Rect offset)
 }
 
 
-Node* CreateButton()
+Layout* CreateButton()
 {
     return
         SplitV(
@@ -113,7 +113,7 @@ Node* CreateButton()
 }
 
 
-Node* CreateData()
+Layout* CreateData()
 {
     return
         SplitV(
@@ -122,7 +122,7 @@ Node* CreateData()
 }
 
 
-Node* CreateView()
+Layout* CreateView()
 {
     return
         SplitV(

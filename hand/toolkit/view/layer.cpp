@@ -1,4 +1,4 @@
-#include "view/layer/layer.h"
+#include "view/layer.h"
 #include "view/theme.h"
 #include <assert.h>
 
@@ -52,7 +52,7 @@ void Layer::SetContent(HmiItem* data)
 }
 
 
-Layout::Node* Layer::GetLayout()
+Layout* Layer::GetLayout()
 {
     if (!m_Layout)
         m_Layout = CreateLayout();
@@ -60,7 +60,7 @@ Layout::Node* Layer::GetLayout()
 }
 
 
-void Layer::SetLayout(Layout::Node* a_layout)
+void Layer::SetLayout(Layout* a_layout)
 {
     delete m_Layout;
     m_Layout = a_layout;
@@ -113,61 +113,4 @@ SDL_Rect Layer::UpdateSize(const SDL_Rect& outer)
     SDL_Rect content = GetDrawer()->GetContentSize(outer);
     m_Size = GetLayout()->GetSize(this, content);
     return GetDrawer()->CalculateSize(m_Size);
-}
-
-
-
-LayerMap::~LayerMap()
-{
-    for (auto entry : m_Sublayers)
-        entry.second->SetParent(nullptr);
-}
-
-
-Layer* LayerMap::GetFirstChild()
-{
-    m_CurrentChild = m_Sublayers.cbegin();
-    if (m_CurrentChild != m_Sublayers.cend())
-        return m_CurrentChild->second;
-    return nullptr;
-}
-
-Layer* LayerMap::GetNextChild()
-{
-    ++m_CurrentChild;
-    if (m_CurrentChild != m_Sublayers.cend())
-        return m_CurrentChild->second;
-    return nullptr;
-}
-
-
-Layer* LayerMap::Insert(const std::string& field, Layer* child)
-{
-    m_Sublayers[field] = child;
-    child->SetParent(this);
-    m_IsModified = true;
-    return child;
-}
-
-
-void LayerMap::Remove(Layer* child)
-{
-    for (auto it = m_Sublayers.begin(); it != m_Sublayers.end(); ++it)
-    {
-        if (it->second == child)
-        {
-            m_Sublayers.erase(it);
-            m_IsModified = true;
-            return;
-        }
-    }
-}
-
-
-Layer* LayerMap::GetField(const std::string& name)
-{
-    auto it = m_Sublayers.find(name);
-    if (it != m_Sublayers.end())
-        return it->second;
-    return nullptr;
 }

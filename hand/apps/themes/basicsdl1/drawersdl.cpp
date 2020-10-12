@@ -1,7 +1,7 @@
-#include "virtualsurface.h"
-#include "view/layer/layer.h"
+#include "drawersdl.h"
+#include "view/layer.h"
 #include "defines.h"
-#include "default.h"
+#include "basicsdl1.h"
 #include <SDL/SDL_ttf.h>
 
 

@@ -5,20 +5,23 @@
 #include "graph/method.h"
 
 
-/// The MasterLayer is a composed Layer, managing the basic layout and theme.
+namespace Layers {
+
+
+/// The View is a composed Layer, managing the basic layout and theme.
 /// For the sub-layers, the main command list is mandatory; other layers may be
 /// additional (system) command lists, a title, a main view, and a secondary view e.g.
 /// an info box or help.
-class MasterLayer : public LayerMap
+class View : public Map
 {
 public:
-    MasterLayer();
+    View();
 
 protected:
     void Rebuild() override;
 
     Drawer* CreatetDrawer() override;
-    Layout::Node* CreateLayout() override { return Layout::CreateView(); }
+    Layout* CreateLayout() override { return Layouts::CreateView(); }
 
 //    void SetFocus(to or not to ...?);
 //    void Keep(enum mode)
@@ -31,7 +34,8 @@ private:
     Layer* m_Title = nullptr;
     Layer* m_View = nullptr;
 
-    Action<MasterLayer>* m_Exit;
+    Action<View>* m_Exit;
 };
 
+}
 #endif // HAND_VIEW_LAYER_MASTERLAYER_H

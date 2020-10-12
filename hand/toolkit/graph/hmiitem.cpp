@@ -1,6 +1,6 @@
 #include "graph/hmiitem.h"
 #include "graph/collection.h"
-#include "view/layer/layer.h"
+#include "view/layer.h"
 
 
 HmiItem::~HmiItem()

@@ -1,5 +1,5 @@
-#ifndef HAND_THEME_SDL_BASE_VIRTUALSURFACE_H
-#define HAND_THEME_SDL_BASE_VIRTUALSURFACE_H
+#ifndef HAND_THEME_BASICSDL1_DRAWERSDL_H
+#define HAND_THEME_BASICSDL1_DRAWERSDL_H
 
 #include <SDL/SDL.h>
 #include "graph/collection.h"
@@ -8,12 +8,12 @@
 #include "view/datatypes/rgb.h"
 
 
-class Default;
+class BasicSdl1;
 
 class DrawerSdl : public Drawer
 {
 public:
-    DrawerSdl(Default* theme, Collection* config) : m_Theme(theme), m_Properties(config) {}
+    DrawerSdl(BasicSdl1* theme, Collection* config) : m_Theme(theme), m_Properties(config) {}
 
     void Draw(SDL_Surface* buffer) override;
 
@@ -44,10 +44,10 @@ protected:
     const Rgb& GetFrameColor() const;
     const Rgb& GetBackgroundColor() const;
 
-    Default* m_Theme;
+    BasicSdl1* m_Theme;
     SDL_Surface* m_Buffer = nullptr;
     Collection* m_Properties;
     bool m_ShowFrame = true;
 };
 
-#endif // HAND_THEME_SDL_BASE_VIRTUALSURFACE_H
+#endif // HAND_THEME_BASICSDL1_DRAWERSDL_H

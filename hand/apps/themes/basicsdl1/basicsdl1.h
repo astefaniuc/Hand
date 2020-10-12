@@ -1,9 +1,9 @@
-#ifndef HAND_THEMES_DEFAULT_H
-#define HAND_THEMES_DEFAULT_H
+#ifndef HAND_THEMES_BASICSDL1_H
+#define HAND_THEMES_BASICSDL1_H
 
 #include "view/theme.h"
 #include "graph/collection.h"
-#include "drawers.h"
+#include "text.h"
 #include <SDL/SDL_ttf.h>
 #include <map>
 
@@ -13,11 +13,11 @@
 
 class Drawer;
 
-class Default : public Theme
+class BasicSdl1 : public Theme
 {
 public:
-    Default();
-    ~Default();
+    BasicSdl1();
+    ~BasicSdl1();
 
     Layer* GetHmi() override { return m_Hmi.GetLayer(); }
 
@@ -31,7 +31,7 @@ public:
     Drawer* GetButtonDrawer() override { return new DrawerSdl(this, &m_Buttons); }
     Drawer* GetDataDrawer() override { return new DrawerSdl(this, &m_Datas); }
     Drawer* GetListDrawer() override { return new DrawerSdl(this, &m_Lists); }
-    Drawer* GetTextDrawer() override { return new TextDrawer(this, &m_Texts); }
+    Drawer* GetTextDrawer() override { return new Text(this, &m_Texts); }
     Drawer* GetViewDrawer() override { return new DrawerSdl(this, &m_Views); }
 
 protected:
@@ -56,4 +56,4 @@ protected:
     std::map<int, TTF_Font*> Fonts;
 };
 
-#endif // HAND_THEMES_DEFAULT_H
+#endif // HAND_THEMES_BASICSDL1_H
