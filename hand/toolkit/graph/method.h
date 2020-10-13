@@ -12,16 +12,14 @@ class Action : public HmiItem
 
 public:
     Action(
-        const std::string& a_name, const std::string& a_description,
-        CallbackOwner* a_obj, TCallback a_func)
-        : HmiItem(a_name, a_description)
+        const std::string& name, const std::string& description,
+        CallbackOwner* obj, TCallback func)
+        : HmiItem(name, description)
     {
-        m_Method = new CCallback<CallbackOwner>(a_obj, a_func);
+        m_Method = new CCallback<CallbackOwner>(obj, func);
         AddActivationClient(m_Method);
     }
     ~Action() { delete m_Method; }
-
-    Type GetType() const override { return HmiItem::EAction; }
 
 private:
     Layer* CreateLayer() override { return new Layers::Button(); }

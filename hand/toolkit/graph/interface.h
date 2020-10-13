@@ -9,8 +9,8 @@ class Layer;
 class Interface : public HmiItem
 {
 public:
-    Interface(const std::string& a_name, const std::string& a_description)
-        : HmiItem(a_name, a_description) {}
+    Interface(const std::string& name, const std::string& description)
+        : HmiItem(name, description) {}
 
     void SetView(Layer* view) { m_View = view; }
     Layer* GetView() const { return m_View; }

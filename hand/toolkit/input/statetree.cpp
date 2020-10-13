@@ -1,9 +1,9 @@
 #include "input/statetree.h"
 
 
-StateNode* StateGraph::Create(unsigned a_numberOfKeys)
+StateNode* StateGraph::Create(unsigned numberOfKeys)
 {
-    m_NumberOfKeys = a_numberOfKeys;
+    m_NumberOfKeys = numberOfKeys;
     // Create the root/null key
     m_Root = new StateNode(m_NumberOfKeys, new StateNode::PeersList());
     for (unsigned i = 0; i < m_NumberOfKeys; ++i)
@@ -13,9 +13,9 @@ StateNode* StateGraph::Create(unsigned a_numberOfKeys)
 }
 
 
-void StateGraph::AddNodes(unsigned level, unsigned a_pos)
+void StateGraph::AddNodes(unsigned level, unsigned pos)
 {
-    StateNode::PeersList* parentNodes = GetPeersList(level-1);
+    StateNode::PeersList* parentNodes = GetPeersList(level - 1);
     StateNode::PeersList* currentNodes = GetPeersList(level);
     if (!currentNodes)
         currentNodes = new StateNode::PeersList();
@@ -25,20 +25,20 @@ void StateGraph::AddNodes(unsigned level, unsigned a_pos)
     {
         StateNode* parent = (*parentNodes)[i];
         // Ignore nodes inserted for the current key
-        if (parent->GetParent(a_pos))
+        if (parent->GetParent(pos))
             continue;
 
         StateNode* child = new StateNode(m_NumberOfKeys, currentNodes);
-        ConnectNodes(parent, child, a_pos);
+        ConnectNodes(parent, child, pos);
         // The new node inherits from the old one the position of the parents
-        for (unsigned j = 0; j < a_pos; ++j)
+        for (unsigned j = 0; j < pos; ++j)
             if (parent->GetParent(j))
-                ConnectNodes(GetParentNode(level-1, j), child, j);
+                ConnectNodes(GetParentNode(level - 1, j), child, j);
     }
 
-    if (a_pos >= level)
+    if (pos >= level)
         // Next level
-        AddNodes(level + 1, a_pos);
+        AddNodes(level + 1, pos);
 }
 
 
@@ -67,8 +67,8 @@ StateNode::PeersList* StateGraph::GetPeersList(unsigned level)
 }
 
 
-void StateGraph::ConnectNodes(StateNode* a_parent, StateNode* a_child, unsigned a_position)
+void StateGraph::ConnectNodes(StateNode* parent, StateNode* child, unsigned position)
 {
-    a_parent->SetChild(a_child, a_position);
-    a_child->SetParent(a_parent, a_position);
+    parent->SetChild(child, position);
+    child->SetParent(parent, position);
 }

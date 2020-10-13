@@ -133,9 +133,9 @@ SDL_Rect BasicSdl1::GetResolution()
 }
 
 
-void BasicSdl1::InitScreen(Layer* a_root)
+void BasicSdl1::InitScreen(Layer* root)
 {
-    m_ScreenRoot = a_root;
+    m_ScreenRoot = root;
     DrawerSdl::GetDrawer(m_ScreenRoot)->RemoveFrame();
     // Start SDL as the default drawing engine:
     // Initialize the SDL library:

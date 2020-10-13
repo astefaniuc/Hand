@@ -2,21 +2,21 @@
 #include "view/layers/list.h"
 
 
-void Collection::Add(HmiItem* a_child)
+void Collection::Add(HmiItem* child)
 {
-    a_child->SetParent(this);
-    m_Value.push_back(a_child);
+    child->SetParent(this);
+    m_Value.push_back(child);
 }
 
 
-void Collection::Remove(HmiItem* a_child)
+void Collection::Remove(HmiItem* child)
 {
-    if (a_child->GetParent() == this)
-        delete a_child;
+    if (child->GetParent() == this)
+        delete child;
 
     for (unsigned i = 0; i < m_Value.size(); ++i)
     {
-        if (m_Value[i] == a_child)
+        if (m_Value[i] == child)
         {
             m_Value.erase(m_Value.begin() + 1);
             return;
@@ -25,10 +25,10 @@ void Collection::Remove(HmiItem* a_child)
 }
 
 
-HmiItem* Collection::GetChild(const std::string& a_name) const
+HmiItem* Collection::GetChild(const std::string& name) const
 {
     for (HmiItem* item : m_Value)
-        if (item->GetName() == a_name)
+        if (item->GetName() == name)
             return item;
 
     return nullptr;

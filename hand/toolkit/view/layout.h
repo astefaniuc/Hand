@@ -11,27 +11,17 @@
 #define VIEW "View"
 
 
-namespace Layouts { class Field; }
+class Field;
 
 class Layout
 {
 public:
     virtual ~Layout() = default;
 
-    virtual Layouts::Field* GetField(const std::string& name) const { return nullptr; }
+    virtual Field* GetField(const std::string& name) const { return nullptr; }
     virtual SDL_Rect GetSize(Layer* tgt, SDL_Rect offset) {
         return { offset.x, offset.y, 0, 0 };
     }
-};
-
-
-namespace Layouts {
-
-enum Orientation
-{
-    Auto,
-    Horizontal,
-    Vertical
 };
 
 
@@ -51,6 +41,16 @@ public:
 private:
     std::string m_Name;
     bool m_IsVisble;
+};
+
+
+namespace Layouts {
+
+enum Orientation
+{
+    Auto,
+    Horizontal,
+    Vertical
 };
 
 

@@ -1,6 +1,5 @@
 #include "view/layouts/compact.h"
 #include "view/layer.h"
-#include "view/layers/map.h"
 
 
 namespace Layouts {
@@ -26,24 +25,6 @@ void AddV(const SDL_Rect& in, SDL_Rect& out)
 
 
 
-SDL_Rect Field::GetSize(Layer* a_tgt, SDL_Rect offset)
-{
-    Layers::Map* tgt = static_cast<Layers::Map*>(a_tgt);
-    Layer* sub = tgt->GetField(m_Name);
-    if (sub)
-        return sub->UpdateSize(offset);
-    return { 0, 0, 0, 0 };
-}
-
-
-Field* Field::GetField(const std::string& a_name) const
-{
-    if (a_name == m_Name)
-        return (Field*)this;
-    return nullptr;
-}
-
-
 SDL_Rect Separator::GetSize(Layer* tgt, SDL_Rect offset)
 {
     SDL_Rect size = Layout::GetSize(tgt, offset);
@@ -65,12 +46,12 @@ SDL_Rect Separator::GetSize(Layer* tgt, SDL_Rect offset)
 }
 
 
-Field* Separator::GetField(const std::string& a_name) const
+Field* Separator::GetField(const std::string& name) const
 {
-    Field* ret = m_Field1->GetField(a_name);
+    Field* ret = m_Field1->GetField(name);
     if (ret)
         return ret;
-    return m_Field2->GetField(a_name);
+    return m_Field2->GetField(name);
 }
 
 

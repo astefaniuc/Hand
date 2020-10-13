@@ -10,17 +10,17 @@ Data::~Data()
 }
 
 
-void Data::SetManipulator(Module* a_manipulator)
+void Data::SetManipulator(Module* manipulator)
 {
     delete m_Manipulator;
-    m_Manipulator = a_manipulator;
+    m_Manipulator = manipulator;
 }
 
 
-void Data::SetPersistence(Persistence* a_storage)
+void Data::SetPersistence(Persistence* storage)
 {
     delete m_Storage;
-    m_Storage = a_storage;
+    m_Storage = storage;
 }
 
 

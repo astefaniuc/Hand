@@ -17,50 +17,50 @@ HmiItem::~HmiItem()
         tmp->Remove(this);
     }
 
-    delete m_Visualization;
+    delete m_Layer;
 }
 
 
-void HmiItem::SetSelected(bool a_isSelected)
+void HmiItem::SetSelected(bool isSelected)
 {
-    m_IsSelected = a_isSelected;
+    m_IsSelected = isSelected;
     Execute(m_SelectionChange);
 }
 
 
-void HmiItem::RemoveCallback(ICallback* a_callback, Listeners& a_list)
+void HmiItem::RemoveCallback(ICallback* callback, Listeners& list)
 {
     // TODO: Do we need thread safety here?
-    for (unsigned i = 0; i < a_list.size(); ++i)
+    for (unsigned i = 0; i < list.size(); ++i)
     {
         // TODO: a memory compare may be a safer way to check for equality.
-        if (a_list[i] == a_callback)
+        if (list[i] == callback)
         {
-            a_list.erase(a_list.begin() + i);
+            list.erase(list.begin() + i);
             return;
         }
     }
 }
 
 
-void HmiItem::Execute(const Listeners& a_list)
+void HmiItem::Execute(const Listeners& list)
 {
-    for (ICallback* listener : a_list)
+    for (ICallback* listener : list)
         listener->Execute(this);
 }
 
 
 Layer* HmiItem::GetLayer()
 {
-    if (!m_Visualization)
+    if (!m_Layer)
         SetLayer(CreateLayer());
-    return m_Visualization;
+    return m_Layer;
 }
 
 
-void HmiItem::SetLayer(Layer* a_visualization)
+void HmiItem::SetLayer(Layer* layer)
 {
-    delete m_Visualization;
-    m_Visualization = a_visualization;
-    m_Visualization->SetContent(this);
+    delete m_Layer;
+    m_Layer = layer;
+    m_Layer->SetContent(this);
 }

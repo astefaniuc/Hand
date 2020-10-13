@@ -8,21 +8,21 @@ class Collection : public Data
 {
 public:
     Collection(
-        const std::string& a_name,
-        const std::string& a_description,
-        Module* a_manipulator = nullptr)
-        : Data(a_name, a_description, a_manipulator) {}
+        const std::string& name,
+        const std::string& description,
+        Module* manipulator = nullptr)
+        : Data(name, description, manipulator) {}
     ~Collection() { Clear(); }
 
     /// Insert a child item and assume ownership of it.
-    void Add(HmiItem* a_child);
+    void Add(HmiItem* child);
     /// Insert a child item without assuming ownership of it.
-    void Attach(HmiItem* a_child) { m_Value.push_back(a_child); }
+    void Attach(HmiItem* child) { m_Value.push_back(child); }
     /// Removes the item from the children list. If it is the owner of the child it destroys it.
-    void Remove(HmiItem* a_child);
+    void Remove(HmiItem* child);
 
-    HmiItem* GetChild(const std::string& a_name) const;
-    HmiItem* GetChild(unsigned a_position) { return m_Value[a_position]; }
+    HmiItem* GetChild(const std::string& name) const;
+    HmiItem* GetChild(unsigned position) { return m_Value[position]; }
 
     /// Returns the number of children.
     unsigned Size() { return m_Value.size(); }
@@ -30,8 +30,6 @@ public:
     void Clear();
 
     std::string GetValueString() override { return "TODO"; }
-
-    HmiItem::Type GetType() const override { return HmiItem::EList; }
 
 private:
     Layer* CreateLayer() override;

@@ -20,9 +20,9 @@ void DrawerSdl::Draw(SDL_Surface* buffer)
 }
 
 
-DrawerSdl* DrawerSdl::GetDrawer(Layer* a_from)
+DrawerSdl* DrawerSdl::GetDrawer(Layer* from)
 {
-    return static_cast<DrawerSdl*>(a_from->GetDrawer());
+    return static_cast<DrawerSdl*>(from->GetDrawer());
 }
 
 

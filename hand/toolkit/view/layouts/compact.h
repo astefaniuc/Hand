@@ -4,13 +4,6 @@
 #include "view/layout.h"
 
 
-#define CONTROL "Control"
-#define DESCRIPTION "Description"
-#define ICON "Icon"
-#define TITLE "Title"
-#define VIEW "View"
-
-
 namespace Layouts {
 
 // "Link" for the Layer
@@ -34,16 +27,6 @@ class CompactList : public List
 {
 public:
     SDL_Rect GetSize(Layer* tgt, SDL_Rect offset)override;
-
-    void SetMaxItemsToShow(unsigned count) { m_MaxItemsToShow->SetValue(count); }
-    unsigned GetMaxItemsToShow() { return m_MaxItemsToShow->GetValue(); }
-
-    Orientation GetOrientation() const { return m_Orientation->GetValue(); }
-    void SetOrientation(Orientation value) { m_Orientation->SetValue(value); }
-
-private:
-    TData<Orientation>* m_Orientation = new TData<Orientation>("Orientation", "", Horizontal);
-    TData<unsigned>* m_MaxItemsToShow = new TData<unsigned>("List max", "Items to show", 5);
 };
 
 

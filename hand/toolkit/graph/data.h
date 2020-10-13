@@ -13,19 +13,19 @@ class Persistence
 public:
     virtual ~Persistence() {}
 
-    virtual bool SetFile(const std::string& a_path) = 0;
+    virtual bool SetFile(const std::string& path) = 0;
     virtual const std::string& GetFile() const = 0;
 
-    virtual bool Load(Data* a_in) const = 0;
-    virtual bool Save(Data* a_out) const = 0;
+    virtual bool Load(Data* in) const = 0;
+    virtual bool Save(Data* out) const = 0;
 };
 
 
 class Data : public HmiItem
 {
 public:
-    Data(const std::string& a_name, const std::string& a_description, Module* a_manipulator)
-        : HmiItem(a_name, a_description), m_Manipulator(a_manipulator)
+    Data(const std::string& name, const std::string& description, Module* manipulator)
+        : HmiItem(name, description), m_Manipulator(manipulator)
     {
 //        if (m_Manipulator)
 //            AddActivationClient(m_Manipulator->GetHmi());
@@ -35,21 +35,21 @@ public:
     virtual std::string GetValueString() = 0;
 
     /// The callback is executed whenever the selection changes.
-    void AddDataChangedClient(ICallback* a_client)
+    void AddDataChangedClient(ICallback* client)
     {
-        m_DataChanged.push_back(a_client);
+        m_DataChanged.push_back(client);
     }
-    void RemoveDataChangedClient(ICallback* a_client)
+    void RemoveDataChangedClient(ICallback* client)
     {
-        RemoveCallback(a_client, m_DataChanged);
+        RemoveCallback(client, m_DataChanged);
     }
 
     /// Deletes a previously stored manipulator.
-    void SetManipulator(Module* a_manipulator);
+    void SetManipulator(Module* manipulator);
     Module* GetManipulator() { return m_Manipulator; }
 
     /// Deletes a previously stored persistence object.
-    void SetPersistence(Persistence* a_storage);
+    void SetPersistence(Persistence* storage);
     Persistence* GetPersistence() { return m_Storage; }
 
 protected:
@@ -69,9 +69,9 @@ template <typename DataType>
 class Manipulator : public Module
 {
 public:
-    void SetItem(TData<DataType>* a_toHandle) { m_Item = a_toHandle; }
+    void SetItem(TData<DataType>* toHandle) { m_Item = toHandle; }
     // TEMP?
-    virtual bool IsValid(const DataType& a_input) = 0;
+    virtual bool IsValid(const DataType& input) = 0;
 
     Layer* GetHmi() override { return m_Interface; }
     void SetHmi(Layer* interface) { m_Interface = interface; }
@@ -87,31 +87,31 @@ class TData : public Data
 {
 public:
     TData(
-        const std::string& a_name,
-        const std::string& a_description,
-        const DataType& a_defaultVal,
-        Manipulator<DataType>* a_manipulator = nullptr)
-        : Data(a_name, a_description, a_manipulator), m_Value(a_defaultVal)
+        const std::string& name,
+        const std::string& description,
+        const DataType& defaultVal,
+        Manipulator<DataType>* manipulator = nullptr)
+        : Data(name, description, manipulator), m_Value(defaultVal)
     {
-        if (a_manipulator)
-            a_manipulator->SetItem(this);
+        if (manipulator)
+            manipulator->SetItem(this);
     }
 
-    virtual bool SetValue(const DataType& a_val)
+    virtual bool SetValue(const DataType& val)
     {
         // The manipulator should call this with valid data.
         // TODO: remove this? What about Persistence?
-        if (m_Manipulator && !((Manipulator<DataType>*)m_Manipulator)->IsValid(a_val))
+        if (m_Manipulator && !((Manipulator<DataType>*)m_Manipulator)->IsValid(val))
             return false;
 
-        m_Value = a_val;
+        m_Value = val;
         Execute(m_DataChanged);
         return true;
     }
     bool operator=(const DataType& val) { return SetValue(val); }
 
     const DataType& GetValue() const { return m_Value; }
-    const DataType& operator()() const { return GetValue(); }
+    const DataType& operator()() const { return m_Value; }
 
     /// Get the value as a human readable string.
     std::string GetValueString() override
@@ -120,8 +120,6 @@ public:
         s << m_Value;
         return s.str();
     }
-
-    HmiItem::Type GetType() const override { return HmiItem::EData; }
 
 private:
     DataType m_Value;

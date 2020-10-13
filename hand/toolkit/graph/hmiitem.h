@@ -12,7 +12,7 @@ class ICallback
 {
 public:
     virtual ~ICallback() = default;
-    virtual void Execute(HmiItem* a_caller) = 0;
+    virtual void Execute(HmiItem* caller) = 0;
 };
 
 
@@ -22,13 +22,13 @@ class CCallback : public ICallback
     typedef void (CallbackOwner::*TCallback)(HmiItem*);
 
 public:
-    CCallback(CallbackOwner* a_obj, TCallback a_func)
-        : m_Object(a_obj), m_Function(a_func) {}
+    CCallback(CallbackOwner* obj, TCallback func)
+        : m_Object(obj), m_Function(func) {}
 
-    void Execute(HmiItem* a_caller) final
+    void Execute(HmiItem* caller) final
     {
         if(m_Object && m_Function)
-            (m_Object->*m_Function)(a_caller);
+            (m_Object->*m_Function)(caller);
     }
 
 private:
@@ -43,64 +43,55 @@ class Collection;
 class HmiItem
 {
 public:
-    enum Type
-    {
-        EBase,
-        EAction,
-        EData,
-        EList
-    };
-
-    HmiItem(const std::string& a_name, const std::string& a_description)
-        : m_Name(a_name), m_Description(a_description) {}
+    HmiItem(const std::string& name, const std::string& description)
+        : m_Name(name), m_Description(description) {}
     virtual ~HmiItem();
 
-    void SetName(const std::string& a_name) { m_Name = a_name; }
+    void SetName(const std::string& name) { m_Name = name; }
     const std::string& GetName() const { return m_Name; }
 
     const std::string& GetDescription() const { return m_Description; }
-    virtual Type GetType() const { return EBase; }
 
     /// The parent is the object owner; HmiItems without a parent have to be explicitly deleted.
-    void SetParent(Collection* a_parent) { m_Parent = a_parent; }
+    void SetParent(Collection* parent) { m_Parent = parent; }
     Collection* GetParent() const { return m_Parent; }
 
     Layer* GetLayer();
-    void SetLayer(Layer* visualization);
+    void SetLayer(Layer* layer);
 
-    void SetSelected(bool a_isSelected);
+    void SetSelected(bool isSelected);
     bool IsSelected() const { return m_IsSelected; }
     /// The callback is executed whenever the selection changes.
-    void AddSelectionClient(ICallback* a_client)
+    void AddSelectionClient(ICallback* client)
     {
-        m_SelectionChange.push_back(a_client);
+        m_SelectionChange.push_back(client);
     }
-    void RemoveSelectionClient(ICallback* a_client)
+    void RemoveSelectionClient(ICallback* client)
     {
-        RemoveCallback(a_client, m_SelectionChange);
+        RemoveCallback(client, m_SelectionChange);
     }
 
 
     void Activate() { Execute(m_Activation); }
-    void AddActivationClient(ICallback* a_client)
+    void AddActivationClient(ICallback* client)
     {
-        m_Activation.push_back(a_client);
+        m_Activation.push_back(client);
     }
-    void RemoveActivationClient(ICallback* a_client)
+    void RemoveActivationClient(ICallback* client)
     {
-        RemoveCallback(a_client, m_Activation);
+        RemoveCallback(client, m_Activation);
     }
 
     // Layout options
 
     /// You can keep HmiItems in the closer focus while the user descends into details.
-    void SetVisualPersistence(int a_level);
+    void SetVisualKeepLevel(int level);
 
 protected:
     typedef std::vector<ICallback*> Listeners;
 
-    void RemoveCallback(ICallback* a_client, Listeners& a_clientsList);
-    void Execute(const Listeners& a_list);
+    void RemoveCallback(ICallback* client, Listeners& clientsList);
+    void Execute(const Listeners& list);
 
     virtual Layer* CreateLayer() = 0;
 
@@ -109,7 +100,7 @@ private:
     std::string m_Description;
 
     Collection* m_Parent = nullptr;
-    Layer* m_Visualization = nullptr;
+    Layer* m_Layer = nullptr;
     bool m_IsSelected = false;
 
     Listeners m_SelectionChange;
