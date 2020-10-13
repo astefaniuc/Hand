@@ -6,16 +6,15 @@
 #include "graph/data.h"
 
 
-struct Rel_Rect
+struct RelRect
 {
-    Rel_Rect(double x_, double y_, double w_, double h_) : x(x_), y(y_), w(w_), h(h_) {}
-    Rel_Rect() : x(0.0), y(0.0), w(1.0), h(1.0) {}
-    Rel_Rect(const Rel_Rect& c) : x(c.x), y(c.y), w(c.w), h(c.h) {}
+    RelRect(double a_x = 0.0, double a_y = 0.0, double a_w = 1.0, double a_h = 1.0)
+        : x(a_x), y(a_y), w(a_w), h(a_h) {}
 
-    double x = 0.0;
-    double y = 0.0;
-    double w = 0.0;
-    double h = 0.0;
+    double x;
+    double y;
+    double w;
+    double h;
 };
 
 
@@ -28,8 +27,8 @@ public:
         const std::string& description,
         double x, double y, double w, double h);
 
-    void SetValue(const Rel_Rect& value);
-    const Rel_Rect& GetValue() { return m_Value; }
+    void SetValue(const RelRect& value);
+    const RelRect& GetValue() { return m_Value; }
     void Reset();
 
 private:
@@ -38,11 +37,10 @@ private:
         return (TData<double>*)GetChild(coordinate);
     }
 
-    Rel_Rect m_Value;
+    RelRect m_Value;
 };
 
 
-void Multiply(const Rel_Rect& src, Rel_Rect& tgt);
-SDL_Rect Multiply(const Rel_Rect& a_clipping, const SDL_Rect& a_absSrc);
+SDL_Rect Multiply(const RelRect& a_clipping, const SDL_Rect& a_absSrc);
 
 #endif // HAND_VIEW_DATATYPES_RECT_H

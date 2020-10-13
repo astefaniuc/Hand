@@ -4,13 +4,13 @@
 #include "view/layout.h"
 
 
-namespace Layouts {
+namespace Layouts { namespace Compact {
 
 // "Link" for the Layer
-class Separator : public Layout
+class Map : public Layout
 {
 public:
-    Separator(Layout* field1, Layout* field2, Orientation orientation)
+    Map(Layout* field1, Layout* field2, Orientation orientation)
         : m_Field1(field1), m_Field2(field2), m_Orientation(orientation) {}
 
     SDL_Rect GetSize(Layer* tgt, SDL_Rect offset) override;
@@ -23,10 +23,10 @@ protected:
 };
 
 
-class CompactList : public List
+class List : public Layouts::List
 {
 public:
-    SDL_Rect GetSize(Layer* tgt, SDL_Rect offset)override;
+    SDL_Rect GetSize(Layer* tgt, SDL_Rect offset) override;
 };
 
 
@@ -39,14 +39,14 @@ Layout* AssureNode(Layout* in);
 Layout* AssureNode(const std::string& in);
 
 template<class T1, class T2>
-Separator* SplitV(T1 field1, T2 field2) {
-    return new Separator(AssureNode(field1), AssureNode(field2), Horizontal);
+Map* SplitV(T1 field1, T2 field2) {
+    return new Map(AssureNode(field1), AssureNode(field2), Horizontal);
 }
 
 template<class T1, class T2>
-Separator* SplitH(T1* field1, T2* field2) {
-    return new Separator(AssureNode(field1), AssureNode(field2), Vertical);
+Map* SplitH(T1* field1, T2* field2) {
+    return new Map(AssureNode(field1), AssureNode(field2), Vertical);
 }
 
-}
+}}
 #endif //HAND_VIEW_LAYOUTS_COMPACT_H

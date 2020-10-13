@@ -40,7 +40,7 @@ protected:
     /// Changes x and y of source
 
     bool GetDrawFrame() const;
-    const Rel_Rect& GetFrameSize() const;
+    const RelRect& GetFrameSize() const;
     const Rgb& GetFrameColor() const;
     const Rgb& GetBackgroundColor() const;
 

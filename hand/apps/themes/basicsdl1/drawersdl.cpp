@@ -54,7 +54,7 @@ SDL_Rect DrawerSdl::GetFrameOffset()
         return { 0, 0, 0, 0 };
 
     SDL_Rect ret;
-    const Rel_Rect& frame = GetFrameSize();
+    const RelRect& frame = GetFrameSize();
     unsigned base = m_Theme->GetBaseSize();
 
     ret.w = base * frame.w;
@@ -131,7 +131,7 @@ bool DrawerSdl::GetDrawFrame() const
     return true;
 }
 
-const Rel_Rect& DrawerSdl::GetFrameSize() const
+const RelRect& DrawerSdl::GetFrameSize() const
 {
     return ((Rect*)(m_Properties->GetChild(FRAMESIZE)))->GetValue();
 }

@@ -2,6 +2,19 @@
 #include "graph/data.h"
 
 
+SDL_Rect Multiply(const RelRect& a_rel, const SDL_Rect& a_abs)
+{
+    SDL_Rect ret;
+    ret.x = a_rel.x * a_abs.w;
+    ret.y = a_rel.y * a_abs.h;
+    ret.w = a_rel.w * a_abs.w;
+    ret.h = a_rel.h * a_abs.h;
+
+    return ret;
+}
+
+
+
 Rect::Rect(
     const std::string& a_name,
     const std::string& a_description,
@@ -16,7 +29,7 @@ Rect::Rect(
 }
 
 
-void Rect::SetValue(const Rel_Rect& a_value)
+void Rect::SetValue(const RelRect& a_value)
 {
     m_Value = a_value;
     // For now add plain data directly
@@ -33,26 +46,4 @@ void Rect::Reset()
     m_Value.y = Get("y")->GetValue();
     m_Value.w = Get("w")->GetValue();
     m_Value.h = Get("h")->GetValue();
-}
-
-// ----------------------------------------------------------------
-
-void Multiply(const Rel_Rect& src, Rel_Rect& tgt)
-{
-    tgt.x += (src.x * tgt.w);
-    tgt.y += (src.y * tgt.h);
-    tgt.w *= src.w;
-    tgt.h *= src.h;
-}
-
-
-SDL_Rect Multiply(const Rel_Rect& a_rel, const SDL_Rect& a_abs)
-{
-    SDL_Rect ret;
-    ret.x = a_rel.x * a_abs.w;
-    ret.y = a_rel.y * a_abs.h;
-    ret.w = a_rel.w * a_abs.w;
-    ret.h = a_rel.h * a_abs.h;
-
-    return ret;
 }

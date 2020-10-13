@@ -18,7 +18,7 @@ protected:
 
     void Clear();
     Drawer* CreatetDrawer() override;
-    Layout* CreateLayout() override { return Layouts::CreateButton(); }
+    Layout* CreateLayout() override { return Layouts::Compact::CreateButton(); }
 
     Layer* m_Name = nullptr;
     Layer* m_Description = nullptr;

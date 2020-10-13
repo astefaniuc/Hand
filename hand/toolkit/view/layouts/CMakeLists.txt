@@ -1,2 +1,1 @@
-target_sources(${LIBNAME} PRIVATE
-    compact.cpp)
+target_sources(${LIBNAME} PRIVATE compact.cpp expanding.cpp)

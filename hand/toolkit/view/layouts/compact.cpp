@@ -2,7 +2,7 @@
 #include "view/layer.h"
 
 
-namespace Layouts {
+namespace Layouts { namespace Compact {
 
 
 Layout* AssureNode(Layout* in) { return in; }
@@ -25,7 +25,7 @@ void AddV(const SDL_Rect& in, SDL_Rect& out)
 
 
 
-SDL_Rect Separator::GetSize(Layer* tgt, SDL_Rect offset)
+SDL_Rect Map::GetSize(Layer* tgt, SDL_Rect offset)
 {
     SDL_Rect size = Layout::GetSize(tgt, offset);
     //  Remove the first childs offset from the total size:
@@ -46,7 +46,7 @@ SDL_Rect Separator::GetSize(Layer* tgt, SDL_Rect offset)
 }
 
 
-Field* Separator::GetField(const std::string& name) const
+Field* Map::GetField(const std::string& name) const
 {
     Field* ret = m_Field1->GetField(name);
     if (ret)
@@ -55,7 +55,7 @@ Field* Separator::GetField(const std::string& name) const
 }
 
 
-SDL_Rect CompactList::GetSize(Layer* tgt, SDL_Rect offset)
+SDL_Rect List::GetSize(Layer* tgt, SDL_Rect offset)
 {
     SDL_Rect size = Layout::GetSize(tgt, offset);
     Layer* sub = tgt->GetFirstChild();
@@ -113,4 +113,4 @@ Layout* CreateView()
                 CONTROL));
 }
 
-}
+}}

@@ -21,7 +21,7 @@ protected:
     void Rebuild() override;
 
     Drawer* CreatetDrawer() override;
-    Layout* CreateLayout() override { return Layouts::CreateView(); }
+    Layout* CreateLayout() override { return Layouts::Compact::CreateView(); }
 
 //    void SetFocus(to or not to ...?);
 //    void Keep(enum mode)

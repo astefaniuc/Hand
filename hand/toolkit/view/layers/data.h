@@ -20,7 +20,7 @@ protected:
 
     void Clear();
     Drawer* CreatetDrawer() override;
-    Layout* CreateLayout() override { return Layouts::CreateData(); }
+    Layout* CreateLayout() override { return Layouts::Compact::CreateData(); }
 
     /// Callback.
     void NotifyChanged(HmiItem*) { m_ModifiedContent = true; }

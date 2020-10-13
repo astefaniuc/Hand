@@ -8,7 +8,7 @@
 #include "graph/method.h"
 #include "graph/data.h"
 #include "base/modulelib.h"
-#include "view/layer.h"
+#include "view/layouts/expanding.h"
 
 
 User::User(EventHandler* a_input)
@@ -17,8 +17,10 @@ User::User(EventHandler* a_input)
       m_ViewStack(new Layers::List()),
       m_Menu("Menu", "System")
 {
-    m_View.GetLayer()->GetLayout()->GetField(TITLE)->SetVisible(false);
-    m_View.GetLayer()->GetLayout()->GetField(DESCRIPTION)->SetVisible(false);
+    Layouts::Expanding::Map* layout = Layouts::Expanding::CreateView();
+    layout->GetField(TITLE)->SetVisible(false);
+    layout->GetField(DESCRIPTION)->SetVisible(false);
+    m_View.GetLayer()->SetLayout(layout);
 
     m_View.SetView(m_ViewStack);
     m_View.SetControls(&m_Menu);

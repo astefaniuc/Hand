@@ -25,7 +25,7 @@ protected:
     void Rebuild() override;
 
     Drawer* CreatetDrawer() override;
-    Layout* CreateLayout() override { return new Layouts::CompactList(); }
+    Layout* CreateLayout() override { return new Layouts::Compact::List(); }
 
     bool SetFocus(HmiItem*);
     // Returns the list which should be mapped to the InputState
