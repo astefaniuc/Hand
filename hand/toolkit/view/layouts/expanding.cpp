@@ -92,28 +92,6 @@ SDL_Rect List::GetSize(Layer* tgt, SDL_Rect offset)
 }
 
 
-Map* CreateButton()
-{
-    Map* ret = new Map();
-    ret->SetField(CONTROL, { 0.8, 0.6, 0.2, 0.4 });
-    ret->SetField(DESCRIPTION, { 0.0, 0.6, 0.8, 0.4 });
-    ret->SetField(TITLE, { 0.25, 0.0, 0.75, 0.6 });
-    ret->SetField(VIEW, { 0.0, 0.0, 0.25, 0.6 });
-    return ret;
-}
-
-
-Map* CreateData()
-{
-    Map* ret = new Map();
-    ret->SetField(CONTROL, { 0.8, 0.6, 0.2, 0.4 });
-    ret->SetField(DESCRIPTION, { 0.0, 0.6, 0.8, 0.4 });
-    ret->SetField(TITLE, { 0.0, 0.0, 0.25, 0.6 });
-    ret->SetField(VIEW, { 0.25, 0.0, 0.75, 0.6 });
-    return ret;
-}
-
-
 Map* CreateView()
 {
     Map* ret = new Map();

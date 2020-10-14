@@ -24,7 +24,6 @@ public:
 
     static DrawerSdl* GetDrawer(Layer* from);
     static void BlitSurface(SDL_Surface* source, SDL_Rect* source_pos, SDL_Surface* target);
-    static void PlaceCentered(const SDL_Rect& source, SDL_Rect& target);
 
     /// Removes the visual frame and its allocated spacing, content is extended.
     void RemoveFrame() { m_ShowFrame = false; }

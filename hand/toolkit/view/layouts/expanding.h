@@ -41,8 +41,6 @@ public:
 };
 
 
-Map* CreateButton();
-Map* CreateData();
 Map* CreateView();
 
 }}

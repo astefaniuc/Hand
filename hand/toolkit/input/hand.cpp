@@ -14,7 +14,7 @@ Hand::Hand(Device* dev) : Module(), m_Device(dev)
     m_KeysHmi->Add(new Note("Middle finger", "", ""));
     m_KeysHmi->Add(new Note("Ring finger", "", ""));
     m_KeysHmi->Add(new Note("Little finger", "", ""));
-    ((Layouts::List*)m_KeysHmi->GetLayer()->GetLayout())->SetOrientation(Layouts::Horizontal);
+    ((Layouts::List*)m_KeysHmi->GetLayer()->GetLayout())->SetOrientation(Layout::Horizontal);
     m_KeysHmi->AddActivationClient(new CCallback<Layer>(m_KeysHmi->GetLayer(), &Layer::Exit));
     m_StateMachine = new InputState(m_NumberOfKeys);
 }

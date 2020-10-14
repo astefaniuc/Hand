@@ -6,7 +6,7 @@
 
 namespace Layouts { namespace Compact {
 
-// "Link" for the Layer
+
 class Map : public Layout
 {
 public:
@@ -40,12 +40,12 @@ Layout* AssureNode(const std::string& in);
 
 template<class T1, class T2>
 Map* SplitV(T1 field1, T2 field2) {
-    return new Map(AssureNode(field1), AssureNode(field2), Horizontal);
+    return new Map(AssureNode(field1), AssureNode(field2), Layout::Horizontal);
 }
 
 template<class T1, class T2>
 Map* SplitH(T1* field1, T2* field2) {
-    return new Map(AssureNode(field1), AssureNode(field2), Vertical);
+    return new Map(AssureNode(field1), AssureNode(field2), Layout::Vertical);
 }
 
 }}

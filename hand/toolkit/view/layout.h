@@ -16,12 +16,39 @@ class Field;
 class Layout
 {
 public:
+    enum Orientation
+    {
+        Auto,
+        Horizontal,
+        Vertical
+    };
+
+    enum EAlignment
+    {
+        Top,
+        Left,
+        Center,
+        Bottom,
+        Right
+    };
+
+    struct SAlignment
+    {
+        EAlignment Parent = Center;
+        EAlignment Field = Center;
+    };
+
     virtual ~Layout() = default;
 
     virtual Field* GetField(const std::string& name) const { return nullptr; }
     virtual SDL_Rect GetSize(Layer* tgt, SDL_Rect offset) {
         return { offset.x, offset.y, 0, 0 };
     }
+
+protected:
+    /// Places the 'source' rect into the 'target' rect as specified with 'alignment'.
+    /// For EAlignment::Center it aligns in vertical and horizontal direction.
+    void Align(EAlignment alignment, const SDL_Rect& target, SDL_Rect& source) const;
 };
 
 
@@ -40,19 +67,11 @@ public:
 
 private:
     std::string m_Name;
-    bool m_IsVisble;
+    bool m_IsVisble = true;
 };
 
 
 namespace Layouts {
-
-enum Orientation
-{
-    Auto,
-    Horizontal,
-    Vertical
-};
-
 
 class List : public Layout
 {

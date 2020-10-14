@@ -152,12 +152,3 @@ void DrawerSdl::FillRect(SDL_Rect r, const Rgb& c)
     SDL_SetClipRect(m_Buffer, &r);
     SDL_FillRect(m_Buffer, &r, SDL_MapRGB(m_Buffer->format, c.m_r, c.m_g, c.m_b));
 }
-
-
-void DrawerSdl::PlaceCentered(const SDL_Rect& src, SDL_Rect& tgt)
-{
-    tgt.x += (tgt.w - src.w) / 2;
-    tgt.y += (tgt.h - src.h) / 2;
-    tgt.w = src.w;
-    tgt.h = src.h;
-}
