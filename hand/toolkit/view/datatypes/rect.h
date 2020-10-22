@@ -2,8 +2,8 @@
 #define HAND_VIEW_DATATYPES_RECT_H
 
 #include <SDL/SDL.h>
-#include "graph/collection.h"
-#include "graph/data.h"
+#include "data/collection.h"
+#include "data/data.h"
 
 
 struct RelRect

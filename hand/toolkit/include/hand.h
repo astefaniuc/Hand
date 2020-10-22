@@ -2,8 +2,8 @@
 #define INCLUDE_HAND_H
 
 #include "base/module.h"
-#include "graph/data.h"
-#include "graph/method.h"
+#include "data/data.h"
+#include "data/method.h"
 #include "base/handserver.h"
 
 #endif // INCLUDE_HAND_H

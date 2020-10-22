@@ -2,7 +2,7 @@
 #define HAND_GRAPH_DATA_H
 
 #include "base/module.h"
-#include "graph/hmiitem.h"
+#include "data/hmiitem.h"
 
 
 class Data;

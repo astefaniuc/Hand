@@ -37,7 +37,8 @@ void Layout::Align(EAlignment alignment, const SDL_Rect& tgt, SDL_Rect& src) con
     case Right:
         src.x = tgt.x + tgt.w - src.w;
         break;
-    default: // Center
+    default:
+         // Center
         src.x = tgt.x + (tgt.w - src.w) / 2;
         src.y = tgt.y + (tgt.h - src.h) / 2;
     }

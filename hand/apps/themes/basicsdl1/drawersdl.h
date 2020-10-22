@@ -2,7 +2,7 @@
 #define HAND_THEME_BASICSDL1_DRAWERSDL_H
 
 #include <SDL/SDL.h>
-#include "graph/collection.h"
+#include "data/collection.h"
 #include "view/drawer.h"
 #include "view/datatypes/rect.h"
 #include "view/datatypes/rgb.h"

@@ -1,8 +1,8 @@
 #ifndef HAND_BASE_USER_H
 #define HAND_BASE_USER_H
 
-#include "graph/collection.h"
-#include "graph/interface.h"
+#include "data/collection.h"
+#include "data/interface.h"
 
 
 class EventHandler;

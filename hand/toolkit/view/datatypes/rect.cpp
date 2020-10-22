@@ -1,5 +1,5 @@
 #include "view/datatypes/rect.h"
-#include "graph/data.h"
+#include "data/data.h"
 
 
 SDL_Rect Multiply(const RelRect& a_rel, const SDL_Rect& a_abs)

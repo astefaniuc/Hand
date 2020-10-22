@@ -4,7 +4,7 @@ project(${LIBNAME})
 
 add_library(${LIBNAME} SHARED "")
 
-target_compile_definitions(${LIBNAME} PRIVATE 
+target_compile_definitions(${LIBNAME} PRIVATE
     HAND_APPSDIR="${APPSDIR}"
     HAND_THEMESDIR="${THEMESDIR}")
 
@@ -12,7 +12,7 @@ target_include_directories(${LIBNAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 
 add_subdirectory(base)
-add_subdirectory(graph)
+add_subdirectory(data)
 add_subdirectory(input)
 add_subdirectory(view)
 

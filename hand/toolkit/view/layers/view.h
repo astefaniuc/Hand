@@ -1,8 +1,8 @@
 #ifndef HAND_VIEW_LAYER_MASTERLAYER_H
 #define HAND_VIEW_LAYER_MASTERLAYER_H
 
-#include "graph/interface.h"
-#include "graph/method.h"
+#include "data/interface.h"
+#include "data/method.h"
 
 
 namespace Layers {

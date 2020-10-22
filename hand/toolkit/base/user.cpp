@@ -5,8 +5,8 @@
 #include "input/hand.h"
 #include "view/theme.h"
 #include "input/inputstate.h"
-#include "graph/method.h"
-#include "graph/data.h"
+#include "data/method.h"
+#include "data/data.h"
 #include "base/modulelib.h"
 #include "view/layouts/aligned.h"
 

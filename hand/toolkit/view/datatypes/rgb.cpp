@@ -1,5 +1,5 @@
 #include "view/datatypes/rgb.h"
-#include "graph/data.h"
+#include "data/data.h"
 
 
 Rgb::Rgb(

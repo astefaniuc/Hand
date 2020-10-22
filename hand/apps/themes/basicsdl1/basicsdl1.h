@@ -2,7 +2,7 @@
 #define HAND_THEMES_BASICSDL1_H
 
 #include "view/theme.h"
-#include "graph/collection.h"
+#include "data/collection.h"
 #include "text.h"
 #include <SDL/SDL_ttf.h>
 #include <map>

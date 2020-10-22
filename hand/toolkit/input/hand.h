@@ -3,7 +3,7 @@
 
 #include <vector>
 #include "base/module.h"
-#include "graph/collection.h"
+#include "data/collection.h"
 
 
 enum default_number_of_items

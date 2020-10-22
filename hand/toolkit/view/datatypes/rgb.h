@@ -1,7 +1,7 @@
 #ifndef HAND_VIEW_DATATYPES_RGB_H
 #define HAND_VIEW_DATATYPES_RGB_H
 
-#include "graph/collection.h"
+#include "data/collection.h"
 
 
 class Rgb : public Collection

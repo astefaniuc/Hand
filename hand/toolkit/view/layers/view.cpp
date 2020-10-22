@@ -1,6 +1,6 @@
 #include "view/layers/view.h"
 #include "view/layers/text.h"
-#include "graph/method.h"
+#include "data/method.h"
 #include "view/theme.h"
 
 

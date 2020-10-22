@@ -2,7 +2,7 @@
 #define HAND_INPUT_DEVICE_H
 
 #include "base/module.h"
-#include "graph/data.h"
+#include "data/data.h"
 
 
 extern const std::string DriverNames[];

@@ -1,7 +1,7 @@
 #ifndef HAND_GRAPH_LIST_H
 #define HAND_GRAPH_LIST_H
 
-#include "graph/data.h"
+#include "data/data.h"
 
 
 class Collection : public Data

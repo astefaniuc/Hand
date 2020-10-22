@@ -1,8 +1,8 @@
 #ifndef HAND_BASE_FILESYSTEM_H
 #define HAND_BASE_FILESYSTEM_H
 
-#include "graph/data.h"
-#include "graph/collection.h"
+#include "data/data.h"
+#include "data/collection.h"
 
 
 class Path : public Manipulator<std::string>
