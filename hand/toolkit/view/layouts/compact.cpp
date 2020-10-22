@@ -25,21 +25,21 @@ void AddV(const SDL_Rect& in, SDL_Rect& out)
 
 
 
-SDL_Rect Map::GetSize(Layer* tgt, SDL_Rect offset)
+SDL_Rect Map::GetSize(Layer* tgt, SDL_Rect outer)
 {
-    SDL_Rect size = Layout::GetSize(tgt, offset);
-    //  Remove the first childs offset from the total size:
-    AddH(m_Field1->GetSize(tgt, offset), size);
+    SDL_Rect size = Layout::GetSize(tgt, outer);
+    //  Remove the first childs outer from the total size:
+    AddH(m_Field1->GetSize(tgt, outer), size);
 
     if (m_Orientation == Horizontal)
     {
-        offset.y += size.h;
-        AddH(m_Field2->GetSize(tgt, offset), size);
+        outer.y += size.h;
+        AddH(m_Field2->GetSize(tgt, outer), size);
     }
     else
     {
-        offset.x += size.w;
-        AddV(m_Field2->GetSize(tgt, offset), size);
+        outer.x += size.w;
+        AddV(m_Field2->GetSize(tgt, outer), size);
     }
 
     return size;
@@ -55,18 +55,18 @@ Field* Map::GetField(const std::string& name) const
 }
 
 
-SDL_Rect List::GetSize(Layer* tgt, SDL_Rect offset)
+SDL_Rect List::GetSize(Layer* tgt, SDL_Rect outer)
 {
-    SDL_Rect size = Layout::GetSize(tgt, offset);
+    SDL_Rect size = Layout::GetSize(tgt, outer);
     Layer* sub = tgt->GetFirstChild();
 
     if (GetOrientation() != Horizontal)
     {
         while (sub)
         {
-            SDL_Rect subSize = sub->UpdateSize(offset);
+            SDL_Rect subSize = sub->UpdateSize(outer);
             AddH(subSize, size);
-            offset.y += subSize.h;
+            outer.y += subSize.h;
             sub = tgt->GetNextChild();
         }
     }
@@ -74,9 +74,9 @@ SDL_Rect List::GetSize(Layer* tgt, SDL_Rect offset)
     {
         while (sub)
         {
-            SDL_Rect subSize = sub->UpdateSize(offset);
+            SDL_Rect subSize = sub->UpdateSize(outer);
             AddV(subSize, size);
-            offset.x += subSize.w;
+            outer.x += subSize.w;
             sub = tgt->GetNextChild();
         }
     }

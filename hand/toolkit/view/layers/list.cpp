@@ -30,6 +30,17 @@ Layer* List::GetNextChild()
 }
 
 
+Layer* List::GetChild(const std::string& name) const
+{
+    Collection* listData = dynamic_cast<Collection*>(GetContent());
+    if (listData)
+        for (unsigned i = 0; i < m_Sublayers.size(); ++i)
+            if (listData->GetChild(i + m_StartPosition)->GetName() == name)
+                return m_Sublayers[i];
+    return nullptr;
+}
+
+
 void List::Rebuild()
 {
     m_Sublayers.clear();

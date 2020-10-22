@@ -13,6 +13,7 @@ class Map : public Layer
 public:
     ~Map();
 
+    unsigned GetChildCount() const override { return m_Sublayers.size(); }
     Layer* GetFirstChild() override;
     Layer* GetNextChild() override;
 
@@ -20,7 +21,7 @@ public:
     Layer* Insert(const std::string& field, Layer* sub);
     void Remove(Layer* sub) override;
 
-    Layer* GetField(const std::string& name);
+    Layer* GetChild(const std::string& name) const override;
 
 protected:
     std::map<std::string, Layer*> m_Sublayers;

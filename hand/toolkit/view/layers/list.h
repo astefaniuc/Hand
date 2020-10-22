@@ -2,7 +2,7 @@
 #define HAND_VIEW_LAYERS_LIST_H
 
 #include "view/layer.h"
-#include "view/layouts/compact.h"
+#include "view/layouts/aligned.h"
 #include <vector>
 
 
@@ -18,14 +18,17 @@ public:
     Layer* Insert(Layer* sub);
     void Remove(Layer* sub) override;
 
+    unsigned GetChildCount() const override { return m_Sublayers.size(); }
     Layer* GetFirstChild() override;
     Layer* GetNextChild() override;
+    /// Finds the child Layer by its data item name.
+    Layer* GetChild(const std::string& name) const override;
 
 protected:
     void Rebuild() override;
 
     Drawer* CreatetDrawer() override;
-    Layout* CreateLayout() override { return new Layouts::Compact::List(); }
+    Layout* CreateLayout() override { return new Layouts::Aligned::List(); }
 
     bool SetFocus(HmiItem*);
     // Returns the list which should be mapped to the InputState

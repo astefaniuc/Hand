@@ -5,8 +5,9 @@
 #include <vector>
 
 
-namespace Layouts { namespace Expanding {
+namespace Layouts { namespace Placed {
 
+/// Expanding layouts using fixed relative positions for placing their sub-fields.
 
 class Field : public ::Field
 {
@@ -14,7 +15,7 @@ public:
     Field(const std::string& name) : ::Field(name) {}
 
     void SetPosition(const RelRect& pos) { m_Position = pos;}
-    SDL_Rect GetSize(Layer* tgt, SDL_Rect offset) override;
+    SDL_Rect GetSize(Layer* tgt, SDL_Rect outer) override;
 
 private:
     RelRect m_Position;
@@ -24,7 +25,7 @@ private:
 class Map : public Layout
 {
 public:
-    SDL_Rect GetSize(Layer* tgt, SDL_Rect offset) override;
+    SDL_Rect GetSize(Layer* tgt, SDL_Rect outer) override;
 
     Field* GetField(const std::string& name) const override;
     void SetField(const std::string& name, const RelRect& coordinates);
@@ -37,7 +38,12 @@ private:
 class List : public Layouts::List
 {
 public:
-    SDL_Rect GetSize(Layer* tgt, SDL_Rect offset) override;
+    SDL_Rect GetSize(Layer* tgt, SDL_Rect outer) override;
+
+    void SetField(const std::string& name, const RelRect& coordinates);
+
+private:
+    std::vector<Field*> m_Fields;
 };
 
 

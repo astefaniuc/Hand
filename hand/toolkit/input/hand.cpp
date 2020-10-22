@@ -3,6 +3,7 @@
 #include "input/inputstate.h"
 #include "data/interface.h"
 #include "view/layer.h"
+#include "view/layouts/placed.h"
 
 
 Hand::Hand(Device* dev) : Module(), m_Device(dev)
@@ -14,8 +15,16 @@ Hand::Hand(Device* dev) : Module(), m_Device(dev)
     m_KeysHmi->Add(new Note("Middle finger", "", ""));
     m_KeysHmi->Add(new Note("Ring finger", "", ""));
     m_KeysHmi->Add(new Note("Little finger", "", ""));
-    ((Layouts::List*)m_KeysHmi->GetLayer()->GetLayout())->SetOrientation(Layout::Horizontal);
     m_KeysHmi->AddActivationClient(new CCallback<Layer>(m_KeysHmi->GetLayer(), &Layer::Exit));
+
+    Layouts::Placed::List* handLayout = new Layouts::Placed::List();
+    handLayout->SetField("Thumb", { 0.21, 0.6, 0.0, 0.0 });
+    handLayout->SetField("Pointer finger", { 0.3, 0.4, 0.0, 0.0 });
+    handLayout->SetField("Middle finger", { 0.45, 0.39, 0.0, 0.0 });
+    handLayout->SetField("Ring finger", { 0.6, 0.41, 0.0, 0.0 });
+    handLayout->SetField("Little finger", { 0.7, 0.5, 0.0, 0.0 });
+    m_KeysHmi->GetLayer()->SetLayout(handLayout);
+
     m_StateMachine = new InputState(m_NumberOfKeys);
 }
 

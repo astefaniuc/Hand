@@ -23,8 +23,10 @@ public:
     // TODO: any use for this?
     Layer* GetParent() const { return m_Parent; }
 
+    virtual unsigned GetChildCount() const { return 0; };
     virtual Layer* GetFirstChild() { return nullptr; }
     virtual Layer* GetNextChild() { return nullptr; }
+    virtual Layer* GetChild(const std::string& name) const { return nullptr; }
 
     virtual void Remove(Layer* sub) = 0;
 
@@ -44,7 +46,7 @@ public:
     void Collapse();
 
     /// Returns the layers rectangle including the frame and spacing around it.
-    SDL_Rect UpdateSize(const SDL_Rect& offset);
+    SDL_Rect UpdateSize(const SDL_Rect& outer);
     /// Returns the size without the frame and spacing.
     const SDL_Rect& GetContentSize() const { return m_Size; }
 

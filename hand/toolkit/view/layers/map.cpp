@@ -51,7 +51,7 @@ void Map::Remove(Layer* child)
 }
 
 
-Layer* Map::GetField(const std::string& name)
+Layer* Map::GetChild(const std::string& name) const
 {
     auto it = m_Sublayers.find(name);
     if (it != m_Sublayers.end())

@@ -1,13 +1,12 @@
 #include "view/layout.h"
-#include "view/layers/map.h"
+#include "view/layer.h"
 
 
-SDL_Rect Field::GetSize(Layer* a_tgt, SDL_Rect offset)
+SDL_Rect Field::GetSize(Layer* tgt, SDL_Rect outer)
 {
-    Layers::Map* tgt = static_cast<Layers::Map*>(a_tgt);
-    Layer* sub = tgt->GetField(m_Name);
+    Layer* sub = tgt->GetChild(m_Name);
     if (sub)
-        return sub->UpdateSize(offset);
+        return sub->UpdateSize(outer);
     return { 0, 0, 0, 0 };
 }
 

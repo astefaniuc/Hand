@@ -41,8 +41,8 @@ public:
     virtual ~Layout() = default;
 
     virtual Field* GetField(const std::string& name) const { return nullptr; }
-    virtual SDL_Rect GetSize(Layer* tgt, SDL_Rect offset) {
-        return { offset.x, offset.y, 0, 0 };
+    virtual SDL_Rect GetSize(Layer* tgt, SDL_Rect outer) {
+        return { outer.x, outer.y, 0, 0 };
     }
 
 protected:
@@ -58,7 +58,7 @@ public:
     Field(const std::string& name) : m_Name(name) {}
 
     /// Returns the size from the matching sub-layer.
-    SDL_Rect GetSize(Layer* tgt, SDL_Rect offset) override;
+    SDL_Rect GetSize(Layer* tgt, SDL_Rect outer) override;
     // Returns this if 'name' matches this, returns NULL otherwise.
     Field* GetField(const std::string& name) const override;
 
@@ -76,7 +76,7 @@ namespace Layouts {
 class List : public Layout
 {
 public:
-    virtual SDL_Rect GetSize(Layer* tgt, SDL_Rect offset) = 0;
+    virtual SDL_Rect GetSize(Layer* tgt, SDL_Rect outer) = 0;
 
     unsigned GetMaxItemsToShow() { return m_MaxItemsToShow; }
     void SetMaxItemsToShow(unsigned count) { m_MaxItemsToShow = count; }
