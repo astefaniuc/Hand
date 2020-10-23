@@ -15,6 +15,9 @@ View::View()
 
 void View::Rebuild()
 {
+    if (!m_Data)
+        return;
+
     Clear();
 
     if (GetLayout()->GetField(TITLE)->IsVisible())

@@ -28,7 +28,6 @@ void AddV(const SDL_Rect& in, SDL_Rect& out)
 SDL_Rect Map::GetSize(Layer* tgt, SDL_Rect outer)
 {
     SDL_Rect size = Layout::GetSize(tgt, outer);
-    //  Remove the first childs outer from the total size:
     AddH(m_Field1->GetSize(tgt, outer), size);
 
     if (m_Orientation == Horizontal)

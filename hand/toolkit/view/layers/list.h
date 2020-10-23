@@ -2,7 +2,7 @@
 #define HAND_VIEW_LAYERS_LIST_H
 
 #include "view/layer.h"
-#include "view/layouts/aligned.h"
+#include "view/layouts/compact.h"
 #include <vector>
 
 
@@ -28,7 +28,7 @@ protected:
     void Rebuild() override;
 
     Drawer* CreatetDrawer() override;
-    Layout* CreateLayout() override { return new Layouts::Aligned::List(); }
+    Layout* CreateLayout() override { return new Layouts::Compact::List(); }
 
     bool SetFocus(HmiItem*);
     // Returns the list which should be mapped to the InputState

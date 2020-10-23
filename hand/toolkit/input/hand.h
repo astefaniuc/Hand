@@ -26,6 +26,7 @@ enum key_position
 class Device;
 class InputState;
 class Interface;
+namespace Layers { class View; }
 
 class Hand : public Module
 {
@@ -58,6 +59,8 @@ private:
     Collection* m_KeysHmi;
     Device* m_Device;
     InputState* m_StateMachine = nullptr;
+
+    Layers::View* m_InitScreen = nullptr;
 };
 
 #endif //HAND_INPUT_HAND_H
