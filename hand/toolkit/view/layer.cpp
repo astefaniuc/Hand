@@ -21,7 +21,7 @@ void Layer::Exit(HmiItem*)
 
 bool Layer::Update()
 {
-    if (m_ModifiedContent)
+    if (m_ModifiedContent && m_Data)
         Rebuild();
 
     Layer* sub = GetFirstChild();

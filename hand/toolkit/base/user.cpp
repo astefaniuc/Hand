@@ -31,8 +31,10 @@ User::User(EventHandler* a_input)
             "./binaries/lib/themes/basicsdl1.so", m_ThemeLoader));
 
     // TODO: load settings
-    m_View.GetLayer()->SetTheme(static_cast<Theme*>(m_ThemeLoader->GetObject()));
-    m_View.GetLayer()->GetTheme()->InitScreen(m_View.GetLayer());
+    Theme* theme = static_cast<Theme*>(m_ThemeLoader->GetObject());
+    m_View.GetLayer()->SetTheme(theme);
+    theme->InitScreen(m_View.GetLayer());
+    m_Menu.Attach(theme->GetHmi()->GetContent());
 
     Hand* right =  new Hand(m_Input->GetDevice(Device::Keyboard));
     if (!right->Init())

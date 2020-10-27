@@ -24,8 +24,12 @@ public:
     /// Finds the child Layer by its data item name.
     Layer* GetChild(const std::string& name) const override;
 
+    void SetExpandChildren(bool expand);
+
 protected:
     void Rebuild() override;
+
+    void AddLayer(HmiItem* data);
 
     Drawer* CreatetDrawer() override;
     Layout* CreateLayout() override { return new Layouts::Compact::List(); }
@@ -40,6 +44,7 @@ private:
     std::vector<Layer*> m_Sublayers;
     std::vector<Layer*>::const_iterator m_CurrentChild = m_Sublayers.cbegin();
     unsigned m_StartPosition = 0;
+    bool m_ExpandChildren = false;
 };
 
 }

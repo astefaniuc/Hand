@@ -3,6 +3,7 @@
 #include "input/inputstate.h"
 #include "data/interface.h"
 #include "view/layer.h"
+#include "view/layers/list.h"
 #include "view/layers/text.h"
 #include "view/layers/view.h"
 #include "view/layouts/placed.h"
@@ -42,6 +43,7 @@ Layer* Hand::GetHmi()
         handLayout->SetField("Ring finger", { 0.6, 0.41, 0.0, 0.0 });
         handLayout->SetField("Little finger", { 0.7, 0.5, 0.0, 0.0 });
         m_KeysHmi->GetLayer()->SetLayout(handLayout);
+        static_cast<Layers::List*>(m_KeysHmi->GetLayer())->SetExpandChildren(true);
 
         Layouts::Aligned::Map* screenLayout = Layouts::Aligned::CreateView();
         screenLayout->SetField(DESCRIPTION, { Layout::Bottom, Layout::Center });

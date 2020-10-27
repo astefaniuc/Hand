@@ -18,7 +18,7 @@ public:
     void Add(HmiItem* child);
     /// Insert a child item without assuming ownership of it.
     void Attach(HmiItem* child) { m_Value.push_back(child); }
-    /// Removes the item from the children list. If it is the owner of the child it destroys it.
+    /// Removes the item from the children list. Owned children are destroyed.
     void Remove(HmiItem* child);
 
     HmiItem* GetChild(const std::string& name) const;

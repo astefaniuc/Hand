@@ -72,10 +72,10 @@ TTF_Font* BasicSdl1::GetFont(int size)
 {
     // Loading font:
     TTF_Font* font = Fonts[size];
-    if(!font)
+    if (!font)
     {
         font = TTF_OpenFont(FONT_FILE, size);
-        if(!font)
+        if (!font)
         {
             std::cout << "Unable to load font:" << FONT_FILE
                     << "\nTTF_OpenFont: " << TTF_GetError() << std::endl;
@@ -139,7 +139,7 @@ void BasicSdl1::InitScreen(Layer* root)
     DrawerSdl::GetDrawer(m_ScreenRoot)->RemoveFrame();
     // Start SDL as the default drawing engine:
     // Initialize the SDL library:
-    if (SDL_Init(SDL_INIT_VIDEO|SDL_INIT_TIMER) < 0)
+    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) < 0)
     {
         std::cout << SDL_GetError() << std::endl;
         exit(21);

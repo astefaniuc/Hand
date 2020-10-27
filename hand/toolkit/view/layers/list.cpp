@@ -1,4 +1,5 @@
 #include "view/layers/list.h"
+#include "view/layers/button.h"
 #include "data/collection.h"
 #include "view/theme.h"
 
@@ -45,9 +46,6 @@ void List::Rebuild()
 {
     m_Sublayers.clear();
 
-    if (!GetContent())
-        return;
-
     Collection* listData = dynamic_cast<Collection*>(GetContent());
     if (listData)
     {
@@ -56,11 +54,25 @@ void List::Rebuild()
             count = GetListLayout()->GetMaxItemsToShow();
 
         for (unsigned i = 0; i < count; ++i)
+
             // Create the sub-objects
-            Insert(listData->GetChild(i + m_StartPosition)->GetLayer());
+            AddLayer(listData->GetChild(i + m_StartPosition));
     }
     else
-        Insert(GetContent()->GetLayer());
+        AddLayer(GetContent());
+}
+
+
+void List::AddLayer(HmiItem* data)
+{
+    if (m_ExpandChildren)
+        Insert(data->GetLayer());
+    else
+    {
+        Layer* button = new Button();
+        button->SetContent(data);
+        Insert(button);
+    }
 }
 
 
@@ -111,6 +123,16 @@ HmiItem* List::GetControlsList()
 
     // TODO
     return nullptr;
+}
+
+
+void List::SetExpandChildren(bool expand)
+{
+    if (m_ExpandChildren != expand)
+    {
+        m_ExpandChildren = expand;
+        m_ModifiedContent = true;
+    }
 }
 
 }
