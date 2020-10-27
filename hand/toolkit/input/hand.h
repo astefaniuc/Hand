@@ -26,7 +26,6 @@ enum key_position
 class Device;
 class InputState;
 class Interface;
-namespace Layers { class View; }
 
 class Hand : public Module
 {
@@ -34,7 +33,7 @@ public:
     Hand(Device* dev);
     ~Hand();
 
-    Layer* GetHmi() override;
+    HmiItem* GetHmi() override;
     // Sets the key map
     bool Init();
 
@@ -60,7 +59,7 @@ private:
     Device* m_Device;
     InputState* m_StateMachine = nullptr;
 
-    Layers::View* m_InitScreen = nullptr;
+    Interface* m_InitScreen = nullptr;
 };
 
 #endif //HAND_INPUT_HAND_H

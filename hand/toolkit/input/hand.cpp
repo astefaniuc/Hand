@@ -4,8 +4,6 @@
 #include "data/interface.h"
 #include "view/layer.h"
 #include "view/layers/list.h"
-#include "view/layers/text.h"
-#include "view/layers/view.h"
 #include "view/layouts/placed.h"
 #include "view/layouts/aligned.h"
 
@@ -32,7 +30,7 @@ Hand::~Hand()
 }
 
 
-Layer* Hand::GetHmi()
+HmiItem* Hand::GetHmi()
 {
     if (!m_InitScreen)
     {
@@ -48,14 +46,14 @@ Layer* Hand::GetHmi()
         Layouts::Aligned::Map* screenLayout = Layouts::Aligned::CreateView();
         screenLayout->SetField(DESCRIPTION, { Layout::Bottom, Layout::Center });
 
-        m_InitScreen = new Layers::View();
-        m_InitScreen->SetLayout(screenLayout);
-        m_InitScreen->Insert(VIEW, m_KeysHmi->GetLayer());
-        m_InitScreen->Insert(TITLE, new Layers::Text("Keyboard Initialization"));
-        m_InitScreen->Insert(DESCRIPTION, new Layers::Text(
-            "Press 5 keys on the keyboard, to initialize a Hand device."));
+        m_InitScreen = new Interface(
+            "Keyboard Initialization",
+            "Press 5 keys on the keyboard, to initialize a Hand device.");
+        m_InitScreen->SetView(m_KeysHmi->GetLayer());
+        m_InitScreen->GetLayer()->SetLayout(screenLayout);
 
-        m_KeysHmi->AddActivationClient(new CCallback<Layer>(m_InitScreen, &Layer::Exit));
+        m_KeysHmi->AddActivationClient(
+            new CCallback<Layer>(m_InitScreen->GetLayer(), &Layer::Exit));
         GetInputState()->GetCommand(m_KeysHmi, m_NumberOfKeys);
     }
 

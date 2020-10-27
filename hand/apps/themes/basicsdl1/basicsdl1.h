@@ -19,7 +19,7 @@ public:
     BasicSdl1();
     ~BasicSdl1();
 
-    Layer* GetHmi() override { return m_Hmi.GetLayer(); }
+    HmiItem* GetHmi() override { return &m_Hmi; }
 
     void InitScreen(Layer* root) override;
     void UpdateScreen() override;

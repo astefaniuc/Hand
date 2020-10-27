@@ -14,7 +14,7 @@
 User::User(EventHandler* a_input)
     : m_Input(a_input),
       m_View("User", "User view"),
-      m_ViewStack(new Layers::List()),
+      m_ViewStack("View", ""),
       m_Menu("Menu", "System")
 {
     Layouts::Aligned::Map* layout = Layouts::Aligned::CreateView();
@@ -22,8 +22,10 @@ User::User(EventHandler* a_input)
     layout->GetField(DESCRIPTION)->SetVisible(false);
     m_View.GetLayer()->SetLayout(layout);
 
-    m_View.SetView(m_ViewStack);
+    m_View.SetView(m_ViewStack.GetLayer());
     m_View.SetControls(&m_Menu);
+
+    static_cast<Layers::List*>(m_ViewStack.GetLayer())->SetExpandChildren(true);
 
     m_ThemeLoader = new ModuleLib();
     m_Menu.Add(new Note(
@@ -34,12 +36,12 @@ User::User(EventHandler* a_input)
     Theme* theme = static_cast<Theme*>(m_ThemeLoader->GetObject());
     m_View.GetLayer()->SetTheme(theme);
     theme->InitScreen(m_View.GetLayer());
-    m_Menu.Attach(theme->GetHmi()->GetContent());
+    m_Menu.Attach(theme->GetHmi());
 
     Hand* right =  new Hand(m_Input->GetDevice(Device::Keyboard));
     if (!right->Init())
         // Show init screen
-        m_ViewStack->Insert(right->GetHmi());
+        m_ViewStack.Attach(right->GetHmi());
     // Add the exit function to the tree of available funcs
     // Request command at highest level
 //    GetCommand(m_Exit, _Device->GetNumberOfKeys());
@@ -55,7 +57,6 @@ User::~User()
         delete app;
     for (Hand* h : m_Hands)
         delete h;
-    delete m_ViewStack;
 }
 
 
@@ -66,7 +67,7 @@ bool User::LoadApp(Note* a_path)
     if (app->Load())
     {
         m_RunningApps.push_back(app);
-        m_ViewStack->Insert(app->GetHmi());
+        m_ViewStack.Attach(app->GetHmi());
         return true;
     }
 

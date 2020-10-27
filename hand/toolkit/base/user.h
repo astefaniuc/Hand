@@ -7,7 +7,6 @@
 
 class EventHandler;
 class Hand;
-namespace Layers { class List; }
 class ModuleLib;
 
 /// Manages the items to be shown on screen and the input modes.
@@ -28,7 +27,7 @@ private:
     std::vector<Hand*> m_Hands;
     std::vector<ModuleLib*> m_RunningApps;
     Interface m_View;
-    Layers::List* m_ViewStack;
+    Collection m_ViewStack;
     Collection m_Menu;
 };
 
