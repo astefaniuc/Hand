@@ -33,7 +33,8 @@ public:
     Hand(Device* dev);
     ~Hand();
 
-    HmiItem* GetHmi() override;
+    HmiItem* GetHmi() override { return nullptr; }
+    HmiItem* GetInitScreen();
     // Sets the key map
     bool Init();
 

@@ -41,7 +41,7 @@ User::User(EventHandler* a_input)
     Hand* right =  new Hand(m_Input->GetDevice(Device::Keyboard));
     if (!right->Init())
         // Show init screen
-        m_ViewStack.Attach(right->GetHmi());
+        m_ViewStack.Attach(right->GetInitScreen());
 
     m_Input->SetUser(this);
     m_Input->Start();

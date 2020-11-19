@@ -30,7 +30,7 @@ Hand::~Hand()
 }
 
 
-HmiItem* Hand::GetHmi()
+HmiItem* Hand::GetInitScreen()
 {
     if (!m_InitScreen)
     {
@@ -52,9 +52,9 @@ HmiItem* Hand::GetHmi()
         m_InitScreen->SetView(m_KeysHmi->GetExpandedView());
         m_InitScreen->GetExpandedView()->SetLayout(screenLayout);
 
-        m_KeysHmi->AddActivationClient(
+        m_InitScreen->AddActivationClient(
             new CCallback<Layer>(m_InitScreen->GetExpandedView(), &Layer::Exit));
-        GetInputState()->GetCommand(m_KeysHmi, m_NumberOfKeys);
+        GetInputState()->GetCommand(m_InitScreen, m_NumberOfKeys);
     }
 
     return m_InitScreen;
