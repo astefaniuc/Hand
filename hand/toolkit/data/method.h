@@ -22,7 +22,7 @@ public:
     ~Action() { delete m_Method; }
 
 private:
-    Layer* CreateLayer() override { return new Layers::Button(); }
+    Layer* CreateExpandedView() override { return new Layers::Button(); }
 
     CCallback<CallbackOwner>* m_Method;
 };

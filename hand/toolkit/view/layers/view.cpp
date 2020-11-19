@@ -31,7 +31,7 @@ void View::Rebuild()
 
     HmiItem* controls = in->GetControls();
     if (controls)
-        m_Control = Insert(CONTROL, controls->GetLayer());
+        m_Control = Insert(CONTROL, controls->GetExpandedView());
 }
 
 

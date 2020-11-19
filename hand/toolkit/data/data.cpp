@@ -24,7 +24,13 @@ void Data::SetPersistence(Persistence* storage)
 }
 
 
-Layer* Data::CreateLayer()
+Layer* Data::CreateExpandedView()
+{
+    return new Layers::DataLayer();
+}
+
+
+Layer* Data::CreateButtonView()
 {
     return new Layers::DataLayer();
 }

@@ -45,7 +45,7 @@ void Collection::Clear()
 }
 
 
-Layer* Collection::CreateLayer()
+Layer* Collection::CreateExpandedView()
 {
     return new Layers::List();
 }

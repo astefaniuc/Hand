@@ -1,6 +1,7 @@
 #include "data/hmiitem.h"
 #include "data/collection.h"
 #include "view/layer.h"
+#include "view/layers/button.h"
 
 
 HmiItem::~HmiItem()
@@ -17,7 +18,7 @@ HmiItem::~HmiItem()
         tmp->Remove(this);
     }
 
-    delete m_Layer;
+    delete m_ExpandedView;
 }
 
 
@@ -50,17 +51,39 @@ void HmiItem::Execute(const Listeners& list)
 }
 
 
-Layer* HmiItem::GetLayer()
+Layer* HmiItem::GetExpandedView()
 {
-    if (!m_Layer)
-        SetLayer(CreateLayer());
-    return m_Layer;
+    if (!m_ExpandedView)
+        SetExpandedView(CreateExpandedView());
+    return m_ExpandedView;
 }
 
 
-void HmiItem::SetLayer(Layer* layer)
+void HmiItem::SetExpandedView(Layer* layer)
 {
-    delete m_Layer;
-    m_Layer = layer;
-    m_Layer->SetContent(this);
+    delete m_ExpandedView;
+    m_ExpandedView = layer;
+    m_ExpandedView->SetContent(this);
+}
+
+
+Layer* HmiItem::GetButtonView()
+{
+    if (!m_ButtonView)
+        SetButtonView(CreateButtonView());
+    return m_ButtonView;
+}
+
+
+void HmiItem::SetButtonView(Layer* layer)
+{
+    delete m_ButtonView;
+    m_ButtonView = layer;
+    m_ButtonView->SetContent(this);
+}
+
+
+Layer* HmiItem::CreateButtonView()
+{
+    return new Layers::Button();
 }

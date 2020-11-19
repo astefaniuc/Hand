@@ -40,8 +40,8 @@ HmiItem* Hand::GetHmi()
         handLayout->SetField("Middle finger", { 0.45, 0.39, 0.0, 0.0 });
         handLayout->SetField("Ring finger", { 0.6, 0.41, 0.0, 0.0 });
         handLayout->SetField("Little finger", { 0.7, 0.5, 0.0, 0.0 });
-        m_KeysHmi->GetLayer()->SetLayout(handLayout);
-        static_cast<Layers::List*>(m_KeysHmi->GetLayer())->SetExpandChildren(true);
+        m_KeysHmi->GetExpandedView()->SetLayout(handLayout);
+        static_cast<Layers::List*>(m_KeysHmi->GetExpandedView())->SetExpandChildren(true);
 
         Layouts::Aligned::Map* screenLayout = Layouts::Aligned::CreateView();
         screenLayout->SetField(DESCRIPTION, { Layout::Bottom, Layout::Center });
@@ -49,11 +49,11 @@ HmiItem* Hand::GetHmi()
         m_InitScreen = new Interface(
             "Keyboard Initialization",
             "Press 5 keys on the keyboard, to initialize a Hand device.");
-        m_InitScreen->SetView(m_KeysHmi->GetLayer());
-        m_InitScreen->GetLayer()->SetLayout(screenLayout);
+        m_InitScreen->SetView(m_KeysHmi->GetExpandedView());
+        m_InitScreen->GetExpandedView()->SetLayout(screenLayout);
 
         m_KeysHmi->AddActivationClient(
-            new CCallback<Layer>(m_InitScreen->GetLayer(), &Layer::Exit));
+            new CCallback<Layer>(m_InitScreen->GetExpandedView(), &Layer::Exit));
         GetInputState()->GetCommand(m_KeysHmi, m_NumberOfKeys);
     }
 

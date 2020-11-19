@@ -2,7 +2,7 @@
 #include "view/layers/view.h"
 
 
-Layer* Interface::CreateLayer()
+Layer* Interface::CreateExpandedView()
 {
     return new Layers::View();
 }

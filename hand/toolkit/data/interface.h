@@ -19,7 +19,7 @@ public:
     HmiItem* GetControls() const { return m_Controls; }
 
 private:
-    Layer* CreateLayer() override;
+    Layer* CreateExpandedView() override;
 
     Layer* m_View = nullptr;
     HmiItem* m_Controls = nullptr;

@@ -32,7 +32,7 @@ public:
     std::string GetValueString() override { return "TODO"; }
 
 private:
-    Layer* CreateLayer() override;
+    Layer* CreateExpandedView() override;
 
     std::vector<HmiItem*> m_Value;
 };

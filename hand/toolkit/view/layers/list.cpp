@@ -66,13 +66,9 @@ void List::Rebuild()
 void List::AddLayer(HmiItem* data)
 {
     if (m_ExpandChildren)
-        Insert(data->GetLayer());
+        Insert(data->GetExpandedView());
     else
-    {
-        Layer* button = new Button();
-        button->SetContent(data);
-        Insert(button);
-    }
+        Insert(data->GetButtonView());
 }
 
 

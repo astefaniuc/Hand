@@ -20,12 +20,12 @@ User::User(EventHandler* a_input)
     Layouts::Aligned::Map* layout = Layouts::Aligned::CreateView();
     layout->GetField(TITLE)->SetVisible(false);
     layout->GetField(DESCRIPTION)->SetVisible(false);
-    m_View.GetLayer()->SetLayout(layout);
+    m_View.GetExpandedView()->SetLayout(layout);
 
-    m_View.SetView(m_ViewStack.GetLayer());
+    m_View.SetView(m_ViewStack.GetExpandedView());
     m_View.SetControls(&m_Menu);
 
-    static_cast<Layers::List*>(m_ViewStack.GetLayer())->SetExpandChildren(true);
+    static_cast<Layers::List*>(m_ViewStack.GetExpandedView())->SetExpandChildren(true);
 
     m_ThemeLoader = new ModuleLib();
     m_Menu.Add(new Note(
@@ -34,17 +34,14 @@ User::User(EventHandler* a_input)
 
     // TODO: load settings
     Theme* theme = static_cast<Theme*>(m_ThemeLoader->GetObject());
-    m_View.GetLayer()->SetTheme(theme);
-    theme->InitScreen(m_View.GetLayer());
+    m_View.GetExpandedView()->SetTheme(theme);
+    theme->InitScreen(m_View.GetExpandedView());
     m_Menu.Attach(theme->GetHmi());
 
     Hand* right =  new Hand(m_Input->GetDevice(Device::Keyboard));
     if (!right->Init())
         // Show init screen
         m_ViewStack.Attach(right->GetHmi());
-    // Add the exit function to the tree of available funcs
-    // Request command at highest level
-//    GetCommand(m_Exit, _Device->GetNumberOfKeys());
 
     m_Input->SetUser(this);
     m_Input->Start();
@@ -78,8 +75,8 @@ bool User::LoadApp(Note* a_path)
 
 void User::Update()
 {
-    m_View.GetLayer()->Update();
-    m_View.GetLayer()->GetTheme()->UpdateScreen();
+    m_View.GetExpandedView()->Update();
+    m_View.GetExpandedView()->GetTheme()->UpdateScreen();
 }
 
 

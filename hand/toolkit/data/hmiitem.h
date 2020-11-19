@@ -56,8 +56,11 @@ public:
     void SetParent(Collection* parent) { m_Parent = parent; }
     Collection* GetParent() const { return m_Parent; }
 
-    Layer* GetLayer();
-    void SetLayer(Layer* layer);
+    Layer* GetExpandedView();
+    void SetExpandedView(Layer* layer);
+
+    Layer* GetButtonView();
+    void SetButtonView(Layer* layer);
 
     void SetSelected(bool isSelected);
     bool IsSelected() const { return m_IsSelected; }
@@ -93,14 +96,16 @@ protected:
     void RemoveCallback(ICallback* client, Listeners& clientsList);
     void Execute(const Listeners& list);
 
-    virtual Layer* CreateLayer() = 0;
+    virtual Layer* CreateExpandedView() = 0;
+    virtual Layer* CreateButtonView();
 
 private:
     std::string m_Name;
     std::string m_Description;
 
     Collection* m_Parent = nullptr;
-    Layer* m_Layer = nullptr;
+    Layer* m_ExpandedView = nullptr;
+    Layer* m_ButtonView = nullptr;
     bool m_IsSelected = false;
 
     Listeners m_SelectionChange;

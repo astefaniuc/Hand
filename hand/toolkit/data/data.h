@@ -53,7 +53,8 @@ public:
     Persistence* GetPersistence() { return m_Storage; }
 
 protected:
-    Layer* CreateLayer() override;
+    Layer* CreateExpandedView() override;
+    Layer* CreateButtonView() override;
 
     Persistence* m_Storage = nullptr;
 
