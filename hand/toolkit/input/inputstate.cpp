@@ -19,7 +19,6 @@ bool InputState::Press(unsigned k)
         return false;
     }
 
-
     return true;
 }
 
@@ -56,28 +55,8 @@ void InputState::Reset(void)
 }
 
 
-StateNode* InputState::GetKey(key_pointer key)
-{
-    switch(key)
-    {
-    case ROOT:
-        return NullKey;
-    case PRESSED:
-        return PressedKey;
-    case RELEASED:
-        return ReleasedKey;
-    default:
-        return nullptr;
-    }
-}
-
-
 bool InputState::Bind(HmiItem* method, const Chord& chord)
 {
-    if (!NullKey)
-        // Not initialized
-        return false;
-
     StateNode* node = NullKey;
     for (unsigned i = 0; i < chord.keys.size(); ++i)
     {
@@ -97,10 +76,6 @@ bool InputState::Bind(HmiItem* method, const Chord& chord)
 
 bool InputState::GetCommand(HmiItem* target, unsigned level)
 {
-    if (!NullKey)
-        // Not initialized
-        return false;
-
     // Get the list of available commands
     StateNode::PeersList* levelCmds = GetCommands(level);
     for (StateNode* node : *levelCmds)

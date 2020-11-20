@@ -5,14 +5,6 @@
 #include "input/chord.h"
 
 
-enum key_pointer
-{
-    ROOT,
-    PRESSED,
-    RELEASED
-};
-
-
 class InputState
 {
 public:
@@ -24,7 +16,6 @@ public:
     bool Release(unsigned index);
     // Resets "pressed" and "released" information
     void Reset();
-    StateNode* GetKey(key_pointer kind);
 
     bool Bind(HmiItem* method, const Chord& chord);
     StateNode::PeersList* GetCommands(unsigned level);
