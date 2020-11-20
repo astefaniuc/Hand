@@ -1,4 +1,5 @@
 #include "input/hand.h"
+#include "input/chord.h"
 #include "input/device.h"
 #include "input/inputstate.h"
 #include "data/interface.h"
@@ -8,15 +9,19 @@
 #include "view/layouts/aligned.h"
 
 
+const std::string Hand::Finger[] = {
+    "Thumb", "Pointer finger", "Middle finger", "Ring finger", "Little finger" };
+
+
 Hand::Hand(Device* dev) : Module(), m_Device(dev)
 {
     m_Device->SetUser(this);
     m_KeysHmi = new Collection("Keys", "");
-    m_KeysHmi->Add(new Note("Thumb", "", ""));
-    m_KeysHmi->Add(new Note("Pointer finger", "", ""));
-    m_KeysHmi->Add(new Note("Middle finger", "", ""));
-    m_KeysHmi->Add(new Note("Ring finger", "", ""));
-    m_KeysHmi->Add(new Note("Little finger", "", ""));
+    m_KeysHmi->Add(new Note(Finger[Chord::Thumb], "", ""));
+    m_KeysHmi->Add(new Note(Finger[Chord::Pointer], "", ""));
+    m_KeysHmi->Add(new Note(Finger[Chord::Middle], "", ""));
+    m_KeysHmi->Add(new Note(Finger[Chord::Ring], "", ""));
+    m_KeysHmi->Add(new Note(Finger[Chord::Little], "", ""));
 
     m_StateMachine = new InputState(m_NumberOfKeys);
 }
@@ -54,7 +59,7 @@ HmiItem* Hand::GetInitScreen()
 
         m_InitScreen->AddActivationClient(
             new CCallback<Layer>(m_InitScreen->GetExpandedView(), &Layer::Exit));
-        GetInputState()->GetCommand(m_InitScreen, m_NumberOfKeys);
+        GetInputState()->Bind(m_InitScreen, Chord::FullHand());
     }
 
     return m_InitScreen;

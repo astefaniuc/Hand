@@ -1,9 +1,10 @@
 #ifndef HAND_INPUT_HAND_H
 #define HAND_INPUT_HAND_H
 
-#include <vector>
 #include "base/module.h"
 #include "data/collection.h"
+#include <vector>
+#include <initializer_list>
 
 
 enum default_number_of_items
@@ -12,15 +13,6 @@ enum default_number_of_items
     MAX_NUMBER_OF_BUTTONS = 10
 };
 
-
-enum key_position
-{
-    THUMB,
-    FOREFINGER,
-    MIDDLEFINGER,
-    RINGFINGER,
-    LITTLEFINGER
-};
 
 
 class Device;
@@ -43,6 +35,9 @@ public:
     // Return the input state machine
     InputState* GetInputState() { return m_StateMachine; }
     unsigned GetNumberOfKeys() { return m_NumberOfKeys; }
+
+    /// ... and the corresponding strings:
+    static const std::string Finger[5];
 
 private:
     // Returns the key number

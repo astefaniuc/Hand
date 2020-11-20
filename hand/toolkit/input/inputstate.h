@@ -2,6 +2,7 @@
 #define HAND_INPUT_INPUTSTATE_H
 
 #include "input/node.h"
+#include "input/chord.h"
 
 
 enum key_pointer
@@ -24,6 +25,8 @@ public:
     // Resets "pressed" and "released" information
     void Reset();
     StateNode* GetKey(key_pointer kind);
+
+    bool Bind(HmiItem* method, const Chord& chord);
     StateNode::PeersList* GetCommands(unsigned level);
     // Maps a command node to the given list
     bool GetCommand(HmiItem* method, unsigned level);

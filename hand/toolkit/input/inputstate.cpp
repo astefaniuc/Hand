@@ -72,6 +72,29 @@ StateNode* InputState::GetKey(key_pointer key)
 }
 
 
+bool InputState::Bind(HmiItem* method, const Chord& chord)
+{
+    if (!NullKey)
+        // Not initialized
+        return false;
+
+    StateNode* node = NullKey;
+    for (unsigned i = 0; i < chord.keys.size(); ++i)
+    {
+        node = node->GetChild(chord.keys[i]);
+        if (!node)
+            return false;
+    }
+
+    if(!node->GetAction())
+    {
+        node->SetAction(method);
+        return true;
+    }
+    return false;
+}
+
+
 bool InputState::GetCommand(HmiItem* target, unsigned level)
 {
     if (!NullKey)
