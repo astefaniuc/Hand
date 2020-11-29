@@ -27,13 +27,6 @@ protected:
 //    void Keep(enum mode)
 
 private:
-    void Clear();
-
-    Layer* m_Control = nullptr;
-    Layer* m_Description = nullptr;
-    Layer* m_Title = nullptr;
-    Layer* m_View = nullptr;
-
     Action<View>* m_Exit;
 };
 

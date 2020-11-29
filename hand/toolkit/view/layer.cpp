@@ -101,13 +101,6 @@ Drawer* Layer::GetDrawer()
 }
 
 
-void Layer::Collapse()
-{
-    IsExpanded = false;
-    m_ModifiedContent = true;
-}
-
-
 SDL_Rect Layer::UpdateSize(const SDL_Rect& outer)
 {
     SDL_Rect content = GetDrawer()->GetContentSize(outer);

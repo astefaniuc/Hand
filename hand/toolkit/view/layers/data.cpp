@@ -16,27 +16,10 @@ void DataLayer::SetContent(HmiItem* data)
 
 void DataLayer::Rebuild()
 {
-    Clear();
+    Map::Rebuild();
 
-    m_Name = Insert(TITLE, new Text(m_Data->GetName() + ":"));
-    if (!m_Data->GetDescription().empty())
-        m_Description = Insert(DESCRIPTION, new Text(m_Data->GetDescription()));
-    m_DataText = Insert(VIEW, new Text(static_cast<Data*>(m_Data)->GetValueString()));
-    // TODO: m_Command
-}
-
-
-void DataLayer::Clear()
-{
-    delete m_Name;
-    delete m_Description;
-    delete m_DataText;
-
-    m_DataText = nullptr;
-    m_Description = nullptr;
-    m_Name = nullptr;
-
-    m_Sublayers.clear();
+    m_DataText.SetData(static_cast<Data*>(m_Data)->GetValueString());
+    Insert(VIEW, &m_DataText);
 }
 
 

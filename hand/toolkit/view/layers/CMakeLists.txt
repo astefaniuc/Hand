@@ -3,4 +3,5 @@ target_sources(${LIBNAME} PRIVATE
     data.cpp
     list.cpp
     map.cpp
+    text.cpp
     view.cpp)

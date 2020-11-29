@@ -3,6 +3,7 @@
 
 #include "view/drawer.h"
 #include "view/layout.h"
+#include "input/chord.h"
 #include <SDL/SDL.h> // TODO: remove SDL dependency here
 
 
@@ -43,8 +44,6 @@ public:
     Drawer* GetDrawer();
     void SetDrawer(Drawer* drawer);
 
-    void Collapse();
-
     /// Returns the layers rectangle including the frame and spacing around it.
     SDL_Rect UpdateSize(const SDL_Rect& outer);
     /// Returns the size without the frame and spacing.
@@ -68,9 +67,6 @@ protected:
     SDL_Rect m_Size = { 0, 0, 0, 0 };
 
     HmiItem* m_Data = nullptr;
-
-    bool IsVisible = true;
-    bool IsExpanded = false;
 
     bool m_ModifiedContent = false;
     bool m_IsModified = true;

@@ -23,13 +23,13 @@ Hand::Hand(Device* dev) : Module(), m_Device(dev)
     m_KeysHmi->Add(new Note(Finger[Chord::Ring], "", ""));
     m_KeysHmi->Add(new Note(Finger[Chord::Little], "", ""));
 
-    m_StateMachine = new InputState(m_NumberOfKeys);
+    m_InputState = new InputState(m_NumberOfKeys);
 }
 
 
 Hand::~Hand()
 {
-    delete m_StateMachine;
+    delete m_InputState;
     delete m_KeysHmi;
     delete m_InitScreen;
 }
@@ -50,16 +50,15 @@ HmiItem* Hand::GetInitScreen()
 
         Layouts::Aligned::Map* screenLayout = Layouts::Aligned::CreateView();
         screenLayout->SetField(DESCRIPTION, { Layout::Bottom, Layout::Center });
+        screenLayout->GetField(CONTROL)->SetVisible(false);
 
         m_InitScreen = new Interface(
             "Keyboard Initialization",
             "Press 5 keys on the keyboard, to initialize a Hand device.");
         m_InitScreen->SetView(m_KeysHmi->GetExpandedView());
-        m_InitScreen->GetExpandedView()->SetLayout(screenLayout);
 
-        m_InitScreen->AddActivationClient(
-            new CCallback<Layer>(m_InitScreen->GetExpandedView(), &Layer::Exit));
-        GetInputState()->Bind(m_InitScreen, Chord::FullHand());
+        Layer* initView = m_InitScreen->GetExpandedView();
+        initView->SetLayout(screenLayout);
     }
 
     return m_InitScreen;
@@ -84,6 +83,28 @@ bool Hand::Init()
 }
 
 
+bool Hand::SetFocus(Layer* view)
+{
+    m_Commands.clear();
+    BindChords(view);
+    return true;
+}
+
+void Hand::BindChords(Layer* focus)
+{
+    HmiItem* method = focus->GetContent();
+    if (method && !method->m_Chord.keys.empty())
+        m_Commands[method] = method->m_Chord;
+
+    Layer* sub = focus->GetFirstChild();
+    while (sub)
+    {
+        BindChords(sub);
+        sub = focus->GetNextChild();
+    }
+}
+
+
 bool Hand::Press(int k)
 {
     if (m_Keys.size() < m_NumberOfKeys)
@@ -94,7 +115,11 @@ bool Hand::Press(int k)
     if (index == -1)
         return false;
 
-    m_StateMachine->Press(index);
+    if (m_InputState->IsClean())
+        m_Record.keys.clear();
+    if (m_InputState->Press(index))
+        m_Record.keys.push_back((Chord::Finger)index);
+
     return true;
 }
 
@@ -109,12 +134,25 @@ bool Hand::Release(int k)
     {
         // Device is during initialization
         DeleteKey(index);
-        m_StateMachine->Reset();
-        for (unsigned i = 0; i < m_Keys.size(); ++i)
-            m_StateMachine->Press(i);
+        // Always ascending
+        m_Record.keys.pop_back();
+        m_InputState->Release(m_Keys.size());
         return true;
     }
-    return m_StateMachine->Release(index);
+
+    if (m_InputState->Release(index) && m_InputState->IsClean())
+    {
+        for (auto command : m_Commands)
+        {
+            if (command.second.IsValid(m_Record))
+            {
+                command.first->Activate();
+                break;
+            }
+        }
+    }
+
+    return true;
 }
 
 

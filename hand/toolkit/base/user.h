@@ -17,7 +17,6 @@ public:
     virtual ~User();
 
     bool LoadApp(Note* path);
-    bool GetCommand(HmiItem* func, int level);
     void Update();
 
 private:
@@ -28,7 +27,6 @@ private:
     std::vector<ModuleLib*> m_RunningApps;
     Interface m_View;
     Collection m_ViewStack;
-    Collection m_Menu;
 };
 
 #endif // HAND_BASE_USER_H

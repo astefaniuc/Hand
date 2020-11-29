@@ -1,6 +1,7 @@
 #ifndef HAND_GRAPH_HMIITEM_H
 #define HAND_GRAPH_HMIITEM_H
 
+#include "input/chord.h"
 #include <string>
 #include <sstream>
 #include <vector>
@@ -39,6 +40,7 @@ private:
 
 class Layer;
 class Collection;
+class Chord;
 
 class HmiItem
 {
@@ -89,6 +91,8 @@ public:
 
     /// You can keep HmiItems in the closer focus while the user descends into details.
     void SetVisualKeepLevel(int level);
+
+    Chord m_Chord;
 
 protected:
     typedef std::vector<ICallback*> Listeners;

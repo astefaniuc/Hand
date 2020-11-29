@@ -3,8 +3,9 @@
 
 #include "base/module.h"
 #include "data/collection.h"
+#include "input/chord.h"
+#include <map>
 #include <vector>
-#include <initializer_list>
 
 
 enum default_number_of_items
@@ -32,11 +33,12 @@ public:
 
     bool Press(int keyId);
     bool Release(int keyId);
-    // Return the input state machine
-    InputState* GetInputState() { return m_StateMachine; }
+
     unsigned GetNumberOfKeys() { return m_NumberOfKeys; }
 
-    /// ... and the corresponding strings:
+    bool SetFocus(Layer* view);
+
+    /// Finger names.
     static const std::string Finger[5];
 
 private:
@@ -48,12 +50,17 @@ private:
     void AddKey(int key_id);
     void DeleteKey(unsigned index);
 
+    void BindChords(Layer* focus);
+
     // Number of controls
     unsigned m_NumberOfKeys = NUMBER_OF_BUTTONS;
     std::vector<int> m_Keys;
     Collection* m_KeysHmi;
     Device* m_Device;
-    InputState* m_StateMachine = nullptr;
+    InputState* m_InputState = nullptr;
+
+    Chord m_Record;
+    std::map<HmiItem*, Chord> m_Commands;
 
     Interface* m_InitScreen = nullptr;
 };

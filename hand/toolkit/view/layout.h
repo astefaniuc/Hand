@@ -62,12 +62,12 @@ public:
     // Returns this if 'name' matches this, returns NULL otherwise.
     Field* GetField(const std::string& name) const override;
 
-    void SetVisible(bool visible) { m_IsVisble = visible; }
-    bool IsVisible() { return m_IsVisble; }
+    void SetVisible(bool visible) { m_IsVisible = visible; }
+    bool IsVisible() { return m_IsVisible; }
 
 private:
     std::string m_Name;
-    bool m_IsVisble = true;
+    bool m_IsVisible = true;
 };
 
 

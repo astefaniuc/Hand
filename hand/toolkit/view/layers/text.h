@@ -13,12 +13,11 @@ class Text : public Layer
 public:
     explicit Text(const std::string& data = std::string()) { SetData(data); }
 
-    void SetData(const std::string& text) { m_Text = text; }
+    void SetData(const std::string& text);
     const std::string& GetData() { return m_Text; }
 
 protected:
     Drawer* CreatetDrawer() override { return GetTheme()->GetTextDrawer(); }
-
     Layout* CreateLayout() override { return new Layout(); }
 
     // Terminal layer. TODO: remove all this from base class.

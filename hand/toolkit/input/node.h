@@ -4,20 +4,12 @@
 #include <vector>
 
 
-class HmiItem;
-
 class StateNode
 {
 public:
     typedef std::vector<StateNode*> PeersList;
 
     StateNode(unsigned size, PeersList* peers);
-
-    /// The action to be executed
-    void SetAction(HmiItem* action) { m_Action = action; }
-    HmiItem* GetAction() { return m_Action; }
-    /// Shortcut.
-    void ClearAction() { m_Action = nullptr; }
 
     void SetParent(StateNode* parent, unsigned pos);
     /// Returns the sub-node at given position if it's a parent
@@ -38,8 +30,6 @@ private:
     };
     std::vector<Link> m_Links;
     PeersList* m_Peers;
-
-    HmiItem* m_Action = nullptr;
 };
 
 

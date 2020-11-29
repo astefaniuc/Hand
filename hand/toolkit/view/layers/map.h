@@ -2,6 +2,7 @@
 #define HAND_VIEW_LAYER_MAP_H
 
 #include "view/layer.h"
+#include "view/layers/text.h"
 #include <map>
 
 
@@ -18,14 +19,19 @@ public:
     Layer* GetNextChild() override;
 
     /// Returns 'sub'.
-    Layer* Insert(const std::string& field, Layer* sub);
+    void Insert(const std::string& field, Layer* sub);
     void Remove(Layer* sub) override;
 
     Layer* GetChild(const std::string& name) const override;
 
 protected:
+    void Rebuild() override;
+
     std::map<std::string, Layer*> m_Sublayers;
     std::map<std::string, Layer*>::const_iterator m_CurrentChild = m_Sublayers.cbegin();
+
+    Text m_Name;
+    Text m_Info;
 };
 
 }

@@ -19,6 +19,7 @@ Layer* Map::GetFirstChild()
     return nullptr;
 }
 
+
 Layer* Map::GetNextChild()
 {
     ++m_CurrentChild;
@@ -28,12 +29,27 @@ Layer* Map::GetNextChild()
 }
 
 
-Layer* Map::Insert(const std::string& field, Layer* child)
+void Map::Rebuild()
 {
+    m_Sublayers.clear();
+
+    m_Name.SetData(m_Data->GetName());
+    m_Info.SetData(m_Data->GetDescription());
+
+    Insert(TITLE, &m_Name);
+    if (!m_Data->GetDescription().empty())
+        Insert(DESCRIPTION, &m_Info);
+}
+
+
+void Map::Insert(const std::string& field, Layer* child)
+{
+    if (!child || !GetLayout()->GetField(field)->IsVisible())
+        return;
+
     m_Sublayers[field] = child;
     child->SetParent(this);
     m_IsModified = true;
-    return child;
 }
 
 

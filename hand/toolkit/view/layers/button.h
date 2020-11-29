@@ -10,18 +10,11 @@ namespace Layers {
 
 class Button : public Map
 {
-public:
-    ~Button() { Clear(); }
-
 protected:
     void Rebuild() override;
 
-    void Clear();
     Drawer* CreatetDrawer() override;
     Layout* CreateLayout() override { return Layouts::Compact::CreateButton(); }
-
-    Layer* m_Name = nullptr;
-    Layer* m_Description = nullptr;
 };
 
 }
