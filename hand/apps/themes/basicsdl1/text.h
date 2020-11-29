@@ -7,7 +7,7 @@
 class Text : public DrawerSdl
 {
 public:
-    Text(BasicSdl1* theme, Collection* config) : DrawerSdl(theme, config) {}
+    Text(BasicSdl1* theme, Hmi::List* config) : DrawerSdl(theme, config) {}
     ~Text() { SDL_FreeSurface(m_Buffer); }
 
     SDL_Rect CalculateSize(SDL_Rect& content) override;

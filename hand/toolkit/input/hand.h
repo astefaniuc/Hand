@@ -2,7 +2,7 @@
 #define HAND_INPUT_HAND_H
 
 #include "base/module.h"
-#include "data/collection.h"
+#include "data/list.h"
 #include "input/chord.h"
 #include <map>
 #include <vector>
@@ -18,7 +18,7 @@ enum default_number_of_items
 
 class Device;
 class InputState;
-class Interface;
+namespace Hmi { class Interface; }
 
 class Hand : public Module
 {
@@ -26,8 +26,8 @@ public:
     Hand(Device* dev);
     ~Hand();
 
-    HmiItem* GetHmi() override { return nullptr; }
-    HmiItem* GetInitScreen();
+    Hmi::Item* GetHmi() override { return nullptr; }
+    Hmi::Item* GetInitScreen();
     // Sets the key map
     bool Init();
 
@@ -46,7 +46,7 @@ private:
     int GetKeyIndex(int keyId);
 
     // Returns the Key symbol at specified position
-    Note* GetKey(unsigned index);
+    Hmi::Note* GetKey(unsigned index);
     void AddKey(int key_id);
     void DeleteKey(unsigned index);
 
@@ -55,14 +55,14 @@ private:
     // Number of controls
     unsigned m_NumberOfKeys = NUMBER_OF_BUTTONS;
     std::vector<int> m_Keys;
-    Collection* m_KeysHmi;
+    Hmi::List* m_KeysHmi;
     Device* m_Device;
     InputState* m_InputState = nullptr;
 
     Chord m_Record;
-    std::map<HmiItem*, Chord> m_Commands;
+    std::map<Hmi::Item*, Chord> m_Commands;
 
-    Interface* m_InitScreen = nullptr;
+    Hmi::Interface* m_InitScreen = nullptr;
 };
 
 #endif //HAND_INPUT_HAND_H

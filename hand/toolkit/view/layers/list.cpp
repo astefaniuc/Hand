@@ -1,6 +1,6 @@
 #include "view/layers/list.h"
 #include "view/layers/button.h"
-#include "data/collection.h"
+#include "data/list.h"
 #include "view/theme.h"
 
 
@@ -33,7 +33,7 @@ Layer* List::GetNextChild()
 
 Layer* List::GetChild(const std::string& name) const
 {
-    Collection* listData = dynamic_cast<Collection*>(GetContent());
+    Hmi::List* listData = dynamic_cast<Hmi::List*>(GetContent());
     if (listData)
         for (unsigned i = 0; i < m_Sublayers.size(); ++i)
             if (listData->GetChild(i + m_StartPosition)->GetName() == name)
@@ -46,7 +46,7 @@ void List::Rebuild()
 {
     m_Sublayers.clear();
 
-    Collection* listData = dynamic_cast<Collection*>(GetContent());
+    Hmi::List* listData = dynamic_cast<Hmi::List*>(GetContent());
     if (listData)
     {
         unsigned count = listData->Size() - m_StartPosition;
@@ -63,7 +63,7 @@ void List::Rebuild()
 }
 
 
-void List::AddLayer(HmiItem* data)
+void List::AddLayer(Hmi::Item* data)
 {
     if (m_ExpandChildren)
         Insert(data->GetExpandedView());
@@ -101,9 +101,9 @@ Drawer* List::CreatetDrawer()
 }
 
 
-bool List::SetFocus(HmiItem*)
+bool List::SetFocus(Hmi::Item*)
 {
-    HmiItem* tgt= GetControlsList();
+    Hmi::Item* tgt= GetControlsList();
     if (!tgt)
         return false;
 
@@ -112,7 +112,7 @@ bool List::SetFocus(HmiItem*)
 }
 
 
-HmiItem* List::GetControlsList()
+Hmi::Item* List::GetControlsList()
 {
     if (!m_Data)
         return nullptr;

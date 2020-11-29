@@ -16,12 +16,12 @@ const std::string Hand::Finger[] = {
 Hand::Hand(Device* dev) : Module(), m_Device(dev)
 {
     m_Device->SetUser(this);
-    m_KeysHmi = new Collection("Keys", "");
-    m_KeysHmi->Add(new Note(Finger[Chord::Thumb], "", ""));
-    m_KeysHmi->Add(new Note(Finger[Chord::Pointer], "", ""));
-    m_KeysHmi->Add(new Note(Finger[Chord::Middle], "", ""));
-    m_KeysHmi->Add(new Note(Finger[Chord::Ring], "", ""));
-    m_KeysHmi->Add(new Note(Finger[Chord::Little], "", ""));
+    m_KeysHmi = new Hmi::List("Keys", "");
+    m_KeysHmi->Add(new Hmi::Note(Finger[Chord::Thumb], "", ""));
+    m_KeysHmi->Add(new Hmi::Note(Finger[Chord::Pointer], "", ""));
+    m_KeysHmi->Add(new Hmi::Note(Finger[Chord::Middle], "", ""));
+    m_KeysHmi->Add(new Hmi::Note(Finger[Chord::Ring], "", ""));
+    m_KeysHmi->Add(new Hmi::Note(Finger[Chord::Little], "", ""));
 
     m_InputState = new InputState(m_NumberOfKeys);
 }
@@ -35,7 +35,7 @@ Hand::~Hand()
 }
 
 
-HmiItem* Hand::GetInitScreen()
+Hmi::Item* Hand::GetInitScreen()
 {
     if (!m_InitScreen)
     {
@@ -52,7 +52,7 @@ HmiItem* Hand::GetInitScreen()
         screenLayout->SetField(DESCRIPTION, { Layout::Bottom, Layout::Center });
         screenLayout->GetField(CONTROL)->SetVisible(false);
 
-        m_InitScreen = new Interface(
+        m_InitScreen = new Hmi::Interface(
             "Keyboard Initialization",
             "Press 5 keys on the keyboard, to initialize a Hand device.");
         m_InitScreen->SetView(m_KeysHmi->GetExpandedView());
@@ -70,7 +70,7 @@ bool Hand::Init()
     for (unsigned i = 0; i < m_NumberOfKeys; ++i)
     {
         // Do we have keys to load?
-        Note* data = GetKey(i);
+        Hmi::Note* data = GetKey(i);
         if (!data)
             return false;
         std::string key_str = data->GetValue();
@@ -92,7 +92,7 @@ bool Hand::SetFocus(Layer* view)
 
 void Hand::BindChords(Layer* focus)
 {
-    HmiItem* method = focus->GetContent();
+    Hmi::Item* method = focus->GetContent();
     if (method && !method->m_Chord.keys.empty())
         m_Commands[method] = method->m_Chord;
 
@@ -166,9 +166,9 @@ int Hand::GetKeyIndex(int k)
 }
 
 
-Note* Hand::GetKey(unsigned pos)
+Hmi::Note* Hand::GetKey(unsigned pos)
 {
-    return static_cast<Note*>(m_KeysHmi->GetChild(pos));
+    return static_cast<Hmi::Note*>(m_KeysHmi->GetChild(pos));
 }
 
 
@@ -183,10 +183,10 @@ void Hand::AddKey(int k)
 void Hand::DeleteKey(unsigned index)
 {
     // Adjust UI literals
-    Note* curr = GetKey(index);
+    Hmi::Note* curr = GetKey(index);
     for (unsigned i = index + 1; i < m_NumberOfKeys; ++i)
     {
-        Note* next = GetKey(i);
+        Hmi::Note* next = GetKey(i);
         curr->SetValue(next->GetValue());
         curr = next;
     }

@@ -1,20 +1,23 @@
 #ifndef HAND_GRAPH_METHOD_H
 #define HAND_GRAPH_METHOD_H
 
-#include "data/hmiitem.h"
+#include "data/item.h"
 #include "view/layers/button.h"
 
 
+namespace Hmi {
+
+
 template <class CallbackOwner>
-class Action : public HmiItem
+class Action : public Item
 {
-    typedef void (CallbackOwner::*TCallback)(HmiItem*);
+    typedef void (CallbackOwner::*TCallback)(Item*);
 
 public:
     Action(
         const std::string& name, const std::string& description,
         CallbackOwner* obj, TCallback func)
-        : HmiItem(name, description)
+        : Item(name, description)
     {
         m_Method = new CCallback<CallbackOwner>(obj, func);
         AddActivationClient(m_Method);
@@ -27,4 +30,5 @@ private:
     CCallback<CallbackOwner>* m_Method;
 };
 
+}
 #endif // HAND_GRAPH_METHOD_H

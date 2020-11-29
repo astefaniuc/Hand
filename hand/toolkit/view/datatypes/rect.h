@@ -2,7 +2,7 @@
 #define HAND_VIEW_DATATYPES_RECT_H
 
 #include <SDL/SDL.h>
-#include "data/collection.h"
+#include "data/list.h"
 #include "data/data.h"
 
 
@@ -19,7 +19,7 @@ struct RelRect
 
 
 
-class Rect : public Collection
+class Rect : public Hmi::List
 {
 public:
     Rect(
@@ -32,9 +32,9 @@ public:
     void Reset();
 
 private:
-    TData<double>* Get(const std::string& coordinate)
+    Hmi::TData<double>* Get(const std::string& coordinate)
     {
-        return (TData<double>*)GetChild(coordinate);
+        return (Hmi::TData<double>*)GetChild(coordinate);
     }
 
     RelRect m_Value;

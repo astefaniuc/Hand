@@ -32,7 +32,7 @@ public:
     Driver GetTypeId() { return m_Type; }
 
     // Returns the Key symbol at specified position
-    virtual void GetKeyName(int k, Note* a_out) = 0;
+    virtual void GetKeyName(int k, Hmi::Note* a_out) = 0;
 
 protected:
     Driver m_Type;

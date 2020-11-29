@@ -2,14 +2,14 @@
 #define HAND_BASE_HANDAPP_H
 
 
-class HmiItem;
+namespace Hmi { class Item; }
 
 class Module
 {
 public:
     virtual ~Module() = default;
 
-    virtual HmiItem* GetHmi() = 0;
+    virtual Hmi::Item* GetHmi() = 0;
 };
 
 #endif // HAND_BASE_HANDAPP_H

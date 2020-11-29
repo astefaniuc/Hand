@@ -2,7 +2,10 @@
 #define HAND_GRAPH_DATA_H
 
 #include "base/module.h"
-#include "data/hmiitem.h"
+#include "data/item.h"
+
+
+namespace Hmi {
 
 
 class Data;
@@ -21,11 +24,11 @@ public:
 };
 
 
-class Data : public HmiItem
+class Data : public Item
 {
 public:
     Data(const std::string& name, const std::string& description, Module* manipulator)
-        : HmiItem(name, description), m_Manipulator(manipulator)
+        : Item(name, description), m_Manipulator(manipulator)
     {
 //        if (m_Manipulator)
 //            AddActivationClient(m_Manipulator->GetHmi());
@@ -74,12 +77,12 @@ public:
     // TEMP?
     virtual bool IsValid(const DataType& input) = 0;
 
-    HmiItem* GetHmi() override { return m_Interface; }
-    void SetHmi(HmiItem* interface) { m_Interface = interface; }
+    Item* GetHmi() override { return m_Interface; }
+    void SetHmi(Item* interface) { m_Interface = interface; }
 
 protected:
     TData<DataType>* m_Item = nullptr;
-    HmiItem* m_Interface = nullptr;
+    Item* m_Interface = nullptr;
 };
 
 
@@ -129,5 +132,5 @@ private:
 
 typedef TData<std::string> Note;
 
-
+}
 #endif // HAND_GRAPH_DATA_H

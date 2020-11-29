@@ -125,7 +125,7 @@ void DrawerSdl::DrawFrame()
 
 bool DrawerSdl::GetDrawFrame() const
 {
-    TData<bool>* data = dynamic_cast<TData<bool>*>(m_Properties->GetChild(DRAWFRAME));
+    Hmi::TData<bool>* data = dynamic_cast<Hmi::TData<bool>*>(m_Properties->GetChild(DRAWFRAME));
     if (data)
         return data->GetValue();
     return true;

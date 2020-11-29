@@ -7,7 +7,7 @@
 #include <SDL/SDL.h> // TODO: remove SDL dependency here
 
 
-class HmiItem;
+namespace Hmi { class Item; }
 class Theme;
 
 class Layer
@@ -32,8 +32,8 @@ public:
     virtual void Remove(Layer* sub) = 0;
 
     // Set pointer to a data tree node
-    virtual void SetContent(HmiItem* data);
-    HmiItem* GetContent() const { return m_Data; }
+    virtual void SetContent(Hmi::Item* data);
+    Hmi::Item* GetContent() const { return m_Data; }
 
     Layout* GetLayout();
     void SetLayout(Layout* layout);
@@ -50,7 +50,7 @@ public:
     const SDL_Rect& GetContentSize() const { return m_Size; }
 
     bool IsModified() { return (m_IsModified || m_ModifiedContent); }
-    virtual void Exit(HmiItem*);
+    virtual void Exit(Hmi::Item*);
 
 protected:
     virtual Layout* CreateLayout() = 0;
@@ -66,7 +66,7 @@ protected:
     /// The layers content/active rectangle and its position.
     SDL_Rect m_Size = { 0, 0, 0, 0 };
 
-    HmiItem* m_Data = nullptr;
+    Hmi::Item* m_Data = nullptr;
 
     bool m_ModifiedContent = false;
     bool m_IsModified = true;

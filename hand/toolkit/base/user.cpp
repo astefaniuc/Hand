@@ -26,7 +26,7 @@ User::User(EventHandler* a_input)
     static_cast<Layers::List*>(m_ViewStack.GetExpandedView())->SetExpandChildren(true);
 
     m_ThemeLoader = new ModuleLib();
-    m_View.GetControls().Add(new Note(
+    m_View.GetControls().Add(new Hmi::Note(
             "Theme", "Select visualization theme",
             "./binaries/lib/themes/basicsdl1.so", m_ThemeLoader));
 
@@ -40,7 +40,7 @@ User::User(EventHandler* a_input)
     if (!right->Init())
     {
         // Show init screen
-        HmiItem* initView = right->GetInitScreen();
+        Hmi::Item* initView = right->GetInitScreen();
         m_ViewStack.Attach(initView);
         m_View.GetExpandedView()->Update();
         right->SetFocus(initView->GetExpandedView());
@@ -60,7 +60,7 @@ User::~User()
 }
 
 
-bool User::LoadApp(Note* a_path)
+bool User::LoadApp(Hmi::Note* a_path)
 {
     ModuleLib* app = new ModuleLib();
     app->SetItem(a_path);

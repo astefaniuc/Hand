@@ -19,13 +19,13 @@ Rect::Rect(
     const std::string& a_name,
     const std::string& a_description,
     double x, double y, double w, double h)
-    : Collection(a_name, a_description), m_Value(x, y, w, h)
+    : Hmi::List(a_name, a_description), m_Value(x, y, w, h)
 {
     // For now add plain data directly
-    Add(new TData<double>("x", "", m_Value.x));
-    Add(new TData<double>("y", "", m_Value.y));
-    Add(new TData<double>("w", "", m_Value.w));
-    Add(new TData<double>("h", "", m_Value.h));
+    Add(new Hmi::TData<double>("x", "", m_Value.x));
+    Add(new Hmi::TData<double>("y", "", m_Value.y));
+    Add(new Hmi::TData<double>("w", "", m_Value.w));
+    Add(new Hmi::TData<double>("h", "", m_Value.h));
 }
 
 

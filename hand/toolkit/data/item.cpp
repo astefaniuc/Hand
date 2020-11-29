@@ -1,10 +1,13 @@
-#include "data/hmiitem.h"
-#include "data/collection.h"
+#include "data/item.h"
+#include "data/list.h"
 #include "view/layer.h"
 #include "view/layers/button.h"
 
 
-HmiItem::~HmiItem()
+namespace Hmi {
+
+
+Item::~Item()
 {
     for (ICallback* ic : m_SelectionChange)
         delete ic;
@@ -13,7 +16,7 @@ HmiItem::~HmiItem()
 
     if (m_Parent)
     {
-        Collection* tmp = m_Parent;
+        List* tmp = m_Parent;
         m_Parent = nullptr;
         tmp->Remove(this);
     }
@@ -22,14 +25,14 @@ HmiItem::~HmiItem()
 }
 
 
-void HmiItem::SetSelected(bool isSelected)
+void Item::SetSelected(bool isSelected)
 {
     m_IsSelected = isSelected;
     Execute(m_SelectionChange);
 }
 
 
-void HmiItem::RemoveCallback(ICallback* callback, Listeners& list)
+void Item::RemoveCallback(ICallback* callback, Listeners& list)
 {
     // TODO: Do we need thread safety here?
     for (unsigned i = 0; i < list.size(); ++i)
@@ -44,14 +47,14 @@ void HmiItem::RemoveCallback(ICallback* callback, Listeners& list)
 }
 
 
-void HmiItem::Execute(const Listeners& list)
+void Item::Execute(const Listeners& list)
 {
     for (ICallback* listener : list)
         listener->Execute(this);
 }
 
 
-Layer* HmiItem::GetExpandedView()
+Layer* Item::GetExpandedView()
 {
     if (!m_ExpandedView)
         SetExpandedView(CreateExpandedView());
@@ -59,7 +62,7 @@ Layer* HmiItem::GetExpandedView()
 }
 
 
-void HmiItem::SetExpandedView(Layer* layer)
+void Item::SetExpandedView(Layer* layer)
 {
     delete m_ExpandedView;
     m_ExpandedView = layer;
@@ -67,7 +70,7 @@ void HmiItem::SetExpandedView(Layer* layer)
 }
 
 
-Layer* HmiItem::GetButtonView()
+Layer* Item::GetButtonView()
 {
     if (!m_ButtonView)
         SetButtonView(CreateButtonView());
@@ -75,7 +78,7 @@ Layer* HmiItem::GetButtonView()
 }
 
 
-void HmiItem::SetButtonView(Layer* layer)
+void Item::SetButtonView(Layer* layer)
 {
     delete m_ButtonView;
     m_ButtonView = layer;
@@ -83,7 +86,9 @@ void HmiItem::SetButtonView(Layer* layer)
 }
 
 
-Layer* HmiItem::CreateButtonView()
+Layer* Item::CreateButtonView()
 {
     return new Layers::Button();
+}
+
 }

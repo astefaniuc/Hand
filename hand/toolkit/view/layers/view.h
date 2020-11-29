@@ -27,7 +27,7 @@ protected:
 //    void Keep(enum mode)
 
 private:
-    Action<View>* m_Exit;
+    Hmi::Action<View>* m_Exit;
 };
 
 }

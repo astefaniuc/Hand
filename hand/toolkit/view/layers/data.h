@@ -8,10 +8,10 @@
 namespace Layers {
 
 
-class DataLayer : public Map
+class Data : public Map
 {
 protected:
-    void SetContent(HmiItem* data) override;
+    void SetContent(Hmi::Item* data) override;
 
     void Rebuild() override;
 
@@ -19,7 +19,7 @@ protected:
     Layout* CreateLayout() override { return Layouts::Compact::CreateData(); }
 
     /// Callback.
-    void NotifyChanged(HmiItem*) { m_ModifiedContent = true; }
+    void NotifyChanged(Hmi::Item*) { m_ModifiedContent = true; }
 
     Text m_DataText;
 };

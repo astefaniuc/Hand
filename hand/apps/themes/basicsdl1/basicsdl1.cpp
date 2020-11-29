@@ -33,23 +33,23 @@ BasicSdl1::BasicSdl1()
     m_Datas.Add(new Rgb(BACKGROUNDCOLOR, "", 40, 40, 100));
     m_Datas.Add(new Rgb(FRAMECOLOR, "", 30, 30, 75));
     m_Datas.Add(new Rect(FRAMESIZE, "Relative frame size [%]", .5, .5, 1.0, 1.0));
-    m_Datas.Add(new TData<bool>(DRAWFRAME, "Draw a visible frame around item", true));
+    m_Datas.Add(new Hmi::TData<bool>(DRAWFRAME, "Draw a visible frame around item", true));
 
     m_Lists.Add(new Rgb(BACKGROUNDCOLOR, "", 20, 20, 50));
     m_Lists.Add(new Rgb(FRAMECOLOR, "", 80, 80, 105));
     m_Lists.Add(new Rect(FRAMESIZE, "Relative frame size [%]", .5, .5, 1.0, 1.0));
-    m_Lists.Add(new TData<bool>(DRAWFRAME, "Draw a visible frame around item", true));
+    m_Lists.Add(new Hmi::TData<bool>(DRAWFRAME, "Draw a visible frame around item", true));
 
     m_Texts.Add(new Rgb(BACKGROUNDCOLOR, "", 1, 1, 1));
     m_Texts.Add(new Rgb(FRAMECOLOR, "", 30, 30, 75));
     m_Texts.Add(new Rect(FRAMESIZE, "Relative frame size [%]", .5, .5, 1.0, 1.0));
     m_Texts.Add(new Rgb(FONTCOLOR, "", 200, 200, 200));
-    m_Texts.Add(new TData<unsigned>(FONTSIZE, "", 20));
+    m_Texts.Add(new Hmi::TData<unsigned>(FONTSIZE, "", 20));
 
     m_Views.Add(new Rgb(BACKGROUNDCOLOR, "", 30, 30, 60));
     m_Views.Add(new Rgb(FRAMECOLOR, "", 30, 30, 75));
     m_Views.Add(new Rect(FRAMESIZE, "Relative frame size [%]", .5, .5, 1.0, 1.0));
-    m_Views.Add(new TData<bool>(DRAWFRAME, "Draw a visible frame around item", true));
+    m_Views.Add(new Hmi::TData<bool>(DRAWFRAME, "Draw a visible frame around item", true));
 
     m_Hmi.Attach(&m_Buttons);
     m_Hmi.Attach(&m_Lists);
@@ -89,11 +89,11 @@ TTF_Font* BasicSdl1::GetFont(int size)
 
 unsigned BasicSdl1::GetBaseSize()
 {
-    return ((TData<unsigned>*)(m_Texts.GetChild(FONTSIZE)))->GetValue();
+    return ((Hmi::TData<unsigned>*)(m_Texts.GetChild(FONTSIZE)))->GetValue();
 }
 
 
-void BasicSdl1::ToggleFullscreen(HmiItem*)
+void BasicSdl1::ToggleFullscreen(Hmi::Item*)
 {
     m_IsFullscreen ? SetWindowed() : SetFullscreen();
 }

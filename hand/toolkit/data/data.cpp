@@ -2,6 +2,9 @@
 #include "view/layers/data.h"
 
 
+namespace Hmi {
+
+
 Data::~Data()
 {
     delete m_Manipulator;
@@ -26,11 +29,13 @@ void Data::SetPersistence(Persistence* storage)
 
 Layer* Data::CreateExpandedView()
 {
-    return new Layers::DataLayer();
+    return new Layers::Data();
 }
 
 
 Layer* Data::CreateButtonView()
 {
-    return new Layers::DataLayer();
+    return new Layers::Data();
+}
+
 }

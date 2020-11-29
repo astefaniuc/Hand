@@ -14,7 +14,7 @@ int main(int argc, const char *argv[])
     // the current thread if not already done
     if (!app.empty())
     {
-        Note* appPath = new Note("Start app", "Passed as program argument", app);
+        Hmi::Note* appPath = new Hmi::Note("Start app", "Passed as program argument", app);
         if (!user.LoadApp(appPath))
             std::cerr << "Error: can't open app '" << app << "'.";
     }

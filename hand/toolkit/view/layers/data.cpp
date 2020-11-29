@@ -6,24 +6,24 @@
 namespace Layers {
 
 
-void DataLayer::SetContent(HmiItem* data)
+void Data::SetContent(Hmi::Item* data)
 {
     Layer::SetContent(data);
-    ((Data*)data)->AddDataChangedClient(
-        new CCallback<DataLayer>(this, &DataLayer::NotifyChanged));
+    ((Hmi::Data*)data)->AddDataChangedClient(
+        new CCallback<Data>(this, &Data::NotifyChanged));
 }
 
 
-void DataLayer::Rebuild()
+void Data::Rebuild()
 {
     Map::Rebuild();
 
-    m_DataText.SetData(static_cast<Data*>(m_Data)->GetValueString());
+    m_DataText.SetData(static_cast<Hmi::Data*>(m_Data)->GetValueString());
     Insert(VIEW, &m_DataText);
 }
 
 
-Drawer* DataLayer::CreatetDrawer()
+Drawer* Data::CreatetDrawer()
 {
     return GetTheme()->GetDataDrawer();
 }

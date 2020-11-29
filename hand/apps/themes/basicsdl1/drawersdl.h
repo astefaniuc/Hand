@@ -2,7 +2,7 @@
 #define HAND_THEME_BASICSDL1_DRAWERSDL_H
 
 #include <SDL/SDL.h>
-#include "data/collection.h"
+#include "data/list.h"
 #include "view/drawer.h"
 #include "view/datatypes/rect.h"
 #include "view/datatypes/rgb.h"
@@ -13,14 +13,14 @@ class BasicSdl1;
 class DrawerSdl : public Drawer
 {
 public:
-    DrawerSdl(BasicSdl1* theme, Collection* config) : m_Theme(theme), m_Properties(config) {}
+    DrawerSdl(BasicSdl1* theme, Hmi::List* config) : m_Theme(theme), m_Properties(config) {}
 
     void Draw(SDL_Surface* buffer) override;
 
     SDL_Rect CalculateSize(SDL_Rect& content) override { return GetFramedSize(content); }
     SDL_Rect GetContentSize(const SDL_Rect& outer) override;
 
-    void SetProperties(Collection* config) { m_Properties = config; }
+    void SetProperties(Hmi::List* config) { m_Properties = config; }
 
     static DrawerSdl* GetDrawer(Layer* from);
     static void BlitSurface(SDL_Surface* source, SDL_Rect* source_pos, SDL_Surface* target);
@@ -45,7 +45,7 @@ protected:
 
     BasicSdl1* m_Theme;
     SDL_Surface* m_Buffer = nullptr;
-    Collection* m_Properties;
+    Hmi::List* m_Properties;
     bool m_ShowFrame = true;
 };
 

@@ -1,7 +1,7 @@
 #ifndef HAND_BASE_USER_H
 #define HAND_BASE_USER_H
 
-#include "data/collection.h"
+#include "data/list.h"
 #include "data/interface.h"
 
 
@@ -16,7 +16,7 @@ public:
     User(EventHandler* input);
     virtual ~User();
 
-    bool LoadApp(Note* path);
+    bool LoadApp(Hmi::Note* path);
     void Update();
 
 private:
@@ -25,8 +25,8 @@ private:
     // May be one or two hands, using a vector is overdosed (TODO)
     std::vector<Hand*> m_Hands;
     std::vector<ModuleLib*> m_RunningApps;
-    Interface m_View;
-    Collection m_ViewStack;
+    Hmi::Interface m_View;
+    Hmi::List m_ViewStack;
 };
 
 #endif // HAND_BASE_USER_H

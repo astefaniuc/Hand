@@ -7,26 +7,26 @@
 #include <vector>
 
 
-class HmiItem;
+namespace Hmi { class Item; }
 
 class ICallback
 {
 public:
     virtual ~ICallback() = default;
-    virtual void Execute(HmiItem* caller) = 0;
+    virtual void Execute(Hmi::Item* caller) = 0;
 };
 
 
 template <class CallbackOwner>
 class CCallback : public ICallback
 {
-    typedef void (CallbackOwner::*TCallback)(HmiItem*);
+    typedef void (CallbackOwner::*TCallback)(Hmi::Item*);
 
 public:
     CCallback(CallbackOwner* obj, TCallback func)
         : m_Object(obj), m_Function(func) {}
 
-    void Execute(HmiItem* caller) final
+    void Execute(Hmi::Item* caller) final
     {
         if(m_Object && m_Function)
             (m_Object->*m_Function)(caller);
@@ -39,15 +39,20 @@ private:
 
 
 class Layer;
-class Collection;
 class Chord;
 
-class HmiItem
+
+namespace Hmi {
+
+
+class List;
+
+class Item
 {
 public:
-    HmiItem(const std::string& name, const std::string& description)
+    Item(const std::string& name, const std::string& description)
         : m_Name(name), m_Description(description) {}
-    virtual ~HmiItem();
+    virtual ~Item();
 
     void SetName(const std::string& name) { m_Name = name; }
     const std::string& GetName() const { return m_Name; }
@@ -55,8 +60,8 @@ public:
     const std::string& GetDescription() const { return m_Description; }
 
     /// The parent is the object owner; HmiItems without a parent have to be explicitly deleted.
-    void SetParent(Collection* parent) { m_Parent = parent; }
-    Collection* GetParent() const { return m_Parent; }
+    void SetParent(Hmi::List* parent) { m_Parent = parent; }
+    Hmi::List* GetParent() const { return m_Parent; }
 
     Layer* GetExpandedView();
     void SetExpandedView(Layer* layer);
@@ -107,7 +112,7 @@ private:
     std::string m_Name;
     std::string m_Description;
 
-    Collection* m_Parent = nullptr;
+    Hmi::List* m_Parent = nullptr;
     Layer* m_ExpandedView = nullptr;
     Layer* m_ButtonView = nullptr;
     bool m_IsSelected = false;
@@ -116,4 +121,5 @@ private:
     Listeners m_Activation;
 };
 
+}
 #endif // HAND_GRAPH_HMIITEM_H

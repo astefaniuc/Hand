@@ -22,7 +22,7 @@ bool ModuleLib::Load()
 }
 
 
-HmiItem* ModuleLib::GetHmi()
+Hmi::Item* ModuleLib::GetHmi()
 {
     if (!m_Module)
         m_Module = Create();

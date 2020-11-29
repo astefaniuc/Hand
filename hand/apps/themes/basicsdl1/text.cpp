@@ -57,5 +57,5 @@ const Rgb& Text::GetFontColor() const
 
 unsigned Text::GetFontSize() const
 {
-    return ((TData<unsigned>*)(m_Properties->GetChild(FONTSIZE)))->GetValue();
+    return ((Hmi::TData<unsigned>*)(m_Properties->GetChild(FONTSIZE)))->GetValue();
 }

@@ -2,7 +2,7 @@
 #define HAND_THEMES_BASICSDL1_H
 
 #include "view/theme.h"
-#include "data/collection.h"
+#include "data/list.h"
 #include "text.h"
 #include <SDL/SDL_ttf.h>
 #include <map>
@@ -19,7 +19,7 @@ public:
     BasicSdl1();
     ~BasicSdl1();
 
-    HmiItem* GetHmi() override { return &m_Hmi; }
+    Hmi::Item* GetHmi() override { return &m_Hmi; }
 
     void InitScreen(Layer* root) override;
     void UpdateScreen() override;
@@ -36,17 +36,17 @@ public:
 
 protected:
     // App mode interface
-    void ToggleFullscreen(HmiItem*);
+    void ToggleFullscreen(Hmi::Item*);
     void SetFullscreen();
     void SetWindowed();
     SDL_Rect GetResolution();
 
-    Collection m_Hmi;
-    Collection m_Buttons;
-    Collection m_Datas;
-    Collection m_Lists;
-    Collection m_Texts;
-    Collection m_Views;
+    Hmi::List m_Hmi;
+    Hmi::List m_Buttons;
+    Hmi::List m_Datas;
+    Hmi::List m_Lists;
+    Hmi::List m_Texts;
+    Hmi::List m_Views;
 
     Layer* m_ScreenRoot = nullptr;
     // The whole screen TODO: can we use SDL_GetVideoSurface() instead?

@@ -2,10 +2,10 @@
 #define HAND_BASE_FILESYSTEM_H
 
 #include "data/data.h"
-#include "data/collection.h"
+#include "data/list.h"
 
 
-class Path : public Manipulator<std::string>
+class Path : public Hmi::Manipulator<std::string>
 {
 public:
     std::string GetAbsolute();
@@ -20,7 +20,7 @@ public:
 
     /// Returns a list of files and sub-folders.
     // TODO: regular expressions for filtering
-    Collection* GetContent();
+    Hmi::List* GetContent();
 };
 
 

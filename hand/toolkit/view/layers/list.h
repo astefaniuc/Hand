@@ -29,14 +29,14 @@ public:
 protected:
     void Rebuild() override;
 
-    void AddLayer(HmiItem* data);
+    void AddLayer(Hmi::Item* data);
 
     Drawer* CreatetDrawer() override;
     Layout* CreateLayout() override { return new Layouts::Compact::List(); }
 
-    bool SetFocus(HmiItem*);
+    bool SetFocus(Hmi::Item*);
     // Returns the list which should be mapped to the InputState
-    HmiItem* GetControlsList();
+    Hmi::Item* GetControlsList();
 
     Layouts::List* GetListLayout() { return static_cast<Layouts::List*>(GetLayout()); }
 

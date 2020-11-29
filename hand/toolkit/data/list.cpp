@@ -1,15 +1,18 @@
-#include "data/collection.h"
+#include "data/list.h"
 #include "view/layers/list.h"
 
 
-void Collection::Add(HmiItem* child)
+namespace Hmi {
+
+
+void List::Add(Item* child)
 {
     child->SetParent(this);
     m_Value.push_back(child);
 }
 
 
-void Collection::Remove(HmiItem* child)
+void List::Remove(Item* child)
 {
     if (child->GetParent() == this)
         delete child;
@@ -25,9 +28,9 @@ void Collection::Remove(HmiItem* child)
 }
 
 
-HmiItem* Collection::GetChild(const std::string& name) const
+Item* List::GetChild(const std::string& name) const
 {
-    for (HmiItem* item : m_Value)
+    for (Item* item : m_Value)
         if (item->GetName() == name)
             return item;
 
@@ -35,9 +38,9 @@ HmiItem* Collection::GetChild(const std::string& name) const
 }
 
 
-void Collection::Clear()
+void List::Clear()
 {
-    for (HmiItem* item : m_Value)
+    for (Item* item : m_Value)
         if (item->GetParent() == this)
             delete item;
 
@@ -45,7 +48,9 @@ void Collection::Clear()
 }
 
 
-Layer* Collection::CreateExpandedView()
+Layer* List::CreateExpandedView()
 {
     return new Layers::List();
+}
+
 }

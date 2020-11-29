@@ -10,7 +10,7 @@
 }
 
 
-void Layer::Exit(HmiItem*)
+void Layer::Exit(Hmi::Item*)
 {
     if (m_Parent)
         m_Parent->Remove(this);
@@ -43,7 +43,7 @@ void Layer::Draw(SDL_Surface* buffer)
 }
 
 
-void Layer::SetContent(HmiItem* data)
+void Layer::SetContent(Hmi::Item* data)
 {
     // Layer-Data is a lifelong 1:1 relation.
     assert(!m_Data);

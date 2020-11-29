@@ -22,7 +22,7 @@ bool Keyboard::Process(const SDL_Event& event)
 }
 
 
-void Keyboard::GetKeyName(int k, Note* a_out)
+void Keyboard::GetKeyName(int k, Hmi::Note* a_out)
 {
     a_out->SetValue(SDL_GetKeyName((SDLKey)k));
 }

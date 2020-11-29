@@ -1,28 +1,31 @@
-#ifndef HAND_GRAPH_LIST_H
-#define HAND_GRAPH_LIST_H
+#ifndef HAND_DATA_LIST_H
+#define HAND_DATA_LIST_H
 
 #include "data/data.h"
 
 
-class Collection : public Data
+namespace Hmi {
+
+
+class List : public Data
 {
 public:
-    Collection(
+    List(
         const std::string& name,
         const std::string& description,
         Module* manipulator = nullptr)
         : Data(name, description, manipulator) {}
-    ~Collection() { Clear(); }
+    ~List() { Clear(); }
 
     /// Insert a child item and assume ownership of it.
-    void Add(HmiItem* child);
+    void Add(Item* child);
     /// Insert a child item without assuming ownership of it.
-    void Attach(HmiItem* child) { m_Value.push_back(child); }
+    void Attach(Item* child) { m_Value.push_back(child); }
     /// Removes the item from the children list. Owned children are destroyed.
-    void Remove(HmiItem* child);
+    void Remove(Item* child);
 
-    HmiItem* GetChild(const std::string& name) const;
-    HmiItem* GetChild(unsigned position) { return m_Value[position]; }
+    Item* GetChild(const std::string& name) const;
+    Item* GetChild(unsigned position) { return m_Value[position]; }
 
     /// Returns the number of children.
     unsigned Size() { return m_Value.size(); }
@@ -34,7 +37,8 @@ public:
 private:
     Layer* CreateExpandedView() override;
 
-    std::vector<HmiItem*> m_Value;
+    std::vector<Item*> m_Value;
 };
 
-#endif // HAND_GRAPH_LIST_H
+}
+#endif // HAND_DATA_LIST_H
