@@ -1,18 +1,18 @@
-#include "data/list.h"
+#include "data/vector.h"
 #include "view/layers/list.h"
 
 
 namespace Hmi {
 
 
-void List::Add(Item* child)
+void Vector::Add(Item* child)
 {
     child->SetParent(this);
     m_Value.push_back(child);
 }
 
 
-void List::Remove(Item* child)
+void Vector::Remove(Item* child)
 {
     if (child->GetParent() == this)
         delete child;
@@ -28,7 +28,7 @@ void List::Remove(Item* child)
 }
 
 
-Item* List::GetChild(const std::string& name) const
+Item* Vector::GetChild(const std::string& name) const
 {
     for (Item* item : m_Value)
         if (item->GetName() == name)
@@ -38,7 +38,7 @@ Item* List::GetChild(const std::string& name) const
 }
 
 
-void List::Clear()
+void Vector::Clear()
 {
     for (Item* item : m_Value)
         if (item->GetParent() == this)
@@ -48,7 +48,7 @@ void List::Clear()
 }
 
 
-Layer* List::CreateExpandedView()
+Layer* Vector::CreateExpandedView()
 {
     return new Layers::List();
 }

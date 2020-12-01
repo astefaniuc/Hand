@@ -19,7 +19,7 @@ Rect::Rect(
     const std::string& a_name,
     const std::string& a_description,
     double x, double y, double w, double h)
-    : Hmi::List(a_name, a_description), m_Value(x, y, w, h)
+    : Hmi::Vector(a_name, a_description), m_Value(x, y, w, h)
 {
     // For now add plain data directly
     Add(new Hmi::TData<double>("x", "", m_Value.x));

@@ -21,12 +21,12 @@ User::User(EventHandler* a_input)
     layout->GetField(DESCRIPTION)->SetVisible(false);
     m_View.GetExpandedView()->SetLayout(layout);
 
-    m_View.SetView(m_ViewStack.GetExpandedView());
+    m_View.SetView(&m_ViewStack);
 
     static_cast<Layers::List*>(m_ViewStack.GetExpandedView())->SetExpandChildren(true);
 
     m_ThemeLoader = new ModuleLib();
-    m_View.GetControls().Add(new Hmi::Note(
+    m_View.AddControl(new Hmi::Note(
             "Theme", "Select visualization theme",
             "./binaries/lib/themes/basicsdl1.so", m_ThemeLoader));
 
@@ -34,7 +34,7 @@ User::User(EventHandler* a_input)
     Theme* theme = static_cast<Theme*>(m_ThemeLoader->GetObject());
     m_View.GetExpandedView()->SetTheme(theme);
     theme->InitScreen(m_View.GetExpandedView());
-    m_View.GetControls().Attach(theme->GetHmi());
+    m_View.AttachControl(theme->GetHmi());
 
     Hand* right = new Hand(m_Input->GetDevice(Device::Keyboard));
     if (!right->Init())

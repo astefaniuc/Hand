@@ -10,34 +10,23 @@ namespace Hmi {
 class List : public Data
 {
 public:
-    List(
-        const std::string& name,
-        const std::string& description,
-        Module* manipulator = nullptr)
+    List(const std::string& name, const std::string& description, Module* manipulator)
         : Data(name, description, manipulator) {}
-    ~List() { Clear(); }
 
     /// Insert a child item and assume ownership of it.
-    void Add(Item* child);
+    virtual void Add(Item* child) = 0;
     /// Insert a child item without assuming ownership of it.
-    void Attach(Item* child) { m_Value.push_back(child); }
+    virtual void Attach(Item* child) = 0;
     /// Removes the item from the children list. Owned children are destroyed.
-    void Remove(Item* child);
+    virtual void Remove(Item* child) = 0;
 
-    Item* GetChild(const std::string& name) const;
-    Item* GetChild(unsigned position) { return m_Value[position]; }
+    virtual Item* GetChild(const std::string& name) const = 0;
+    virtual Item* GetChild(unsigned position) = 0;
 
     /// Returns the number of children.
-    unsigned Size() { return m_Value.size(); }
+    virtual unsigned Size() const = 0;
     /// Removes all child items; own items are destroyed.
-    void Clear();
-
-    std::string GetValueString() override { return "TODO"; }
-
-private:
-    Layer* CreateExpandedView() override;
-
-    std::vector<Item*> m_Value;
+    virtual void Clear() = 0;
 };
 
 }

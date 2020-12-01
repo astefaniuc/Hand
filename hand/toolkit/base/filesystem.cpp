@@ -52,7 +52,7 @@ Hmi::List* Folder::GetContent()
     if (!is_directory(path))
         return nullptr;
 
-    Hmi::List* ret = new Hmi::List(m_Item->GetValue(), "Content");
+    Hmi::Vector* ret = new Hmi::Vector(m_Item->GetValue(), "Content");
 
     bfs::directory_iterator end;
     for (bfs::directory_iterator iter(path); iter != end ; ++iter)

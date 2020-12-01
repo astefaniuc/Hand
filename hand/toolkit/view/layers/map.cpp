@@ -34,10 +34,10 @@ void Map::Rebuild()
     m_Sublayers.clear();
 
     m_Name.SetData(m_Data->GetName());
-    m_Info.SetData(m_Data->GetDescription());
+    m_Info.SetData(m_Data->GetInfo());
 
     Insert(TITLE, &m_Name);
-    if (!m_Data->GetDescription().empty())
+    if (!m_Data->GetInfo().empty())
         Insert(DESCRIPTION, &m_Info);
 }
 

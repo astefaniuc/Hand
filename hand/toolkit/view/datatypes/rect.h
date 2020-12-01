@@ -2,7 +2,7 @@
 #define HAND_VIEW_DATATYPES_RECT_H
 
 #include <SDL/SDL.h>
-#include "data/list.h"
+#include "data/vector.h"
 #include "data/data.h"
 
 
@@ -19,7 +19,7 @@ struct RelRect
 
 
 
-class Rect : public Hmi::List
+class Rect : public Hmi::Vector
 {
 public:
     Rect(

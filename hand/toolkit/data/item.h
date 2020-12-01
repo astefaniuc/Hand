@@ -50,24 +50,36 @@ class List;
 class Item
 {
 public:
+    enum InfoLevel
+    {
+        Hint,
+        Info,
+        Warning,
+        Error,
+        Fatal
+    };
+
     Item(const std::string& name, const std::string& description)
-        : m_Name(name), m_Description(description) {}
+        : m_Name(name), m_Info(description) {}
     virtual ~Item();
 
     void SetName(const std::string& name) { m_Name = name; }
     const std::string& GetName() const { return m_Name; }
 
-    const std::string& GetDescription() const { return m_Description; }
+    const std::string& GetInfo() const { return m_Info; }
+    void SetInfo(const std::string& info, InfoLevel type, bool persistent = true) {}
 
     /// The parent is the object owner; HmiItems without a parent have to be explicitly deleted.
     void SetParent(Hmi::List* parent) { m_Parent = parent; }
     Hmi::List* GetParent() const { return m_Parent; }
+
 
     Layer* GetExpandedView();
     void SetExpandedView(Layer* layer);
 
     Layer* GetButtonView();
     void SetButtonView(Layer* layer);
+
 
     void SetSelected(bool isSelected);
     bool IsSelected() const { return m_IsSelected; }
@@ -110,7 +122,7 @@ protected:
 
 private:
     std::string m_Name;
-    std::string m_Description;
+    std::string m_Info;
 
     Hmi::List* m_Parent = nullptr;
     Layer* m_ExpandedView = nullptr;

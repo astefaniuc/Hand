@@ -19,11 +19,10 @@ void View::Rebuild()
 
     Hmi::Interface* in = static_cast<Hmi::Interface*>(m_Data);
 
-    Insert(VIEW, in->GetView());
+    Insert(VIEW, in->GetView()->GetExpandedView());
 
-    Hmi::List& controls = in->GetControls();
-    controls.Attach(m_Exit);
-    Insert(CONTROL, controls.GetExpandedView());
+//    controls.Attach(m_Exit);
+    Insert(CONTROL, in->GetControls()->GetExpandedView());
 }
 
 

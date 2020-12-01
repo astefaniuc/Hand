@@ -2,7 +2,8 @@
 #define HAND_THEMES_BASICSDL1_H
 
 #include "view/theme.h"
-#include "data/list.h"
+#include "data/map.h"
+#include "data/vector.h"
 #include "text.h"
 #include <SDL/SDL_ttf.h>
 #include <map>
@@ -41,12 +42,12 @@ protected:
     void SetWindowed();
     SDL_Rect GetResolution();
 
-    Hmi::List m_Hmi;
-    Hmi::List m_Buttons;
-    Hmi::List m_Datas;
-    Hmi::List m_Lists;
-    Hmi::List m_Texts;
-    Hmi::List m_Views;
+    Hmi::Vector m_Hmi;
+    Hmi::Map m_Buttons;
+    Hmi::Map m_Datas;
+    Hmi::Map m_Lists;
+    Hmi::Map m_Texts;
+    Hmi::Map m_Views;
 
     Layer* m_ScreenRoot = nullptr;
     // The whole screen TODO: can we use SDL_GetVideoSurface() instead?

@@ -16,7 +16,7 @@ const std::string Hand::Finger[] = {
 Hand::Hand(Device* dev) : Module(), m_Device(dev)
 {
     m_Device->SetUser(this);
-    m_KeysHmi = new Hmi::List("Keys", "");
+    m_KeysHmi = new Hmi::Vector("Keys", "");
     m_KeysHmi->Add(new Hmi::Note(Finger[Chord::Thumb], "", ""));
     m_KeysHmi->Add(new Hmi::Note(Finger[Chord::Pointer], "", ""));
     m_KeysHmi->Add(new Hmi::Note(Finger[Chord::Middle], "", ""));
@@ -55,7 +55,7 @@ Hmi::Item* Hand::GetInitScreen()
         m_InitScreen = new Hmi::Interface(
             "Keyboard Initialization",
             "Press 5 keys on the keyboard, to initialize a Hand device.");
-        m_InitScreen->SetView(m_KeysHmi->GetExpandedView());
+        m_InitScreen->SetView(m_KeysHmi);
 
         Layer* initView = m_InitScreen->GetExpandedView();
         initView->SetLayout(screenLayout);

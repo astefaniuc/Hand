@@ -1,30 +1,34 @@
 #ifndef HAND_GRAPH_INTERFACE_H
 #define HAND_GRAPH_INTERFACE_H
 
-#include "data/item.h"
-#include "data/list.h"
+#include "data/map.h"
+#include "data/vector.h"
 
 
 class Layer;
 
+
 namespace Hmi {
 
-class Interface : public Item
+
+class Interface : public Map
 {
 public:
-    Interface(const std::string& name, const std::string& description)
-        : Item(name, description), m_Controls("Controls", "") {}
+    Interface(
+        const std::string& name,
+        const std::string& description,
+        Module* manipulator = nullptr)
+        : Map(name, description, manipulator) { Add(CONTROL, new Vector("Controls", "")); }
 
-    void SetView(Layer* view) { m_View = view; }
-    Layer* GetView() const { return m_View; }
+    void SetView(Item* view) { Add(VIEW, view); }
+    Item* GetView() const { return GetChild(VIEW); }
 
-    List& GetControls() { return m_Controls; }
+    Vector* GetControls() { return static_cast<Vector*>(GetChild(CONTROL)); }
+    void AddControl(Item* control) { GetControls()->Add(control); }
+    void AttachControl(Item* control) { GetControls()->Attach(control); }
 
 private:
     Layer* CreateExpandedView() override;
-
-    Layer* m_View = nullptr;
-    List m_Controls;
 };
 
 }

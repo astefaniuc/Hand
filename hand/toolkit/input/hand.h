@@ -2,7 +2,7 @@
 #define HAND_INPUT_HAND_H
 
 #include "base/module.h"
-#include "data/list.h"
+#include "data/vector.h"
 #include "input/chord.h"
 #include <map>
 #include <vector>
@@ -55,7 +55,7 @@ private:
     // Number of controls
     unsigned m_NumberOfKeys = NUMBER_OF_BUTTONS;
     std::vector<int> m_Keys;
-    Hmi::List* m_KeysHmi;
+    Hmi::Vector* m_KeysHmi;
     Device* m_Device;
     InputState* m_InputState = nullptr;
 

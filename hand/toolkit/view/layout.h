@@ -2,13 +2,7 @@
 #define HAND_VIEW_LAYOUT_H
 
 #include "view/datatypes/rect.h"
-
-
-#define CONTROL "Control"
-#define DESCRIPTION "Description"
-#define ICON "Icon"
-#define TITLE "Title"
-#define VIEW "View"
+#include "include/stdfields.h"
 
 
 class Field;

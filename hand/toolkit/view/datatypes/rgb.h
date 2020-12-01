@@ -1,10 +1,10 @@
 #ifndef HAND_VIEW_DATATYPES_RGB_H
 #define HAND_VIEW_DATATYPES_RGB_H
 
-#include "data/list.h"
+#include "data/map.h"
 
 
-class Rgb : public Hmi::List
+class Rgb : public Hmi::Map
 {
 public:
     Rgb(

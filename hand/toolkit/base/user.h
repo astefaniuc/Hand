@@ -1,7 +1,7 @@
 #ifndef HAND_BASE_USER_H
 #define HAND_BASE_USER_H
 
-#include "data/list.h"
+#include "data/vector.h"
 #include "data/interface.h"
 
 
@@ -26,7 +26,7 @@ private:
     std::vector<Hand*> m_Hands;
     std::vector<ModuleLib*> m_RunningApps;
     Hmi::Interface m_View;
-    Hmi::List m_ViewStack;
+    Hmi::Vector m_ViewStack;
 };
 
 #endif // HAND_BASE_USER_H
