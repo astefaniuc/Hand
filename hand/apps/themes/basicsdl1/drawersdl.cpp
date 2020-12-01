@@ -1,5 +1,5 @@
 #include "drawersdl.h"
-#include "view/layer.h"
+#include "view/layers/list.h"
 #include "defines.h"
 #include "basicsdl1.h"
 #include <SDL/SDL_ttf.h>
@@ -11,11 +11,12 @@ void DrawerSdl::Draw(SDL_Surface* buffer)
     DrawBackground();
     DrawFrame();
 
-    Layer* sub = m_Layer->GetFirstChild();
+    Layers::List* layer = static_cast<Layers::List*>(m_Layer);
+    Layer* sub = layer->GetFirstChild();
     while (sub)
     {
         sub->Draw(buffer);
-        sub = m_Layer->GetNextChild();
+        sub = layer->GetNextChild();
     }
 }
 

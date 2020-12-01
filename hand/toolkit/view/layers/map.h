@@ -1,7 +1,7 @@
 #ifndef HAND_VIEW_LAYER_MAP_H
 #define HAND_VIEW_LAYER_MAP_H
 
-#include "view/layer.h"
+#include "view/layers/list.h"
 #include "view/layers/text.h"
 #include <map>
 
@@ -9,7 +9,7 @@
 namespace Layers {
 
 
-class Map : public Layer
+class Map : public List
 {
 public:
     ~Map();

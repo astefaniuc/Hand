@@ -1,11 +1,11 @@
 #include "view/layouts/placed.h"
-#include "view/layer.h"
+#include "view/layers/list.h"
 
 
 namespace Layouts { namespace Placed {
 
 
-SDL_Rect Field::GetSize(Layer* tgt, SDL_Rect outer)
+SDL_Rect Field::GetSize(Layers::List* tgt, SDL_Rect outer)
 {
     outer.x += m_Position.x * outer.w;
     outer.y += m_Position.y * outer.h;
@@ -14,7 +14,7 @@ SDL_Rect Field::GetSize(Layer* tgt, SDL_Rect outer)
 
 
 
-SDL_Rect Map::GetSize(Layer* tgt, SDL_Rect outer)
+SDL_Rect Map::GetSize(Layers::List* tgt, SDL_Rect outer)
 {
     for (auto field : m_Fields)
         field->GetSize(tgt, outer);
@@ -44,7 +44,7 @@ void Map::SetField(const std::string& name, const RelRect& position)
 
 
 
-SDL_Rect List::GetSize(Layer* tgt, SDL_Rect outer)
+SDL_Rect List::GetSize(Layers::List* tgt, SDL_Rect outer)
 {
     for (auto field : m_Fields)
         field->GetSize(tgt, outer);

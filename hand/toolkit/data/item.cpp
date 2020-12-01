@@ -22,6 +22,7 @@ Item::~Item()
     }
 
     delete m_ExpandedView;
+    delete m_ButtonView;
 }
 
 

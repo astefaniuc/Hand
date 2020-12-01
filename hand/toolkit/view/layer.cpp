@@ -1,13 +1,7 @@
 #include "view/layer.h"
+#include "view/layers/list.h"
 #include "view/theme.h"
 #include <assert.h>
-
-
- Layer::~Layer()
- {
-    delete m_Drawer;
-    delete m_Layout;
-}
 
 
 void Layer::Exit(Hmi::Item*)
@@ -16,21 +10,6 @@ void Layer::Exit(Hmi::Item*)
         m_Parent->Remove(this);
      delete m_Drawer;
      m_Drawer = nullptr;
-}
-
-
-bool Layer::Update()
-{
-    if (m_ModifiedContent && m_Data)
-        Rebuild();
-
-    Layer* sub = GetFirstChild();
-    while (sub)
-    {
-        m_IsModified |= sub->Update();
-        sub = GetNextChild();
-    }
-    return m_IsModified;
 }
 
 
@@ -48,22 +27,6 @@ void Layer::SetContent(Hmi::Item* data)
     // Layer-Data is a lifelong 1:1 relation.
     assert(!m_Data);
     m_Data = data;
-    m_ModifiedContent = true;
-}
-
-
-Layout* Layer::GetLayout()
-{
-    if (!m_Layout)
-        m_Layout = CreateLayout();
-     return m_Layout;
-}
-
-
-void Layer::SetLayout(Layout* a_layout)
-{
-    delete m_Layout;
-    m_Layout = a_layout;
     m_ModifiedContent = true;
 }
 
@@ -104,6 +67,6 @@ Drawer* Layer::GetDrawer()
 SDL_Rect Layer::UpdateSize(const SDL_Rect& outer)
 {
     SDL_Rect content = GetDrawer()->GetContentSize(outer);
-    m_Size = GetLayout()->GetSize(this, content);
+    m_Size = { content.x, content.y, 0, 0 };
     return GetDrawer()->CalculateSize(m_Size);
 }

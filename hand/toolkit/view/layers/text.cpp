@@ -3,6 +3,7 @@
 
 namespace Layers {
 
+
 void Text::SetData(const std::string& text)
 {
     if (m_Text != text)

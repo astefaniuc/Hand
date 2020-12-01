@@ -4,7 +4,7 @@
 #include "input/inputstate.h"
 #include "data/interface.h"
 #include "view/layer.h"
-#include "view/layers/list.h"
+#include "view/layers/vector.h"
 #include "view/layouts/placed.h"
 #include "view/layouts/aligned.h"
 
@@ -45,11 +45,13 @@ Hmi::Item* Hand::GetInitScreen()
         handLayout->SetField("Middle finger", { 0.45, 0.39, 0.0, 0.0 });
         handLayout->SetField("Ring finger", { 0.6, 0.41, 0.0, 0.0 });
         handLayout->SetField("Little finger", { 0.7, 0.5, 0.0, 0.0 });
-        m_KeysHmi->GetExpandedView()->SetLayout(handLayout);
-        static_cast<Layers::List*>(m_KeysHmi->GetExpandedView())->SetExpandChildren(true);
+
+        Layers::Vector* handLayer = static_cast<Layers::Vector*>(m_KeysHmi->GetExpandedView());
+        handLayer->SetLayout(handLayout);
+        handLayer->SetExpandChildren(true);
 
         Layouts::Aligned::Map* screenLayout = Layouts::Aligned::CreateView();
-        screenLayout->SetField(DESCRIPTION, { Layout::Bottom, Layout::Center });
+        screenLayout->SetField(DESCRIPTION, { Layouts::Aligned::Bottom, Layouts::Aligned::Center });
         screenLayout->GetField(CONTROL)->SetVisible(false);
 
         m_InitScreen = new Hmi::Interface(
@@ -57,8 +59,7 @@ Hmi::Item* Hand::GetInitScreen()
             "Press 5 keys on the keyboard, to initialize a Hand device.");
         m_InitScreen->SetView(m_KeysHmi);
 
-        Layer* initView = m_InitScreen->GetExpandedView();
-        initView->SetLayout(screenLayout);
+        static_cast<Layers::List*>(m_InitScreen->GetExpandedView())->SetLayout(screenLayout);
     }
 
     return m_InitScreen;
@@ -95,13 +96,14 @@ void Hand::BindChords(Layer* focus)
     Hmi::Item* method = focus->GetContent();
     if (method && !method->m_Chord.keys.empty())
         m_Commands[method] = method->m_Chord;
-
+/*
     Layer* sub = focus->GetFirstChild();
     while (sub)
     {
         BindChords(sub);
         sub = focus->GetNextChild();
     }
+    */
 }
 
 

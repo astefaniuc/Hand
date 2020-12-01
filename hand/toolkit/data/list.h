@@ -27,6 +27,9 @@ public:
     virtual unsigned Size() const = 0;
     /// Removes all child items; own items are destroyed.
     virtual void Clear() = 0;
+
+protected:
+    Layer* CreateButtonView() override;
 };
 
 }

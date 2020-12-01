@@ -2,8 +2,7 @@
 #define HAND_VIEW_LAYERS_LIST_H
 
 #include "view/layer.h"
-#include "view/layouts/compact.h"
-#include <vector>
+#include "view/layout.h"
 
 
 namespace Layers {
@@ -12,39 +11,28 @@ namespace Layers {
 class List : public Layer
 {
 public:
-    ~List();
+    ~List() { delete m_Layout; }
 
-    /// Returns 'sub'.
-    Layer* Insert(Layer* sub);
-    void Remove(Layer* sub) override;
+    bool Update() override;
+    SDL_Rect UpdateSize(const SDL_Rect& outer) final;
+    /// Rebuild sub-layer structure on content or layout changes.
+    virtual void Rebuild() = 0;
 
-    unsigned GetChildCount() const override { return m_Sublayers.size(); }
-    Layer* GetFirstChild() override;
-    Layer* GetNextChild() override;
-    /// Finds the child Layer by its data item name.
-    Layer* GetChild(const std::string& name) const override;
+    Layout* GetLayout();
+    void SetLayout(Layout* layout);
 
-    void SetExpandChildren(bool expand);
+    virtual unsigned GetChildCount() const = 0;
+    virtual Layer* GetFirstChild() = 0;
+    virtual Layer* GetNextChild() = 0;
+    virtual Layer* GetChild(const std::string& name) const = 0;
+
+    virtual void Remove(Layer* sub) = 0;
 
 protected:
-    void Rebuild() override;
-
-    void AddLayer(Hmi::Item* data);
-
-    Drawer* CreatetDrawer() override;
-    Layout* CreateLayout() override { return new Layouts::Compact::List(); }
-
-    bool SetFocus(Hmi::Item*);
-    // Returns the list which should be mapped to the InputState
-    Hmi::Item* GetControlsList();
-
-    Layouts::List* GetListLayout() { return static_cast<Layouts::List*>(GetLayout()); }
+    virtual Layout* CreateLayout() = 0;
 
 private:
-    std::vector<Layer*> m_Sublayers;
-    std::vector<Layer*>::const_iterator m_CurrentChild = m_Sublayers.cbegin();
-    unsigned m_StartPosition = 0;
-    bool m_ExpandChildren = false;
+    Layout* m_Layout = nullptr;
 };
 
 }

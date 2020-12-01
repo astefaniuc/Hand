@@ -6,6 +6,8 @@
 
 
 class Field;
+namespace Layers { class List; }
+
 
 class Layout
 {
@@ -17,32 +19,12 @@ public:
         Vertical
     };
 
-    enum EAlignment
-    {
-        Top,
-        Left,
-        Center,
-        Bottom,
-        Right
-    };
-
-    struct SAlignment
-    {
-        EAlignment Parent = Center;
-        EAlignment Field = Center;
-    };
-
     virtual ~Layout() = default;
 
     virtual Field* GetField(const std::string& name) const { return nullptr; }
-    virtual SDL_Rect GetSize(Layer* tgt, SDL_Rect outer) {
+    virtual SDL_Rect GetSize(Layers::List* tgt, SDL_Rect outer) {
         return { outer.x, outer.y, 0, 0 };
     }
-
-protected:
-    /// Places the 'source' rect into the 'target' rect as specified with 'alignment'.
-    /// For EAlignment::Center it aligns in vertical and horizontal direction.
-    void Align(EAlignment alignment, const SDL_Rect& target, SDL_Rect& source) const;
 };
 
 
@@ -52,7 +34,7 @@ public:
     Field(const std::string& name) : m_Name(name) {}
 
     /// Returns the size from the matching sub-layer.
-    SDL_Rect GetSize(Layer* tgt, SDL_Rect outer) override;
+    SDL_Rect GetSize(Layers::List* tgt, SDL_Rect outer) override;
     // Returns this if 'name' matches this, returns NULL otherwise.
     Field* GetField(const std::string& name) const override;
 
@@ -70,8 +52,6 @@ namespace Layouts {
 class List : public Layout
 {
 public:
-    virtual SDL_Rect GetSize(Layer* tgt, SDL_Rect outer) = 0;
-
     unsigned GetMaxItemsToShow() { return m_MaxItemsToShow; }
     void SetMaxItemsToShow(unsigned count) { m_MaxItemsToShow = count; }
 

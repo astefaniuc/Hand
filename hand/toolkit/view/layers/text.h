@@ -3,6 +3,7 @@
 
 #include "view/layer.h"
 #include "view/theme.h"
+#include <string>
 
 
 namespace Layers {
@@ -18,11 +19,9 @@ public:
 
 protected:
     Drawer* CreatetDrawer() override { return GetTheme()->GetTextDrawer(); }
-    Layout* CreateLayout() override { return new Layout(); }
 
-    // Terminal layer. TODO: remove all this from base class.
-    void Rebuild() override {}
-    void Remove(Layer*) override {}
+    // Terminal layer. TODO: remove this from base class.
+    bool Update() override { return false; }
 
 private:
     std::string m_Text;

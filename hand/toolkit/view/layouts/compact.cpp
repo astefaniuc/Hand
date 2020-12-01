@@ -1,5 +1,5 @@
 #include "view/layouts/compact.h"
-#include "view/layer.h"
+#include "view/layers/list.h"
 
 
 namespace Layouts { namespace Compact {
@@ -25,7 +25,7 @@ void AddV(const SDL_Rect& in, SDL_Rect& out)
 
 
 
-SDL_Rect Map::GetSize(Layer* tgt, SDL_Rect outer)
+SDL_Rect Map::GetSize(Layers::List* tgt, SDL_Rect outer)
 {
     SDL_Rect size = Layout::GetSize(tgt, outer);
     AddH(m_Field1->GetSize(tgt, outer), size);
@@ -54,7 +54,7 @@ Field* Map::GetField(const std::string& name) const
 }
 
 
-SDL_Rect List::GetSize(Layer* tgt, SDL_Rect outer)
+SDL_Rect List::GetSize(Layers::List* tgt, SDL_Rect outer)
 {
     SDL_Rect size = Layout::GetSize(tgt, outer);
     Layer* sub = tgt->GetFirstChild();

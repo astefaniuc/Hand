@@ -1,11 +1,36 @@
 #include "view/layouts/aligned.h"
-#include "view/layer.h"
+#include "view/layers/list.h"
 
 
 namespace Layouts { namespace Aligned {
 
 
-SDL_Rect Field::GetSize(Layer* tgt, SDL_Rect outer)
+void Align(EAlignment alignment, const SDL_Rect& tgt, SDL_Rect& src)
+{
+    switch (alignment)
+    {
+    case Top:
+        src.y = tgt.y;
+        break;
+    case Bottom:
+        src.y = tgt.y + tgt.h - src.h;
+        break;
+    case Left:
+        src.x = tgt.x;
+        break;
+    case Right:
+        src.x = tgt.x + tgt.w - src.w;
+        break;
+    default:
+         // Center
+        src.x = tgt.x + (tgt.w - src.w) / 2;
+        src.y = tgt.y + (tgt.h - src.h) / 2;
+    }
+}
+
+
+
+SDL_Rect Field::GetSize(Layers::List* tgt, SDL_Rect outer)
 {
     SDL_Rect size = ::Field::GetSize(tgt, outer);
 
@@ -33,7 +58,7 @@ SDL_Rect Field::GetSize(Layer* tgt, SDL_Rect outer)
 
 
 
-SDL_Rect Map::GetSize(Layer* tgt, SDL_Rect outer)
+SDL_Rect Map::GetSize(Layers::List* tgt, SDL_Rect outer)
 {
     SDL_Rect ret = outer;
     for (auto field : m_Fields)
@@ -83,16 +108,16 @@ void Map::SetField(const std::string& name, SAlignment alignment)
 Map* CreateView()
 {
     Map* ret = new Map();
-    ret->SetField(TITLE, { Layout::Top, Layout::Center });
-    ret->SetField(CONTROL, { Layout::Bottom, Layout::Center });
-    ret->SetField(DESCRIPTION, { Layout::Right, Layout::Center });
-    ret->SetField(VIEW, { Layout::Center, Layout::Center });
+    ret->SetField(TITLE, { Top, Center });
+    ret->SetField(CONTROL, { Bottom, Center });
+    ret->SetField(DESCRIPTION, { Right, Center });
+    ret->SetField(VIEW, { Center, Center });
     return ret;
 }
 
 
 
-SDL_Rect List::GetSize(Layer* tgt, SDL_Rect outer)
+SDL_Rect List::GetSize(Layers::List* tgt, SDL_Rect outer)
 {
     unsigned count = tgt->GetChildCount();
     if (!count)

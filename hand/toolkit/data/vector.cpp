@@ -1,8 +1,16 @@
 #include "data/vector.h"
-#include "view/layers/list.h"
+#include "view/layers/vector.h"
+#include "view/layers/button.h"
 
 
 namespace Hmi {
+
+
+Layer* List::CreateButtonView()
+{
+    return new Layers::Button();
+}
+
 
 
 void Vector::Add(Item* child)
@@ -50,7 +58,7 @@ void Vector::Clear()
 
 Layer* Vector::CreateExpandedView()
 {
-    return new Layers::List();
+    return new Layers::Vector();
 }
 
 }

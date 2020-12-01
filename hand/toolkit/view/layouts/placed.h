@@ -15,7 +15,7 @@ public:
     Field(const std::string& name) : ::Field(name) {}
 
     void SetPosition(const RelRect& pos) { m_Position = pos;}
-    SDL_Rect GetSize(Layer* tgt, SDL_Rect outer) override;
+    SDL_Rect GetSize(Layers::List* tgt, SDL_Rect outer) override;
 
 private:
     RelRect m_Position;
@@ -25,7 +25,7 @@ private:
 class Map : public Layout
 {
 public:
-    SDL_Rect GetSize(Layer* tgt, SDL_Rect outer) override;
+    SDL_Rect GetSize(Layers::List* tgt, SDL_Rect outer) override;
 
     Field* GetField(const std::string& name) const override;
     void SetField(const std::string& name, const RelRect& coordinates);
@@ -38,7 +38,7 @@ private:
 class List : public Layouts::List
 {
 public:
-    SDL_Rect GetSize(Layer* tgt, SDL_Rect outer) override;
+    SDL_Rect GetSize(Layers::List* tgt, SDL_Rect outer) override;
 
     void SetField(const std::string& name, const RelRect& coordinates);
 

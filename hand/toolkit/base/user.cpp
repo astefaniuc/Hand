@@ -1,6 +1,6 @@
 #include "user.h"
 #include "input/eventhandler.h"
-#include "view/layers/list.h"
+#include "view/layers/vector.h"
 #include "input/device.h"
 #include "input/hand.h"
 #include "view/theme.h"
@@ -19,11 +19,11 @@ User::User(EventHandler* a_input)
     Layouts::Aligned::Map* layout = Layouts::Aligned::CreateView();
     layout->GetField(TITLE)->SetVisible(false);
     layout->GetField(DESCRIPTION)->SetVisible(false);
-    m_View.GetExpandedView()->SetLayout(layout);
+    static_cast<Layers::List*>(m_View.GetExpandedView())->SetLayout(layout);
 
     m_View.SetView(&m_ViewStack);
 
-    static_cast<Layers::List*>(m_ViewStack.GetExpandedView())->SetExpandChildren(true);
+    static_cast<Layers::Vector*>(m_ViewStack.GetExpandedView())->SetExpandChildren(true);
 
     m_ThemeLoader = new ModuleLib();
     m_View.AddControl(new Hmi::Note(
