@@ -1,8 +1,7 @@
 #ifndef HAND_VIEW_LAYER_MASTERLAYER_H
 #define HAND_VIEW_LAYER_MASTERLAYER_H
 
-#include "data/interface.h"
-#include "data/method.h"
+#include "view/layers/map.h"
 
 
 namespace Layers {
@@ -21,13 +20,12 @@ protected:
     void Rebuild() override;
 
     Drawer* CreatetDrawer() override;
-    Layout* CreateLayout() override { return Layouts::Compact::CreateView(); }
-
+    Layout* CreateLayout() override;
 //    void SetFocus(to or not to ...?);
 //    void Keep(enum mode)
 
 private:
-    Hmi::Action<View>* m_Exit;
+    Hmi::List* m_LayerCommands;
 };
 
 }

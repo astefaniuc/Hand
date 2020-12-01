@@ -109,8 +109,10 @@ Map* CreateView()
 {
     Map* ret = new Map();
     ret->SetField(TITLE, { Top, Center });
-    ret->SetField(CONTROL, { Bottom, Center });
     ret->SetField(DESCRIPTION, { Right, Center });
+    ret->SetField(MANIPULATORS, { Left, Center });
+    ret->SetField(CONTROL, { Bottom, Left });
+    ret->SetField(LAYER_CONTROLS, { Bottom, Right });
     ret->SetField(VIEW, { Center, Center });
     return ret;
 }

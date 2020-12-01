@@ -7,6 +7,8 @@
 #define ICON "Icon"
 #define TITLE "Title"
 #define VIEW "View"
+#define LAYER_CONTROLS "Layer controls"
+#define MANIPULATORS "Manipulators"
 
 
 #endif //HAND_INCLUDE_STDFIELDS_H
