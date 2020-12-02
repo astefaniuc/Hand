@@ -30,56 +30,59 @@ void Align(EAlignment alignment, const SDL_Rect& tgt, SDL_Rect& src)
 
 
 
-SDL_Rect Field::GetSize(Layers::List* tgt, SDL_Rect outer)
+SDL_Rect Field::GetSize(Layers::List* parent, SDL_Rect& outer)
 {
-    SDL_Rect size = ::Field::GetSize(tgt, outer);
+    SDL_Rect size = GetLayerSize(parent, outer);
+    if ((size.w == 0) || (size.h == 0))
+        return size;
 
     Align(m_Alignment.Parent, outer, size);
 
+    SDL_Rect frame = outer;
     if (m_Alignment.Parent == Top)
-        outer.h = size.h;
+        frame.h = size.h;
     else if (m_Alignment.Parent == Bottom)
     {
-        outer.y += outer.h - size.h;
-        outer.h = size.h;
+        frame.y += frame.h - size.h;
+        frame.h = size.h;
     }
     else if (m_Alignment.Parent == Left)
-        outer.w = size.w;
+        frame.w = size.w;
     else if (m_Alignment.Parent == Right)
     {
-        outer.x += outer.w - size.w;
-        outer.w = size.w;
+        frame.x += frame.w - size.w;
+        frame.w = size.w;
     }
 
-    Align(m_Alignment.Field, outer, size);
+    Align(m_Alignment.Field, frame, size);
 
-    return ::Field::GetSize(tgt, size);
+    frame = GetLayerSize(parent, size);
+
+    if (m_Alignment.Parent == Top)
+    {
+        outer.h -= frame.h;
+        outer.y += frame.h;
+    }
+    else if (m_Alignment.Parent == Bottom)
+        outer.h -= frame.h;
+    else if (m_Alignment.Parent == Left)
+    {
+        outer.w -= frame.w;
+        outer.x += frame.w;
+    }
+    else if (m_Alignment.Parent == Right)
+        outer.w -= frame.w;
+
+    return frame;
 }
 
 
 
-SDL_Rect Map::GetSize(Layers::List* tgt, SDL_Rect outer)
+SDL_Rect Map::GetSize(Layers::List* tgt, SDL_Rect& outer)
 {
     SDL_Rect ret = outer;
     for (auto field : m_Fields)
-    {
-        SDL_Rect sub = field->GetSize(tgt, outer);
-        SAlignment align = field->GetAlignment();
-        if (align.Parent == Top)
-        {
-            outer.h -= sub.h;
-            outer.y += sub.h;
-        }
-        else if (align.Parent == Bottom)
-            outer.h -= sub.h;
-        else if (align.Parent == Left)
-        {
-            outer.w -= sub.w;
-            outer.x += sub.w;
-        }
-        else if (align.Parent == Right)
-            outer.w -= sub.w;
-    }
+        field->GetSize(tgt, outer);
     return ret;
 }
 
@@ -95,7 +98,7 @@ Field* Map::GetField(const std::string& name) const
 
 void Map::SetField(const std::string& name, SAlignment alignment)
 {
-    Field* field = static_cast<Field*>(GetField(name));
+    Field* field = GetField(name);
     if (!field)
     {
         field = new Field(name);
@@ -119,7 +122,7 @@ Map* CreateView()
 
 
 
-SDL_Rect List::GetSize(Layers::List* tgt, SDL_Rect outer)
+SDL_Rect List::GetSize(Layers::List* tgt, SDL_Rect& outer)
 {
     unsigned count = tgt->GetChildCount();
     if (!count)

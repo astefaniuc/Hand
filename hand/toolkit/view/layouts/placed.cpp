@@ -5,19 +5,22 @@
 namespace Layouts { namespace Placed {
 
 
-SDL_Rect Field::GetSize(Layers::List* tgt, SDL_Rect outer)
+SDL_Rect Field::GetSize(Layers::List* parent, SDL_Rect& outer)
 {
     outer.x += m_Position.x * outer.w;
     outer.y += m_Position.y * outer.h;
-    return ::Field::GetSize(tgt, outer);
+    return GetLayerSize(parent, outer);
 }
 
 
 
-SDL_Rect Map::GetSize(Layers::List* tgt, SDL_Rect outer)
+SDL_Rect Map::GetSize(Layers::List* tgt, SDL_Rect& outer)
 {
     for (auto field : m_Fields)
-        field->GetSize(tgt, outer);
+    {
+        SDL_Rect tmp = outer;
+        field->GetSize(tgt, tmp);
+    }
     return outer;
 }
 
@@ -33,28 +36,7 @@ Field* Map::GetField(const std::string& name) const
 
 void Map::SetField(const std::string& name, const RelRect& position)
 {
-    Field* field = static_cast<Field*>(GetField(name));
-    if (!field)
-    {
-        field = new Field(name);
-        m_Fields.push_back(field);
-    }
-    field->SetPosition(position);
-}
-
-
-
-SDL_Rect List::GetSize(Layers::List* tgt, SDL_Rect outer)
-{
-    for (auto field : m_Fields)
-        field->GetSize(tgt, outer);
-    return outer;
-}
-
-
-void List::SetField(const std::string& name, const RelRect& position)
-{
-    Field* field = static_cast<Field*>(GetField(name));
+    Field* field = GetField(name);
     if (!field)
     {
         field = new Field(name);

@@ -13,7 +13,7 @@ public:
     Map(Layout* field1, Layout* field2, Orientation orientation)
         : m_Field1(field1), m_Field2(field2), m_Orientation(orientation) {}
 
-    SDL_Rect GetSize(Layers::List* tgt, SDL_Rect outer) override;
+    SDL_Rect GetSize(Layers::List* tgt, SDL_Rect& outer) override;
     Field* GetField(const std::string& name) const override;
 
 protected:
@@ -26,7 +26,7 @@ protected:
 class List : public Layouts::List
 {
 public:
-    SDL_Rect GetSize(Layers::List* tgt, SDL_Rect outer) override;
+    SDL_Rect GetSize(Layers::List* tgt, SDL_Rect& outer) override;
 };
 
 

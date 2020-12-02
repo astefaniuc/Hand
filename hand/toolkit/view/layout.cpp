@@ -2,9 +2,9 @@
 #include "view/layers/list.h"
 
 
-SDL_Rect Field::GetSize(Layers::List* tgt, SDL_Rect outer)
+SDL_Rect Field::GetLayerSize(Layers::List* parent, SDL_Rect& outer)
 {
-    Layer* sub = tgt->GetChild(m_Name);
+    Layer* sub = parent->GetChild(m_Name);
     if (sub)
         return sub->UpdateSize(outer);
     return { 0, 0, 0, 0 };

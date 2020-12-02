@@ -22,7 +22,7 @@ public:
     virtual ~Layout() = default;
 
     virtual Field* GetField(const std::string& name) const { return nullptr; }
-    virtual SDL_Rect GetSize(Layers::List* tgt, SDL_Rect outer) {
+    virtual SDL_Rect GetSize(Layers::List* tgt, SDL_Rect& outer) {
         return { outer.x, outer.y, 0, 0 };
     }
 };
@@ -34,12 +34,17 @@ public:
     Field(const std::string& name) : m_Name(name) {}
 
     /// Returns the size from the matching sub-layer.
-    SDL_Rect GetSize(Layers::List* tgt, SDL_Rect outer) override;
+    SDL_Rect GetSize(Layers::List* parent, SDL_Rect& outer) override {
+        return GetLayerSize(parent, outer);
+    }
     // Returns this if 'name' matches this, returns NULL otherwise.
     Field* GetField(const std::string& name) const override;
 
     void SetVisible(bool visible) { m_IsVisible = visible; }
     bool IsVisible() { return m_IsVisible; }
+
+protected:
+    SDL_Rect GetLayerSize(Layers::List* parent, SDL_Rect& outer);
 
 private:
     std::string m_Name;
