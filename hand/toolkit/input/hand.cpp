@@ -51,8 +51,9 @@ Hmi::Item* Hand::GetInitScreen()
         handLayer->SetExpandChildren(true);
 
         Layouts::Aligned::Map* screenLayout = Layouts::Aligned::CreateView();
-        screenLayout->SetField(DESCRIPTION, { Layouts::Aligned::Bottom, Layouts::Aligned::Center });
+        screenLayout->SetField(DESCRIPTION, { Layouts::Bottom, Layouts::Center });
         screenLayout->GetField(CONTROL)->SetVisible(false);
+        screenLayout->GetField(LAYER_CONTROLS)->SetVisible(false);
 
         m_InitScreen = new Hmi::Interface(
             "Keyboard Initialization",

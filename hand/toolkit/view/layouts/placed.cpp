@@ -5,44 +5,17 @@
 namespace Layouts { namespace Placed {
 
 
-SDL_Rect Field::GetSize(Layers::List* parent, SDL_Rect& outer)
+
+SDL_Rect Map::GetSize(SDL_Rect& outer)
 {
-    outer.x += m_Position.x * outer.w;
-    outer.y += m_Position.y * outer.h;
-    return GetLayerSize(parent, outer);
-}
-
-
-
-SDL_Rect Map::GetSize(Layers::List* tgt, SDL_Rect& outer)
-{
-    for (auto field : m_Fields)
+    std::vector<Layouts::Field*> fields;
+    GetValidFields(fields);
+    for (auto field : fields)
     {
         SDL_Rect tmp = outer;
-        field->GetSize(tgt, tmp);
+        field->GetPlacedSize(tmp);
     }
     return outer;
-}
-
-
-Field* Map::GetField(const std::string& name) const
-{
-    for (auto field : m_Fields)
-        if (field->GetField(name))
-            return field;
-    return nullptr;
-}
-
-
-void Map::SetField(const std::string& name, const RelRect& position)
-{
-    Field* field = GetField(name);
-    if (!field)
-    {
-        field = new Field(name);
-        m_Fields.push_back(field);
-    }
-    field->SetPosition(position);
 }
 
 

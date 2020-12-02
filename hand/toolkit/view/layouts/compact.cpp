@@ -5,8 +5,13 @@
 namespace Layouts { namespace Compact {
 
 
-Layout* AssureNode(Layout* in) { return in; }
-Layout* AssureNode(const std::string& in) { return new Field(in); }
+Field* AssureNode(Layout* in)
+{
+    Field* ret = new Field("");
+    ret->SetLayout(in);
+    return ret;
+}
+Field* AssureNode(const std::string& in) { return new Field(in); }
 
 
 void AddH(const SDL_Rect& in, SDL_Rect& out)
@@ -25,59 +30,50 @@ void AddV(const SDL_Rect& in, SDL_Rect& out)
 
 
 
-SDL_Rect Map::GetSize(Layers::List* tgt, SDL_Rect& outer)
+SDL_Rect Map::GetSize(SDL_Rect& outer)
 {
-    SDL_Rect size = Layout::GetSize(tgt, outer);
+    SDL_Rect size = Layout::GetSize(outer);
     SDL_Rect tmp = outer;
-    AddH(m_Field1->GetSize(tgt, tmp), size);
+    AddH(m_Fields[0]->GetSize(tmp), size);
 
     if (m_Orientation == Horizontal)
     {
         outer.y += size.h;
-        AddH(m_Field2->GetSize(tgt, outer), size);
+        AddH(m_Fields[1]->GetSize(outer), size);
     }
     else
     {
         outer.x += size.w;
-        AddV(m_Field2->GetSize(tgt, outer), size);
+        AddV(m_Fields[1]->GetSize(outer), size);
     }
 
     return size;
 }
 
 
-Field* Map::GetField(const std::string& name) const
+SDL_Rect List::GetSize(SDL_Rect& outer)
 {
-    Field* ret = m_Field1->GetField(name);
-    if (ret)
-        return ret;
-    return m_Field2->GetField(name);
-}
-
-
-SDL_Rect List::GetSize(Layers::List* tgt, SDL_Rect& outer)
-{
-    SDL_Rect size = Layout::GetSize(tgt, outer);
-    Layer* sub = tgt->GetFirstChild();
+//    wir brauchen hier nur ein subset von tgt => Mit Field rechnen...
+    SDL_Rect size = Layout::GetSize(outer);
+    std::vector<Layouts::Field*> fields;
+    GetValidFields(fields);
 
     if (GetOrientation() != Horizontal)
     {
-        while (sub)
+        for (auto field : fields)
         {
-            SDL_Rect subSize = sub->UpdateSize(outer);
+            SDL_Rect subSize = field->GetSize(outer);
             AddH(subSize, size);
             outer.y += subSize.h;
-            sub = tgt->GetNextChild();
         }
     }
     else
     {
-        while (sub)
+        for (auto field : fields)
         {
-            SDL_Rect subSize = sub->UpdateSize(outer);
+            SDL_Rect subSize = field->GetSize(outer);
             AddV(subSize, size);
             outer.x += subSize.w;
-            sub = tgt->GetNextChild();
         }
     }
 

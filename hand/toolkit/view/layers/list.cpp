@@ -22,7 +22,7 @@ bool List::Update()
 SDL_Rect List::UpdateSize(const SDL_Rect& outer)
 {
     SDL_Rect content = GetDrawer()->GetContentSize(outer);
-    m_Size = GetLayout()->GetSize(this, content);
+    m_Size = GetLayout()->GetSize(content);
     return GetDrawer()->CalculateSize(m_Size);
 }
 

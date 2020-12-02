@@ -10,15 +10,16 @@ namespace Layouts { namespace Compact {
 class Map : public Layout
 {
 public:
-    Map(Layout* field1, Layout* field2, Orientation orientation)
-        : m_Field1(field1), m_Field2(field2), m_Orientation(orientation) {}
+    Map(Field* field1, Field* field2, Orientation orientation)
+        : m_Orientation(orientation)
+    {
+        m_Fields.push_back(field1);
+        m_Fields.push_back(field2);
+    }
 
-    SDL_Rect GetSize(Layers::List* tgt, SDL_Rect& outer) override;
-    Field* GetField(const std::string& name) const override;
+    SDL_Rect GetSize(SDL_Rect& outer) override;
 
 protected:
-    Layout* m_Field1;
-    Layout* m_Field2;
     Orientation m_Orientation;
 };
 
@@ -26,7 +27,7 @@ protected:
 class List : public Layouts::List
 {
 public:
-    SDL_Rect GetSize(Layers::List* tgt, SDL_Rect& outer) override;
+    SDL_Rect GetSize(SDL_Rect& outer) override;
 };
 
 
@@ -35,8 +36,8 @@ Layout* CreateButton();
 Layout* CreateData();
 Layout* CreateView();
 
-Layout* AssureNode(Layout* in);
-Layout* AssureNode(const std::string& in);
+Field* AssureNode(Layout* in);
+Field* AssureNode(const std::string& in);
 
 template<class T1, class T2>
 Map* SplitV(T1 field1, T2 field2) {

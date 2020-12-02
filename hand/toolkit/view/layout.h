@@ -5,8 +5,28 @@
 #include "include/stdfields.h"
 
 
-class Field;
 namespace Layers { class List; }
+namespace Layouts
+{
+
+enum EAlignment
+{
+    Top,
+    Left,
+    Center,
+    Bottom,
+    Right
+};
+
+struct SAlignment
+{
+    EAlignment Parent = Center;
+    EAlignment Field = Center;
+};
+
+class Field;
+
+}
 
 
 class Layout
@@ -21,38 +41,68 @@ public:
 
     virtual ~Layout() = default;
 
-    virtual Field* GetField(const std::string& name) const { return nullptr; }
-    virtual SDL_Rect GetSize(Layers::List* tgt, SDL_Rect& outer) {
+
+    Layouts::Field* GetField(const std::string& name, bool create = true);
+    void SetField(const std::string& name, Layouts::SAlignment alignment);
+
+    virtual SDL_Rect GetSize(SDL_Rect& outer) {
         return { outer.x, outer.y, 0, 0 };
     }
-};
 
-
-class Field : public Layout
-{
-public:
-    Field(const std::string& name) : m_Name(name) {}
-
-    /// Returns the size from the matching sub-layer.
-    SDL_Rect GetSize(Layers::List* parent, SDL_Rect& outer) override {
-        return GetLayerSize(parent, outer);
-    }
-    // Returns this if 'name' matches this, returns NULL otherwise.
-    Field* GetField(const std::string& name) const override;
-
-    void SetVisible(bool visible) { m_IsVisible = visible; }
-    bool IsVisible() { return m_IsVisible; }
+    bool IsValid();
+    // Returns the vector size.
+    unsigned GetValidFields(std::vector<Layouts::Field*>& out);
 
 protected:
-    SDL_Rect GetLayerSize(Layers::List* parent, SDL_Rect& outer);
-
-private:
-    std::string m_Name;
-    bool m_IsVisible = true;
+    std::vector<Layouts::Field*> m_Fields;
 };
 
 
 namespace Layouts {
+
+
+/// Places the 'source' rect into the 'target' rect as specified with 'alignment'.
+/// For EAlignment::Center it aligns in vertical and horizontal direction.
+void Align(EAlignment alignment, const SDL_Rect& target, SDL_Rect& source);
+
+
+class Field
+{
+public:
+    Field(const std::string& name) : m_Name(name) { delete m_Layout; }
+
+    /// Returns the size from the matching sub-layer.
+    SDL_Rect GetSize(SDL_Rect& outer);
+    SDL_Rect GetAlignedSize(SDL_Rect& outer);
+    SDL_Rect GetPlacedSize(SDL_Rect& outer);
+
+    Field* GetField(const std::string& name) const;
+
+    void SetLayout(Layout* layout);
+    void SetLayer(Layer* layer) { m_Layer = layer; }
+
+    void SetVisible(bool visible) { m_IsVisible = visible; }
+    bool IsVisible() { return m_IsVisible; }
+
+    SAlignment GetAlignment() { return m_Alignment; }
+    void SetAlignment(SAlignment alignment) { m_Alignment = alignment;}
+
+    void SetPosition(const RelRect& pos) { m_Position = pos;}
+
+    bool IsValid() { return (m_Layer || (m_Layout && m_Layout->IsValid())); }
+
+protected:
+    Layout* m_Layout = nullptr;
+    Layer* m_Layer = nullptr;
+
+    bool m_IsVisible = true;
+    SAlignment m_Alignment;
+    RelRect m_Position;
+
+private:
+    std::string m_Name;
+};
+
 
 class List : public Layout
 {
