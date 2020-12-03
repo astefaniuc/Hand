@@ -23,14 +23,19 @@ Map* CreateView()
     ret->SetField(DESCRIPTION, { Right, Center });
     ret->SetField(MANIPULATORS, { Left, Center });
 
-    // ret->SetField("Aggregate", { Bottom, Center });
-    // Compact::List* aggregateLayout = new Compact::List();
+    Compact::List* aggregateLayout = new Compact::List();
+    aggregateLayout->GetField(CONTROL, true);
+    aggregateLayout->GetField(LAYER_CONTROLS, true);
+
+    Field* agg = ret->GetField("Aggregate");
+    agg->SetLayout(aggregateLayout);
+    agg->SetAlignment({ Bottom, Center });
+
+    // List* aggregateLayout = new List();
     // aggregateLayout->SetField(CONTROL, { Left, Center });
     // aggregateLayout->SetField(LAYER_CONTROLS, { Right, Center });
     // ret->GetField("Aggregate")->SetLayout(aggregateLayout);
 
-    ret->SetField(LAYER_CONTROLS, { Top, Right });
-    ret->SetField(CONTROL, { Bottom, Center });
     ret->SetField(VIEW, { Center, Center });
     return ret;
 }

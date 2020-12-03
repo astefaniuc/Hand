@@ -92,7 +92,10 @@ void Field::SetLayout(Layout* layout)
 SDL_Rect Field::GetSize(SDL_Rect& outer)
 {
     if (m_Layout)
-        return m_Layout->GetSize(outer);
+    {
+        SDL_Rect tmp = outer;
+        return m_Layout->GetSize(tmp);
+    }
     if (m_Layer)
         return m_Layer->UpdateSize(outer);
     return { 0, 0, 0, 0 };

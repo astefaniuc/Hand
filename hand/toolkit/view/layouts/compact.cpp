@@ -33,8 +33,7 @@ void AddV(const SDL_Rect& in, SDL_Rect& out)
 SDL_Rect Map::GetSize(SDL_Rect& outer)
 {
     SDL_Rect size = Layout::GetSize(outer);
-    SDL_Rect tmp = outer;
-    AddH(m_Fields[0]->GetSize(tmp), size);
+    AddH(m_Fields[0]->GetSize(outer), size);
 
     if (m_Orientation == Horizontal)
     {
