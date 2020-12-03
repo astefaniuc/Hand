@@ -5,13 +5,22 @@
 namespace Layouts { namespace Compact {
 
 
-Field* AssureNode(Layout* in)
+Field* MakeField(Layout* in)
 {
     Field* ret = new Field("");
     ret->SetLayout(in);
     return ret;
 }
-Field* AssureNode(const std::string& in) { return new Field(in); }
+Field* MakeField(const std::string& in) { return new Field(in); }
+
+Layout* Split(Field* field1, Field* field2, Layout::Orientation orientation)
+{
+    List* ret = new List();
+    ret->SetField(field1);
+    ret->SetField(field2);
+    ret->SetOrientation(orientation);
+    return ret;
+}
 
 
 void AddH(const SDL_Rect& in, SDL_Rect& out)
@@ -30,34 +39,13 @@ void AddV(const SDL_Rect& in, SDL_Rect& out)
 
 
 
-SDL_Rect Map::GetSize(SDL_Rect& outer)
-{
-    SDL_Rect size = Layout::GetSize(outer);
-    AddH(m_Fields[0]->GetSize(outer), size);
-
-    if (m_Orientation == Horizontal)
-    {
-        outer.y += size.h;
-        AddH(m_Fields[1]->GetSize(outer), size);
-    }
-    else
-    {
-        outer.x += size.w;
-        AddV(m_Fields[1]->GetSize(outer), size);
-    }
-
-    return size;
-}
-
-
 SDL_Rect List::GetSize(SDL_Rect& outer)
 {
-//    wir brauchen hier nur ein subset von tgt => Mit Field rechnen...
     SDL_Rect size = Layout::GetSize(outer);
     std::vector<Layouts::Field*> fields;
     GetValidFields(fields);
 
-    if (GetOrientation() != Horizontal)
+    if (GetOrientation() == Vertical)
     {
         for (auto field : fields)
         {

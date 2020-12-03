@@ -7,27 +7,11 @@
 namespace Layouts { namespace Compact {
 
 
-class Map : public Layout
-{
-public:
-    Map(Field* field1, Field* field2, Orientation orientation)
-        : m_Orientation(orientation)
-    {
-        m_Fields.push_back(field1);
-        m_Fields.push_back(field2);
-    }
-
-    SDL_Rect GetSize(SDL_Rect& outer) override;
-
-protected:
-    Orientation m_Orientation;
-};
-
-
 class List : public Layouts::List
 {
 public:
     SDL_Rect GetSize(SDL_Rect& outer) override;
+    void SetField(Field* field) { m_Fields.push_back(field); }
 };
 
 
@@ -36,17 +20,18 @@ Layout* CreateButton();
 Layout* CreateData();
 Layout* CreateView();
 
-Field* AssureNode(Layout* in);
-Field* AssureNode(const std::string& in);
+Field* MakeField(Layout* in);
+Field* MakeField(const std::string& in);
+Layout* Split(Field* field1, Field* field2, Layout::Orientation orientation);
 
 template<class T1, class T2>
-Map* SplitV(T1 field1, T2 field2) {
-    return new Map(AssureNode(field1), AssureNode(field2), Layout::Horizontal);
+Layout* SplitV(T1 field1, T2 field2) {
+    return Split(MakeField(field1), MakeField(field2), Layout::Vertical);
 }
 
 template<class T1, class T2>
-Map* SplitH(T1* field1, T2* field2) {
-    return new Map(AssureNode(field1), AssureNode(field2), Layout::Vertical);
+Layout* SplitH(T1* field1, T2* field2) {
+    return Split(MakeField(field1), MakeField(field2), Layout::Horizontal);
 }
 
 }}
