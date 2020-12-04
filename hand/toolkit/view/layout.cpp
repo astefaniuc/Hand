@@ -89,20 +89,17 @@ void Field::SetLayout(Layout* layout)
 }
 
 
-SDL_Rect Field::GetSize(SDL_Rect& outer)
+SDL_Rect Field::GetSize(const SDL_Rect& outer)
 {
     if (m_Layout)
-    {
-        SDL_Rect tmp = outer;
-        return m_Layout->GetSize(tmp);
-    }
+        return m_Layout->GetSize(outer);
     if (m_Layer)
         return m_Layer->UpdateSize(outer);
     return { 0, 0, 0, 0 };
 }
 
 
-SDL_Rect Field::GetAlignedSize(SDL_Rect& outer)
+SDL_Rect Field::GetAlignedSize(const SDL_Rect& outer)
 {
     SDL_Rect size = GetSize(outer);
     if ((size.w == 0) || (size.h == 0))
@@ -128,32 +125,16 @@ SDL_Rect Field::GetAlignedSize(SDL_Rect& outer)
 
     Align(m_Alignment.Field, frame, size);
 
-    frame = GetSize(size);
-
-    if (m_Alignment.Parent == Top)
-    {
-        outer.h -= frame.h;
-        outer.y += frame.h;
-    }
-    else if (m_Alignment.Parent == Bottom)
-        outer.h -= frame.h;
-    else if (m_Alignment.Parent == Left)
-    {
-        outer.w -= frame.w;
-        outer.x += frame.w;
-    }
-    else if (m_Alignment.Parent == Right)
-        outer.w -= frame.w;
-
-    return frame;
+    return GetSize(size);
 }
 
 
-SDL_Rect Field::GetPlacedSize(SDL_Rect& outer)
+SDL_Rect Field::GetPlacedSize(const SDL_Rect& outer)
 {
-    outer.x += m_Position.x * outer.w;
-    outer.y += m_Position.y * outer.h;
-    return GetSize(outer);
+    SDL_Rect tmp = outer;
+    tmp.x += m_Position.x * tmp.w;
+    tmp.y += m_Position.y * tmp.h;
+    return GetSize(tmp);
 }
 
 }

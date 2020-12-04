@@ -45,7 +45,7 @@ public:
     Layouts::Field* GetField(const std::string& name, bool create = true);
     void SetField(const std::string& name, Layouts::SAlignment alignment);
 
-    virtual SDL_Rect GetSize(SDL_Rect& outer) {
+    virtual SDL_Rect GetSize(const SDL_Rect& outer) {
         return { outer.x, outer.y, 0, 0 };
     }
 
@@ -72,9 +72,9 @@ public:
     Field(const std::string& name) : m_Name(name) { delete m_Layout; }
 
     /// Returns the size from the matching sub-layer.
-    SDL_Rect GetSize(SDL_Rect& outer);
-    SDL_Rect GetAlignedSize(SDL_Rect& outer);
-    SDL_Rect GetPlacedSize(SDL_Rect& outer);
+    SDL_Rect GetSize(const SDL_Rect& outer);
+    SDL_Rect GetAlignedSize(const SDL_Rect& outer);
+    SDL_Rect GetPlacedSize(const SDL_Rect& outer);
 
     Field* GetField(const std::string& name) const;
 

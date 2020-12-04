@@ -6,13 +6,33 @@
 namespace Layouts { namespace Aligned {
 
 
-SDL_Rect Map::GetSize(SDL_Rect& outer)
+SDL_Rect Map::GetSize(const SDL_Rect& outer)
 {
-    SDL_Rect ret = outer;
-    for (auto field : m_Fields)
-        if (field->IsValid())
-            field->GetAlignedSize(outer);
-    return ret;
+    std::vector<Layouts::Field*> fields;
+    GetValidFields(fields);
+
+    SDL_Rect rest = outer;
+    for (auto field : fields)
+    {
+        SDL_Rect subSize = field->GetAlignedSize(rest);
+        EAlignment alignment = field->GetAlignment().Parent;
+        if (alignment == Top)
+        {
+            rest.h -= subSize.h;
+            rest.y += subSize.h;
+        }
+        else if (alignment == Bottom)
+            rest.h -= subSize.h;
+        else if (alignment == Left)
+        {
+            rest.w -= subSize.w;
+            rest.x += subSize.w;
+        }
+        else if (alignment == Right)
+            rest.w -= subSize.w;
+
+    }
+    return outer;
 }
 
 
@@ -42,7 +62,7 @@ Map* CreateView()
 
 
 
-SDL_Rect List::GetSize(SDL_Rect& outer)
+SDL_Rect List::GetSize(const SDL_Rect& outer)
 {
     std::vector<Layouts::Field*> fields;
     if (!GetValidFields(fields))
