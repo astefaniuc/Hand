@@ -43,7 +43,7 @@ Map* CreateView()
     ret->SetField(DESCRIPTION, { Right, Center });
     ret->SetField(MANIPULATORS, { Left, Center });
 
-    Compact::List* aggregateLayout = new Compact::List();
+    List* aggregateLayout = new List();
     aggregateLayout->GetField(CONTROL, true);
     aggregateLayout->GetField(LAYER_CONTROLS, true);
 
@@ -56,6 +56,8 @@ Map* CreateView()
     // aggregateLayout->SetField(LAYER_CONTROLS, { Right, Center });
     // ret->GetField("Aggregate")->SetLayout(aggregateLayout);
 
+    // ret->SetField(LAYER_CONTROLS, { Top, Right });
+    // ret->SetField(CONTROL, { Bottom, Center });
     ret->SetField(VIEW, { Center, Center });
     return ret;
 }
@@ -69,45 +71,27 @@ SDL_Rect List::GetSize(const SDL_Rect& outer)
         return Layout::GetSize(outer);
 
     SDL_Rect size = outer;
-    SDL_Rect fieldSize = outer;
+    SDL_Rect fieldSize = { outer.x, outer.y, 0, 0 };
 
     // Calculate first the fixed size. The list expands only in one direction.
+    for (auto field : fields)
+    {
+        SDL_Rect subSize = field->GetSize(outer);
+        if (subSize.w > fieldSize.w)
+            fieldSize.w = subSize.w;
+        if (subSize.h > fieldSize.h)
+            fieldSize.h = subSize.h;
+    }
+
     if (GetOrientation() == Vertical)
-    {
-        fieldSize.h /= fields.size();
-        SDL_Rect available = fieldSize;
-        fieldSize.w = 0;
-        for (auto field : fields)
-        {
-            SDL_Rect subSize = field->GetSize(available);
-            if (subSize.w > fieldSize.w)
-                fieldSize.w = subSize.w;
-        }
-
         size.w = fieldSize.w;
-    }
     else
-    {
-        fieldSize.w /= fields.size();
-        SDL_Rect available = fieldSize;
-        fieldSize.h = 0;
-        for (auto field : fields)
-        {
-            SDL_Rect subSize = field->GetSize(available);
-            if (subSize.h > fieldSize.h)
-                fieldSize.h = subSize.h;
-        }
-
         size.h = fieldSize.h;
-    }
 
     // Align each sub-layer into its field.
     for (auto field : fields)
     {
-        SDL_Rect subSize = field->GetSize(fieldSize);
-        Align(m_Alignment, fieldSize, subSize);
-        field->GetSize(subSize);
-
+        field->GetAlignedSize(fieldSize);
         if (GetOrientation() == Vertical)
             fieldSize.y += fieldSize.h;
         else
