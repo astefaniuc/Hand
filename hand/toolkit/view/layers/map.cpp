@@ -42,13 +42,17 @@ void Map::Rebuild()
 }
 
 
-void Map::Insert(const std::string& field, Layer* child)
+void Map::Insert(const std::string& name, Layer* child)
 {
-    if (!child || !GetLayout()->GetField(field)->IsVisible())
+    if (!child)
         return;
 
-    GetLayout()->GetField(field)->SetLayer(child);
-    m_Sublayers[field] = child;
+    Layouts::Field* field = GetLayout()->GetField(name, false);
+    if (!field || !field->IsVisible())
+        return;
+
+    field->SetLayer(child);
+    m_Sublayers[name] = child;
     child->SetParent(this);
     m_IsModified = true;
 }
