@@ -18,12 +18,6 @@ class List : public Layouts::List
 {
 public:
     SDL_Rect GetSize(const SDL_Rect& outer) override;
-
-    EAlignment GetAlignment() { return m_Alignment; }
-    void SetAlignment(EAlignment alignment) { m_Alignment = alignment;}
-
-private:
-    EAlignment m_Alignment = Center;
 };
 
 
