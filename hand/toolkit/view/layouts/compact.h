@@ -7,15 +7,6 @@
 namespace Layouts { namespace Compact {
 
 
-class List : public Layouts::List
-{
-public:
-    SDL_Rect GetSize(const SDL_Rect& outer) override;
-    void SetField(Field* field) { m_Fields.push_back(field); }
-};
-
-
-
 Layout* CreateButton();
 Layout* CreateData();
 Layout* CreateView();

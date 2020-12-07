@@ -2,7 +2,6 @@
 #define HAND_VIEW_LAYOUTS_EXPANDING_H
 
 #include "view/layout.h"
-#include <vector>
 
 
 namespace Layouts { namespace Placed {
@@ -18,6 +17,8 @@ public:
     void SetField(const std::string& name, const RelRect& position) {
         GetField(name)->SetPosition(position);
     }
+
+    bool IsExpanding(Orientation) override { return true; }
 };
 
 

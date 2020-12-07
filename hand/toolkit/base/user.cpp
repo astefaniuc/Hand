@@ -16,7 +16,7 @@ User::User(EventHandler* a_input)
       m_View("User", "User view"),
       m_ViewStack("View", "")
 {
-    Layouts::Aligned::Map* layout = Layouts::Aligned::CreateView();
+    Layouts::List* layout = Layouts::Aligned::CreateView();
     layout->GetField(TITLE)->SetVisible(false);
     layout->GetField(DESCRIPTION)->SetVisible(false);
     static_cast<Layers::List*>(m_View.GetExpandedView())->SetLayout(layout);

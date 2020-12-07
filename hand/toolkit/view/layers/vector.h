@@ -2,7 +2,7 @@
 #define HAND_VIEW_LAYERS_VECTOR_H
 
 #include "view/layers/list.h"
-#include "view/layouts/compact.h"
+#include "view/layout.h"
 #include <vector>
 
 
@@ -32,7 +32,7 @@ protected:
     void AddLayer(Hmi::Item* data);
 
     Drawer* CreatetDrawer() override;
-    Layout* CreateLayout() override { return new Layouts::Compact::List(); }
+    Layout* CreateLayout() override { return new Layouts::List(); }
 
     bool SetFocus(Hmi::Item*);
     // Returns the list which should be mapped to the InputState
