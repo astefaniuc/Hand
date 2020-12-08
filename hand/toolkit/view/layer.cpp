@@ -70,3 +70,11 @@ SDL_Rect Layer::UpdateSize(const SDL_Rect& outer)
     m_Size = { content.x, content.y, 0, 0 };
     return GetDrawer()->CalculateSize(m_Size);
 }
+
+
+void Layer::UpdatePositions(const SDL_Rect& outer)
+{
+    m_Size.x = outer.x;
+    m_Size.y = outer.y;
+}
+

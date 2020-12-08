@@ -8,11 +8,20 @@ namespace Layouts { namespace Placed {
 
 SDL_Rect Map::GetSize(const SDL_Rect& outer)
 {
-    std::vector<Layouts::Field*> fields;
+    std::vector<Field*> fields;
     GetValidFields(fields);
     for (auto field : fields)
-        field->GetPlacedSize(outer);
+        field->GetSize(outer);
     return outer;
+}
+
+
+void Map::UpdatePositions(const SDL_Rect& outer)
+{
+    std::vector<Field*> all;
+    GetValidFields(all);
+    for (auto field : all)
+        field->SetPlacedPosition(outer);
 }
 
 

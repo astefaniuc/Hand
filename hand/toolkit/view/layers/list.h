@@ -15,6 +15,7 @@ public:
 
     bool Update() override;
     SDL_Rect UpdateSize(const SDL_Rect& outer) final;
+    void UpdatePositions(const SDL_Rect& outer) final;
     /// Rebuild sub-layer structure on content or layout changes.
     virtual void Rebuild() = 0;
 

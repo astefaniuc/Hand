@@ -47,7 +47,7 @@ void Map::Insert(const std::string& name, Layer* child)
     if (!child)
         return;
 
-    Layouts::Field* field = GetLayout()->GetField(name, false);
+    Field* field = GetLayout()->GetField(name, false);
     if (!field || !field->IsVisible())
         return;
 

@@ -35,8 +35,7 @@ struct HAlignment
 };
 
 
-namespace Layers { class List; }
-namespace Layouts{ class Field; }
+class Field;
 
 class Layout
 {
@@ -51,8 +50,8 @@ public:
     virtual ~Layout() = default;
 
 
-    Layouts::Field* GetField(const std::string& name, bool create = true);
-    void SetField(Layouts::Field* field) { m_Fields.push_back(field); }
+    Field* GetField(const std::string& name, bool create = true);
+    void SetField(Field* field) { m_Fields.push_back(field); }
     void SetField(
         const std::string& name,
         VAlignment::Position vertical,
@@ -61,67 +60,20 @@ public:
     virtual SDL_Rect GetSize(const SDL_Rect& outer) {
         return { outer.x, outer.y, 0, 0 };
     }
+    virtual void UpdatePositions(const SDL_Rect& outer) = 0;
 
     bool IsValid();
     virtual bool IsExpanding(Orientation direction);
 
     /// Returns the vector size.
-    unsigned GetValidFields(std::vector<Layouts::Field*>& out);
+    unsigned GetValidFields(std::vector<Field*>& out);
 
 protected:
-    std::vector<Layouts::Field*> m_Fields;
+    std::vector<Field*> m_Fields;
 };
 
 
 namespace Layouts {
-
-
-class Field
-{
-public:
-    Field(const std::string& name) : m_Name(name) { delete m_Layout; }
-
-    /// Returns the size from the matching sub-layer.
-    SDL_Rect GetSize(const SDL_Rect& outer);
-    SDL_Rect GetPlacedSize(const SDL_Rect& outer);
-
-    Field* GetField(const std::string& name) const;
-
-    void SetLayout(Layout* layout);
-    void SetLayer(Layer* layer) { m_Layer = layer; }
-
-    void SetVisible(bool visible) { m_IsVisible = visible; }
-    bool IsVisible() { return m_IsVisible; }
-
-    void SetAlignment(VAlignment::Position position) { m_AlignmentV.Pos = position;}
-    void SetAlignment(HAlignment::Position position) { m_AlignmentH.Pos = position;}
-    void SetAlignment(VAlignment::Position vertical, HAlignment::Position horizontal);
-    void Align();
-
-    void SetPosition(const RelRect& pos) { m_Position = pos;}
-
-    bool IsValid() { return (m_Layer || (m_Layout && m_Layout->IsValid())); }
-
-    void SetExpanding(bool vertical, bool horizontal);
-    bool IsExpanding(Layout::Orientation direction);
-
-    SDL_Rect Size;
-    SDL_Rect Frame;
-
-protected:
-    Layout* m_Layout = nullptr;
-    Layer* m_Layer = nullptr;
-
-    bool m_IsVisible = true;
-    bool m_ExpandV = false;
-    bool m_ExpandH = false;
-    VAlignment m_AlignmentV;
-    HAlignment m_AlignmentH;
-    RelRect m_Position;
-
-private:
-    std::string m_Name;
-};
 
 
 class List : public Layout
@@ -135,6 +87,7 @@ public:
     };
 
     SDL_Rect GetSize(const SDL_Rect& outer) override;
+    void UpdatePositions(const SDL_Rect& outer) override;
 
     void SetExpansion(Expansion mode) { m_ExpansionMode = mode; }
 

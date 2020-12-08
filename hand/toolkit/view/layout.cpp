@@ -1,10 +1,11 @@
 #include "view/layout.h"
+#include "view/field.h"
 #include "view/layers/list.h"
 
 
-Layouts::Field* Layout::GetField(const std::string& name, bool create)
+Field* Layout::GetField(const std::string& name, bool create)
 {
-    Layouts::Field* ret = nullptr;
+    Field* ret = nullptr;
     for (auto field : m_Fields)
     {
         ret = field->GetField(name);
@@ -14,7 +15,7 @@ Layouts::Field* Layout::GetField(const std::string& name, bool create)
 
     if (create)
     {
-        ret = new Layouts::Field(name);
+        ret = new Field(name);
         m_Fields.push_back(ret);
     }
     return ret;
@@ -51,13 +52,14 @@ bool Layout::IsExpanding(Orientation direction)
 }
 
 
-unsigned Layout::GetValidFields(std::vector<Layouts::Field*>& out)
+unsigned Layout::GetValidFields(std::vector<Field*>& out)
 {
     for (auto field : m_Fields)
         if (field->IsValid())
             out.push_back(field);
     return out.size();
 }
+
 
 
 void VAlignment::Align(const SDL_Rect& tgt, SDL_Rect& src)
@@ -95,77 +97,6 @@ void HAlignment::Align(const SDL_Rect& tgt, SDL_Rect& src)
 namespace Layouts {
 
 
-Field* Field::GetField(const std::string& name) const
-{
-    if (name == m_Name)
-        return (Field*)this;
-    if (m_Layout)
-        return m_Layout->GetField(name, false);
-    return nullptr;
-}
-
-
-void Field::SetLayout(Layout* layout)
-{
-    delete m_Layout;
-    m_Layout = layout;
-}
-
-
-SDL_Rect Field::GetSize(const SDL_Rect& outer)
-{
-    if (m_Layout)
-        return m_Layout->GetSize(outer);
-    if (m_Layer)
-        return m_Layer->UpdateSize(outer);
-    return { 0, 0, 0, 0 };
-}
-
-
-void Field::Align()
-{
-    m_AlignmentV.Align(Frame, Size);
-    m_AlignmentH.Align(Frame, Size);
-    GetSize(Size);
-}
-
-
-SDL_Rect Field::GetPlacedSize(const SDL_Rect& outer)
-{
-    SDL_Rect tmp = outer;
-    tmp.x += m_Position.x * tmp.w;
-    tmp.y += m_Position.y * tmp.h;
-    return GetSize(tmp);
-}
-
-
-void Field::SetExpanding(bool vertical, bool horizontal)
-{
-    m_ExpandV = vertical;
-    m_ExpandH = horizontal;
-}
-
-
-bool Field::IsExpanding(Layout::Orientation direction)
-{
-    bool ret = (direction == Layout::Vertical) ? m_ExpandV : m_ExpandH;
-    if (ret)
-        return true;
-
-    if (m_Layout)
-        return m_Layout->IsExpanding(direction);
-
-    return false;
-}
-
-
-void Field::SetAlignment(VAlignment::Position vertical, HAlignment::Position horizontal)
-{
-    m_AlignmentV.Pos = vertical;
-    m_AlignmentH.Pos = horizontal;
-}
-
-
 SDL_Rect List::GetSize(const SDL_Rect& outer)
 {
     std::vector<Field*> all;
@@ -183,10 +114,7 @@ SDL_Rect List::GetSize(const SDL_Rect& outer)
     }
 
     for (auto field : compact)
-    {
-        field->Size = field->GetSize(outer);
-        field->Frame = { outer.x, outer.y, field->Size.w, field->Size.h };
-    }
+        field->Frame = field->Size = field->GetSize(outer);
 
     if (expanding.size())
     {
@@ -215,26 +143,55 @@ SDL_Rect List::GetSize(const SDL_Rect& outer)
             SetEqualSize(compact);
     }
 
-    SDL_Rect size = { outer.x, outer.y, 0, 0 };
-    uint16_t fixedSize = SetSameSize(all, GetOrientation());
-    if (GetOrientation() == Vertical)
-        size.w = fixedSize;
-    else
-        size.h = fixedSize;
+    SetSameSize(all, GetOrientation());
 
+    return GetCompactSize(all);
+}
+
+
+void List::UpdatePositions(const SDL_Rect& outer)
+{
+    std::vector<Field*> all;
+    GetValidFields(all);
+    unsigned offset = 0;
     for (auto field : all)
     {
+        field->Frame.x = outer.x;
+        field->Frame.y = outer.y;
+
         if (GetOrientation() == Vertical)
         {
-            field->Frame.y += size.h;
+            field->Frame.y += offset;
             field->Align();
-            size.h += field->Frame.h;
+            offset += field->Frame.h;
         }
         else
         {
-            field->Frame.x += size.w;
+            field->Frame.x += offset;
             field->Align();
+            offset += field->Frame.w;
+        }
+    }
+}
+
+
+SDL_Rect List::GetCompactSize(const std::vector<Field*>& fields)
+{
+    SDL_Rect size = { 0, 0, 0, 0 };
+
+    for (auto field : fields)
+    {
+        if (GetOrientation() == Vertical)
+        {
+            size.h += field->Frame.h;
+            if (field->Frame.w > size.w)
+                size.w = field->Frame.w;
+        }
+        else
+        {
             size.w += field->Frame.w;
+            if (field->Frame.h > size.h)
+                size.h = field->Frame.h;
         }
     }
 
@@ -249,10 +206,10 @@ uint16_t List::SetSameSize(const std::vector<Field*>& fields, Layout::Orientatio
          if (orientation == Vertical)
         {
             if (field->Size.w > fixedSize)
-                fixedSize = field->Size.w;
+                fixedSize = field->Frame.w;
         }
         else if (field->Size.h > fixedSize)
-            fixedSize = field->Size.h;
+            fixedSize = field->Frame.h;
     }
 
     for (auto field : fields)
@@ -284,30 +241,6 @@ void List::SetExpandedSize(SDL_Rect outer, const std::vector<Field*>& fields)
         field->Size = field->GetSize(outer);
         field->Frame = outer;
     }
-}
-
-
-SDL_Rect List::GetCompactSize(const std::vector<Field*>& fields)
-{
-    SDL_Rect size = { 0, 0, 0, 0 };
-
-    for (auto field : fields)
-    {
-        if (GetOrientation() == Vertical)
-        {
-            size.h += field->Size.h;
-            if (field->Size.w > size.w)
-                size.w = field->Size.w;
-        }
-        else
-        {
-            size.w += field->Size.w;
-            if (field->Size.h > size.h)
-                size.h = field->Size.h;
-        }
-    }
-
-    return size;
 }
 
 }

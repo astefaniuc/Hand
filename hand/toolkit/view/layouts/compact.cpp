@@ -1,5 +1,6 @@
 #include "view/layouts/compact.h"
 #include "view/layers/list.h"
+#include "view/field.h"
 
 
 namespace Layouts { namespace Compact {

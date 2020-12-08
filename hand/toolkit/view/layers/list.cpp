@@ -27,6 +27,14 @@ SDL_Rect List::UpdateSize(const SDL_Rect& outer)
 }
 
 
+void List::UpdatePositions(const SDL_Rect& outer)
+{
+    Layer::UpdatePositions(outer);
+    if (m_Layout)
+        m_Layout->UpdatePositions(outer);
+}
+
+
 Layout* List::GetLayout()
 {
     if (!m_Layout)
