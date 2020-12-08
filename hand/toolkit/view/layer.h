@@ -38,6 +38,7 @@ public:
     /// Returns the layers rectangle including the frame and spacing around it.
     virtual SDL_Rect UpdateSize(const SDL_Rect& outer);
     virtual void UpdatePositions(const SDL_Rect& outer);
+    virtual bool IsExpanding(Layout::Orientation direction) { return false; }
 
     /// Returns the size without the frame and spacing.
     const SDL_Rect& GetContentSize() const { return m_Size; }

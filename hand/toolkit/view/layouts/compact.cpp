@@ -30,7 +30,7 @@ Layout* CreateButton()
     return
         SplitV(
             SplitH(VIEW, TITLE),
-            CONTROL);
+            SplitH(DESCRIPTION, CONTROL));
 }
 
 

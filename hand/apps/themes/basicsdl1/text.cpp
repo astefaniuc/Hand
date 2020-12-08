@@ -9,7 +9,9 @@ SDL_Rect Text::CalculateSize(SDL_Rect& content)
 {
     const std::string& text = static_cast<Layers::Text*>(m_Layer)->GetData();
 
-    if (!text.empty())
+    if (text.empty())
+        content.w = content.h = 0;
+    else
     {
         // Type mismatch in the SDL lib
         int w, h;

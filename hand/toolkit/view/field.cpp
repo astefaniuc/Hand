@@ -67,6 +67,8 @@ bool Field::IsExpanding(Layout::Orientation direction)
 
     if (m_Layout)
         return m_Layout->IsExpanding(direction);
+    if (m_Layer)
+        return m_Layer->IsExpanding(direction);
 
     return false;
 }

@@ -29,9 +29,11 @@ SDL_Rect List::UpdateSize(const SDL_Rect& outer)
 
 void List::UpdatePositions(const SDL_Rect& outer)
 {
-    Layer::UpdatePositions(outer);
+    SDL_Rect content = GetDrawer()->GetContentPosition(outer);
+    m_Size.x = content.x;
+    m_Size.y = content.y;
     if (m_Layout)
-        m_Layout->UpdatePositions(outer);
+        m_Layout->UpdatePositions(m_Size);
 }
 
 

@@ -33,6 +33,14 @@ SDL_Rect DrawerSdl::GetContentSize(const SDL_Rect& outer)
     SDL_Rect content = outer;
     content.w -= offset.w;
     content.h -= offset.h;
+    return content;
+}
+
+
+SDL_Rect DrawerSdl::GetContentPosition(const SDL_Rect& outer)
+{
+    SDL_Rect offset = GetFrameOffset();
+    SDL_Rect content = outer;
     content.x += offset.x;
     content.y += offset.y;
     return content;

@@ -66,15 +66,14 @@ Drawer* Layer::GetDrawer()
 
 SDL_Rect Layer::UpdateSize(const SDL_Rect& outer)
 {
-    SDL_Rect content = GetDrawer()->GetContentSize(outer);
-    m_Size = { content.x, content.y, 0, 0 };
     return GetDrawer()->CalculateSize(m_Size);
 }
 
 
 void Layer::UpdatePositions(const SDL_Rect& outer)
 {
-    m_Size.x = outer.x;
-    m_Size.y = outer.y;
+    SDL_Rect content = GetDrawer()->GetContentPosition(outer);
+    m_Size.x = content.x;
+    m_Size.y = content.y;
 }
 

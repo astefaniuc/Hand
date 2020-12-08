@@ -29,6 +29,10 @@ public:
 
     virtual void Remove(Layer* sub) = 0;
 
+    bool IsExpanding(Layout::Orientation direction) override {
+        return GetLayout()->IsExpanding(direction);
+    }
+
 protected:
     virtual Layout* CreateLayout() = 0;
 
