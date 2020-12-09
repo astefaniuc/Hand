@@ -8,7 +8,7 @@
 #include "data/method.h"
 #include "data/data.h"
 #include "base/modulelib.h"
-#include "view/layouts/aligned.h"
+#include "view/layouts/builtin.h"
 
 
 User::User(EventHandler* a_input)
@@ -16,7 +16,8 @@ User::User(EventHandler* a_input)
       m_View("User", "User view"),
       m_ViewStack("View", "")
 {
-    Layouts::List* layout = Layouts::Aligned::CreateView();
+    Layout* layout = Layouts::CreateView();
+    layout->GetField(VIEW)->SetExpanding(true, true);
     layout->GetField(TITLE)->SetVisible(false);
     layout->GetField(DESCRIPTION)->SetVisible(false);
     static_cast<Layers::List*>(m_View.GetExpandedView())->SetLayout(layout);
@@ -42,7 +43,7 @@ User::User(EventHandler* a_input)
         // Show init screen
         Hmi::Item* initView = right->GetInitScreen();
         m_ViewStack.Attach(initView);
-        m_View.GetExpandedView()->Update();
+//        m_View.GetExpandedView()->Update();
         right->SetFocus(initView->GetExpandedView());
     }
 

@@ -110,5 +110,20 @@ private:
     Expansion m_ExpansionMode = Compact;
 };
 
+
+Field* MakeField(Layout* in);
+Field* MakeField(const std::string& in);
+Layout* Split(Field* field1, Field* field2, Layout::Orientation orientation);
+
+template<class T1, class T2>
+Layout* SplitV(T1 field1, T2 field2) {
+    return Split(MakeField(field1), MakeField(field2), Layout::Vertical);
+}
+
+template<class T1, class T2>
+Layout* SplitH(T1* field1, T2* field2) {
+    return Split(MakeField(field1), MakeField(field2), Layout::Horizontal);
+}
+
 }
 #endif //HAND_VIEW_LAYOUT_H

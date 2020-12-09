@@ -24,9 +24,6 @@ public:
 };
 
 
-typedef Map List;
-
-
 Map* CreateView();
 
 }}

@@ -97,6 +97,25 @@ void HAlignment::Align(const SDL_Rect& tgt, SDL_Rect& src)
 namespace Layouts {
 
 
+Field* MakeField(Layout* in)
+{
+    Field* ret = new Field("");
+    ret->SetLayout(in);
+    return ret;
+}
+Field* MakeField(const std::string& in) { return new Field(in); }
+
+Layout* Split(Field* field1, Field* field2, Layout::Orientation orientation)
+{
+    List* ret = new List();
+    ret->SetField(field1);
+    ret->SetField(field2);
+    ret->SetOrientation(orientation);
+    return ret;
+}
+
+
+
 SDL_Rect List::GetSize(const SDL_Rect& outer)
 {
     std::vector<Field*> all;

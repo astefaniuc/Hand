@@ -2,7 +2,7 @@
 #define HAND_VIEW_LAYER_BUTTON_H
 
 #include "view/layers/map.h"
-#include "view/layouts/compact.h"
+#include "view/layouts/builtin.h"
 
 
 namespace Layers {
@@ -14,7 +14,7 @@ protected:
     void Rebuild() override;
 
     Drawer* CreatetDrawer() override;
-    Layout* CreateLayout() override { return Layouts::Compact::CreateButton(); }
+    Layout* CreateLayout() override { return Layouts::CreateButton(); }
 };
 
 }

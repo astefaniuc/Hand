@@ -31,6 +31,6 @@ void View::Rebuild()
 
 
 Drawer* View::CreatetDrawer() { return GetTheme()->GetViewDrawer(); }
-Layout* View::CreateLayout() { return Layouts::Compact::CreateView(); }
+Layout* View::CreateLayout() { return Layouts::CreateView(); }
 
 }

@@ -6,7 +6,7 @@
 #include "view/layer.h"
 #include "view/layers/vector.h"
 #include "view/layouts/placed.h"
-#include "view/layouts/aligned.h"
+#include "view/layouts/builtin.h"
 
 
 const std::string Hand::Finger[] = {
@@ -39,7 +39,7 @@ Hmi::Item* Hand::GetInitScreen()
 {
     if (!m_InitScreen)
     {
-        Layouts::Placed::List* handLayout = new Layouts::Placed::List();
+        Layouts::Placed::Map* handLayout = new Layouts::Placed::Map();
         handLayout->SetField("Thumb", { 0.21, 0.6, 0.0, 0.0 });
         handLayout->SetField("Pointer finger", { 0.3, 0.4, 0.0, 0.0 });
         handLayout->SetField("Middle finger", { 0.45, 0.39, 0.0, 0.0 });
@@ -50,7 +50,7 @@ Hmi::Item* Hand::GetInitScreen()
         handLayer->SetLayout(handLayout);
         handLayer->SetExpandChildren(true);
 
-        Layouts::List* screenLayout = Layouts::Aligned::CreateView();
+        Layout* screenLayout = Layouts::CreateView();
         screenLayout->SetField(DESCRIPTION, VAlignment::Bottom, HAlignment::HCenter );
         screenLayout->GetField(CONTROL)->SetVisible(false);
         screenLayout->GetField(LAYER_CONTROLS)->SetVisible(false);
