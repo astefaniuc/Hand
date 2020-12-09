@@ -3,6 +3,13 @@
 #include "view/layers/list.h"
 
 
+Layout::~Layout()
+{
+    for (auto field : m_Fields)
+        delete field;
+}
+
+
 Field* Layout::GetField(const std::string& name, bool create)
 {
     Field* ret = nullptr;
@@ -19,13 +26,6 @@ Field* Layout::GetField(const std::string& name, bool create)
         m_Fields.push_back(ret);
     }
     return ret;
-}
-
-
-void Layout::SetField(
-    const std::string& name, VAlignment::Position vertical, HAlignment::Position horizontal)
-{
-    GetField(name)->SetAlignment(vertical, horizontal);
 }
 
 
@@ -120,7 +120,7 @@ SDL_Rect List::GetSize(const SDL_Rect& outer)
 {
     std::vector<Field*> all;
     if (!GetValidFields(all))
-        return Layout::GetSize(outer);
+        return { 0, 0, 0, 0 };
 
     std::vector<Field*> expanding;
     std::vector<Field*> compact;
@@ -140,7 +140,7 @@ SDL_Rect List::GetSize(const SDL_Rect& outer)
         SDL_Rect rest = outer;
         if (compact.size())
         {
-            SDL_Rect compactSize = GetCompactSize(compact);
+            SDL_Rect compactSize = GetCompoundSize(compact);
             // TODO: deal with size.h > outer.h ?
             if (GetOrientation() == Vertical)
             {
@@ -164,7 +164,7 @@ SDL_Rect List::GetSize(const SDL_Rect& outer)
 
     SetSameSize(all, GetOrientation());
 
-    return GetCompactSize(all);
+    return GetCompoundSize(all);
 }
 
 
@@ -194,7 +194,7 @@ void List::UpdatePositions(const SDL_Rect& outer)
 }
 
 
-SDL_Rect List::GetCompactSize(const std::vector<Field*>& fields)
+SDL_Rect List::GetCompoundSize(const std::vector<Field*>& fields)
 {
     SDL_Rect size = { 0, 0, 0, 0 };
 
@@ -216,6 +216,7 @@ SDL_Rect List::GetCompactSize(const std::vector<Field*>& fields)
 
     return size;
 }
+
 
 uint16_t List::SetSameSize(const std::vector<Field*>& fields, Layout::Orientation orientation)
 {
@@ -241,6 +242,7 @@ uint16_t List::SetSameSize(const std::vector<Field*>& fields, Layout::Orientatio
 
     return fixedSize;
 }
+
 
 void List::SetEqualSize(const std::vector<Field*>& fields)
 {

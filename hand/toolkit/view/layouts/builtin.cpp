@@ -28,9 +28,9 @@ Layout* CreateView()
     List* ret = new List();
 
     ret->SetOrientation(Layout::Vertical);
-    ret->GetField(TITLE, true);
-    ret->GetField(VIEW, true);
-    ret->GetField(DESCRIPTION, true);
+    ret->GetField(TITLE);
+    ret->GetField(VIEW);
+    ret->GetField(DESCRIPTION);
     ret->SetField(MakeField(SplitH(CONTROL, LAYER_CONTROLS)));
 
     return ret;

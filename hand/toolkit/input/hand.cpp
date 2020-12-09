@@ -51,7 +51,7 @@ Hmi::Item* Hand::GetInitScreen()
         handLayer->SetExpandChildren(true);
 
         Layout* screenLayout = Layouts::CreateView();
-        screenLayout->SetField(DESCRIPTION, VAlignment::Bottom, HAlignment::HCenter );
+        screenLayout->GetField(DESCRIPTION)->SetAlignment(VAlignment::Bottom, HAlignment::HCenter);
         screenLayout->GetField(CONTROL)->SetVisible(false);
         screenLayout->GetField(LAYER_CONTROLS)->SetVisible(false);
 

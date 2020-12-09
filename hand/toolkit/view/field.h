@@ -2,6 +2,37 @@
 #define HAND_VIEW_FIELD_H
 
 #include "view/layout.h"
+#include "include/stdfields.h"
+
+
+struct VAlignment
+{
+    enum Position
+    {
+        Top,
+        VCenter,
+        Bottom,
+    };
+    /// Places the 'source' rect into the 'target' rect as specified with 'alignment'.
+    void Align(const SDL_Rect& target, SDL_Rect& source);
+
+    Position Pos = VCenter;
+};
+
+
+struct HAlignment
+{
+    enum Position
+    {
+        Left,
+        HCenter,
+        Right
+    };
+    /// Places the 'source' rect into the 'target' rect as specified with 'alignment'.
+    void Align(const SDL_Rect& target, SDL_Rect& source);
+
+    Position Pos = HCenter;
+};
 
 
 class Field

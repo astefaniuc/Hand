@@ -2,37 +2,6 @@
 #define HAND_VIEW_LAYOUT_H
 
 #include "view/datatypes/rect.h"
-#include "include/stdfields.h"
-
-
-struct VAlignment
-{
-    enum Position
-    {
-        Top,
-        VCenter,
-        Bottom,
-    };
-    /// Places the 'source' rect into the 'target' rect as specified with 'alignment'.
-    void Align(const SDL_Rect& target, SDL_Rect& source);
-
-    Position Pos = VCenter;
-};
-
-
-struct HAlignment
-{
-    enum Position
-    {
-        Left,
-        HCenter,
-        Right
-    };
-    /// Places the 'source' rect into the 'target' rect as specified with 'alignment'.
-    void Align(const SDL_Rect& target, SDL_Rect& source);
-
-    Position Pos = HCenter;
-};
 
 
 class Field;
@@ -47,19 +16,13 @@ public:
         Vertical
     };
 
-    virtual ~Layout() = default;
+    virtual ~Layout();
 
 
     Field* GetField(const std::string& name, bool create = true);
     void SetField(Field* field) { m_Fields.push_back(field); }
-    void SetField(
-        const std::string& name,
-        VAlignment::Position vertical,
-        HAlignment::Position horizontal);
 
-    virtual SDL_Rect GetSize(const SDL_Rect& outer) {
-        return { outer.x, outer.y, 0, 0 };
-    }
+    virtual SDL_Rect GetSize(const SDL_Rect& outer) = 0;
     virtual void UpdatePositions(const SDL_Rect& outer) = 0;
 
     bool IsValid();
@@ -101,7 +64,7 @@ private:
     void SetExpandedSize(SDL_Rect outer, const std::vector<Field*>& fields);
     void SetEqualSize(const std::vector<Field*>& fields);
 //    SDL_Rect SetEqualSpace(const std::vector<Field*>& fields);
-    SDL_Rect GetCompactSize(const std::vector<Field*>& fields);
+    SDL_Rect GetCompoundSize(const std::vector<Field*>& fields);
     uint16_t SetSameSize(const std::vector<Field*>& fields, Layout::Orientation orientation);
 
     Orientation m_Orientation = Horizontal;
