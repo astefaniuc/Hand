@@ -19,19 +19,17 @@ bool List::Update()
 }
 
 
-SDL_Rect List::UpdateSize(const SDL_Rect& outer)
+SDL_Rect List::ComputeSize(const SDL_Rect& outer)
 {
-    SDL_Rect content = GetDrawer()->GetContentSize(outer);
-    m_Size = GetLayout()->GetSize(content);
-    return GetDrawer()->CalculateSize(m_Size);
+    return GetDrawer()->ComputeSize(
+                GetLayout()->ComputeSize(
+                    GetDrawer()->GetContentSize(outer)));
 }
 
 
 void List::UpdatePositions(const SDL_Rect& outer)
 {
-    SDL_Rect content = GetDrawer()->GetContentPosition(outer);
-    m_Size.x = content.x;
-    m_Size.y = content.y;
+    m_Size = GetDrawer()->GetContentSize(outer);
     if (m_Layout)
         m_Layout->UpdatePositions(m_Size);
 }

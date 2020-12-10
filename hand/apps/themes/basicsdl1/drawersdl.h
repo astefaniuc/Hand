@@ -17,9 +17,8 @@ public:
 
     void Draw(SDL_Surface* buffer) override;
 
-    SDL_Rect CalculateSize(SDL_Rect& content) override { return GetFramedSize(content); }
+    SDL_Rect ComputeSize(const SDL_Rect& content) override { return GetFramedSize(content); }
     SDL_Rect GetContentSize(const SDL_Rect& outer) override;
-    SDL_Rect GetContentPosition(const SDL_Rect& outer) override;
 
     void SetProperties(Hmi::List* config) { m_Properties = config; }
 

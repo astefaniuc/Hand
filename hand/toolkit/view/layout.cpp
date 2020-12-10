@@ -116,7 +116,7 @@ Layout* Split(Field* field1, Field* field2, Layout::Orientation orientation)
 
 
 
-SDL_Rect List::GetSize(const SDL_Rect& outer)
+SDL_Rect List::ComputeSize(const SDL_Rect& outer)
 {
     std::vector<Field*> all;
     if (!GetValidFields(all))
@@ -133,7 +133,7 @@ SDL_Rect List::GetSize(const SDL_Rect& outer)
     }
 
     for (auto field : compact)
-        field->Frame = field->Size = field->GetSize(outer);
+        field->Frame = field->ComputeSize(outer);
 
     if (expanding.size())
     {
@@ -225,10 +225,10 @@ uint16_t List::SetSameSize(const std::vector<Field*>& fields, Layout::Orientatio
     {
          if (orientation == Vertical)
         {
-            if (field->Size.w > fixedSize)
+            if (field->Frame.w > fixedSize)
                 fixedSize = field->Frame.w;
         }
-        else if (field->Size.h > fixedSize)
+        else if (field->Frame.h > fixedSize)
             fixedSize = field->Frame.h;
     }
 
@@ -259,7 +259,7 @@ void List::SetExpandedSize(SDL_Rect outer, const std::vector<Field*>& fields)
 {
     for (auto field : fields)
     {
-        field->Size = field->GetSize(outer);
+        field->ComputeSize(outer);
         field->Frame = outer;
     }
 }

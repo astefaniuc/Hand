@@ -41,7 +41,7 @@ public:
     Field(const std::string& name) : m_Name(name) { delete m_Layout; }
 
     /// Returns the size from the matching sub-layer.
-    SDL_Rect GetSize(const SDL_Rect& outer);
+    SDL_Rect ComputeSize(const SDL_Rect& outer);
     void SetPlacedPosition(const SDL_Rect& outer);
 
     Field* GetField(const std::string& name) const;
@@ -64,10 +64,10 @@ public:
     void SetExpanding(bool vertical, bool horizontal);
     bool IsExpanding(Layout::Orientation direction);
 
-    SDL_Rect Size;
     SDL_Rect Frame;
 
 protected:
+    SDL_Rect Size;
     Layout* m_Layout = nullptr;
     Layer* m_Layer = nullptr;
 

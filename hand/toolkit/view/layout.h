@@ -22,7 +22,7 @@ public:
     Field* GetField(const std::string& name, bool create = true);
     void SetField(Field* field) { m_Fields.push_back(field); }
 
-    virtual SDL_Rect GetSize(const SDL_Rect& outer) = 0;
+    virtual SDL_Rect ComputeSize(const SDL_Rect& outer) = 0;
     virtual void UpdatePositions(const SDL_Rect& outer) = 0;
 
     bool IsValid();
@@ -49,7 +49,7 @@ public:
         EqualSpace
     };
 
-    SDL_Rect GetSize(const SDL_Rect& outer) override;
+    SDL_Rect ComputeSize(const SDL_Rect& outer) override;
     void UpdatePositions(const SDL_Rect& outer) override;
 
     void SetExpansion(Expansion mode) { m_ExpansionMode = mode; }

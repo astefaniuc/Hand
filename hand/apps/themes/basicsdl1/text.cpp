@@ -5,10 +5,10 @@
 // #include "SDL/SDL_Image.h"
 
 
-SDL_Rect Text::CalculateSize(SDL_Rect& content)
+SDL_Rect Text::ComputeSize(const SDL_Rect& a_content)
 {
+    SDL_Rect content = a_content;
     const std::string& text = static_cast<Layers::Text*>(m_Layer)->GetData();
-
     if (text.empty())
         content.w = content.h = 0;
     else
@@ -36,7 +36,7 @@ void Text::Draw(SDL_Surface* buffer)
         m_Buffer = RenderText(text, GetFontSize(), GetFontColor());
     }
 
-    SDL_Rect srcRect = m_Layer->GetContentSize();
+    SDL_Rect srcRect = m_Layer->GetSize();
     BlitSurface(m_Buffer, &srcRect, buffer);
 }
 

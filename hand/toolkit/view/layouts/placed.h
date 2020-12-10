@@ -13,7 +13,7 @@ namespace Layouts { namespace Placed {
 class Map : public Layout
 {
 public:
-    SDL_Rect GetSize(const SDL_Rect& outer) override;
+    SDL_Rect ComputeSize(const SDL_Rect& outer) override;
     void UpdatePositions(const SDL_Rect& outer) override;
 
     void SetField(const std::string& name, const RelRect& position) {

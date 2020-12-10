@@ -14,8 +14,8 @@ public:
     ~List() { delete m_Layout; }
 
     bool Update() override;
-    SDL_Rect UpdateSize(const SDL_Rect& outer) final;
-    void UpdatePositions(const SDL_Rect& outer) final;
+    SDL_Rect ComputeSize(const SDL_Rect& outer) override;
+    void UpdatePositions(const SDL_Rect& outer) override;
     /// Rebuild sub-layer structure on content or layout changes.
     virtual void Rebuild() = 0;
 

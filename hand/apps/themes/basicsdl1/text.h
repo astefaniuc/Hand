@@ -10,7 +10,7 @@ public:
     Text(BasicSdl1* theme, Hmi::List* config) : DrawerSdl(theme, config) {}
     ~Text() { SDL_FreeSurface(m_Buffer); }
 
-    SDL_Rect CalculateSize(SDL_Rect& content) override;
+    SDL_Rect ComputeSize(const SDL_Rect& content) override;
 
     void Draw(SDL_Surface* buffer) override;
 

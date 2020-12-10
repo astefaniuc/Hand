@@ -6,12 +6,12 @@ namespace Layouts { namespace Placed {
 
 
 
-SDL_Rect Map::GetSize(const SDL_Rect& outer)
+SDL_Rect Map::ComputeSize(const SDL_Rect& outer)
 {
     std::vector<Field*> fields;
     GetValidFields(fields);
     for (auto field : fields)
-        field->GetSize(outer);
+        field->ComputeSize(outer);
     return outer;
 }
 

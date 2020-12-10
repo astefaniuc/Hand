@@ -33,14 +33,6 @@ SDL_Rect DrawerSdl::GetContentSize(const SDL_Rect& outer)
     SDL_Rect content = outer;
     content.w -= offset.w;
     content.h -= offset.h;
-    return content;
-}
-
-
-SDL_Rect DrawerSdl::GetContentPosition(const SDL_Rect& outer)
-{
-    SDL_Rect offset = GetFrameOffset();
-    SDL_Rect content = outer;
     content.x += offset.x;
     content.y += offset.y;
     return content;
@@ -86,7 +78,7 @@ void DrawerSdl::BlitSurface(SDL_Surface* source, SDL_Rect* src_pos, SDL_Surface*
 
 void DrawerSdl::DrawBackground()
 {
-    FillRect(m_Layer->GetContentSize(), GetBackgroundColor());
+    FillRect(m_Layer->GetSize(), GetBackgroundColor());
 }
 
 
@@ -99,10 +91,9 @@ void DrawerSdl::DrawFrame()
     int16_t width = m_Theme->GetBaseSize() * 0.1;
     const Rgb& color = GetFrameColor();
 
-    SDL_Rect content = m_Layer->GetContentSize();
     // Draw each line separately
     {
-        SDL_Rect top = content;
+        SDL_Rect top = m_Layer->GetSize();
         top.x -= width;
         top.y -= width;
         top.w += 2 * width;
@@ -110,22 +101,22 @@ void DrawerSdl::DrawFrame()
         FillRect(top, color);
     }
     {
-        SDL_Rect down = content;
+        SDL_Rect down = m_Layer->GetSize();
         down.x -= width;
-        down.y += content.h;
+        down.y += down.h;
         down.w += 2 * width;
         down.h = width;
         FillRect(down, color);
     }
     {
-        SDL_Rect left = content;
+        SDL_Rect left = m_Layer->GetSize();
         left.x -= width;
         left.w = width;
         FillRect(left, color);
     }
     {
-        SDL_Rect right = content;
-        right.x += content.w;
+        SDL_Rect right = m_Layer->GetSize();
+        right.x += right.w;
         right.w = width;
         FillRect(right, color);
     }

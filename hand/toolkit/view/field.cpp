@@ -19,13 +19,14 @@ void Field::SetLayout(Layout* layout)
 }
 
 
-SDL_Rect Field::GetSize(const SDL_Rect& outer)
+SDL_Rect Field::ComputeSize(const SDL_Rect& outer)
 {
+    Size = { 0, 0, 0, 0 };
     if (m_Layout)
-        return m_Layout->GetSize(outer);
+        Size = m_Layout->ComputeSize(outer);
     if (m_Layer)
-        return m_Layer->UpdateSize(outer);
-    return { 0, 0, 0, 0 };
+        Size = m_Layer->ComputeSize(outer);
+    return Size;
 }
 
 
