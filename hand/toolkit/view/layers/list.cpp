@@ -21,9 +21,15 @@ bool List::Update()
 
 SDL_Rect List::ComputeSize(const SDL_Rect& outer)
 {
-    return GetDrawer()->ComputeSize(
-                GetLayout()->ComputeSize(
-                    GetDrawer()->GetContentSize(outer)));
+    SDL_Rect ret = GetDrawer()->ComputeSize(
+        GetLayout()->ComputeSize(GetDrawer()->GetContentSize(outer)));
+
+    if ((ret.w > outer.w) || (ret.h > outer.h))
+    {
+        // TODO. The Layer/logic has to deal with space shortage.
+    }
+
+    return ret;
 }
 
 
