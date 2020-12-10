@@ -11,7 +11,7 @@ namespace Hmi { class Item; }
 namespace Layers { class List; }
 class Theme;
 
-class Layer
+class Layer : public Field::Item
 {
 public:
     virtual ~Layer() { delete m_Drawer; }
@@ -35,11 +35,6 @@ public:
     Drawer* GetDrawer();
     void SetDrawer(Drawer* drawer);
 
-    virtual SDL_Rect ComputeSize(const SDL_Rect& outer);
-    virtual void UpdatePositions(const SDL_Rect& outer);
-
-    virtual bool IsExpanding(Layout::Orientation direction) { return false; }
-
     const SDL_Rect& GetSize() const { return m_Size; }
 
     bool IsModified() { return (m_IsModified || m_ModifiedContent); }
@@ -47,6 +42,15 @@ public:
 
 protected:
     virtual Drawer* CreatetDrawer() = 0;
+
+    /// The Field::Item implementation:
+    Field* GetField(const std::string& name, bool create = true) final { return nullptr; }
+    SDL_Rect ComputeSize(const SDL_Rect& outer) override;
+    void UpdatePositions(const SDL_Rect& outer) override;
+    bool IsExpanding(Orientation direction) override { return false; }
+    bool IsValid() const final { return true; }
+    void Exit() final { Exit(nullptr); }
+
 
     Layers::List* m_Parent = nullptr;
     Theme* m_Theme = nullptr;

@@ -75,7 +75,7 @@ void Vector::AddLayer(Hmi::Item* data)
 
 Layer* Vector::Insert(Layer* a_child)
 {
-    GetLayout()->GetField(a_child->GetContent()->GetName())->SetLayer(a_child);
+    GetLayout()->GetField(a_child->GetContent()->GetName())->SetItem(a_child);
     m_Sublayers.push_back(a_child);
     a_child->SetParent(this);
     m_IsModified = true;

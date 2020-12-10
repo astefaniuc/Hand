@@ -27,7 +27,7 @@ Layout* CreateView()
 {
     List* ret = new List();
 
-    ret->SetOrientation(Layout::Vertical);
+    ret->SetOrientation(Vertical);
     ret->GetField(TITLE);
     ret->GetField(VIEW);
     ret->GetField(DESCRIPTION);

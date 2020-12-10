@@ -163,8 +163,8 @@ void BasicSdl1::UpdateScreen()
     if (m_ScreenRoot->IsModified())
     {
         SDL_Rect res = GetResolution();
-        m_ScreenRoot->ComputeSize(res);
-        m_ScreenRoot->UpdatePositions(res);
+        ((Field::Item*)m_ScreenRoot)->ComputeSize(res);
+        ((Field::Item*)m_ScreenRoot)->UpdatePositions(res);
         m_ScreenRoot->Draw(m_Surface);
         SDL_Flip(m_Surface);
     }

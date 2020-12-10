@@ -1,8 +1,8 @@
 #ifndef HAND_VIEW_FIELD_H
 #define HAND_VIEW_FIELD_H
 
-#include "view/layout.h"
 #include "include/stdfields.h"
+#include "view/datatypes/rect.h"
 
 
 struct VAlignment
@@ -35,10 +35,32 @@ struct HAlignment
 };
 
 
+enum Orientation
+{
+    Auto,
+    Horizontal,
+    Vertical
+};
+
+
 class Field
 {
 public:
-    Field(const std::string& name) : m_Name(name) { delete m_Layout; }
+    class Item
+    {
+    public:
+        virtual ~Item() = default;
+
+        virtual Field* GetField(const std::string& name, bool create = true) = 0;
+        virtual SDL_Rect ComputeSize(const SDL_Rect& outer) = 0;
+        virtual void UpdatePositions(const SDL_Rect& outer) = 0;
+        virtual bool IsExpanding(Orientation direction) = 0;
+        virtual bool IsValid() const = 0;
+        virtual void Exit() = 0;
+    };
+
+    Field(const std::string& name) : m_Name(name) {}
+    ~Field();
 
     /// Returns the size from the matching sub-layer.
     SDL_Rect ComputeSize(const SDL_Rect& outer);
@@ -46,8 +68,7 @@ public:
 
     Field* GetField(const std::string& name) const;
 
-    void SetLayout(Layout* layout);
-    void SetLayer(Layer* layer) { m_Layer = layer; }
+    void SetItem(Item* item);
 
     void SetVisible(bool visible) { m_IsVisible = visible; }
     bool IsVisible() { return m_IsVisible; }
@@ -59,10 +80,10 @@ public:
 
     void SetPosition(const RelRect& pos) { m_Position = pos;}
 
-    bool IsValid() { return (m_Layer || (m_Layout && m_Layout->IsValid())); }
+    bool IsValid() const { return (m_Item && m_Item->IsValid()); }
 
     void SetExpanding(bool vertical, bool horizontal);
-    bool IsExpanding(Layout::Orientation direction);
+    bool IsExpanding(Orientation direction) const;
 
     /// External size, modified in the layout.
     SDL_Rect Frame;
@@ -70,8 +91,7 @@ public:
 private:
     // Content size and position
     SDL_Rect m_Size;
-    Layout* m_Layout = nullptr;
-    Layer* m_Layer = nullptr;
+    Item* m_Item = nullptr;
 
     bool m_IsVisible = true;
     bool m_ExpandV = false;
@@ -80,7 +100,6 @@ private:
     HAlignment m_AlignmentH;
     RelRect m_Position;
 
-private:
     std::string m_Name;
 };
 

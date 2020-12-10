@@ -1,31 +1,69 @@
 #include "view/field.h"
-#include "view/layers/list.h"
+
+
+void VAlignment::Align(const SDL_Rect& tgt, SDL_Rect& src)
+{
+    switch (Pos)
+    {
+    case Top:
+        src.y = tgt.y;
+        break;
+    case Bottom:
+        src.y = tgt.y + tgt.h - src.h;
+        break;
+    default: // VCenter
+        src.y = tgt.y + (tgt.h - src.h) / 2;
+    }
+}
+
+
+void HAlignment::Align(const SDL_Rect& tgt, SDL_Rect& src)
+{
+    switch (Pos)
+    {
+    case Left:
+        src.x = tgt.x;
+        break;
+    case Right:
+        src.x = tgt.x + tgt.w - src.w;
+        break;
+    default: // HCenter
+        src.x = tgt.x + (tgt.w - src.w) / 2;
+    }
+}
+
+
+
+Field::~Field()
+{
+    if (m_Item)
+        m_Item->Exit();
+}
 
 
 Field* Field::GetField(const std::string& name) const
 {
     if (name == m_Name)
         return (Field*)this;
-    if (m_Layout)
-        return m_Layout->GetField(name, false);
+    if (m_Item)
+        return m_Item->GetField(name, false);
     return nullptr;
 }
 
 
-void Field::SetLayout(Layout* layout)
+void Field::SetItem(Item* item)
 {
-    delete m_Layout;
-    m_Layout = layout;
+    if (m_Item && (item != m_Item))
+        m_Item->Exit();
+    m_Item = item;
 }
 
 
 SDL_Rect Field::ComputeSize(const SDL_Rect& outer)
 {
     m_Size = { 0, 0, 0, 0 };
-    if (m_Layout)
-        m_Size = m_Layout->ComputeSize(outer);
-    if (m_Layer)
-        m_Size = m_Layer->ComputeSize(outer);
+    if (m_Item)
+        m_Size = m_Item->ComputeSize(outer);
     return m_Size;
 }
 
@@ -35,10 +73,8 @@ void Field::Align()
     m_AlignmentV.Align(Frame, m_Size);
     m_AlignmentH.Align(Frame, m_Size);
 
-    if (m_Layout)
-        m_Layout->UpdatePositions(m_Size);
-    if (m_Layer)
-        m_Layer->UpdatePositions(m_Size);
+    if (m_Item)
+        m_Item->UpdatePositions(m_Size);
 }
 
 
@@ -46,10 +82,9 @@ void Field::SetPlacedPosition(const SDL_Rect& outer)
 {
     m_Size.x = outer.x + m_Position.x * outer.w;
     m_Size.y = outer.y + m_Position.y * outer.h;
-    if (m_Layout)
-        m_Layout->UpdatePositions(m_Size);
-    if (m_Layer)
-        m_Layer->UpdatePositions(m_Size);
+
+    if (m_Item)
+        m_Item->UpdatePositions(m_Size);
 }
 
 
@@ -60,16 +95,14 @@ void Field::SetExpanding(bool vertical, bool horizontal)
 }
 
 
-bool Field::IsExpanding(Layout::Orientation direction)
+bool Field::IsExpanding(Orientation direction) const
 {
-    bool ret = (direction == Layout::Vertical) ? m_ExpandV : m_ExpandH;
+    bool ret = (direction == Vertical) ? m_ExpandV : m_ExpandH;
     if (ret)
         return true;
 
-    if (m_Layout)
-        return m_Layout->IsExpanding(direction);
-    if (m_Layer)
-        return m_Layer->IsExpanding(direction);
+    if (m_Item)
+        return m_Item->IsExpanding(direction);
 
     return false;
 }

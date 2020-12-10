@@ -1,6 +1,4 @@
 #include "view/layout.h"
-#include "view/field.h"
-#include "view/layers/list.h"
 
 
 Layout::~Layout()
@@ -29,7 +27,7 @@ Field* Layout::GetField(const std::string& name, bool create)
 }
 
 
-bool Layout::IsValid()
+bool Layout::IsValid() const
 {
     for (auto field : m_Fields)
         if (field->IsValid())
@@ -61,51 +59,18 @@ unsigned Layout::GetValidFields(std::vector<Field*>& out)
 }
 
 
-
-void VAlignment::Align(const SDL_Rect& tgt, SDL_Rect& src)
-{
-    switch (Pos)
-    {
-    case Top:
-        src.y = tgt.y;
-        break;
-    case Bottom:
-        src.y = tgt.y + tgt.h - src.h;
-        break;
-    default: // VCenter
-        src.y = tgt.y + (tgt.h - src.h) / 2;
-    }
-}
-
-
-void HAlignment::Align(const SDL_Rect& tgt, SDL_Rect& src)
-{
-    switch (Pos)
-    {
-    case Left:
-        src.x = tgt.x;
-        break;
-    case Right:
-        src.x = tgt.x + tgt.w - src.w;
-        break;
-    default: // HCenter
-        src.x = tgt.x + (tgt.w - src.w) / 2;
-    }
-}
-
-
 namespace Layouts {
 
 
 Field* MakeField(Layout* in)
 {
     Field* ret = new Field("");
-    ret->SetLayout(in);
+    ret->SetItem(in);
     return ret;
 }
 Field* MakeField(const std::string& in) { return new Field(in); }
 
-Layout* Split(Field* field1, Field* field2, Layout::Orientation orientation)
+Layout* Split(Field* field1, Field* field2, Orientation orientation)
 {
     List* ret = new List();
     ret->SetField(field1);
@@ -218,7 +183,7 @@ SDL_Rect List::GetCompoundSize(const std::vector<Field*>& fields)
 }
 
 
-uint16_t List::SetSameSize(const std::vector<Field*>& fields, Layout::Orientation orientation)
+uint16_t List::SetSameSize(const std::vector<Field*>& fields, Orientation orientation)
 {
     uint16_t fixedSize = 0;
     for (auto field : fields)
@@ -246,7 +211,7 @@ uint16_t List::SetSameSize(const std::vector<Field*>& fields, Layout::Orientatio
 
 void List::SetEqualSize(const std::vector<Field*>& fields)
 {
-    Layout::Orientation orientation = Vertical;
+    Orientation orientation = Vertical;
     if (GetOrientation() == Vertical)
         // Inverted
         orientation = Horizontal;

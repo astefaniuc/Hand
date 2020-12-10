@@ -1,35 +1,25 @@
 #ifndef HAND_VIEW_LAYOUT_H
 #define HAND_VIEW_LAYOUT_H
 
-#include "view/datatypes/rect.h"
+#include "view/field.h"
 
 
-class Field;
-
-class Layout
+class Layout : public Field::Item
 {
 public:
-    enum Orientation
-    {
-        Auto,
-        Horizontal,
-        Vertical
-    };
-
     virtual ~Layout();
 
 
-    Field* GetField(const std::string& name, bool create = true);
+    Field* GetField(const std::string& name, bool create = true) override;
     void SetField(Field* field) { m_Fields.push_back(field); }
 
-    virtual SDL_Rect ComputeSize(const SDL_Rect& outer) = 0;
-    virtual void UpdatePositions(const SDL_Rect& outer) = 0;
-
-    bool IsValid();
-    virtual bool IsExpanding(Orientation direction);
+    bool IsValid() const;
+    bool IsExpanding(Orientation direction) override;
 
     /// Returns the vector size.
     unsigned GetValidFields(std::vector<Field*>& out);
+
+    void Exit() override { delete this; }
 
 protected:
     std::vector<Field*> m_Fields;
@@ -65,7 +55,7 @@ private:
     void SetEqualSize(const std::vector<Field*>& fields);
 //    SDL_Rect SetEqualSpace(const std::vector<Field*>& fields);
     SDL_Rect GetCompoundSize(const std::vector<Field*>& fields);
-    uint16_t SetSameSize(const std::vector<Field*>& fields, Layout::Orientation orientation);
+    uint16_t SetSameSize(const std::vector<Field*>& fields, Orientation orientation);
 
     Orientation m_Orientation = Horizontal;
     unsigned m_MaxItemsToShow = 5;
@@ -76,16 +66,16 @@ private:
 
 Field* MakeField(Layout* in);
 Field* MakeField(const std::string& in);
-Layout* Split(Field* field1, Field* field2, Layout::Orientation orientation);
+Layout* Split(Field* field1, Field* field2, Orientation orientation);
 
 template<class T1, class T2>
 Layout* SplitV(T1 field1, T2 field2) {
-    return Split(MakeField(field1), MakeField(field2), Layout::Vertical);
+    return Split(MakeField(field1), MakeField(field2), Vertical);
 }
 
 template<class T1, class T2>
 Layout* SplitH(T1* field1, T2* field2) {
-    return Split(MakeField(field1), MakeField(field2), Layout::Horizontal);
+    return Split(MakeField(field1), MakeField(field2), Horizontal);
 }
 
 }

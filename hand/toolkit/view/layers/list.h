@@ -14,8 +14,6 @@ public:
     ~List() { delete m_Layout; }
 
     bool Update() override;
-    SDL_Rect ComputeSize(const SDL_Rect& outer) override;
-    void UpdatePositions(const SDL_Rect& outer) override;
     /// Rebuild sub-layer structure on content or layout changes.
     virtual void Rebuild() = 0;
 
@@ -29,12 +27,15 @@ public:
 
     virtual void Remove(Layer* sub) = 0;
 
-    bool IsExpanding(Layout::Orientation direction) override {
-        return GetLayout()->IsExpanding(direction);
-    }
-
 protected:
     virtual Layout* CreateLayout() = 0;
+
+    /// Field::Item interface:
+    SDL_Rect ComputeSize(const SDL_Rect& outer) override;
+    void UpdatePositions(const SDL_Rect& outer) override;
+    bool IsExpanding(Orientation direction) override {
+        return GetLayout()->IsExpanding(direction);
+    }
 
 private:
     Layout* m_Layout = nullptr;
