@@ -64,10 +64,12 @@ public:
     void SetExpanding(bool vertical, bool horizontal);
     bool IsExpanding(Layout::Orientation direction);
 
+    /// External size, modified in the layout.
     SDL_Rect Frame;
 
-protected:
-    SDL_Rect Size;
+private:
+    // Content size and position
+    SDL_Rect m_Size;
     Layout* m_Layout = nullptr;
     Layer* m_Layer = nullptr;
 

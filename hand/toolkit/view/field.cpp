@@ -21,35 +21,35 @@ void Field::SetLayout(Layout* layout)
 
 SDL_Rect Field::ComputeSize(const SDL_Rect& outer)
 {
-    Size = { 0, 0, 0, 0 };
+    m_Size = { 0, 0, 0, 0 };
     if (m_Layout)
-        Size = m_Layout->ComputeSize(outer);
+        m_Size = m_Layout->ComputeSize(outer);
     if (m_Layer)
-        Size = m_Layer->ComputeSize(outer);
-    return Size;
+        m_Size = m_Layer->ComputeSize(outer);
+    return m_Size;
 }
 
 
 void Field::Align()
 {
-    m_AlignmentV.Align(Frame, Size);
-    m_AlignmentH.Align(Frame, Size);
+    m_AlignmentV.Align(Frame, m_Size);
+    m_AlignmentH.Align(Frame, m_Size);
 
     if (m_Layout)
-        m_Layout->UpdatePositions(Size);
+        m_Layout->UpdatePositions(m_Size);
     if (m_Layer)
-        m_Layer->UpdatePositions(Size);
+        m_Layer->UpdatePositions(m_Size);
 }
 
 
 void Field::SetPlacedPosition(const SDL_Rect& outer)
 {
-    Size.x = outer.x + m_Position.x * outer.w;
-    Size.y = outer.y + m_Position.y * outer.h;
+    m_Size.x = outer.x + m_Position.x * outer.w;
+    m_Size.y = outer.y + m_Position.y * outer.h;
     if (m_Layout)
-        m_Layout->UpdatePositions(Size);
+        m_Layout->UpdatePositions(m_Size);
     if (m_Layer)
-        m_Layer->UpdatePositions(Size);
+        m_Layer->UpdatePositions(m_Size);
 }
 
 
