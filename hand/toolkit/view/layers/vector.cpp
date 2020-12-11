@@ -51,8 +51,8 @@ void Vector::Rebuild()
     if (listData)
     {
         unsigned count = listData->Size() - m_StartPosition;
-        if (GetListLayout()->GetMaxItemsToShow() < count)
-            count = GetListLayout()->GetMaxItemsToShow();
+        if (GetMaxItemsToShow() < count)
+            count = GetMaxItemsToShow();
 
         for (unsigned i = 0; i < count; ++i)
 
@@ -100,27 +100,6 @@ void Vector::Remove(Layer* a_child)
 Drawer* Vector::CreatetDrawer()
 {
     return GetTheme()->GetListDrawer();
-}
-
-
-bool Vector::SetFocus(Hmi::Item*)
-{
-    Hmi::Item* tgt= GetControlsList();
-    if (!tgt)
-        return false;
-
-    // TODO
-    return true;
-}
-
-
-Hmi::Item* Vector::GetControlsList()
-{
-    if (!m_Data)
-        return nullptr;
-
-    // TODO
-    return nullptr;
 }
 
 

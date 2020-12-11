@@ -26,6 +26,9 @@ public:
 
     void SetExpandChildren(bool expand);
 
+    unsigned GetMaxItemsToShow() { return m_MaxItemsToShow; }
+    void SetMaxItemsToShow(unsigned count) { m_MaxItemsToShow = count; }
+
 protected:
     void Rebuild() override;
 
@@ -34,16 +37,11 @@ protected:
     Drawer* CreatetDrawer() override;
     Layout* CreateLayout() override { return new Layouts::List(); }
 
-    bool SetFocus(Hmi::Item*);
-    // Returns the list which should be mapped to the InputState
-    Hmi::Item* GetControlsList();
-
-    Layouts::List* GetListLayout() { return static_cast<Layouts::List*>(GetLayout()); }
-
 private:
     std::vector<Layer*> m_Sublayers;
     std::vector<Layer*>::const_iterator m_CurrentChild = m_Sublayers.cbegin();
     unsigned m_StartPosition = 0;
+    unsigned m_MaxItemsToShow = 5;
     bool m_ExpandChildren = false;
 };
 

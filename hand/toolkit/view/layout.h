@@ -44,9 +44,6 @@ public:
 
     void SetExpansion(Expansion mode) { m_ExpansionMode = mode; }
 
-    unsigned GetMaxItemsToShow() { return m_MaxItemsToShow; }
-    void SetMaxItemsToShow(unsigned count) { m_MaxItemsToShow = count; }
-
     Orientation GetOrientation() const { return m_Orientation; }
     void SetOrientation(Orientation value) { m_Orientation = value; }
 
@@ -58,8 +55,6 @@ private:
     uint16_t SetSameSize(const std::vector<Field*>& fields, Orientation orientation);
 
     Orientation m_Orientation = Horizontal;
-    unsigned m_MaxItemsToShow = 5;
-
     Expansion m_ExpansionMode = Compact;
 };
 
