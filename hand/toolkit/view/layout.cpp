@@ -39,13 +39,9 @@ bool Layout::IsValid() const
 bool Layout::IsExpanding(Orientation direction)
 {
     for (auto field : m_Fields)
-    {
-        if (!field->IsValid())
-            continue;
-
-        if (field->IsExpanding(direction))
+        if (field->IsValid() && field->IsExpanding(direction))
             return true;
-    }
+
     return false;
 }
 
