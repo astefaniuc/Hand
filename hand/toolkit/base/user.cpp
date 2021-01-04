@@ -43,7 +43,7 @@ User::User(EventHandler* a_input)
         // Show init screen
         Hmi::Item* initView = right->GetInitScreen();
         m_ViewStack.Attach(initView);
-//        m_View.GetExpandedView()->Update();
+        m_View.GetExpandedView()->Update();
         right->SetFocus(initView->GetExpandedView());
     }
 

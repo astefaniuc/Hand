@@ -47,13 +47,14 @@ void Map::Insert(const std::string& name, Layer* child)
     if (!child)
         return;
 
+    m_Sublayers[name] = child;
+    child->SetParent(this);
+
     Field* field = GetLayout()->GetField(name, false);
     if (!field || !field->IsVisible())
         return;
 
     field->SetItem(child);
-    m_Sublayers[name] = child;
-    child->SetParent(this);
     m_IsModified = true;
 }
 

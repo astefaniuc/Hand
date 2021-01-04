@@ -88,23 +88,23 @@ bool Hand::Init()
 bool Hand::SetFocus(Layer* view)
 {
     m_Commands.clear();
-    BindChords(view);
+    view->SetFocus(this);
     return true;
 }
+
+
+void Hand::BindChord(Hmi::Item* item)
+{
+    if (!item->m_Chord.keys.empty())
+        m_Commands[item] = item->m_Chord;
+}
+
 
 void Hand::BindChords(Layer* focus)
 {
     Hmi::Item* method = focus->GetContent();
     if (method && !method->m_Chord.keys.empty())
         m_Commands[method] = method->m_Chord;
-/*
-    Layer* sub = focus->GetFirstChild();
-    while (sub)
-    {
-        BindChords(sub);
-        sub = focus->GetNextChild();
-    }
-    */
 }
 
 

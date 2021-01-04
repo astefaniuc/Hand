@@ -10,6 +10,7 @@
 namespace Hmi { class Item; }
 namespace Layers { class List; }
 class Theme;
+class Hand;
 
 class Layer : public Field::Item
 {
@@ -39,6 +40,8 @@ public:
 
     bool IsModified() { return (m_IsModified || m_ModifiedContent); }
     virtual void Exit(Hmi::Item*);
+
+    virtual void SetFocus(Hand* hand);
 
 protected:
     virtual Drawer* CreatetDrawer() = 0;

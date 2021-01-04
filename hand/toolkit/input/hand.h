@@ -37,6 +37,7 @@ public:
     unsigned GetNumberOfKeys() { return m_NumberOfKeys; }
 
     bool SetFocus(Layer* view);
+    void BindChord(Hmi::Item* item);
 
     /// Finger names.
     static const std::string Finger[5];

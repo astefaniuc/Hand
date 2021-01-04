@@ -20,6 +20,8 @@ public:
     Layout* GetLayout();
     void SetLayout(Layout* layout);
 
+    void SetFocus(Hand* hand) override;
+
     virtual unsigned GetChildCount() const = 0;
     virtual Layer* GetFirstChild() = 0;
     virtual Layer* GetNextChild() = 0;

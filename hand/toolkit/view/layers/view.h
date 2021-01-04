@@ -21,7 +21,8 @@ protected:
 
     Drawer* CreatetDrawer() override;
     Layout* CreateLayout() override;
-//    void SetFocus(to or not to ...?);
+
+    void SetFocus(Hand* hand) override;
 //    void Keep(enum mode)
 
 private:

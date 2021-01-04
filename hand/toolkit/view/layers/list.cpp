@@ -1,4 +1,5 @@
 #include "view/layers/list.h"
+#include "input/hand.h"
 
 
 namespace Layers {
@@ -54,5 +55,17 @@ void List::SetLayout(Layout* a_layout)
     m_Layout = a_layout;
     m_ModifiedContent = true;
 }
+
+
+void List::SetFocus(Hand* hand)
+{
+    Layer* sub = GetFirstChild();
+    while (sub)
+    {
+        hand->BindChord(sub->GetContent());
+        sub = GetNextChild();
+    }
+}
+
 
 }

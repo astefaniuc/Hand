@@ -3,6 +3,7 @@
 #include "data/method.h"
 #include "data/vector.h"
 #include "view/theme.h"
+#include "input/hand.h"
 
 
 namespace Layers {
@@ -27,6 +28,17 @@ void View::Rebuild()
     Insert(VIEW, in->GetView()->GetExpandedView());
     Insert(CONTROL, in->GetControls()->GetExpandedView());
     Insert(LAYER_CONTROLS, m_LayerCommands->GetExpandedView());
+}
+
+
+void View::SetFocus(Hand* hand)
+{
+    Layer* ctrls = GetChild(CONTROL);
+    if (ctrls)
+        ctrls->SetFocus(hand);
+    ctrls = GetChild(LAYER_CONTROLS);
+    if (ctrls)
+        ctrls->SetFocus(hand);
 }
 
 
