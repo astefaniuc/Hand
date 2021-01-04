@@ -20,7 +20,7 @@ public:
     Chord(std::initializer_list<Finger> a_keys = {}) : keys(a_keys) {}
     virtual ~Chord() = default;
 
-    static Chord FullHand() { return Chord({Thumb, Pointer, Middle, Ring, Little}); }
+    static Chord FullHand() { return Chord({ Thumb, Pointer, Middle, Ring, Little }); }
 
     virtual bool IsValid(const Chord& input);
 

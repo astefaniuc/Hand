@@ -29,11 +29,11 @@ public:
     /// Frames are scaled based on this.
     unsigned GetBaseSize();
 
-    Drawer* GetButtonDrawer() override { return new DrawerSdl(this, &m_Buttons); }
-    Drawer* GetDataDrawer() override { return new DrawerSdl(this, &m_Datas); }
-    Drawer* GetListDrawer() override { return new DrawerSdl(this, &m_Lists); }
-    Drawer* GetTextDrawer() override { return new Text(this, &m_Texts); }
-    Drawer* GetViewDrawer() override { return new DrawerSdl(this, &m_Views); }
+    Drawer* GetButtonDrawer() override { return new DrawerSdl(this, m_Buttons); }
+    Drawer* GetDataDrawer() override { return new DrawerSdl(this, m_Datas); }
+    Drawer* GetListDrawer() override { return new DrawerSdl(this, m_Lists); }
+    Drawer* GetTextDrawer() override { return new Text(this, m_Texts); }
+    Drawer* GetViewDrawer() override { return new DrawerSdl(this, m_Views); }
 
 protected:
     // App mode interface
@@ -43,11 +43,11 @@ protected:
     SDL_Rect GetResolution();
 
     Hmi::Vector m_Hmi;
-    Hmi::Map m_Buttons;
-    Hmi::Map m_Datas;
-    Hmi::Map m_Lists;
-    Hmi::Map m_Texts;
-    Hmi::Map m_Views;
+    Hmi::Map* m_Buttons;
+    Hmi::Map* m_Datas;
+    Hmi::Map* m_Lists;
+    Hmi::Map* m_Texts;
+    Hmi::Map* m_Views;
 
     Layer* m_ScreenRoot = nullptr;
     // The whole screen TODO: can we use SDL_GetVideoSurface() instead?

@@ -7,6 +7,9 @@
 
 SDL_Rect Text::ComputeSize(const SDL_Rect& a_content)
 {
+    if (!m_Layer->IsModified())
+        return GetFramedSize(m_Layer->GetSize());
+
     SDL_Rect content = a_content;
     const std::string& text = static_cast<Layers::Text*>(m_Layer)->GetData();
     if (text.empty())
