@@ -18,6 +18,7 @@ public:
     Device* GetDevice(Device::Driver device) override;
     /// Starts timer (infinite loop)
     void Start() override;
+    void Stop() override;
 
     /// Called from C callback
     void Pump();
@@ -27,8 +28,8 @@ private:
     std::vector<DeviceSdl*> m_Devices;
 
     // The queue for system device events
-    SDL_TimerID Timer = nullptr;
-    bool ExecNotFinished = false;
+    SDL_TimerID m_Timer = nullptr;
+    bool m_ExecNotFinished = false;
 };
 
 #endif // HAND_BASE_SDL_EVENTHANDLER_H

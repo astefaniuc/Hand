@@ -1,7 +1,6 @@
 #include "input/sdl/eventhandler.h"
 #include "base/user.h"
 #include "input/sdl/keyboard.h"
-#include <unistd.h>
 
 
 // C callback used in EventHandlerSdl::Start()
@@ -23,24 +22,30 @@ EventHandlerSdl::~EventHandlerSdl()
 void EventHandlerSdl::Start()
 {
     // Start only once
-    if (Timer)
+    if (m_Timer)
         return;
     // 25 pix per sec
     uint32_t interval = 1000/25;
-    Timer = SDL_AddTimer(interval, &PumpCallback, this);
-    if (!Timer)
+    m_Timer = SDL_AddTimer(interval, &PumpCallback, this);
+    if (!m_Timer)
         exit(1);
-    // Stop the main execution line
-    pause();
+}
+
+
+void EventHandlerSdl::Stop()
+{
+    if (!m_Timer)
+        return;
+    SDL_RemoveTimer(m_Timer);
 }
 
 
 void EventHandlerSdl::Pump()
 {
     // Executed 25x per sec
-    if (ExecNotFinished)
+    if (m_ExecNotFinished)
         return;
-    ExecNotFinished = true;
+    m_ExecNotFinished = true;
 
     SDL_Event event;
     while (SDL_PollEvent(&event))
@@ -50,7 +55,7 @@ void EventHandlerSdl::Pump()
 
     // Trigger screen refresh.
     m_User->Update();
-    ExecNotFinished = false;
+    m_ExecNotFinished = false;
 }
 
 

@@ -4,6 +4,7 @@
 
 #define CONTROL "Control"
 #define DESCRIPTION "Description"
+#define EXIT "Exit"
 #define ICON "Icon"
 #define TITLE "Title"
 #define VIEW "View"

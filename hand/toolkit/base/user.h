@@ -19,6 +19,9 @@ public:
     bool LoadApp(Hmi::Note* path);
     void Update();
 
+    void Start();
+    void Stop(Hmi::Item*);
+
 private:
     EventHandler* m_Input;
     ModuleLib* m_ThemeLoader;

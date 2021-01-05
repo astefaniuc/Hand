@@ -16,6 +16,7 @@ public:
     virtual Device* GetDevice(Device::Driver device) = 0;
 
     virtual void Start() = 0;
+    virtual void Stop() = 0;
 };
 
 #endif // HAND_BASE_EVENTHANDLER_H

@@ -19,6 +19,7 @@ int main(int argc, const char *argv[])
             std::cerr << "Error: can't open app '" << app << "'.";
     }
 
+    user.Start();
     // Never reached
     return 0;
 }

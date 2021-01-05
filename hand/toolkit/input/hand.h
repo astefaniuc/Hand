@@ -36,7 +36,9 @@ public:
 
     unsigned GetNumberOfKeys() { return m_NumberOfKeys; }
 
-    bool SetFocus(Layer* view);
+    void SetFocus(Layer* view);
+    void ReleaseFocus(Layer* view);
+
     void BindChord(Hmi::Item* item);
 
     /// Finger names.
@@ -62,6 +64,7 @@ private:
 
     Chord m_Record;
     std::map<Hmi::Item*, Chord> m_Commands;
+    std::vector<Layer*> m_FocusStack;
 
     Hmi::Interface* m_InitScreen = nullptr;
 };

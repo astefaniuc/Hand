@@ -24,9 +24,11 @@ protected:
 
     void SetFocus(Hand* hand) override;
 //    void Keep(enum mode)
+    void Exit(Hmi::Item*) override;
 
 private:
     Hmi::List* m_LayerCommands;
+    Hand* m_Hand = nullptr;
 };
 
 }

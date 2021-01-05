@@ -85,13 +85,24 @@ bool Hand::Init()
 }
 
 
-bool Hand::SetFocus(Layer* view)
+void Hand::SetFocus(Layer* view)
 {
     m_Commands.clear();
+    m_FocusStack.push_back(view);
     view->SetFocus(this);
-    return true;
 }
 
+
+void Hand::ReleaseFocus(Layer* view)
+{
+    if (view == m_FocusStack.back())
+    {
+        m_Commands.clear();
+        m_FocusStack.pop_back();
+        if (m_FocusStack.size())
+            m_FocusStack.back()->SetFocus(this);
+    }
+}
 
 void Hand::BindChord(Hmi::Item* item)
 {
