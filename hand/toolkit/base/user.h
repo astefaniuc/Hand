@@ -3,6 +3,8 @@
 
 #include "data/vector.h"
 #include "data/interface.h"
+#include <mutex>
+#include <condition_variable>
 
 
 class EventHandler;
@@ -30,6 +32,9 @@ private:
     std::vector<ModuleLib*> m_RunningApps;
     Hmi::Interface m_View;
     Hmi::Vector m_ViewStack;
+
+    std::mutex m_Mutex;
+    std::condition_variable m_MainThread;
 };
 
 #endif // HAND_BASE_USER_H

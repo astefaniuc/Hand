@@ -11,7 +11,7 @@ namespace Layers {
 
 View::View()
 {
-    Hmi::Action<View>* exit = new Hmi::Action<View>(EXIT, "Close interface", this, &View::Exit);
+    Hmi::Action<View>* exit = new Hmi::Action<View>(EXIT, "Close interface", this, &View::Quit);
     exit->m_Chord = Chord::FullHand();
 
     m_LayerCommands = new Hmi::Vector(LAYER_CONTROLS, "");
@@ -43,14 +43,14 @@ void View::SetFocus(Hand* hand)
 }
 
 
-void View::Exit(Hmi::Item*)
+void View::Quit(Hmi::Item*)
 {
     if (m_Hand)
     {
         m_Hand->ReleaseFocus(this);
         m_Hand = nullptr;
     }
-    Map::Exit(nullptr);
+    Map::Quit(nullptr);
 }
 
 

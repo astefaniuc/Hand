@@ -20,6 +20,6 @@ int main(int argc, const char *argv[])
     }
 
     user.Start();
-    // Never reached
+
     return 0;
 }

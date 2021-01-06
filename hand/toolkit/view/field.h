@@ -51,12 +51,15 @@ public:
     public:
         virtual ~Item() = default;
 
+        void SetParentField(Field* field);
         virtual Field* GetField(const std::string& name, bool create = true) = 0;
         virtual SDL_Rect ComputeSize(const SDL_Rect& outer) = 0;
         virtual void UpdatePositions(const SDL_Rect& outer) = 0;
         virtual bool IsExpanding(Orientation direction) = 0;
         virtual bool IsValid() const = 0;
         virtual void Exit() = 0;
+    protected:
+        Field* m_Field = nullptr;
     };
 
     Field(const std::string& name) : m_Name(name) {}
@@ -69,6 +72,7 @@ public:
     Field* GetField(const std::string& name) const;
 
     void SetItem(Item* item);
+    void RemoveItem() { m_Item = nullptr; }
 
     void SetVisible(bool visible) { m_IsVisible = visible; }
     bool IsVisible() { return m_IsVisible; }

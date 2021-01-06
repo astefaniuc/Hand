@@ -5,12 +5,17 @@
 #include <assert.h>
 
 
-void Layer::Exit(Hmi::Item*)
+void Layer::Quit(Hmi::Item*)
 {
     if (m_Parent)
+    {
         m_Parent->Remove(this);
-     delete m_Drawer;
-     m_Drawer = nullptr;
+        m_Parent = nullptr;
+    }
+    SetParentField(nullptr);
+
+    delete m_Drawer;
+    m_Drawer = nullptr;
 }
 
 

@@ -15,7 +15,7 @@ class Hand;
 class Layer : public Field::Item
 {
 public:
-    virtual ~Layer() { delete m_Drawer; }
+    virtual ~Layer() { Quit(nullptr); }
 
     // Checks and updates content and triggers a re-draw if needed
     virtual bool Update() = 0;
@@ -39,7 +39,7 @@ public:
     const SDL_Rect& GetSize() const { return m_Size; }
 
     bool IsModified() { return (m_IsModified || m_ModifiedContent); }
-    virtual void Exit(Hmi::Item*);
+    void Exit() final { Quit(nullptr); }
 
     virtual void SetFocus(Hand* hand);
 
@@ -48,11 +48,12 @@ protected:
 
     /// The Field::Item implementation:
     Field* GetField(const std::string& name, bool create = true) final { return nullptr; }
+
     SDL_Rect ComputeSize(const SDL_Rect& outer) override;
     void UpdatePositions(const SDL_Rect& outer) override;
     bool IsExpanding(Orientation direction) override { return false; }
     bool IsValid() const final { return true; }
-    void Exit() final { Exit(nullptr); }
+    virtual void Quit(Hmi::Item*);
 
 
     Layers::List* m_Parent = nullptr;

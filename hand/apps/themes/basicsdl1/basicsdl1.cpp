@@ -62,8 +62,8 @@ BasicSdl1::~BasicSdl1()
     for (auto curr = Fonts.begin(); curr != Fonts.end(); ++curr)
         TTF_CloseFont((*curr).second);
 
-    // TODO: what if multiple SDL themes are loaded?
-    atexit(SDL_Quit);
+    // TODO: we can't call atexit(SDL_Quit) here because it doesn' work from a lib
+    // And what if multiple SDL themes are loaded?
 }
 
 

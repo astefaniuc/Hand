@@ -3,6 +3,7 @@
 
 #include "input/eventhandler.h"
 #include <SDL/SDL.h>
+#include <mutex>
 #include <vector>
 
 
@@ -29,7 +30,7 @@ private:
 
     // The queue for system device events
     SDL_TimerID m_Timer = nullptr;
-    bool m_ExecNotFinished = false;
+    std::mutex m_Execution;
 };
 
 #endif // HAND_BASE_SDL_EVENTHANDLER_H

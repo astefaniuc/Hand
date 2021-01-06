@@ -24,7 +24,7 @@ protected:
 
     void SetFocus(Hand* hand) override;
 //    void Keep(enum mode)
-    void Exit(Hmi::Item*) override;
+    void Quit(Hmi::Item*) override;
 
 private:
     Hmi::List* m_LayerCommands;

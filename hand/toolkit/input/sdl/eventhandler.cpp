@@ -36,6 +36,7 @@ void EventHandlerSdl::Stop()
 {
     if (!m_Timer)
         return;
+    std::unique_lock<std::mutex> lock(m_Execution);
     SDL_RemoveTimer(m_Timer);
 }
 
@@ -43,9 +44,8 @@ void EventHandlerSdl::Stop()
 void EventHandlerSdl::Pump()
 {
     // Executed 25x per sec
-    if (m_ExecNotFinished)
+    if (!m_Execution.try_lock())
         return;
-    m_ExecNotFinished = true;
 
     SDL_Event event;
     while (SDL_PollEvent(&event))
@@ -55,7 +55,7 @@ void EventHandlerSdl::Pump()
 
     // Trigger screen refresh.
     m_User->Update();
-    m_ExecNotFinished = false;
+    m_Execution.unlock();
 }
 
 

@@ -9,7 +9,6 @@
 #include "view/theme.h"
 #include "view/layers/vector.h"
 #include "view/layouts/builtin.h"
-#include <unistd.h>
 
 
 User::User(EventHandler* a_input)
@@ -74,15 +73,17 @@ void User::Start()
 
     m_Input->Start();
     // Stop the main execution line
-    pause();
+    std::unique_lock<std::mutex> lock(m_Mutex);
+    m_MainThread.wait(lock);
+
+    m_Input->Stop();
+    m_View.GetExpandedView()->Exit();
 }
 
 
 void User::Stop(Hmi::Item*)
 {
-    m_Input->Stop();
-    // TODO
-    exit(0);
+    m_MainThread.notify_all();
 }
 
 

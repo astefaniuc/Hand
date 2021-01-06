@@ -34,6 +34,16 @@ void HAlignment::Align(const SDL_Rect& tgt, SDL_Rect& src)
 
 
 
+void Field::Item::SetParentField(Field* field)
+{
+    if (m_Field && (m_Field != field))
+        m_Field->RemoveItem();
+
+    m_Field = field;
+}
+
+
+
 Field::~Field()
 {
     if (m_Item)
@@ -56,6 +66,7 @@ void Field::SetItem(Item* item)
     if (m_Item && (item != m_Item))
         m_Item->Exit();
     m_Item = item;
+    m_Item->SetParentField(this);
 }
 
 
