@@ -39,7 +39,7 @@ public:
     void SetFocus(Layer* view);
     void ReleaseFocus(Layer* view);
 
-    void BindChord(Hmi::Item* item);
+    void BindChord(Layer* layer);
 
     /// Finger names.
     static const std::string Finger[5];

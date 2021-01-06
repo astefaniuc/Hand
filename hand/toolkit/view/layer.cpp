@@ -84,6 +84,6 @@ void Layer::UpdatePositions(const SDL_Rect& outer)
 
 void Layer::SetFocus(Hand* hand)
 {
-    hand->BindChord(m_Data);
+    hand->BindChord(this);
 }
 

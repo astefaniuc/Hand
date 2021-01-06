@@ -77,7 +77,7 @@ void List::SetFocus(Hand* hand)
     Layer* sub = GetFirstChild();
     while (sub)
     {
-        hand->BindChord(sub->GetContent());
+        hand->BindChord(sub);
         sub = GetNextChild();
     }
 }

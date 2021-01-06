@@ -8,7 +8,7 @@ class InputState
 {
 public:
     InputState(unsigned numberOfKeys);
-    virtual ~InputState() {}
+    ~InputState();
 
     // Stores information about pressed keys by moving up the PressedKey ptr
     bool Press(unsigned index);
@@ -19,9 +19,19 @@ public:
 
     StateNode::PeersList* GetCommands(unsigned level);
 
-protected:
+private:
     // Resets "pressed" and "released" information
     void Reset();
+
+    // Graph creation
+
+    void AddNodes(unsigned level, unsigned keyNumber);
+    void ConnectNodes(StateNode* parent, StateNode* child, unsigned pos);
+    // Returns only new nodes of the previous level
+    StateNode* GetParentNode(unsigned level, unsigned pos);
+    StateNode::PeersList* GetPeersList(unsigned level);
+
+    unsigned m_NumberOfKeys = 0;
 
     StateNode* NullKey;
     StateNode* PressedKey;

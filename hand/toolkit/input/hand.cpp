@@ -40,11 +40,11 @@ Hmi::Item* Hand::GetInitScreen()
     if (!m_InitScreen)
     {
         Layouts::Placed::Map* handLayout = new Layouts::Placed::Map();
-        handLayout->SetField("Thumb", { 0.21, 0.6, 0.0, 0.0 });
-        handLayout->SetField("Pointer finger", { 0.3, 0.4, 0.0, 0.0 });
-        handLayout->SetField("Middle finger", { 0.45, 0.39, 0.0, 0.0 });
-        handLayout->SetField("Ring finger", { 0.6, 0.41, 0.0, 0.0 });
-        handLayout->SetField("Little finger", { 0.7, 0.5, 0.0, 0.0 });
+        handLayout->SetField(Finger[Chord::Thumb], { 0.21, 0.6, 0.0, 0.0 });
+        handLayout->SetField(Finger[Chord::Pointer], { 0.3, 0.4, 0.0, 0.0 });
+        handLayout->SetField(Finger[Chord::Middle], { 0.45, 0.39, 0.0, 0.0 });
+        handLayout->SetField(Finger[Chord::Ring], { 0.6, 0.41, 0.0, 0.0 });
+        handLayout->SetField(Finger[Chord::Little], { 0.7, 0.5, 0.0, 0.0 });
 
         Layers::Vector* handLayer = static_cast<Layers::Vector*>(m_KeysHmi->GetExpandedView());
         handLayer->SetLayout(handLayout);
@@ -104,8 +104,10 @@ void Hand::ReleaseFocus(Layer* view)
     }
 }
 
-void Hand::BindChord(Hmi::Item* item)
+
+void Hand::BindChord(Layer* layer)
 {
+    Hmi::Item* item = layer->GetContent();
     if (!item->m_Chord.keys.empty())
         m_Commands[item] = item->m_Chord;
 }
