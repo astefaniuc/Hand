@@ -81,12 +81,6 @@ void User::Start()
 }
 
 
-void User::Stop(Hmi::Item*)
-{
-    m_MainThread.notify_all();
-}
-
-
 bool User::LoadApp(Hmi::Note* a_path)
 {
     ModuleLib* app = new ModuleLib();
