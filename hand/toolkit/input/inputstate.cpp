@@ -26,7 +26,6 @@ InputState::~InputState()
 
 bool InputState::Press(unsigned k)
 {
-
     PressedKey = ReleasedKey = ReleasedKey->GetChild(k);
     if (!PressedKey)
     {
@@ -53,12 +52,6 @@ bool InputState::Release(unsigned k)
         Reset();
 
     return true;
-}
-
-
-void InputState::Reset()
-{
-    PressedKey = ReleasedKey = NullKey;
 }
 
 

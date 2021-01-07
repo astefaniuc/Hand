@@ -82,5 +82,4 @@ void List::SetFocus(Hand* hand)
     }
 }
 
-
 }

@@ -20,8 +20,7 @@ public:
     StateNode::PeersList* GetCommands(unsigned level);
 
 private:
-    // Resets "pressed" and "released" information
-    void Reset();
+    void Reset() { PressedKey = ReleasedKey = NullKey; }
 
     // Graph creation
 
