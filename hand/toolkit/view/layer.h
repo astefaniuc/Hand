@@ -41,7 +41,8 @@ public:
     bool IsModified() { return (m_IsModified || m_ModifiedContent); }
     void Exit() final { Quit(nullptr); }
 
-    virtual void SetFocus(Hand* hand);
+    virtual void SetFocus(Hand* hand) {}
+    virtual void SetControl(Layer* ctrl) {}
 
 protected:
     virtual Drawer* CreatetDrawer() = 0;

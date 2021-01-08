@@ -9,7 +9,6 @@ namespace Layers {
 void Button::Rebuild()
 {
     Map::Rebuild();
-    // TODO: m_Control
 }
 
 

@@ -5,6 +5,7 @@
 #include "data/interface.h"
 #include "view/layer.h"
 #include "view/layers/vector.h"
+#include "view/layers/text.h"
 #include "view/layouts/placed.h"
 #include "view/layouts/builtin.h"
 
@@ -105,11 +106,15 @@ void Hand::ReleaseFocus(Layer* view)
 }
 
 
-void Hand::BindChord(Layer* layer)
+Layer* Hand::BindChord(Layer* layer)
 {
     Hmi::Item* item = layer->GetContent();
     if (!item->m_Chord.keys.empty())
-        m_Commands[item] = item->m_Chord;
+    {
+        m_Commands[layer] = item->m_Chord;
+        return GetLayer(item->m_Chord);
+    }
+    return nullptr;
 }
 
 
@@ -117,7 +122,22 @@ void Hand::BindChords(Layer* focus)
 {
     Hmi::Item* method = focus->GetContent();
     if (method && !method->m_Chord.keys.empty())
-        m_Commands[method] = method->m_Chord;
+        m_Commands[focus] = method->m_Chord;
+}
+
+
+Layer* Hand::GetLayer(Chord& chord)
+{
+    std::string shrtct;
+    int last = int(chord.keys.size()) - 1;
+    for (size_t i = 0; i < chord.keys.size(); ++i)
+    {
+        shrtct += GetKey(chord.keys[i])->GetValue();
+        if (i < last)
+            shrtct += "+";
+    }
+
+    return new Layers::Text(shrtct);
 }
 
 
@@ -162,7 +182,7 @@ bool Hand::Release(int k)
         {
             if (command.second.IsValid(m_Record))
             {
-                command.first->Activate();
+                command.first->GetContent()->Activate();
                 break;
             }
         }

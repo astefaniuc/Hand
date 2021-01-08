@@ -1,7 +1,6 @@
 #include "view/layer.h"
 #include "view/layers/list.h"
 #include "view/theme.h"
-#include "input/hand.h"
 #include <assert.h>
 
 
@@ -79,11 +78,5 @@ SDL_Rect Layer::ComputeSize(const SDL_Rect& outer)
 void Layer::UpdatePositions(const SDL_Rect& outer)
 {
     m_Size = GetDrawer()->GetContentSize(outer);
-}
-
-
-void Layer::SetFocus(Hand* hand)
-{
-    hand->BindChord(this);
 }
 

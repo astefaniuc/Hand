@@ -39,7 +39,7 @@ public:
     void SetFocus(Layer* view);
     void ReleaseFocus(Layer* view);
 
-    void BindChord(Layer* layer);
+    Layer* BindChord(Layer* layer);
 
     /// Finger names.
     static const std::string Finger[5];
@@ -54,6 +54,7 @@ private:
     void DeleteKey(unsigned index);
 
     void BindChords(Layer* focus);
+    Layer* GetLayer(Chord& chord);
 
     // Number of controls
     unsigned m_NumberOfKeys = NUMBER_OF_BUTTONS;
@@ -63,7 +64,7 @@ private:
     InputState* m_InputState = nullptr;
 
     Chord m_Record;
-    std::map<Hmi::Item*, Chord> m_Commands;
+    std::map<Layer*, Chord> m_Commands;
     std::vector<Layer*> m_FocusStack;
 
     Hmi::Interface* m_InitScreen = nullptr;
