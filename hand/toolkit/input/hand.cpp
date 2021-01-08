@@ -128,6 +128,7 @@ Layer* Hand::AddControl(Layer* layer)
             if (shrtct->GetParent(i))
                 chord.keys.push_back(Chord::Finger(i));
 
+        m_Commands[layer] = chord;
         return GetLayer(chord);
     }
 
