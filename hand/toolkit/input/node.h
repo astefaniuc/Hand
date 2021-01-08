@@ -4,6 +4,8 @@
 #include <vector>
 
 
+class Layer;
+
 class StateNode
 {
 public:
@@ -22,6 +24,9 @@ public:
 
     PeersList* GetPeersList() { return m_Peers; }
 
+    bool Assign(Layer* layer);
+    bool Clear(Layer* layer);
+
 private:
     struct Link
     {
@@ -30,6 +35,8 @@ private:
     };
     std::vector<Link> m_Links;
     PeersList* m_Peers;
+
+    Layer* m_Layer = nullptr;
 };
 
 

@@ -89,6 +89,8 @@ bool Hand::Init()
 void Hand::SetFocus(Layer* view)
 {
     m_Commands.clear();
+    if (m_FocusStack.size())
+        m_FocusStack.back()->ReleaseFocus(this);
     m_FocusStack.push_back(view);
     view->SetFocus(this);
 }
@@ -106,7 +108,7 @@ void Hand::ReleaseFocus(Layer* view)
 }
 
 
-Layer* Hand::BindChord(Layer* layer)
+Layer* Hand::AddControl(Layer* layer)
 {
     Hmi::Item* item = layer->GetContent();
     if (!item->m_Chord.keys.empty())
@@ -114,15 +116,31 @@ Layer* Hand::BindChord(Layer* layer)
         m_Commands[layer] = item->m_Chord;
         return GetLayer(item->m_Chord);
     }
+
+    StateNode::PeersList& cmds = *m_InputState->GetCommands(1);
+    for (StateNode* shrtct : cmds)
+    {
+        if (!shrtct->Assign(layer))
+            continue;
+
+        Chord chord;
+        for (unsigned i = 0; i < m_NumberOfKeys; ++i)
+            if (shrtct->GetParent(i))
+                chord.keys.push_back(Chord::Finger(i));
+
+        return GetLayer(chord);
+    }
+
     return nullptr;
 }
 
 
-void Hand::BindChords(Layer* focus)
+void Hand::RemoveControl(Layer* button)
 {
-    Hmi::Item* method = focus->GetContent();
-    if (method && !method->m_Chord.keys.empty())
-        m_Commands[focus] = method->m_Chord;
+    StateNode::PeersList& cmds = *m_InputState->GetCommands(1);
+    for (StateNode* shrtct : cmds)
+        if (shrtct->Clear(button))
+            return;
 }
 
 

@@ -77,7 +77,19 @@ void List::SetFocus(Hand* hand)
     Layer* sub = GetFirstChild();
     while (sub)
     {
-        sub->SetControl(hand->BindChord(sub));
+        sub->SetControl(hand->AddControl(sub));
+        sub = GetNextChild();
+    }
+}
+
+
+void List::ReleaseFocus(Hand* hand)
+{
+    Layer* sub = GetFirstChild();
+    while (sub)
+    {
+        sub->RemoveControl();
+        hand->RemoveControl(sub);
         sub = GetNextChild();
     }
 }

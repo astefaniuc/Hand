@@ -39,7 +39,8 @@ public:
     void SetFocus(Layer* view);
     void ReleaseFocus(Layer* view);
 
-    Layer* BindChord(Layer* layer);
+    Layer* AddControl(Layer* button);
+    void RemoveControl(Layer* button);
 
     /// Finger names.
     static const std::string Finger[5];
@@ -53,7 +54,6 @@ private:
     void AddKey(int key_id);
     void DeleteKey(unsigned index);
 
-    void BindChords(Layer* focus);
     Layer* GetLayer(Chord& chord);
 
     // Number of controls

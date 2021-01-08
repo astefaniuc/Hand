@@ -42,7 +42,10 @@ public:
     void Exit() final { Quit(nullptr); }
 
     virtual void SetFocus(Hand* hand) {}
+    virtual void ReleaseFocus(Hand* hand) {}
+
     virtual void SetControl(Layer* ctrl) {}
+    virtual void RemoveControl() {}
 
 protected:
     virtual Drawer* CreatetDrawer() = 0;

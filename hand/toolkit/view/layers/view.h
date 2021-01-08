@@ -23,6 +23,7 @@ protected:
     Layout* CreateLayout() override;
 
     void SetFocus(Hand* hand) override;
+    void ReleaseFocus(Hand* hand) override;
 //    void Keep(enum mode)
     void Quit(Hmi::Item*) override;
 

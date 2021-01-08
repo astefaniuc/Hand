@@ -21,6 +21,7 @@ public:
     void SetLayout(Layout* layout);
 
     void SetFocus(Hand* hand) override;
+    void ReleaseFocus(Hand* hand) override;
 
     virtual unsigned GetChildCount() const = 0;
     virtual Layer* GetFirstChild() = 0;

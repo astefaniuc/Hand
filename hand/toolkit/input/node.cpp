@@ -54,3 +54,23 @@ StateNode* StateNode::GetFirstChild() const
     // Never happens
     return nullptr;
 }
+
+
+bool StateNode::Assign(Layer* layer)
+{
+    if (m_Layer)
+        return false;
+
+    m_Layer = layer;
+    return true;
+}
+
+
+bool StateNode::Clear(Layer* layer)
+{
+    if (m_Layer != layer)
+        return false;
+
+    m_Layer = nullptr;
+    return true;
+}

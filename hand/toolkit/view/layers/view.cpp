@@ -43,6 +43,18 @@ void View::SetFocus(Hand* hand)
 }
 
 
+void View::ReleaseFocus(Hand* hand)
+{
+    Layer* ctrls = GetChild(CONTROL);
+    if (ctrls)
+        ctrls->ReleaseFocus(hand);
+    ctrls = GetChild(LAYER_CONTROLS);
+    if (ctrls)
+        ctrls->ReleaseFocus(hand);
+    m_Hand = nullptr;
+}
+
+
 void View::Quit(Hmi::Item*)
 {
     if (m_Hand)

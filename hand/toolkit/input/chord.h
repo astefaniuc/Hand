@@ -16,6 +16,11 @@ public:
         Ring,
         Little
     };
+    enum Match
+    {
+        Exactly,
+        Pressed,
+    };
 
     Chord(std::initializer_list<Finger> a_keys = {}) : keys(a_keys) {}
     virtual ~Chord() = default;
