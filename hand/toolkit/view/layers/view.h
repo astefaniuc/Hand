@@ -6,6 +6,7 @@
 
 namespace Layers {
 
+class ListView;
 
 /// The View is a composed Layer, managing the basic layout and theme.
 /// For the sub-layers, the main command list is mandatory; other layers may be
@@ -15,8 +16,10 @@ class View : public Map
 {
 public:
     View();
+    ~View();
 
 protected:
+    void SetContent(Hmi::Item* data) override;
     void Rebuild() override;
 
     Drawer* CreatetDrawer() override;
@@ -29,6 +32,8 @@ protected:
 
 private:
     Hmi::List* m_LayerCommands;
+    ListView* m_Controls;
+
     Hand* m_Hand = nullptr;
 };
 

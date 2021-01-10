@@ -1,4 +1,5 @@
 #include "view/layers/view.h"
+#include "view/layers/listview.h"
 #include "data/interface.h"
 #include "data/method.h"
 #include "data/vector.h"
@@ -16,6 +17,22 @@ View::View()
 
     m_LayerCommands = new Hmi::Vector(LAYER_CONTROLS, "");
     m_LayerCommands->Add(exit);
+
+    m_Controls = new ListView();
+}
+
+
+View::~View()
+{
+//    delete m_LayerCommands;
+    delete m_Controls;
+}
+
+
+void View::SetContent(Hmi::Item* data)
+{
+    m_Controls->SetContent(static_cast<Hmi::Interface*>(data)->GetControls());
+    Layer::SetContent(data);
 }
 
 
@@ -26,7 +43,7 @@ void View::Rebuild()
     Hmi::Interface* in = static_cast<Hmi::Interface*>(m_Data);
 
     Insert(VIEW, in->GetView()->GetExpandedView());
-    Insert(CONTROL, in->GetControls()->GetExpandedView());
+    Insert(CONTROL, m_Controls);
     Insert(LAYER_CONTROLS, m_LayerCommands->GetExpandedView());
 }
 

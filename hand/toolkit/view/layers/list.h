@@ -39,6 +39,7 @@ protected:
     bool IsExpanding(Orientation direction) override {
         return GetLayout()->IsExpanding(direction);
     }
+
     void Quit(Hmi::Item*) override;
 
 private:

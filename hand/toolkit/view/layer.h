@@ -5,6 +5,7 @@
 #include "input/chord.h"
 #include "view/field.h"
 #include <SDL/SDL.h> // TODO: remove SDL dependency here
+#include <iostream>
 
 
 namespace Hmi { class Item; }
@@ -46,6 +47,7 @@ public:
 
     virtual void SetControl(Layer* ctrl) {}
     virtual void RemoveControl() {}
+
 
 protected:
     virtual Drawer* CreatetDrawer() = 0;

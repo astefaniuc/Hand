@@ -23,6 +23,12 @@ Layout* CreateData()
 }
 
 
+Layout* CreateListView()
+{
+    return SplitH(LAYER_CONTROLS, VIEW);
+}
+
+
 Layout* CreateView()
 {
     List* ret = new List();

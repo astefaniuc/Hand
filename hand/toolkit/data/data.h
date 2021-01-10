@@ -59,6 +59,8 @@ protected:
     Layer* CreateExpandedView() override;
     Layer* CreateButtonView() override;
 
+    void ConnectButton(Layer* view) override;
+
     Persistence* m_Storage = nullptr;
 
     Listeners m_DataChanged;

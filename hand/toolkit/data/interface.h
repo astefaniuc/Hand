@@ -29,6 +29,9 @@ public:
 
 private:
     Layer* CreateExpandedView() override;
+    void ConnectButton(Layer* view) override;
+
+    //void ShowExpandedView(
 };
 
 }

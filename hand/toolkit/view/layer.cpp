@@ -1,7 +1,6 @@
 #include "view/layer.h"
 #include "view/layers/list.h"
 #include "view/theme.h"
-#include <assert.h>
 
 
 void Layer::Quit(Hmi::Item*)
@@ -29,8 +28,6 @@ void Layer::Draw(SDL_Surface* buffer)
 
 void Layer::SetContent(Hmi::Item* data)
 {
-    // Layer-Data is a lifelong 1:1 relation.
-    assert(!m_Data);
     m_Data = data;
     m_ModifiedContent = true;
 }

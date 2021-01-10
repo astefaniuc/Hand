@@ -38,9 +38,8 @@ private:
 };
 
 
-class Layer;
 class Chord;
-
+class Layer;
 
 namespace Hmi {
 
@@ -80,6 +79,7 @@ public:
     Layer* GetButtonView();
     void SetButtonView(Layer* layer);
 
+    virtual void ConnectButton(Layer* view) {}
 
     void SetSelected(bool isSelected);
     bool IsSelected() const { return m_IsSelected; }

@@ -5,21 +5,6 @@
 namespace Layers {
 
 
-void List::Quit(Hmi::Item*)
-{
-    Layer* sub = GetFirstChild();
-    while (sub)
-    {
-        // Don't break iterators:
-        sub->SetParent(nullptr);
-
-        sub->Exit();
-        sub = GetNextChild();
-    }
-    Layer::Quit(nullptr);
-}
-
-
 bool List::Update()
 {
     if (m_ModifiedContent && m_Data)
@@ -92,6 +77,21 @@ void List::ReleaseFocus(Hand* hand)
         hand->RemoveControl(sub);
         sub = GetNextChild();
     }
+}
+
+
+void List::Quit(Hmi::Item*)
+{
+    Layer* sub = GetFirstChild();
+    while (sub)
+    {
+        // Don't break iterators:
+        sub->SetParent(nullptr);
+
+        sub->Exit();
+        sub = GetNextChild();
+    }
+    Layer::Quit(nullptr);
 }
 
 }

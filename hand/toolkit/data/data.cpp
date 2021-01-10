@@ -38,4 +38,11 @@ Layer* Data::CreateButtonView()
     return new Layers::Data();
 }
 
+void Data::ConnectButton(Layer* view)
+{
+    if (m_Manipulator)
+    {
+        // TODO ...
+    }
+}
 }

@@ -69,7 +69,10 @@ void Vector::AddLayer(Hmi::Item* data)
     if (m_ExpandChildren)
         Insert(data->GetExpandedView());
     else
+    {
         Insert(data->GetButtonView());
+        data->ConnectButton(this);
+    }
 }
 
 

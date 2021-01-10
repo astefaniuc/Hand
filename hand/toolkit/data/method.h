@@ -19,15 +19,11 @@ public:
         CallbackOwner* obj, TCallback func)
         : Item(name, description)
     {
-        m_Method = new CCallback<CallbackOwner>(obj, func);
-        AddActivationClient(m_Method);
+        AddActivationClient(new CCallback<CallbackOwner>(obj, func));
     }
-    ~Action() { delete m_Method; }
 
 private:
     Layer* CreateExpandedView() override { return new Layers::Button(); }
-
-    CCallback<CallbackOwner>* m_Method;
 };
 
 }

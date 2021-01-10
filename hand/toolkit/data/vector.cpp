@@ -1,6 +1,7 @@
 #include "data/vector.h"
-#include "view/layers/vector.h"
 #include "view/layers/button.h"
+#include "view/layers/listview.h"
+#include "view/layers/vector.h"
 
 
 namespace Hmi {
@@ -9,6 +10,22 @@ namespace Hmi {
 Layer* List::CreateButtonView()
 {
     return new Layers::Button();
+}
+
+
+void List::ConnectButton(Layer* view)
+{
+    Layers::ListView* lv = dynamic_cast<Layers::ListView*>(view->GetParent());
+    if (lv)
+    {
+        if (m_ButtonActivation)
+        {
+            RemoveActivationClient(m_ButtonActivation);
+            delete m_ButtonActivation;
+        }
+        m_ButtonActivation = new CCallback<Layer>(lv, &Layer::SetContent);
+        AddActivationClient(m_ButtonActivation);
+    }
 }
 
 
@@ -49,8 +66,13 @@ Item* Vector::GetChild(const std::string& name) const
 void Vector::Clear()
 {
     for (Item* item : m_Value)
+    {
         if (item->GetParent() == this)
+        {
+            item->SetParent(nullptr);
             delete item;
+        }
+    }
 
     m_Value.clear();
 }
@@ -60,5 +82,6 @@ Layer* Vector::CreateExpandedView()
 {
     return new Layers::Vector();
 }
+
 
 }
