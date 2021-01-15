@@ -38,6 +38,8 @@ protected:
     Layout* CreateLayout() override { return new Layouts::List(); }
 
 private:
+    void ClearContainer() override { m_Sublayers.clear(); }
+
     std::vector<Layer*> m_Sublayers;
     std::vector<Layer*>::const_iterator m_CurrentChild = m_Sublayers.cbegin();
     unsigned m_StartPosition = 0;

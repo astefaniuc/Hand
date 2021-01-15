@@ -21,7 +21,7 @@ protected:
     Drawer* CreatetDrawer() override { return GetTheme()->GetTextDrawer(); }
 
     // Terminal layer. TODO: remove this from base class.
-    bool Update() override { return false; }
+    void Rebuild() override {}
 
 private:
     std::string m_Text;

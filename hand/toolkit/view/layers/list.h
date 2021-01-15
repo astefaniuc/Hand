@@ -13,15 +13,11 @@ class List : public Layer
 public:
     ~List() { delete m_Layout; }
 
-    bool Update() override;
-    /// Rebuild sub-layer structure on content or layout changes.
-    virtual void Rebuild() = 0;
-
     Layout* GetLayout();
     void SetLayout(Layout* layout);
 
-    void SetFocus(Hand* hand) override;
-    void ReleaseFocus(Hand* hand) override;
+    void UpdateFocus() override;
+    void ClearFocus() override;
 
     virtual unsigned GetChildCount() const = 0;
     virtual Layer* GetFirstChild() = 0;
@@ -40,9 +36,11 @@ protected:
         return GetLayout()->IsExpanding(direction);
     }
 
-    void Quit(Hmi::Item*) override;
+    void Clear(Hmi::Item*) override;
 
 private:
+    virtual void ClearContainer() = 0;
+
     Layout* m_Layout = nullptr;
 };
 

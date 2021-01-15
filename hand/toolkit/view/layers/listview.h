@@ -17,20 +17,19 @@ public:
 
     void SetContent(Hmi::Item* data) override;
 
+    void UpdateFocus() override;
+    void ClearFocus() override;
+
 protected:
     void Rebuild() override;
 
     Drawer* CreatetDrawer() override;
     Layout* CreateLayout() override;
 
-    void SetFocus(Hand* hand) override;
-    void ReleaseFocus(Hand* hand) override;
-
 private:
     Hmi::List* m_LayerCommands = nullptr;
 //    Vector m_List;
     std::vector<Hmi::Item*> m_ViewStack;
-    Hand* m_Hand = nullptr;
 };
 
 }

@@ -27,7 +27,8 @@ public:
 protected:
     void Rebuild() override;
     void SetControl(Layer* ctrl) override { Insert(CONTROL, ctrl); }
-    void RemoveControl() override { Remove(GetChild(CONTROL)); }
+    void RemoveControl() override;
+    void ClearContainer() override { m_Sublayers.clear(); }
 
     std::map<std::string, Layer*> m_Sublayers;
     std::map<std::string, Layer*>::const_iterator m_CurrentChild = m_Sublayers.cbegin();

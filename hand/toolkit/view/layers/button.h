@@ -11,8 +11,6 @@ namespace Layers {
 class Button : public Map
 {
 protected:
-    void Rebuild() override;
-
     Drawer* CreatetDrawer() override;
     Layout* CreateLayout() override { return Layouts::CreateButton(); }
 };

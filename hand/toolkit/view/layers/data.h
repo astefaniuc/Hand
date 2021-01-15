@@ -19,7 +19,7 @@ protected:
     Layout* CreateLayout() override { return Layouts::CreateData(); }
 
     /// Callback.
-    void NotifyChanged(Hmi::Item*) { m_ModifiedContent = true; }
+    void NotifyChanged(Hmi::Item*) { SetModifiedContent(); }
 
     Text m_DataText;
 };

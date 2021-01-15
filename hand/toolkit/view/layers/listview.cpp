@@ -13,16 +13,8 @@ ListView::ListView()
 
 void ListView::SetContent(Hmi::Item* data)
 {
-    Hand* tmp = m_Hand;
-    if (tmp && m_ViewStack.size())
-        ReleaseFocus(tmp);
-
     m_ViewStack.push_back(data);
-    Layer::SetContent(data);
-    Update();
-
-    if (tmp)
-        SetFocus(tmp);
+    List::SetContent(data);
 }
 
 
@@ -30,34 +22,33 @@ void ListView::Rebuild()
 {
     Map::Rebuild();
 
-    Hmi::List* in = static_cast<Hmi::List*>(m_Data);
-
-    Insert(VIEW, in->GetExpandedView());
+    Insert(VIEW, m_Data->GetExpandedView());
     Insert(LAYER_CONTROLS, m_LayerCommands->GetExpandedView());
 }
 
 
-void ListView::SetFocus(Hand* hand)
+void ListView::UpdateFocus()
 {
-    m_Hand = hand;
-    Layer* ctrls = GetChild(VIEW);
-    if (ctrls)
-        ctrls->SetFocus(hand);
-    ctrls = GetChild(LAYER_CONTROLS);
-    if (ctrls)
-        ctrls->SetFocus(hand);
+    if (m_Data)
+    {
+        Layer* data = m_Data->GetExpandedView();
+        data->SetFocus(m_Hand);
+        if (!data->IsVisible())
+            data->Update();
+    }
+
+    Layer* layerCmds = m_LayerCommands->GetExpandedView();
+    layerCmds->SetFocus(m_Hand);
+    if (!layerCmds->IsVisible())
+        layerCmds->Update();
 }
 
 
-void ListView::ReleaseFocus(Hand* hand)
+void ListView::ClearFocus()
 {
-    Layer* ctrls = GetChild(VIEW);
-    if (ctrls)
-        ctrls->ReleaseFocus(hand);
-    ctrls = GetChild(LAYER_CONTROLS);
-    if (ctrls)
-        ctrls->ReleaseFocus(hand);
-    m_Hand = nullptr;
+    if (m_Data)
+        m_Data->GetExpandedView()->ReleaseFocus(m_Hand);
+    m_LayerCommands->GetExpandedView()->ReleaseFocus(m_Hand);
 }
 
 

@@ -55,7 +55,7 @@ void Map::Insert(const std::string& name, Layer* child)
         return;
 
     field->SetItem(child);
-    m_IsModified = true;
+    SetModified();
 }
 
 
@@ -66,10 +66,17 @@ void Map::Remove(Layer* child)
         if (it->second == child)
         {
             m_Sublayers.erase(it);
-            m_IsModified = true;
+            SetModified();
             return;
         }
     }
+}
+
+void Map::RemoveControl()
+{
+    Layer* ctrl = GetChild(CONTROL);
+    ctrl->Exit();
+    delete ctrl;
 }
 
 

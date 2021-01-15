@@ -52,6 +52,8 @@ public:
         virtual ~Item() = default;
 
         void SetParentField(Field* field);
+        Field* GetParentField() { return m_Field; }
+
         virtual Field* GetField(const std::string& name, bool create = true) = 0;
         virtual SDL_Rect ComputeSize(const SDL_Rect& outer) = 0;
         virtual void UpdatePositions(const SDL_Rect& outer) = 0;

@@ -4,6 +4,8 @@
 #include "view/layers/map.h"
 
 
+namespace Hmi { class Vector; }
+
 namespace Layers {
 
 class ListView;
@@ -18,6 +20,8 @@ public:
     View();
     ~View();
 
+    void AddOnExit(ICallback* cb);
+
 protected:
     void SetContent(Hmi::Item* data) override;
     void Rebuild() override;
@@ -25,16 +29,15 @@ protected:
     Drawer* CreatetDrawer() override;
     Layout* CreateLayout() override;
 
-    void SetFocus(Hand* hand) override;
-    void ReleaseFocus(Hand* hand) override;
+    void UpdateFocus() override;
+    void ClearFocus() override;
+
 //    void Keep(enum mode)
     void Quit(Hmi::Item*) override;
 
 private:
-    Hmi::List* m_LayerCommands;
+    Hmi::Vector* m_LayerCommands;
     ListView* m_Controls;
-
-    Hand* m_Hand = nullptr;
 };
 
 }

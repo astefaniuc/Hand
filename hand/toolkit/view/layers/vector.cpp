@@ -81,7 +81,7 @@ Layer* Vector::Insert(Layer* a_child)
     GetLayout()->GetField(a_child->GetContent()->GetName())->SetItem(a_child);
     m_Sublayers.push_back(a_child);
     a_child->SetParent(this);
-    m_IsModified = true;
+    SetModified();
     return a_child;
 }
 
@@ -93,7 +93,7 @@ void Vector::Remove(Layer* a_child)
         if (m_Sublayers[i] == a_child)
         {
             m_Sublayers.erase(m_Sublayers.begin() + i);
-            m_IsModified = true;
+            SetModified();
             return;
         }
     }
@@ -111,7 +111,7 @@ void Vector::SetExpandChildren(bool expand)
     if (m_ExpandChildren != expand)
     {
         m_ExpandChildren = expand;
-        m_ModifiedContent = true;
+        SetModifiedContent();
     }
 }
 

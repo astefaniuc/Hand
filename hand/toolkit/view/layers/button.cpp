@@ -6,12 +6,6 @@
 namespace Layers {
 
 
-void Button::Rebuild()
-{
-    Map::Rebuild();
-}
-
-
 Drawer* Button::CreatetDrawer()
 {
     return GetTheme()->GetButtonDrawer();

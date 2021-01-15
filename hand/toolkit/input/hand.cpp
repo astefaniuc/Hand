@@ -88,7 +88,6 @@ bool Hand::Init()
 
 void Hand::SetFocus(Layer* view)
 {
-    m_Commands.clear();
     if (m_FocusStack.size())
         m_FocusStack.back()->ReleaseFocus(this);
     m_FocusStack.push_back(view);
@@ -100,7 +99,6 @@ void Hand::ReleaseFocus(Layer* view)
 {
     if (view == m_FocusStack.back())
     {
-        m_Commands.clear();
         m_FocusStack.pop_back();
         if (m_FocusStack.size())
             m_FocusStack.back()->SetFocus(this);
@@ -111,7 +109,7 @@ void Hand::ReleaseFocus(Layer* view)
 Layer* Hand::AddControl(Layer* layer)
 {
     Hmi::Item* item = layer->GetContent();
-    if (!item->m_Chord.keys.empty())
+    if (item && !item->m_Chord.keys.empty())
     {
         m_Commands[layer] = item->m_Chord;
         return GetLayer(item->m_Chord);
@@ -138,6 +136,7 @@ Layer* Hand::AddControl(Layer* layer)
 
 void Hand::RemoveControl(Layer* button)
 {
+    m_Commands.erase(m_Commands.find(button));
     StateNode::PeersList& cmds = *m_InputState->GetCommands(1);
     for (StateNode* shrtct : cmds)
         if (shrtct->Clear(button))

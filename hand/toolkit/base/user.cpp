@@ -8,6 +8,7 @@
 #include "input/inputstate.h"
 #include "view/theme.h"
 #include "view/layers/vector.h"
+#include "view/layers/view.h"
 #include "view/layouts/builtin.h"
 
 
@@ -40,7 +41,6 @@ User::User(EventHandler* a_input)
     m_View.AttachControl(theme->GetHmi());
 
     m_Hands.push_back(new Hand(m_Input->GetDevice(Device::Keyboard)));
-    baseView->Update();
     m_Hands[0]->SetFocus(baseView);
 
     m_Input->SetUser(this);
@@ -58,16 +58,14 @@ User::~User()
 
 void User::Start()
 {
-    static_cast<Layers::List*>(static_cast<Layers::List*>(m_View.GetExpandedView())->
-        GetChild(LAYER_CONTROLS))->GetChild(EXIT)->GetContent()->AddActivationClient(
-            new CCallback<User>(this, &User::Stop));
+    static_cast<Layers::View*>(m_View.GetExpandedView())->
+        AddOnExit(new CCallback<User>(this, &User::Stop));
 
     if (!m_Hands[0]->Init())
     {
         // Show init screen
         Hmi::Item* initView = m_Hands[0]->GetInitScreen();
         m_ViewStack.Attach(initView);
-        initView->GetExpandedView()->Update();
         m_Hands[0]->SetFocus(initView->GetExpandedView());
     }
 
@@ -90,7 +88,6 @@ bool User::LoadApp(Hmi::Note* a_path)
         m_RunningApps.push_back(app);
         Hmi::Item* hmi = app->GetHmi();
         m_ViewStack.Attach(hmi);
-        hmi->GetExpandedView()->Update();
         m_Hands[0]->SetFocus(hmi->GetExpandedView());
         return true;
     }
@@ -102,6 +99,5 @@ bool User::LoadApp(Hmi::Note* a_path)
 
 void User::Update()
 {
-    m_View.GetExpandedView()->Update();
     m_View.GetExpandedView()->GetTheme()->UpdateScreen();
 }

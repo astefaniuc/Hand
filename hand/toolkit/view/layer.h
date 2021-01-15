@@ -16,10 +16,10 @@ class Hand;
 class Layer : public Field::Item
 {
 public:
-    virtual ~Layer() { Quit(nullptr); }
+    virtual ~Layer() {}
 
     // Checks and updates content and triggers a re-draw if needed
-    virtual bool Update() = 0;
+    void Update();
     void Draw(SDL_Surface* buffer);
 
     // Methods to (re-)set links to external objects:
@@ -40,16 +40,27 @@ public:
     const SDL_Rect& GetSize() const { return m_Size; }
 
     bool IsModified() { return (m_IsModified || m_ModifiedContent); }
-    void Exit() final { Quit(nullptr); }
+    void SetModified();
 
-    virtual void SetFocus(Hand* hand) {}
-    virtual void ReleaseFocus(Hand* hand) {}
+    void Exit() final { Quit(nullptr); }
+    virtual void Clear(Hmi::Item*) {}
+
+    void SetFocus(Hand* hand);
+    void ReleaseFocus(Hand* hand);
 
     virtual void SetControl(Layer* ctrl) {}
     virtual void RemoveControl() {}
 
+    bool IsVisible() { return (m_Field && m_Field->IsVisible()); }
 
 protected:
+    virtual void UpdateFocus() {}
+    virtual void ClearFocus() {}
+
+    void SetModifiedContent();
+    /// Rebuild sub-layer structure on content or layout changes.
+    virtual void Rebuild() = 0;
+
     virtual Drawer* CreatetDrawer() = 0;
 
     /// The Field::Item implementation:
@@ -70,7 +81,9 @@ protected:
     SDL_Rect m_Size = { 0, 0, 0, 0 };
 
     Hmi::Item* m_Data = nullptr;
+    Hand* m_Hand = nullptr;
 
+private:
     bool m_ModifiedContent = false;
     bool m_IsModified = true;
 };

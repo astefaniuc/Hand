@@ -5,23 +5,10 @@
 namespace Layers {
 
 
-bool List::Update()
-{
-    if (m_ModifiedContent && m_Data)
-        Rebuild();
-
-    Layer* sub = GetFirstChild();
-    while (sub)
-    {
-        m_IsModified |= sub->Update();
-        sub = GetNextChild();
-    }
-    return m_IsModified;
-}
-
-
 SDL_Rect List::ComputeSize(const SDL_Rect& outer)
 {
+    Update();
+
     SDL_Rect ret = GetDrawer()->ComputeSize(
         GetLayout()->ComputeSize(GetDrawer()->GetContentSize(outer)));
 
@@ -53,34 +40,35 @@ void List::SetLayout(Layout* a_layout)
 {
     delete m_Layout;
     m_Layout = a_layout;
-    m_ModifiedContent = true;
+    SetModifiedContent();
 }
 
 
-void List::SetFocus(Hand* hand)
+void List::UpdateFocus()
 {
     Layer* sub = GetFirstChild();
     while (sub)
     {
-        sub->SetControl(hand->AddControl(sub));
+        sub->Update();
+        sub->SetControl(m_Hand->AddControl(sub));
         sub = GetNextChild();
     }
 }
 
 
-void List::ReleaseFocus(Hand* hand)
+void List::ClearFocus()
 {
     Layer* sub = GetFirstChild();
     while (sub)
     {
         sub->RemoveControl();
-        hand->RemoveControl(sub);
+        m_Hand->RemoveControl(sub);
         sub = GetNextChild();
     }
 }
 
 
-void List::Quit(Hmi::Item*)
+void List::Clear(Hmi::Item*)
 {
     Layer* sub = GetFirstChild();
     while (sub)
@@ -91,7 +79,7 @@ void List::Quit(Hmi::Item*)
         sub->Exit();
         sub = GetNextChild();
     }
-    Layer::Quit(nullptr);
+    ClearContainer();
 }
 
 }

@@ -28,7 +28,7 @@ public:
 
     void Execute(Hmi::Item* caller) final
     {
-        if(m_Object && m_Function)
+        if (m_Object && m_Function)
             (m_Object->*m_Function)(caller);
     }
 
