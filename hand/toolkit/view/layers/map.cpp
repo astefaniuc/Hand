@@ -4,13 +4,6 @@
 namespace Layers {
 
 
-Map::~Map()
-{
-    for (auto entry : m_Sublayers)
-        entry.second->SetParent(nullptr);
-}
-
-
 Layer* Map::GetFirstChild()
 {
     m_CurrentChild = m_Sublayers.cbegin();

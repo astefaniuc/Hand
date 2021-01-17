@@ -3,6 +3,8 @@
 
 Layout::~Layout()
 {
+    SetParentField(nullptr);
+
     for (auto field : m_Fields)
         delete field;
 }

@@ -34,6 +34,7 @@ void Vector::Add(Item* child)
 {
     child->SetParent(this);
     m_Value.push_back(child);
+    NotifyChanged();
 }
 
 
@@ -46,7 +47,8 @@ void Vector::Remove(Item* child)
     {
         if (m_Value[i] == child)
         {
-            m_Value.erase(m_Value.begin() + 1);
+            m_Value.erase(m_Value.begin() + i);
+            NotifyChanged();
             return;
         }
     }
@@ -75,6 +77,7 @@ void Vector::Clear()
     }
 
     m_Value.clear();
+    NotifyChanged();
 }
 
 

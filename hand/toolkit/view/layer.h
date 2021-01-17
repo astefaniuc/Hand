@@ -72,6 +72,9 @@ protected:
     bool IsValid() const final { return true; }
     virtual void Quit(Hmi::Item*);
 
+    /// Callback.
+    void OnNotifyChanged(Hmi::Item*) { SetModifiedContent(); }
+
 
     Layers::List* m_Parent = nullptr;
     Theme* m_Theme = nullptr;
@@ -84,6 +87,7 @@ protected:
     Hand* m_Hand = nullptr;
 
 private:
+    ICallback* m_DataChanged = nullptr;
     bool m_ModifiedContent = false;
     bool m_IsModified = true;
 };

@@ -38,7 +38,7 @@ void View::AddOnExit(ICallback* cb)
 void View::SetContent(Hmi::Item* data)
 {
     m_Controls->SetContent(static_cast<Hmi::Interface*>(data)->GetControls());
-    Layer::SetContent(data);
+    Map::SetContent(data);
 }
 
 

@@ -93,7 +93,6 @@ public:
         RemoveCallback(client, m_SelectionChange);
     }
 
-
     void Activate() { Execute(m_Activation); }
     void AddActivationClient(ICallback* client)
     {
@@ -102,6 +101,15 @@ public:
     void RemoveActivationClient(ICallback* client)
     {
         RemoveCallback(client, m_Activation);
+    }
+
+    void AddDataChangedClient(ICallback* client)
+    {
+        m_DataChanged.push_back(client);
+    }
+    void RemoveDataChangedClient(ICallback* client)
+    {
+        RemoveCallback(client, m_DataChanged);
     }
 
     // Layout options
@@ -120,6 +128,8 @@ protected:
     virtual Layer* CreateExpandedView() = 0;
     virtual Layer* CreateButtonView();
 
+    void NotifyChanged() { Execute(m_DataChanged); }
+
 private:
     std::string m_Name;
     std::string m_Info;
@@ -131,6 +141,7 @@ private:
 
     Listeners m_SelectionChange;
     Listeners m_Activation;
+    Listeners m_DataChanged;
 };
 
 }

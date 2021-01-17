@@ -26,8 +26,11 @@ protected:
     Drawer* CreatetDrawer() override;
     Layout* CreateLayout() override;
 
+    void Back(Hmi::Item*);
+
 private:
     Hmi::List* m_LayerCommands = nullptr;
+    Hmi::Item* m_Back = nullptr;
 //    Vector m_List;
     std::vector<Hmi::Item*> m_ViewStack;
 };

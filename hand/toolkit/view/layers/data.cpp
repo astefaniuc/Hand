@@ -6,14 +6,6 @@
 namespace Layers {
 
 
-void Data::SetContent(Hmi::Item* data)
-{
-    Layer::SetContent(data);
-    ((Hmi::Data*)data)->AddDataChangedClient(
-        new CCallback<Data>(this, &Data::NotifyChanged));
-}
-
-
 void Data::Rebuild()
 {
     Map::Rebuild();

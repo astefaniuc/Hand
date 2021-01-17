@@ -8,8 +8,6 @@ namespace Hmi {
 Data::~Data()
 {
     delete m_Manipulator;
-    for (ICallback* ic : m_DataChanged)
-        delete ic;
 }
 
 

@@ -8,6 +8,7 @@ void Map::Add(const std::string& key, Item* child)
 {
     child->SetParent(this);
     m_Value[key] = child;
+    NotifyChanged();
 }
 
 
@@ -21,6 +22,8 @@ void Map::Remove(Item* child)
         if (it->second == child)
         {
             m_Value.erase(it);
+            NotifyChanged();
+
             return;
         }
     }
@@ -51,10 +54,16 @@ Item* Map::GetChild(unsigned pos)
 void Map::Clear()
 {
     for (auto item : m_Value)
+    {
         if (item.second->GetParent() == this)
+        {
+            item.second->SetParent(nullptr);
             delete item.second;
+        }
+    }
 
     m_Value.clear();
+    NotifyChanged();
 }
 
 }

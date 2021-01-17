@@ -36,17 +36,6 @@ public:
     ~Data();
 
     virtual std::string GetValueString() = 0;
-
-    /// The callback is executed whenever the selection changes.
-    void AddDataChangedClient(ICallback* client)
-    {
-        m_DataChanged.push_back(client);
-    }
-    void RemoveDataChangedClient(ICallback* client)
-    {
-        RemoveCallback(client, m_DataChanged);
-    }
-
     /// Deletes a previously stored manipulator.
     void SetManipulator(Module* manipulator);
     Module* GetManipulator() { return m_Manipulator; }
@@ -63,7 +52,6 @@ protected:
 
     Persistence* m_Storage = nullptr;
 
-    Listeners m_DataChanged;
     Module* m_Manipulator = nullptr;
 };
 
@@ -111,7 +99,7 @@ public:
             return false;
 
         m_Value = val;
-        Execute(m_DataChanged);
+        NotifyChanged();
         return true;
     }
     bool operator=(const DataType& val) { return SetValue(val); }

@@ -80,6 +80,7 @@ void List::Clear(Hmi::Item*)
         sub = GetNextChild();
     }
     ClearContainer();
+    SetModifiedContent();
 }
 
 }

@@ -1,5 +1,6 @@
 #include "view/layers/listview.h"
 #include "view/layouts/builtin.h"
+#include "data/method.h"
 
 
 namespace Layers {
@@ -13,8 +14,13 @@ ListView::ListView()
 
 void ListView::SetContent(Hmi::Item* data)
 {
+    if (m_Data && !m_Back)
+    {
+        m_Back = new Hmi::Action<ListView>("Back", "Previous list", this, &ListView::Back);
+        m_LayerCommands->Add(m_Back);
+    }
     m_ViewStack.push_back(data);
-    List::SetContent(data);
+    Map::SetContent(data);
 }
 
 
@@ -54,5 +60,17 @@ void ListView::ClearFocus()
 
 Drawer* ListView::CreatetDrawer() { return GetTheme()->GetViewDrawer(); }
 Layout* ListView::CreateLayout() { return Layouts::CreateListView(); }
+
+
+void ListView::Back(Hmi::Item*)
+{
+    m_ViewStack.pop_back();
+    Map::SetContent(m_ViewStack.back());
+    if (m_ViewStack.size() == 1)
+    {
+        delete m_Back;
+        m_Back = nullptr;
+    }
+}
 
 }

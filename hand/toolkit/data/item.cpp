@@ -9,11 +9,6 @@ namespace Hmi {
 
 Item::~Item()
 {
-    for (ICallback* ic : m_SelectionChange)
-        delete ic;
-    for (ICallback* ic : m_Activation)
-        delete ic;
-
     if (m_Parent)
     {
         List* tmp = m_Parent;
@@ -23,6 +18,13 @@ Item::~Item()
 
     delete m_ExpandedView;
     delete m_ButtonView;
+
+    for (ICallback* ic : m_SelectionChange)
+        delete ic;
+    for (ICallback* ic : m_Activation)
+        delete ic;
+    for (ICallback* ic : m_DataChanged)
+        delete ic;
 }
 
 

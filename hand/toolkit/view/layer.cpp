@@ -6,6 +6,10 @@
 void Layer::Quit(Hmi::Item*)
 {
     SetParentField(nullptr);
+    if (m_Data && m_DataChanged)
+        m_Data->RemoveDataChangedClient(m_DataChanged);
+    delete m_DataChanged;
+    m_DataChanged = nullptr;
 
     if (m_Parent)
     {
@@ -27,6 +31,12 @@ void Layer::Draw(SDL_Surface* buffer)
 
 void Layer::SetContent(Hmi::Item* data)
 {
+    if (m_Data)
+        m_Data->RemoveDataChangedClient(m_DataChanged);
+    if (!m_DataChanged)
+        m_DataChanged = new CCallback<Layer>(this, &Layer::OnNotifyChanged);
+
+    data->AddDataChangedClient(m_DataChanged);
     SetModifiedContent();
     m_Data = data;
 }

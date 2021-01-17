@@ -12,7 +12,8 @@ namespace Layers {
 class Map : public List
 {
 public:
-    ~Map();
+    ~Map() { Exit(); }
+
 
     unsigned GetChildCount() const override { return m_Sublayers.size(); }
     Layer* GetFirstChild() override;
