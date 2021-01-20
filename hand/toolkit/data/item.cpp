@@ -25,6 +25,8 @@ Item::~Item()
         delete ic;
     for (ICallback* ic : m_DataChanged)
         delete ic;
+
+    delete m_Shortcut;
 }
 
 
@@ -92,6 +94,20 @@ void Item::SetButtonView(Layer* layer)
 Layer* Item::CreateButtonView()
 {
     return new Layers::Button();
+}
+
+
+void Item::SetShortcut(Chord* chord)
+{
+    delete m_Shortcut;
+    m_Shortcut = chord;
+}
+
+
+void Item::SetControl(Chord* chord)
+{
+    // TODO checking?
+    m_Control = chord;
 }
 
 }

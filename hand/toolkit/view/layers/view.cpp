@@ -13,7 +13,7 @@ namespace Layers {
 View::View()
 {
     Hmi::Action<View>* exit = new Hmi::Action<View>(EXIT, "Close interface", this, &View::Quit);
-    exit->m_Chord = Chord::FullHand();
+    exit->SetShortcut(Chord::FullHand());
 
     m_LayerCommands = new Hmi::Vector(LAYER_CONTROLS, "");
     m_LayerCommands->Add(exit);

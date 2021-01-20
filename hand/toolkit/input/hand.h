@@ -4,7 +4,6 @@
 #include "base/module.h"
 #include "data/vector.h"
 #include "input/chord.h"
-#include <map>
 #include <vector>
 
 
@@ -39,8 +38,11 @@ public:
     void SetFocus(Layer* view);
     void ReleaseFocus(Layer* view);
 
-    Layer* AddControl(Layer* button);
-    void RemoveControl(Layer* button);
+    void AddControl(Hmi::Item* item);
+    void RemoveControl(Hmi::Item* item);
+
+    // Returns the Key symbol at specified position
+    Hmi::Note* GetKey(unsigned index);
 
     /// Finger names.
     static const std::string Finger[5];
@@ -49,12 +51,8 @@ private:
     // Returns the key number
     int GetKeyIndex(int keyId);
 
-    // Returns the Key symbol at specified position
-    Hmi::Note* GetKey(unsigned index);
     void AddKey(int key_id);
     void DeleteKey(unsigned index);
-
-    Layer* GetLayer(Chord& chord);
 
     // Number of controls
     unsigned m_NumberOfKeys = NUMBER_OF_BUTTONS;
@@ -64,7 +62,7 @@ private:
     InputState* m_InputState = nullptr;
 
     Chord m_Record;
-    std::map<Layer*, Chord> m_Commands;
+    std::vector<Chord*> m_Commands;
     std::vector<Layer*> m_FocusStack;
 
     Hmi::Interface* m_InitScreen = nullptr;

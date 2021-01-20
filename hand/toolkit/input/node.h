@@ -5,6 +5,7 @@
 
 
 class Layer;
+class Chord;
 
 class StateNode
 {
@@ -12,6 +13,7 @@ public:
     typedef std::vector<StateNode*> PeersList;
 
     StateNode(unsigned size, PeersList* peers);
+    ~StateNode();
 
     void SetParent(StateNode* parent, unsigned pos);
     /// Returns the sub-node at given position if it's a parent
@@ -24,8 +26,7 @@ public:
 
     PeersList* GetPeersList() { return m_Peers; }
 
-    bool Assign(Layer* layer);
-    bool Clear(Layer* layer);
+    Chord* GetChord();
 
 private:
     struct Link
@@ -36,7 +37,7 @@ private:
     std::vector<Link> m_Links;
     PeersList* m_Peers;
 
-    Layer* m_Layer = nullptr;
+    Chord* m_Chord = nullptr;
 };
 
 

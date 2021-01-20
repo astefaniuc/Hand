@@ -8,6 +8,7 @@
 #include "view/layers/text.h"
 #include "view/layouts/placed.h"
 #include "view/layouts/builtin.h"
+#include <algorithm>
 
 
 const std::string Hand::Finger[] = {
@@ -107,56 +108,41 @@ void Hand::ReleaseFocus(Layer* view)
 }
 
 
-Layer* Hand::AddControl(Layer* layer)
+void Hand::AddControl(Hmi::Item* item)
 {
-    Hmi::Item* item = layer->GetContent();
-    if (item && !item->m_Chord.keys.empty())
+    if (item && item->GetShortcut())
     {
-        m_Commands[layer] = item->m_Chord;
-        return GetLayer(item->m_Chord);
+        Chord* chord = item->GetShortcut();
+        if (!chord->keys.empty())
+        {
+            chord->Assign(item);
+            m_Commands.push_back(chord);
+            return item->SetControl(chord);
+        }
     }
 
     StateNode::PeersList& cmds = *m_InputState->GetCommands(1);
     for (StateNode* shrtct : cmds)
     {
-        if (!shrtct->Assign(layer))
+        Chord* chord = shrtct->GetChord();
+        if (!chord->Assign(item))
             continue;
 
-        Chord chord;
-        for (unsigned i = 0; i < m_NumberOfKeys; ++i)
-            if (shrtct->GetParent(i))
-                chord.keys.push_back(Chord::Finger(i));
-
-        m_Commands[layer] = chord;
-        return GetLayer(chord);
+        m_Commands.push_back(chord);
+        return item->SetControl(chord);
     }
-
-    return nullptr;
 }
 
 
-void Hand::RemoveControl(Layer* button)
+void Hand::RemoveControl(Hmi::Item* item)
 {
-    m_Commands.erase(m_Commands.find(button));
-    StateNode::PeersList& cmds = *m_InputState->GetCommands(1);
-    for (StateNode* shrtct : cmds)
-        if (shrtct->Clear(button))
-            return;
-}
-
-
-Layer* Hand::GetLayer(Chord& chord)
-{
-    std::string shrtct;
-    int last = int(chord.keys.size()) - 1;
-    for (size_t i = 0; i < chord.keys.size(); ++i)
+    auto it = std::find(m_Commands.begin(), m_Commands.end(), item->GetControl());
+    if (it != m_Commands.end())
     {
-        shrtct += GetKey(chord.keys[i])->GetValue();
-        if (i < last)
-            shrtct += "+";
+        (*it)->Clear(item);
+        item->SetControl(nullptr);
+        m_Commands.erase(it);
     }
-
-    return new Layers::Text(shrtct);
 }
 
 
@@ -199,9 +185,9 @@ bool Hand::Release(int k)
     {
         for (auto command : m_Commands)
         {
-            if (command.second.IsValid(m_Record))
+            if (command->IsValid(m_Record))
             {
-                command.first->GetContent()->Activate();
+                command->GetItem()->Activate();
                 break;
             }
         }

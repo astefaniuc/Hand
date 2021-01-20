@@ -5,6 +5,10 @@
 #include <initializer_list>
 
 
+class Layer;
+class Hand;
+namespace Hmi { class Item; }
+
 class Chord
 {
 public:
@@ -25,11 +29,21 @@ public:
     Chord(std::initializer_list<Finger> a_keys = {}) : keys(a_keys) {}
     virtual ~Chord() = default;
 
-    static Chord FullHand() { return Chord({ Thumb, Pointer, Middle, Ring, Little }); }
+    static Chord* FullHand() { return new Chord({ Thumb, Pointer, Middle, Ring, Little }); }
 
     virtual bool IsValid(const Chord& input);
 
+    bool Assign(Hmi::Item* item);
+    Hmi::Item* GetItem() const { return m_Item; }
+    bool Clear(Hmi::Item* item);
+
+    Layer* GetLayer(Hand* hand);
+
     std::vector<Finger> keys;
+
+private:
+    Hmi::Item* m_Item = nullptr;
+    Layer* m_Layer = nullptr;
 };
 
 #endif // HAND_INPUT_CHORD_H

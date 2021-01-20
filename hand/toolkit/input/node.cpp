@@ -1,12 +1,18 @@
 #include "input/node.h"
+#include "input/chord.h"
 
 
 StateNode::StateNode(unsigned size, PeersList* peers)
     : m_Links(size),
       m_Peers(peers)
 {
-    // Adds itself to the peers list
     m_Peers->push_back(this);
+}
+
+
+StateNode::~StateNode()
+{
+    delete m_Chord;
 }
 
 
@@ -56,21 +62,14 @@ StateNode* StateNode::GetFirstChild() const
 }
 
 
-bool StateNode::Assign(Layer* layer)
+Chord* StateNode::GetChord()
 {
-    if (m_Layer)
-        return false;
-
-    m_Layer = layer;
-    return true;
-}
-
-
-bool StateNode::Clear(Layer* layer)
-{
-    if (m_Layer != layer)
-        return false;
-
-    m_Layer = nullptr;
-    return true;
+    if (!m_Chord)
+    {
+        m_Chord = new Chord();
+        for (unsigned i = 0; i < m_Links.size(); ++i)
+            if (GetParent(i))
+                m_Chord->keys.push_back(Chord::Finger(i));
+    }
+    return m_Chord;
 }

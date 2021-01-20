@@ -38,7 +38,6 @@ private:
 };
 
 
-class Chord;
 class Layer;
 
 namespace Hmi {
@@ -112,12 +111,17 @@ public:
         RemoveCallback(client, m_DataChanged);
     }
 
+    // Persistent chord suggestion, this item assumes the ownership.
+    Chord* GetShortcut() const { return m_Shortcut; }
+    void SetShortcut(Chord* chord);
+    // Active chord, external ownership.
+    Chord* GetControl() const { return m_Control; }
+    void SetControl(Chord* chord);
+
     // Layout options
 
     /// You can keep HmiItems in the closer focus while the user descends into details.
     void SetVisualKeepLevel(int level);
-
-    Chord m_Chord;
 
 protected:
     typedef std::vector<ICallback*> Listeners;
@@ -142,6 +146,9 @@ private:
     Listeners m_SelectionChange;
     Listeners m_Activation;
     Listeners m_DataChanged;
+
+    Chord* m_Shortcut = nullptr;
+    Chord* m_Control = nullptr;
 };
 
 }
