@@ -4,34 +4,16 @@
 namespace Layers {
 
 
-Layer* Map::GetFirstChild()
-{
-    m_CurrentChild = m_Sublayers.cbegin();
-    if (m_CurrentChild != m_Sublayers.cend())
-        return m_CurrentChild->second;
-    return nullptr;
-}
-
-
-Layer* Map::GetNextChild()
-{
-    ++m_CurrentChild;
-    if (m_CurrentChild != m_Sublayers.cend())
-        return m_CurrentChild->second;
-    return nullptr;
-}
-
-
 void Map::Rebuild()
 {
-    m_Sublayers.clear();
-
     m_Name.SetData(m_Data->GetName());
     m_Info.SetData(m_Data->GetInfo());
 
     Insert(TITLE, &m_Name);
     if (!m_Data->GetInfo().empty())
         Insert(DESCRIPTION, &m_Info);
+    if (m_Control)
+        Insert(CONTROL, m_Control);
 }
 
 
@@ -40,11 +22,8 @@ void Map::Insert(const std::string& name, Layer* child)
     if (!child)
         return;
 
-    m_Sublayers[name] = child;
-    child->SetParent(this);
-
     Field* field = GetLayout()->GetField(name, false);
-    if (!field || !field->IsVisible())
+    if (!field)
         return;
 
     field->SetItem(child);
@@ -52,33 +31,11 @@ void Map::Insert(const std::string& name, Layer* child)
 }
 
 
-void Map::Remove(Layer* child)
-{
-    for (auto it = m_Sublayers.begin(); it != m_Sublayers.end(); ++it)
-    {
-        if (it->second == child)
-        {
-            m_Sublayers.erase(it);
-            SetModified();
-            return;
-        }
-    }
-}
-
 void Map::RemoveControl()
 {
-    Layer* ctrl = GetChild(CONTROL);
-    ctrl->Exit();
-    delete ctrl;
-}
-
-
-Layer* Map::GetChild(const std::string& name) const
-{
-    auto it = m_Sublayers.find(name);
-    if (it != m_Sublayers.end())
-        return it->second;
-    return nullptr;
+    m_Control->Exit();
+    delete m_Control;
+    m_Control = nullptr;
 }
 
 }

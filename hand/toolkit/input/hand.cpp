@@ -99,6 +99,7 @@ void Hand::ReleaseFocus(Layer* view)
 {
     if (view == m_FocusStack.back())
     {
+        view->ReleaseFocus(this);
         m_FocusStack.pop_back();
         if (m_FocusStack.size())
             m_FocusStack.back()->SetFocus(this);

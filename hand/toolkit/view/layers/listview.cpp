@@ -20,6 +20,7 @@ void ListView::SetContent(Hmi::Item* data)
         m_LayerCommands->Add(m_Back);
     }
     m_ViewStack.push_back(data);
+    m_DataControls.SetContent(data);
     Map::SetContent(data);
 }
 
@@ -28,32 +29,23 @@ void ListView::Rebuild()
 {
     Map::Rebuild();
 
-    Insert(VIEW, m_Data->GetExpandedView());
+    Insert(VIEW, &m_DataControls);
     Insert(LAYER_CONTROLS, m_LayerCommands->GetExpandedView());
 }
 
 
-void ListView::UpdateFocus()
+bool ListView::UpdateFocus()
 {
-    if (m_Data)
-    {
-        Layer* data = m_Data->GetExpandedView();
-        data->SetFocus(m_Hand);
-        if (!data->IsVisible())
-            data->Update();
-    }
+    m_DataControls.SetFocus(m_Hand);
+    m_LayerCommands->GetExpandedView()->SetFocus(m_Hand);
 
-    Layer* layerCmds = m_LayerCommands->GetExpandedView();
-    layerCmds->SetFocus(m_Hand);
-    if (!layerCmds->IsVisible())
-        layerCmds->Update();
+    return false;
 }
 
 
 void ListView::ClearFocus()
 {
-    if (m_Data)
-        m_Data->GetExpandedView()->ReleaseFocus(m_Hand);
+    m_DataControls.ReleaseFocus(m_Hand);
     m_LayerCommands->GetExpandedView()->ReleaseFocus(m_Hand);
 }
 
@@ -66,6 +58,7 @@ void ListView::Back(Hmi::Item*)
 {
     m_ViewStack.pop_back();
     Map::SetContent(m_ViewStack.back());
+    m_DataControls.SetContent(m_Data);
     if (m_ViewStack.size() == 1)
     {
         delete m_Back;

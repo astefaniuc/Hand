@@ -17,7 +17,7 @@ public:
 
     void SetContent(Hmi::Item* data) override;
 
-    void UpdateFocus() override;
+    bool UpdateFocus() override;
     void ClearFocus() override;
 
 protected:
@@ -31,7 +31,7 @@ protected:
 private:
     Hmi::List* m_LayerCommands = nullptr;
     Hmi::Item* m_Back = nullptr;
-//    Vector m_List;
+    Vector m_DataControls;
     std::vector<Hmi::Item*> m_ViewStack;
 };
 

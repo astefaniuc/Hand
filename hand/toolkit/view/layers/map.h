@@ -14,28 +14,17 @@ class Map : public List
 public:
     ~Map() { Exit(); }
 
-
-    unsigned GetChildCount() const override { return m_Sublayers.size(); }
-    Layer* GetFirstChild() override;
-    Layer* GetNextChild() override;
-
     /// Returns 'sub'.
     void Insert(const std::string& field, Layer* sub);
-    void Remove(Layer* sub) override;
-
-    Layer* GetChild(const std::string& name) const override;
 
 protected:
     void Rebuild() override;
-    void SetControl(Layer* ctrl) override { Insert(CONTROL, ctrl); }
+    void SetControl(Layer* ctrl) override { m_Control = ctrl; SetModifiedContent(); }
     void RemoveControl() override;
-    void ClearContainer() override { m_Sublayers.clear(); }
-
-    std::map<std::string, Layer*> m_Sublayers;
-    std::map<std::string, Layer*>::const_iterator m_CurrentChild = m_Sublayers.cbegin();
 
     Text m_Name;
     Text m_Info;
+    Layer* m_Control = nullptr;
 };
 
 }

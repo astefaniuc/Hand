@@ -7,6 +7,7 @@ namespace Layers {
 
 SDL_Rect List::ComputeSize(const SDL_Rect& outer)
 {
+    GetLayout();
     Update();
 
     SDL_Rect ret = GetDrawer()->ComputeSize(
@@ -31,7 +32,7 @@ void List::UpdatePositions(const SDL_Rect& outer)
 Layout* List::GetLayout()
 {
     if (!m_Layout)
-        m_Layout = CreateLayout();
+        SetLayout(CreateLayout());
      return m_Layout;
 }
 
@@ -40,46 +41,51 @@ void List::SetLayout(Layout* a_layout)
 {
     delete m_Layout;
     m_Layout = a_layout;
+    m_Layout->SetLayer(this);
     SetModifiedContent();
 }
 
 
-void List::UpdateFocus()
+void List::Update()
 {
-    Layer* sub = GetFirstChild();
-    while (sub)
-    {
-        sub->Update();
-        sub->SetControl(m_Hand->AddControl(sub));
-        sub = GetNextChild();
-    }
+    if (m_Layout)
+        Layer::Update();
+}
+
+
+bool List::UpdateFocus()
+{
+    // Layer* sub = GetFirstChild();
+    // while (sub)
+    // {
+    //     sub->SetControl(m_Hand->AddControl(sub));
+    //     sub = GetNextChild();
+    // }
+    return false;
 }
 
 
 void List::ClearFocus()
 {
-    Layer* sub = GetFirstChild();
-    while (sub)
-    {
-        sub->RemoveControl();
-        m_Hand->RemoveControl(sub);
-        sub = GetNextChild();
-    }
+    // Layer* sub = GetFirstChild();
+    // while (sub)
+    // {
+    //     sub->RemoveControl();
+    //     m_Hand->RemoveControl(sub);
+    //     sub = GetNextChild();
+    // }
 }
 
 
-void List::Clear(Hmi::Item*)
+void List::Clear()
 {
-    Layer* sub = GetFirstChild();
-    while (sub)
+    if (m_Hand && !m_UpdateFocus)
     {
-        // Don't break iterators:
-        sub->SetParent(nullptr);
-
-        sub->Exit();
-        sub = GetNextChild();
+        ClearFocus();
+        m_UpdateFocus = true;
     }
-    ClearContainer();
+
+    GetLayout()->Clear();
     SetModifiedContent();
 }
 

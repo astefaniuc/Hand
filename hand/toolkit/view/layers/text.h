@@ -17,6 +17,8 @@ public:
     void SetData(const std::string& text);
     const std::string& GetData() { return m_Text; }
 
+    void DrawContent(SDL_Surface*) override {}
+
 protected:
     Drawer* CreatetDrawer() override { return GetTheme()->GetTextDrawer(); }
 

@@ -15,7 +15,7 @@ Layer* List::CreateButtonView()
 
 void List::ConnectButton(Layer* view)
 {
-    Layers::ListView* lv = dynamic_cast<Layers::ListView*>(view->GetParent());
+    Layers::ListView* lv = dynamic_cast<Layers::ListView*>(view->GetParentLayer());
     if (lv)
     {
         if (m_ButtonActivation)
@@ -33,6 +33,13 @@ void List::ConnectButton(Layer* view)
 void Vector::Add(Item* child)
 {
     child->SetParent(this);
+    m_Value.push_back(child);
+    NotifyChanged();
+}
+
+
+void Vector::Attach(Item* child)
+{
     m_Value.push_back(child);
     NotifyChanged();
 }

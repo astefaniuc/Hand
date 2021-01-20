@@ -9,9 +9,16 @@ class Layout : public Field::Item
 public:
     virtual ~Layout();
 
-
     Field* GetField(const std::string& name, bool create = true) override;
-    void SetField(Field* field) { m_Fields.push_back(field); }
+    void SetField(Field* field);
+
+    Field::Item* GetItem(const std::string& name);
+
+    Layout* GetLayout() override { return this; }
+    Layers::List* GetLayer() override;
+    void SetLayer(Layers::List* parent);
+
+    void SetTheme(Theme* theme) override;
 
     bool IsValid() const;
     bool IsExpanding(Orientation direction) override;
@@ -19,10 +26,14 @@ public:
     /// Returns the vector size.
     unsigned GetValidFields(std::vector<Field*>& out);
 
+    void Draw(SDL_Surface* buffer) final;
+
     void Exit() override { delete this; }
+    void Clear() override;
 
 protected:
     std::vector<Field*> m_Fields;
+    Layers::List* m_Layer = nullptr;
 };
 
 

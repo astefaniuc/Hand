@@ -13,18 +13,17 @@ class List : public Layer
 public:
     ~List() { delete m_Layout; }
 
-    Layout* GetLayout();
+    Layout* GetLayout() override;
     void SetLayout(Layout* layout);
 
-    void UpdateFocus() override;
+    Layers::List* GetLayer() override { return this; }
+
+    void Update() override;
+
+    bool UpdateFocus() override;
     void ClearFocus() override;
 
-    virtual unsigned GetChildCount() const = 0;
-    virtual Layer* GetFirstChild() = 0;
-    virtual Layer* GetNextChild() = 0;
-    virtual Layer* GetChild(const std::string& name) const = 0;
-
-    virtual void Remove(Layer* sub) = 0;
+    void DrawContent(SDL_Surface* buffer) override { GetLayout()->Draw(buffer); }
 
 protected:
     virtual Layout* CreateLayout() = 0;
@@ -36,11 +35,9 @@ protected:
         return GetLayout()->IsExpanding(direction);
     }
 
-    void Clear(Hmi::Item*) override;
+    void Clear() override;
 
 private:
-    virtual void ClearContainer() = 0;
-
     Layout* m_Layout = nullptr;
 };
 

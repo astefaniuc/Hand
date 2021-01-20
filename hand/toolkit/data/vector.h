@@ -20,7 +20,7 @@ public:
     /// Insert a child item and assume ownership of it.
     void Add(Item* child) override;
     /// Insert a child item without assuming ownership of it.
-    void Attach(Item* child) override { m_Value.push_back(child); }
+    void Attach(Item* child) override;
     /// Removes the item from the children list. Owned children are destroyed.
     void Remove(Item* child) override;
 

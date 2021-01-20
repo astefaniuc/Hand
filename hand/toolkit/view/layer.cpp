@@ -3,22 +3,24 @@
 #include "view/theme.h"
 
 
+Layer::~Layer()
+{
+    // if (m_Data && m_DataCb)
+    // {
+    //     m_Data->RemoveDataChangedClient(m_DataCb);
+    //     std::cout << "del: " << m_DataCb << std::endl;
+    // }
+
+//    delete m_DataCb;
+}
+
+
 void Layer::Quit(Hmi::Item*)
 {
     SetParentField(nullptr);
-    if (m_Data && m_DataChanged)
-        m_Data->RemoveDataChangedClient(m_DataChanged);
-    delete m_DataChanged;
-    m_DataChanged = nullptr;
-
-    if (m_Parent)
-    {
-        m_Parent->Remove(this);
-        m_Parent = nullptr;
-    }
     delete m_Drawer;
     m_Drawer = nullptr;
-    Clear(nullptr);
+    Clear();
 }
 
 
@@ -32,20 +34,30 @@ void Layer::Draw(SDL_Surface* buffer)
 void Layer::SetContent(Hmi::Item* data)
 {
     if (m_Data)
-        m_Data->RemoveDataChangedClient(m_DataChanged);
-    if (!m_DataChanged)
-        m_DataChanged = new CCallback<Layer>(this, &Layer::OnNotifyChanged);
+    {
+        m_Data->RemoveDataChangedClient(m_DataCb);
+        std::cout << "rem: " << m_DataCb << std::endl;
+    }
+    Clear();
 
-    data->AddDataChangedClient(m_DataChanged);
+    if (!m_DataCb)
+        m_DataCb = new CCallback<Layer>(this, &Layer::OnNotifyChanged);
+
+    data->AddDataChangedClient(m_DataCb);
     SetModifiedContent();
+
     m_Data = data;
 }
 
 
-void Layer::SetTheme(Theme* a_theme)
+void Layer::SetTheme(Theme* theme)
 {
-    delete m_Theme;
-    m_Theme = a_theme;
+    m_Theme = theme;
+    if (m_Theme && m_Drawer)
+        SetDrawer(CreatetDrawer());
+
+    if (GetLayout())
+        GetLayout()->SetTheme(theme);
 }
 
 
@@ -53,7 +65,7 @@ Theme* Layer::GetTheme()
 {
     if (m_Theme)
         return m_Theme;
-    return GetParent()->GetTheme();
+    return GetParentLayer()->GetTheme();
 }
 
 
@@ -77,8 +89,9 @@ Drawer* Layer::GetDrawer()
 
 void Layer::SetModified()
 {
-    if (m_Parent && !m_Parent->IsModified())
-        m_Parent->SetModified();
+    Layers::List* parent = GetParentLayer();
+    if (parent && !parent->IsModified())
+        parent->SetModified();
     m_IsModified = true;
 }
 
@@ -88,8 +101,6 @@ void Layer::SetModifiedContent()
     if (m_ModifiedContent)
         return;
 
-    if (m_Hand)
-        ClearFocus();
     SetModified();
     m_ModifiedContent = true;
 }
@@ -102,12 +113,13 @@ void Layer::Update()
 
     if (m_ModifiedContent && m_Data)
     {
+        ClearCallback(nullptr);
         Rebuild();
         m_ModifiedContent = false;
     }
 
-    if (m_Hand)
-        UpdateFocus();
+    if (m_Hand && m_UpdateFocus)
+        m_UpdateFocus = UpdateFocus();
 }
 
 
@@ -127,15 +139,16 @@ void Layer::UpdatePositions(const SDL_Rect& outer)
 void Layer::SetFocus(Hand* hand)
 {
     m_Hand = hand;
+    m_UpdateFocus = UpdateFocus();
     SetModified();
 }
 
 
 void Layer::ReleaseFocus(Hand* hand)
 {
-    if (m_Hand)
-    {
+    if (m_Hand && !m_UpdateFocus)
         ClearFocus();
-        m_Hand = nullptr;
-    }
+
+    m_UpdateFocus = false;
+    m_Hand = nullptr;
 }

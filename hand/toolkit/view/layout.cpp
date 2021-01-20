@@ -1,4 +1,5 @@
 #include "view/layout.h"
+#include "view/layers/list.h"
 
 
 Layout::~Layout()
@@ -23,9 +24,25 @@ Field* Layout::GetField(const std::string& name, bool create)
     if (create)
     {
         ret = new Field(name);
-        m_Fields.push_back(ret);
+        SetField(ret);
     }
     return ret;
+}
+
+
+void Layout::SetField(Field* field)
+{
+    m_Fields.push_back(field);
+    field->SetParentLayout(this);
+}
+
+
+Field::Item* Layout::GetItem(const std::string& name)
+{
+    Field* f = GetField(name, false);
+    if (f)
+        return f->GetItem();
+    return nullptr;
 }
 
 
@@ -54,6 +71,47 @@ unsigned Layout::GetValidFields(std::vector<Field*>& out)
         if (field->IsValid())
             out.push_back(field);
     return out.size();
+}
+
+
+void Layout::Draw(SDL_Surface* buffer)
+{
+    for (auto field : m_Fields)
+        if (field->IsValid())
+            field->GetItem()->Draw(buffer);
+}
+
+
+void Layout::SetLayer(Layers::List* parent)
+{
+    if (m_Layer)
+        m_Layer->SetLayout(nullptr);
+    m_Layer = parent;
+}
+
+
+Layers::List* Layout::GetLayer()
+{
+    if (m_Layer)
+        return m_Layer;
+
+    return GetParentLayer();
+}
+
+
+void Layout::SetTheme(Theme* theme)
+{
+    for (auto field : m_Fields)
+        if (field->IsValid())
+            field->GetItem()->SetTheme(theme);
+}
+
+
+void Layout::Clear()
+{
+    for (auto field : m_Fields)
+        if (field->IsValid())
+            field->GetItem()->Clear();
 }
 
 

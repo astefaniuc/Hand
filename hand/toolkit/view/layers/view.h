@@ -29,7 +29,7 @@ protected:
     Drawer* CreatetDrawer() override;
     Layout* CreateLayout() override;
 
-    void UpdateFocus() override;
+    bool UpdateFocus() override;
     void ClearFocus() override;
 
 //    void Keep(enum mode)

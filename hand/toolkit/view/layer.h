@@ -16,26 +16,25 @@ class Hand;
 class Layer : public Field::Item
 {
 public:
-    virtual ~Layer() {}
+    virtual ~Layer();
 
     // Checks and updates content and triggers a re-draw if needed
-    void Update();
-    void Draw(SDL_Surface* buffer);
-
-    // Methods to (re-)set links to external objects:
-    void SetParent(Layers::List* parent) { m_Parent = parent; }
-    // TODO: any use for this?
-    Layers::List* GetParent() const { return m_Parent; }
+    virtual void Update();
+    void Draw(SDL_Surface* buffer) final;
+    virtual void DrawContent(SDL_Surface* buffer) = 0;
 
     // Set pointer to a data tree node
     virtual void SetContent(Hmi::Item* data);
     Hmi::Item* GetContent() const { return m_Data; }
 
-    void SetTheme(Theme* theme);
+    void SetTheme(Theme* theme) override;
     Theme* GetTheme();
 
     Drawer* GetDrawer();
     void SetDrawer(Drawer* drawer);
+
+    Layout* GetLayout() override { return nullptr; }
+    Layers::List* GetLayer() override { return nullptr; }
 
     const SDL_Rect& GetSize() const { return m_Size; }
 
@@ -43,9 +42,10 @@ public:
     void SetModified();
 
     void Exit() final { Quit(nullptr); }
-    virtual void Clear(Hmi::Item*) {}
+    void Clear() override { SetModifiedContent(); }
+    virtual void ClearCallback(Hmi::Item*) { Clear(); }
 
-    void SetFocus(Hand* hand);
+    virtual void SetFocus(Hand* hand);
     void ReleaseFocus(Hand* hand);
 
     virtual void SetControl(Layer* ctrl) {}
@@ -54,7 +54,7 @@ public:
     bool IsVisible() { return (m_Field && m_Field->IsVisible()); }
 
 protected:
-    virtual void UpdateFocus() {}
+    virtual bool UpdateFocus() { return false; }
     virtual void ClearFocus() {}
 
     void SetModifiedContent();
@@ -75,8 +75,6 @@ protected:
     /// Callback.
     void OnNotifyChanged(Hmi::Item*) { SetModifiedContent(); }
 
-
-    Layers::List* m_Parent = nullptr;
     Theme* m_Theme = nullptr;
     Drawer* m_Drawer = nullptr;
 
@@ -85,9 +83,10 @@ protected:
 
     Hmi::Item* m_Data = nullptr;
     Hand* m_Hand = nullptr;
+    bool m_UpdateFocus = false;
 
 private:
-    ICallback* m_DataChanged = nullptr;
+    ICallback* m_DataCb = nullptr;
     bool m_ModifiedContent = false;
     bool m_IsModified = true;
 };

@@ -55,20 +55,16 @@ void View::Rebuild()
 }
 
 
-void View::UpdateFocus()
+bool View::UpdateFocus()
 {
     m_Controls->SetFocus(m_Hand);
-    if (!m_Controls->IsVisible())
-        m_Controls->Update();
+    m_LayerCommands->GetExpandedView()->SetFocus(m_Hand);
 
-    Layer* layerCmds = m_LayerCommands->GetExpandedView();
-    layerCmds->SetFocus(m_Hand);
-    if (!layerCmds->IsVisible())
-        layerCmds->Update();
+    return false;
 }
 
 
-void View::ClearFocus(  )
+void View::ClearFocus()
 {
     m_Controls->ReleaseFocus(m_Hand);
     m_LayerCommands->GetExpandedView()->ReleaseFocus(m_Hand);
@@ -78,10 +74,8 @@ void View::ClearFocus(  )
 void View::Quit(Hmi::Item*)
 {
     if (m_Hand)
-    {
         m_Hand->ReleaseFocus(this);
-        ReleaseFocus(m_Hand);
-    }
+
     Map::Quit(nullptr);
 }
 

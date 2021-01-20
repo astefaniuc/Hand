@@ -1,4 +1,5 @@
 #include "view/field.h"
+#include "view/layout.h"
 
 
 void VAlignment::Align(const SDL_Rect& tgt, SDL_Rect& src)
@@ -42,6 +43,13 @@ void Field::Item::SetParentField(Field* field)
     m_Field = field;
 }
 
+
+Layers::List* Field::Item::GetParentLayer()
+{
+    if (GetParentField() && GetParentField()->GetParentLayout())
+        return GetParentField()->GetParentLayout()->GetLayer();
+    return nullptr;
+}
 
 
 Field::~Field()

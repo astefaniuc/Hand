@@ -6,6 +6,10 @@ namespace Hmi {
 
 void Map::Add(const std::string& key, Item* child)
 {
+    Item* old = m_Value[key];
+    if (old && (old->GetParent() == this))
+        delete old;
+
     child->SetParent(this);
     m_Value[key] = child;
     NotifyChanged();

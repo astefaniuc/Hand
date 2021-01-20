@@ -93,6 +93,8 @@ public:
 
     virtual bool SetValue(const DataType& val)
     {
+        if (m_Value == val)
+            return true;
         // The manipulator should call this with valid data.
         // TODO: remove this? What about Persistence?
         if (m_Manipulator && !((Manipulator<DataType>*)m_Manipulator)->IsValid(val))

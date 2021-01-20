@@ -11,13 +11,7 @@ void DrawerSdl::Draw(SDL_Surface* buffer)
     DrawBackground();
     DrawFrame();
 
-    Layers::List* layer = static_cast<Layers::List*>(m_Layer);
-    Layer* sub = layer->GetFirstChild();
-    while (sub)
-    {
-        sub->Draw(buffer);
-        sub = layer->GetNextChild();
-    }
+    m_Layer->DrawContent(buffer);
 }
 
 
