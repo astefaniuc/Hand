@@ -3,6 +3,7 @@ target_sources(${LIBNAME} PRIVATE
     device.cpp
     hand.cpp
     inputstate.cpp
+    interaction.cpp
     node.cpp)
 
 add_subdirectory(sdl)

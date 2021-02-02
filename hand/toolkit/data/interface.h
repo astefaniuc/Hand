@@ -27,6 +27,8 @@ public:
     void AddControl(Item* control) { GetControls()->Add(control); }
     void AttachControl(Item* control) { GetControls()->Attach(control); }
 
+    Interface* GetInterface() override { return this; }
+
 private:
     Layer* CreateExpandedView() override;
     void ConnectButton(Layer* view) override;

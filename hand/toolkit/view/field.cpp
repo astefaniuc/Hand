@@ -47,7 +47,7 @@ void Field::Item::SetParentField(Field* field)
 Layers::List* Field::Item::GetParentLayer()
 {
     if (GetParentField() && GetParentField()->GetParentLayout())
-        return GetParentField()->GetParentLayout()->GetLayer();
+        return GetParentField()->GetParentLayout()->GetListLayer();
     return nullptr;
 }
 

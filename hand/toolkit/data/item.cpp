@@ -30,6 +30,14 @@ Item::~Item()
 }
 
 
+Interface* Item::GetParentInterface()
+{
+    if (m_Parent)
+        return m_Parent->GetInterface();
+    return nullptr;
+}
+
+
 void Item::SetSelected(bool isSelected)
 {
     m_IsSelected = isSelected;
@@ -101,13 +109,6 @@ void Item::SetShortcut(Chord* chord)
 {
     delete m_Shortcut;
     m_Shortcut = chord;
-}
-
-
-void Item::SetControl(Chord* chord)
-{
-    // TODO checking?
-    m_Control = chord;
 }
 
 }

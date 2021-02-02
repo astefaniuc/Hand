@@ -10,17 +10,23 @@ namespace Layers {
 
 class ListView;
 
-/// The View is a composed Layer, managing the basic layout and theme.
+/// The Interface is a composed Layer, managing the basic layout and theme.
 /// For the sub-layers, the main command list is mandatory; other layers may be
 /// additional (system) command lists, a title, a main view, and a secondary view e.g.
 /// an info box or help.
-class View : public Map
+class Interface : public Map
 {
 public:
-    View();
-    ~View();
+    Interface();
+    ~Interface();
 
     void AddOnExit(ICallback* cb);
+    void RemoveOnExit(ICallback* cb);
+
+    void SetInteractionControl(Interaction::Control* hand);
+    void RemoveInteractionControl();
+
+    void GetActiveItems(std::vector<Hmi::Item*>& out) override;
 
 protected:
     void SetContent(Hmi::Item* data) override;
@@ -29,15 +35,12 @@ protected:
     Drawer* CreatetDrawer() override;
     Layout* CreateLayout() override;
 
-    bool UpdateFocus() override;
-    void ClearFocus() override;
-
 //    void Keep(enum mode)
-    void Quit(Hmi::Item*) override;
+    void Quit(Hmi::Item* caller) override;
 
 private:
-    Hmi::Vector* m_LayerCommands;
     ListView* m_Controls;
+    Interaction::Control* m_InteractionControl = nullptr;
 };
 
 }

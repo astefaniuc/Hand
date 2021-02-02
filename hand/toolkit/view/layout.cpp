@@ -90,7 +90,7 @@ void Layout::SetLayer(Layers::List* parent)
 }
 
 
-Layers::List* Layout::GetLayer()
+Layers::List* Layout::GetListLayer()
 {
     if (m_Layer)
         return m_Layer;

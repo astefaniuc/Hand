@@ -6,18 +6,12 @@
 namespace Layers {
 
 
-ListView::ListView()
-{
-    m_LayerCommands = new Hmi::Vector(LAYER_CONTROLS, "");
-}
-
-
 void ListView::SetContent(Hmi::Item* data)
 {
     if (m_Data && !m_Back)
     {
         m_Back = new Hmi::Action<ListView>("Back", "Previous list", this, &ListView::Back);
-        m_LayerCommands->Add(m_Back);
+        GetLayerControls()->Add(m_Back);
     }
     m_ViewStack.push_back(data);
     m_DataControls.SetContent(data);
@@ -30,23 +24,7 @@ void ListView::Rebuild()
     Map::Rebuild();
 
     Insert(VIEW, &m_DataControls);
-    Insert(LAYER_CONTROLS, m_LayerCommands->GetExpandedView());
-}
-
-
-bool ListView::UpdateFocus()
-{
-    m_DataControls.SetFocus(m_Hand);
-    m_LayerCommands->GetExpandedView()->SetFocus(m_Hand);
-
-    return false;
-}
-
-
-void ListView::ClearFocus()
-{
-    m_DataControls.ReleaseFocus(m_Hand);
-    m_LayerCommands->GetExpandedView()->ReleaseFocus(m_Hand);
+    Insert(LAYER_CONTROLS, GetLayerControls()->GetExpandedView());
 }
 
 

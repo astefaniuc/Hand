@@ -11,22 +11,34 @@ namespace Layers {
 class List : public Layer
 {
 public:
-    ~List() { delete m_Layout; }
+    ~List();
 
     Layout* GetLayout() override;
     void SetLayout(Layout* layout);
 
-    Layers::List* GetLayer() override { return this; }
+    Layers::List* GetListLayer() override { return this; }
 
     void Update() override;
-
-    bool UpdateFocus() override;
-    void ClearFocus() override;
-
     void DrawContent(SDL_Surface* buffer) override { GetLayout()->Draw(buffer); }
+
+
+    bool SetInteraction(Interaction::Group* focus) override;
+    void ReleaseInteractionGroup() override;
+
+    bool SetCommand(Interaction::Command* ctrl) override;
+    void ReleaseCommand() override;
+
+    void SetFocus();
+    void RemoveFocus();
+
+    Hmi::List* GetLayerControls() override;
+    virtual void GetActiveItems(std::vector<Hmi::Item*>& out) {}
 
 protected:
     virtual Layout* CreateLayout() = 0;
+
+    void UpdateFocus() override;
+    void ClearFocus() override;
 
     /// Field::Item interface:
     SDL_Rect ComputeSize(const SDL_Rect& outer) override;
@@ -37,8 +49,12 @@ protected:
 
     void Clear() override;
 
-private:
     Layout* m_Layout = nullptr;
+    Hmi::List* m_LayerCommands = nullptr;
+
+    Interaction::Group* m_InteractionGroup = nullptr;
+    Interaction::Command* m_Command = nullptr;
+    bool m_HasFocus = false;
 };
 
 }

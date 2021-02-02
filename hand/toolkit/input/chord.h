@@ -35,7 +35,7 @@ public:
 
     bool Assign(Hmi::Item* item);
     Hmi::Item* GetItem() const { return m_Item; }
-    bool Clear(Hmi::Item* item);
+    void ClearItem() { m_Item = nullptr; }
 
     Layer* GetLayer(Hand* hand);
 

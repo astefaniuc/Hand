@@ -4,6 +4,7 @@
 #include "base/module.h"
 #include "data/vector.h"
 #include "input/chord.h"
+#include "input/interaction.h"
 #include <vector>
 
 
@@ -18,6 +19,7 @@ enum default_number_of_items
 class Device;
 class InputState;
 namespace Hmi { class Interface; }
+namespace Interaction { class Control; }
 
 class Hand : public Module
 {
@@ -25,21 +27,19 @@ public:
     Hand(Device* dev);
     ~Hand();
 
-    Hmi::Item* GetHmi() override { return nullptr; }
-    Hmi::Item* GetInitScreen();
     // Sets the key map
     bool Init();
+    void SetInteraction(Interaction::Control* control) { m_Interaction = control; }
+
+    Hmi::Item* GetHmi() override { return nullptr; }
+    Hmi::Item* GetInitScreen();
 
     bool Press(int keyId);
     bool Release(int keyId);
 
     unsigned GetNumberOfKeys() { return m_NumberOfKeys; }
 
-    void SetFocus(Layer* view);
-    void ReleaseFocus(Layer* view);
-
-    void AddControl(Hmi::Item* item);
-    void RemoveControl(Hmi::Item* item);
+    Chord* Assign(Hmi::Item* item, Chord* chord);
 
     // Returns the Key symbol at specified position
     Hmi::Note* GetKey(unsigned index);
@@ -63,7 +63,7 @@ private:
 
     Chord m_Record;
     std::vector<Chord*> m_Commands;
-    std::vector<Layer*> m_FocusStack;
+    Interaction::Control* m_Interaction;
 
     Hmi::Interface* m_InitScreen = nullptr;
 };

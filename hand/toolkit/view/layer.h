@@ -2,16 +2,19 @@
 #define HAND_VIEW_LAYER_H
 
 #include "view/drawer.h"
-#include "input/chord.h"
 #include "view/field.h"
 #include <SDL/SDL.h> // TODO: remove SDL dependency here
-#include <iostream>
 
 
 namespace Hmi { class Item; }
 namespace Layers { class List; }
+namespace Interaction
+{
+    class Control;
+    class Group;
+    class Command;
+}
 class Theme;
-class Hand;
 
 class Layer : public Field::Item
 {
@@ -34,28 +37,34 @@ public:
     void SetDrawer(Drawer* drawer);
 
     Layout* GetLayout() override { return nullptr; }
-    Layers::List* GetLayer() override { return nullptr; }
+    Layers::List* GetListLayer() override { return nullptr; }
 
     const SDL_Rect& GetSize() const { return m_Size; }
 
     bool IsModified() { return (m_IsModified || m_ModifiedContent); }
     void SetModified();
 
-    void Exit() final { Quit(nullptr); }
-    void Clear() override { SetModifiedContent(); }
-    virtual void ClearCallback(Hmi::Item*) { Clear(); }
-
-    virtual void SetFocus(Hand* hand);
-    void ReleaseFocus(Hand* hand);
-
-    virtual void SetControl(Layer* ctrl) {}
-    virtual void RemoveControl() {}
-
     bool IsVisible() { return (m_Field && m_Field->IsVisible()); }
 
+    void Exit() final { Quit(nullptr); }
+    void Clear() override;
+
+    // Focus management interface
+
+    virtual bool SetInteraction(Interaction::Group* hand) { return false; }
+    virtual void ReleaseInteractionGroup() {}
+
+    virtual bool SetCommand(Interaction::Command* ctrl) { return false; }
+    virtual void ReleaseCommand() {}
+
+    virtual Hmi::List* GetLayerControls() { return nullptr; }
+    virtual void GetShortcuts(std::vector<Hmi::Item*>& out) {}
+
 protected:
-    virtual bool UpdateFocus() { return false; }
+    virtual bool CanUpdate() { return true; }
+    virtual void UpdateFocus() {}
     virtual void ClearFocus() {}
+
 
     void SetModifiedContent();
     /// Rebuild sub-layer structure on content or layout changes.
@@ -82,8 +91,6 @@ protected:
     SDL_Rect m_Size = { 0, 0, 0, 0 };
 
     Hmi::Item* m_Data = nullptr;
-    Hand* m_Hand = nullptr;
-    bool m_UpdateFocus = false;
 
 private:
     ICallback* m_DataCb = nullptr;

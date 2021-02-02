@@ -8,8 +8,8 @@
 
 
 class EventHandler;
-class Hand;
 class ModuleLib;
+namespace Interaction { class Control; }
 
 /// Manages the items to be shown on screen and the input modes.
 class User
@@ -27,8 +27,9 @@ public:
 private:
     EventHandler* m_Input;
     ModuleLib* m_ThemeLoader;
-    // May be one or two hands, using a vector is overdosed (TODO)
-    std::vector<Hand*> m_Hands;
+
+    Interaction::Control* m_Control;
+
     std::vector<ModuleLib*> m_RunningApps;
     Hmi::Interface m_View;
     Hmi::Vector m_ViewStack;

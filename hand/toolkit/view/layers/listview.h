@@ -12,13 +12,7 @@ namespace Layers {
 class ListView : public Map
 {
 public:
-    ListView();
-    ~ListView() { delete m_LayerCommands; }
-
     void SetContent(Hmi::Item* data) override;
-
-    bool UpdateFocus() override;
-    void ClearFocus() override;
 
 protected:
     void Rebuild() override;
@@ -29,7 +23,6 @@ protected:
     void Back(Hmi::Item*);
 
 private:
-    Hmi::List* m_LayerCommands = nullptr;
     Hmi::Item* m_Back = nullptr;
     Vector m_DataControls;
     std::vector<Hmi::Item*> m_ViewStack;

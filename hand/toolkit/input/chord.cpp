@@ -26,16 +26,6 @@ bool Chord::Assign(Hmi::Item* item)
 }
 
 
-bool Chord::Clear(Hmi::Item* item)
-{
-    if (m_Item != item)
-        return false;
-
-    m_Item = nullptr;
-    return true;
-}
-
-
 
 Layer* Chord::GetLayer(Hand* hand)
 {

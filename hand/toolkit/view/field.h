@@ -61,7 +61,7 @@ public:
         Layers::List* GetParentLayer();
 
         virtual Layout* GetLayout() = 0;
-        virtual Layers::List* GetLayer() = 0;
+        virtual Layers::List* GetListLayer() = 0;
 
         virtual void SetTheme(Theme* theme) = 0;
 

@@ -1,6 +1,7 @@
 #include "view/layer.h"
 #include "view/layers/list.h"
 #include "view/theme.h"
+#include "input/interaction.h"
 
 
 Layer::~Layer()
@@ -34,10 +35,7 @@ void Layer::Draw(SDL_Surface* buffer)
 void Layer::SetContent(Hmi::Item* data)
 {
     if (m_Data)
-    {
         m_Data->RemoveDataChangedClient(m_DataCb);
-        std::cout << "rem: " << m_DataCb << std::endl;
-    }
     Clear();
 
     if (!m_DataCb)
@@ -108,18 +106,21 @@ void Layer::SetModifiedContent()
 
 void Layer::Update()
 {
-    if (!m_IsModified)
+    if (!m_ModifiedContent || !CanUpdate())
         return;
 
-    if (m_ModifiedContent && m_Data)
-    {
-        ClearCallback(nullptr);
-        Rebuild();
-        m_ModifiedContent = false;
-    }
+    Clear();
+    Rebuild();
+    UpdateFocus();
 
-    if (m_Hand && m_UpdateFocus)
-        m_UpdateFocus = UpdateFocus();
+    m_ModifiedContent = false;
+}
+
+
+void Layer::Clear()
+{
+    ClearFocus();
+    SetModifiedContent();
 }
 
 
@@ -133,22 +134,4 @@ SDL_Rect Layer::ComputeSize(const SDL_Rect& outer)
 void Layer::UpdatePositions(const SDL_Rect& outer)
 {
     m_Size = GetDrawer()->GetContentSize(outer);
-}
-
-
-void Layer::SetFocus(Hand* hand)
-{
-    m_Hand = hand;
-    m_UpdateFocus = UpdateFocus();
-    SetModified();
-}
-
-
-void Layer::ReleaseFocus(Hand* hand)
-{
-    if (m_Hand && !m_UpdateFocus)
-        ClearFocus();
-
-    m_UpdateFocus = false;
-    m_Hand = nullptr;
 }

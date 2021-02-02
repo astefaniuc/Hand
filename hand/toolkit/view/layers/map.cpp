@@ -1,4 +1,5 @@
 #include "view/layers/map.h"
+#include "input/interaction.h"
 
 
 namespace Layers {
@@ -12,8 +13,8 @@ void Map::Rebuild()
     Insert(TITLE, &m_Name);
     if (!m_Data->GetInfo().empty())
         Insert(DESCRIPTION, &m_Info);
-    if (m_Control)
-        Insert(CONTROL, m_Control);
+    if (m_Command)
+        Insert(CONTROL, m_Command->GetLayer());
 }
 
 
@@ -28,14 +29,6 @@ void Map::Insert(const std::string& name, Layer* child)
 
     field->SetItem(child);
     SetModified();
-}
-
-
-void Map::RemoveControl()
-{
-    m_Control->Exit();
-    delete m_Control;
-    m_Control = nullptr;
 }
 
 }

@@ -5,6 +5,13 @@
 namespace Layers {
 
 
+List::~List()
+{
+    delete m_Layout;
+    delete m_LayerCommands;
+}
+
+
 SDL_Rect List::ComputeSize(const SDL_Rect& outer)
 {
     GetLayout();
@@ -53,40 +60,77 @@ void List::Update()
 }
 
 
-bool List::UpdateFocus()
+void List::UpdateFocus()
 {
-    // Layer* sub = GetFirstChild();
-    // while (sub)
-    // {
-    //     sub->SetControl(m_Hand->AddControl(sub));
-    //     sub = GetNextChild();
-    // }
-    return false;
+    if (m_InteractionGroup)
+        m_InteractionGroup->Update();
 }
 
 
 void List::ClearFocus()
 {
-    // Layer* sub = GetFirstChild();
-    // while (sub)
-    // {
-    //     sub->RemoveControl();
-    //     m_Hand->RemoveControl(sub);
-    //     sub = GetNextChild();
-    // }
+    if (m_InteractionGroup)
+        m_InteractionGroup->Clear();
 }
 
 
 void List::Clear()
 {
-    if (m_Hand && !m_UpdateFocus)
-    {
-        ClearFocus();
-        m_UpdateFocus = true;
-    }
+    Layer::Clear();
+    if (m_Layout)
+        m_Layout->Clear();
+}
 
-    GetLayout()->Clear();
+
+Hmi::List* List::GetLayerControls()
+{
+    if (!m_LayerCommands)
+        m_LayerCommands = new Hmi::Vector(LAYER_CONTROLS, "");
+    return m_LayerCommands;
+}
+
+
+bool List::SetInteraction(Interaction::Group* focus)
+{
+    m_InteractionGroup = focus;
+    return true;
+}
+
+
+void List::ReleaseInteractionGroup()
+{
+    m_InteractionGroup = nullptr;
+}
+
+
+bool List::SetCommand(Interaction::Command* ctrl)
+{
+    m_Command = ctrl;
     SetModifiedContent();
+    return true;
+}
+
+
+void List::ReleaseCommand()
+{
+    if (!m_Command)
+        return;
+    m_Command = nullptr;
+    SetModifiedContent();
+}
+
+
+void List::SetFocus()
+{
+    m_HasFocus = true;
+    m_InteractionGroup->GetControl()->Add(
+        new Interaction::Group(GetLayerControls()->GetExpandedView()->GetListLayer()));
+}
+
+
+void List::RemoveFocus()
+{
+    m_HasFocus = false;
 }
 
 }

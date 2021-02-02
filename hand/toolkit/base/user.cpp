@@ -8,7 +8,7 @@
 #include "input/inputstate.h"
 #include "view/theme.h"
 #include "view/layers/vector.h"
-#include "view/layers/view.h"
+#include "view/layers/interface.h"
 #include "view/layouts/builtin.h"
 
 
@@ -17,7 +17,7 @@ User::User(EventHandler* a_input)
       m_View("User", "User view"),
       m_ViewStack("View", "")
 {
-    Layers::List* baseView = static_cast<Layers::List*>(m_View.GetExpandedView());
+    Layers::List* baseView = m_View.GetExpandedView()->GetListLayer();
 
     Layout* layout = Layouts::CreateView();
     layout->GetField(VIEW)->SetExpanding(true, true);
@@ -40,8 +40,8 @@ User::User(EventHandler* a_input)
     theme->InitScreen(baseView);
     m_View.AttachControl(theme->GetHmi());
 
-    m_Hands.push_back(new Hand(m_Input->GetDevice(Device::Keyboard)));
-    m_Hands[0]->SetFocus(baseView);
+    m_Control = new Interaction::Control(new Hand(m_Input->GetDevice(Device::Keyboard)));
+    m_Control->SetTarget(dynamic_cast<Layers::Interface*>(baseView));
 
     m_Input->SetUser(this);
 }
@@ -51,23 +51,15 @@ User::~User()
 {
     for (ModuleLib* app : m_RunningApps)
         delete app;
-    for (Hand* h : m_Hands)
-        delete h;
 }
 
 
 void User::Start()
 {
-    static_cast<Layers::View*>(m_View.GetExpandedView())->
+    static_cast<Layers::Interface*>(m_View.GetExpandedView())->
         AddOnExit(new CCallback<User>(this, &User::Stop));
 
-    if (!m_Hands[0]->Init())
-    {
-        // Show init screen
-        Hmi::Item* initView = m_Hands[0]->GetInitScreen();
-        m_ViewStack.Attach(initView);
-        m_Hands[0]->SetFocus(initView->GetExpandedView());
-    }
+    m_Control->Start();
 
     m_Input->Start();
     // Stop the main execution line
@@ -88,7 +80,7 @@ bool User::LoadApp(Hmi::Note* a_path)
         m_RunningApps.push_back(app);
         Hmi::Item* hmi = app->GetHmi();
         m_ViewStack.Attach(hmi);
-        m_Hands[0]->SetFocus(hmi->GetExpandedView());
+        m_Control->SetTarget(dynamic_cast<Layers::Interface*>(hmi->GetExpandedView()));
         return true;
     }
 

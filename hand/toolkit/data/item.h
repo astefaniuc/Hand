@@ -44,6 +44,7 @@ namespace Hmi {
 
 
 class List;
+class Interface;
 
 class Item
 {
@@ -70,6 +71,9 @@ public:
     /// The parent is the object owner; HmiItems without a parent have to be explicitly deleted.
     void SetParent(Hmi::List* parent) { m_Parent = parent; }
     Hmi::List* GetParent() const { return m_Parent; }
+
+    Interface* GetParentInterface();
+    virtual Interface* GetInterface() { return GetParentInterface(); }
 
 
     Layer* GetExpandedView();
@@ -114,9 +118,6 @@ public:
     // Persistent chord suggestion, this item assumes the ownership.
     Chord* GetShortcut() const { return m_Shortcut; }
     void SetShortcut(Chord* chord);
-    // Active chord, external ownership.
-    Chord* GetControl() const { return m_Control; }
-    void SetControl(Chord* chord);
 
     // Layout options
 
@@ -148,7 +149,6 @@ private:
     Listeners m_DataChanged;
 
     Chord* m_Shortcut = nullptr;
-    Chord* m_Control = nullptr;
 };
 
 }

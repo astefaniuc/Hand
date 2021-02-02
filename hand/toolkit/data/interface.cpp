@@ -1,5 +1,5 @@
 #include "data/interface.h"
-#include "view/layers/view.h"
+#include "view/layers/interface.h"
 
 
 namespace Hmi {
@@ -7,7 +7,7 @@ namespace Hmi {
 
 Layer* Interface::CreateExpandedView()
 {
-    return new Layers::View();
+    return new Layers::Interface();
 }
 
 

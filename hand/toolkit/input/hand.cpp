@@ -2,6 +2,7 @@
 #include "input/chord.h"
 #include "input/device.h"
 #include "input/inputstate.h"
+#include "input/interaction.h"
 #include "data/interface.h"
 #include "view/layer.h"
 #include "view/layers/vector.h"
@@ -62,7 +63,7 @@ Hmi::Item* Hand::GetInitScreen()
             "Press 5 keys on the keyboard, to initialize a Hand device.");
         m_InitScreen->SetView(m_KeysHmi);
 
-        static_cast<Layers::List*>(m_InitScreen->GetExpandedView())->SetLayout(screenLayout);
+        m_InitScreen->GetExpandedView()->GetListLayer()->SetLayout(screenLayout);
     }
 
     return m_InitScreen;
@@ -87,62 +88,27 @@ bool Hand::Init()
 }
 
 
-void Hand::SetFocus(Layer* view)
+Chord* Hand::Assign(Hmi::Item* item, Chord* chord)
 {
-    if (m_FocusStack.size())
-        m_FocusStack.back()->ReleaseFocus(this);
-    m_FocusStack.push_back(view);
-    view->SetFocus(this);
-}
-
-
-void Hand::ReleaseFocus(Layer* view)
-{
-    if (view == m_FocusStack.back())
+    if (chord && !chord->keys.empty())
     {
-        view->ReleaseFocus(this);
-        m_FocusStack.pop_back();
-        if (m_FocusStack.size())
-            m_FocusStack.back()->SetFocus(this);
-    }
-}
-
-
-void Hand::AddControl(Hmi::Item* item)
-{
-    if (item && item->GetShortcut())
-    {
-        Chord* chord = item->GetShortcut();
-        if (!chord->keys.empty())
-        {
-            chord->Assign(item);
-            m_Commands.push_back(chord);
-            return item->SetControl(chord);
-        }
+        chord->Assign(item);
+        m_Commands.push_back(chord);
+        return chord;
     }
 
     StateNode::PeersList& cmds = *m_InputState->GetCommands(1);
-    for (StateNode* shrtct : cmds)
+    for (StateNode* cmd : cmds)
     {
-        Chord* chord = shrtct->GetChord();
+        Chord* chord = cmd->GetChord();
         if (!chord->Assign(item))
             continue;
 
         m_Commands.push_back(chord);
-        return item->SetControl(chord);
+        return chord;
     }
-}
 
-
-void Hand::RemoveControl(Hmi::Item* item)
-{
-    auto it = std::find(m_Commands.begin(), m_Commands.end(), item->GetControl());
-    if (it != m_Commands.end())
-    {
-        (*it)->Clear(item);
-        item->SetControl(nullptr);
-        m_Commands.erase(it);
-    }
+    return nullptr;
 }
 
 
@@ -182,16 +148,7 @@ bool Hand::Release(int k)
     }
 
     if (m_InputState->Release(index) && m_InputState->IsClean())
-    {
-        for (auto command : m_Commands)
-        {
-            if (command->IsValid(m_Record))
-            {
-                command->GetItem()->Activate();
-                break;
-            }
-        }
-    }
+        m_Interaction->Execute(m_Record);
 
     return true;
 }

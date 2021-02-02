@@ -1,7 +1,7 @@
 #include "data/vector.h"
 #include "view/layers/button.h"
-#include "view/layers/listview.h"
 #include "view/layers/vector.h"
+#include "view/layers/listview.h"
 
 
 namespace Hmi {
@@ -92,6 +92,5 @@ Layer* Vector::CreateExpandedView()
 {
     return new Layers::Vector();
 }
-
 
 }
