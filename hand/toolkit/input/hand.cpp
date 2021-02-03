@@ -90,13 +90,6 @@ bool Hand::Init()
 
 Chord* Hand::Assign(Hmi::Item* item, Chord* chord)
 {
-    if (chord && !chord->keys.empty())
-    {
-        chord->Assign(item);
-        m_Commands.push_back(chord);
-        return chord;
-    }
-
     StateNode::PeersList& cmds = *m_InputState->GetCommands(1);
     for (StateNode* cmd : cmds)
     {
@@ -104,7 +97,6 @@ Chord* Hand::Assign(Hmi::Item* item, Chord* chord)
         if (!chord->Assign(item))
             continue;
 
-        m_Commands.push_back(chord);
         return chord;
     }
 

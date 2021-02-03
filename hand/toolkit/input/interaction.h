@@ -35,13 +35,13 @@ public:
     void Add(Group* child);
     void Remove(Group* child);
     void SetFocus(Group* child);
+    void SetShortcuts(Group* s);
 
     void Execute(const Chord& chord);
 
-    void Clear();
-
 private:
-    void Update();
+    void Rebuild();
+    void Clear();
     void RemoveTargetCb(Hmi::Item* caller);
 
     Hand* m_Hand;
@@ -51,6 +51,7 @@ private:
 
     std::vector<Group*> m_Groups;
     Group* m_Focus = nullptr;
+    Group* m_ShortCuts = nullptr;
 };
 
 

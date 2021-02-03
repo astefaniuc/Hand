@@ -28,6 +28,8 @@ public:
 
     void GetActiveItems(std::vector<Hmi::Item*>& out) override;
 
+    void CollectShortcuts();
+
 protected:
     void SetContent(Hmi::Item* data) override;
     void Rebuild() override;
@@ -41,6 +43,7 @@ protected:
 private:
     ListView* m_Controls;
     Interaction::Control* m_InteractionControl = nullptr;
+    Hmi::Vector* m_Shortcuts = nullptr;
 };
 
 }

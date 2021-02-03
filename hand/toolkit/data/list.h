@@ -28,6 +28,8 @@ public:
     /// Removes all child items; own items are destroyed.
     virtual void Clear() = 0;
 
+    void GetShortcuts(Hmi::Interface* caller, Hmi::List* out) override;
+
 protected:
     Layer* CreateButtonView() override;
     void ConnectButton(Layer* view) override;

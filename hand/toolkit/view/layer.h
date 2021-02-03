@@ -58,7 +58,6 @@ public:
     virtual void ReleaseCommand() {}
 
     virtual Hmi::List* GetLayerControls() { return nullptr; }
-    virtual void GetShortcuts(std::vector<Hmi::Item*>& out) {}
 
 protected:
     virtual bool CanUpdate() { return true; }

@@ -111,4 +111,11 @@ void Item::SetShortcut(Chord* chord)
     m_Shortcut = chord;
 }
 
+
+void Item::GetShortcuts(Hmi::Interface* caller, Hmi::List* out)
+{
+    if (m_Shortcut && !m_Shortcut->keys.empty())
+        out->Attach(this);
+}
+
 }

@@ -7,6 +7,14 @@
 namespace Hmi {
 
 
+void List::GetShortcuts(Hmi::Interface* caller, Hmi::List* out)
+{
+    Item::GetShortcuts(caller, out);
+    for (auto i = 0; i < Size(); ++i)
+        GetChild(i)->GetShortcuts(caller, out);
+}
+
+
 Layer* List::CreateButtonView()
 {
     return new Layers::Button();

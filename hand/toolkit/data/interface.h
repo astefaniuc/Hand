@@ -29,6 +29,8 @@ public:
 
     Interface* GetInterface() override { return this; }
 
+    void GetShortcuts(Hmi::Interface* caller, Hmi::List* out) override;
+
 private:
     Layer* CreateExpandedView() override;
     void ConnectButton(Layer* view) override;

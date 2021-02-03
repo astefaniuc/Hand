@@ -62,7 +62,6 @@ private:
     InputState* m_InputState = nullptr;
 
     Chord m_Record;
-    std::vector<Chord*> m_Commands;
     Interaction::Control* m_Interaction;
 
     Hmi::Interface* m_InitScreen = nullptr;

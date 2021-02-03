@@ -39,10 +39,32 @@ void Control::Start()
 }
 
 
-void Control::Update()
+void Control::Rebuild()
 {
     Clear();
+    if (!m_Stack.back())
+        return;
+
     m_Stack.back()->SetInteractionControl(this);
+
+    if (m_ShortCuts)
+    {
+        Hmi::List* cmds = static_cast<Hmi::List*>(m_ShortCuts->GetTarget()->GetContent());
+        for (auto i = 0; i < cmds->Size(); ++i)
+        {
+            Hmi::Item* item = cmds->GetChild(i);
+            item->GetShortcut()->Assign(item);
+            m_ShortCuts->Add(new Command(m_ShortCuts, item->GetShortcut()));
+
+        }
+    }
+
+    if (m_Focus && (m_Focus != m_ShortCuts))
+        m_Focus->Update();
+
+    for (Group* child : m_Groups)
+        if ((child != m_ShortCuts) && (child != m_Focus))
+            child->Update();
 }
 
 
@@ -54,6 +76,9 @@ void Control::Clear()
         delete child;
     }
     m_Groups.clear();
+
+    m_Focus = nullptr;
+    m_ShortCuts = nullptr;
 }
 
 
@@ -64,7 +89,7 @@ void Control::SetTarget(Layers::Interface* target)
     m_Stack.push_back(target);
     target->AddOnExit(m_TargetExit);
 
-    Update();
+    Rebuild();
 }
 
 
@@ -77,7 +102,7 @@ void Control::RemoveTarget(Layers::Interface* target)
         (*it)->RemoveOnExit(m_TargetExit);
         m_Stack.erase((++it).base());
 
-        Update();
+        Rebuild();
     }
 }
 
@@ -106,7 +131,6 @@ void Control::Add(Group* child)
 
     m_Groups.push_back(child);
     child->SetControl(this);
-    child->Update();
 }
 
 
@@ -124,6 +148,13 @@ void Control::SetFocus(Group* child)
         m_Focus->GetTarget()->RemoveFocus();
     m_Focus = child;
     child->GetTarget()->SetFocus();
+}
+
+
+void Control::SetShortcuts(Group* s)
+{
+    m_ShortCuts = s;
+    Add(s);
 }
 
 

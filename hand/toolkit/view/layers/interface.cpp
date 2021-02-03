@@ -71,6 +71,19 @@ void Interface::GetActiveItems(std::vector<Hmi::Item*>& out)
 }
 
 
+void Interface::CollectShortcuts()
+{
+    if (!m_Shortcuts)
+        m_Shortcuts = new Hmi::Vector("Shortcuts", "");
+    else
+        m_Shortcuts->Clear();
+
+    GetLayerControls()->GetShortcuts(nullptr, m_Shortcuts);
+    if (GetContent())
+        GetContent()->GetShortcuts(GetContent()->GetInterface(), m_Shortcuts);
+}
+
+
 void Interface::SetInteractionControl(Interaction::Control* control)
 {
     if (m_InteractionControl)
@@ -83,6 +96,11 @@ void Interface::SetInteractionControl(Interaction::Control* control)
     control->SetFocus(ctrlGroup);
 
     control->Add(new Interaction::Group(this));
+
+    CollectShortcuts();
+    if (m_Shortcuts->Size())
+        control->SetShortcuts(new Interaction::Group(
+            m_Shortcuts->GetExpandedView()->GetListLayer()));
 
     SetModified();
 }

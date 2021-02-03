@@ -118,6 +118,7 @@ public:
     // Persistent chord suggestion, this item assumes the ownership.
     Chord* GetShortcut() const { return m_Shortcut; }
     void SetShortcut(Chord* chord);
+    virtual void GetShortcuts(Hmi::Interface* caller, Hmi::List* out);
 
     // Layout options
 
