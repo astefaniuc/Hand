@@ -33,8 +33,6 @@ public:
 protected:
     Layer* CreateButtonView() override;
     void ConnectButton(Layer* view) override;
-
-    ICallback* m_ButtonActivation = nullptr;
 };
 
 }

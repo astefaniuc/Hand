@@ -19,6 +19,7 @@ public:
     void SetField(const std::string& name, const RelRect& position) {
         GetField(name)->SetPosition(position);
     }
+    void ClearFields() override {}
 
     bool IsExpanding(Orientation) override { return true; }
 };

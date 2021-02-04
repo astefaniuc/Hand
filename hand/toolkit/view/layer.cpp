@@ -6,19 +6,13 @@
 
 Layer::~Layer()
 {
-    // if (m_Data && m_DataCb)
-    // {
-    //     m_Data->RemoveDataChangedClient(m_DataCb);
-    //     std::cout << "del: " << m_DataCb << std::endl;
-    // }
-
-//    delete m_DataCb;
+    Exit();
 }
 
 
 void Layer::Quit(Hmi::Item*)
 {
-    SetParentField(nullptr);
+    SetModified();
     delete m_Drawer;
     m_Drawer = nullptr;
     Clear();
@@ -32,16 +26,13 @@ void Layer::Draw(SDL_Surface* buffer)
 }
 
 
-void Layer::SetContent(Hmi::Item* data)
+void Layer::SetData(Hmi::Item* data)
 {
     if (m_Data)
-        m_Data->RemoveDataChangedClient(m_DataCb);
-    Clear();
+        m_Data->DataListeners.Remove(this);
+    ClearContent();
 
-    if (!m_DataCb)
-        m_DataCb = new CCallback<Layer>(this, &Layer::OnNotifyChanged);
-
-    data->AddDataChangedClient(m_DataCb);
+    data->DataListeners.Add(this, &Layer::OnNotifyChanged);
     SetModifiedContent();
 
     m_Data = data;
@@ -109,7 +100,7 @@ void Layer::Update()
     if (!m_ModifiedContent || !CanUpdate())
         return;
 
-    Clear();
+    ClearContent();
     Rebuild();
     UpdateFocus();
 
@@ -118,6 +109,13 @@ void Layer::Update()
 
 
 void Layer::Clear()
+{
+    SetParentField(nullptr);
+    ClearContent();
+}
+
+
+void Layer::ClearContent()
 {
     ClearFocus();
     SetModifiedContent();

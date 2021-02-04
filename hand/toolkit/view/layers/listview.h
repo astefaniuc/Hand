@@ -12,13 +12,19 @@ namespace Layers {
 class ListView : public Map
 {
 public:
-    void SetContent(Hmi::Item* data) override;
+    void SetData(Hmi::Item* data) override;
 
 protected:
     void Rebuild() override;
 
     Drawer* CreatetDrawer() override;
     Layout* CreateLayout() override;
+
+    void GetActiveItems(std::vector<Hmi::Item*>& out) override
+    {
+        m_DataControls.GetActiveItems(out);
+    }
+
 
     void Back(Hmi::Item*);
 

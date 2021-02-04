@@ -9,6 +9,8 @@ namespace Layers {
 
 void Vector::Rebuild()
 {
+    m_Layout->ClearFields();
+
     std::vector<Hmi::Item*> items;
     GetActiveItems(items);
 
@@ -32,7 +34,7 @@ void Vector::AddLayer(Hmi::Item* data)
 
 Layer* Vector::Insert(Layer* a_child)
 {
-    GetLayout()->GetField(a_child->GetContent()->GetName())->SetItem(a_child);
+    GetLayout()->GetField(a_child->GetData()->GetName())->SetItem(a_child);
     SetModified();
     return a_child;
 }
@@ -40,10 +42,10 @@ Layer* Vector::Insert(Layer* a_child)
 
 void Vector::GetActiveItems(std::vector<Hmi::Item*>& out)
 {
-    if (!GetContent())
+    if (!GetData())
         return;
 
-    Hmi::List* listData = dynamic_cast<Hmi::List*>(GetContent());
+    Hmi::List* listData = dynamic_cast<Hmi::List*>(GetData());
     if (listData)
     {
         unsigned count = listData->Size() - m_StartPosition;
@@ -56,7 +58,7 @@ void Vector::GetActiveItems(std::vector<Hmi::Item*>& out)
             out.push_back(listData->GetChild(i + m_StartPosition));
     }
     else
-        out.push_back(GetContent());
+        out.push_back(GetData());
 }
 
 

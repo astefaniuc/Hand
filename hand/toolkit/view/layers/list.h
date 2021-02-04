@@ -47,7 +47,7 @@ protected:
         return GetLayout()->IsExpanding(direction);
     }
 
-    void Clear() override;
+    void ClearContent() override;
 
     Layout* m_Layout = nullptr;
     Hmi::List* m_LayerCommands = nullptr;

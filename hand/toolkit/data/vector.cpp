@@ -23,17 +23,11 @@ Layer* List::CreateButtonView()
 
 void List::ConnectButton(Layer* view)
 {
-    Layers::ListView* lv = dynamic_cast<Layers::ListView*>(view->GetParentLayer());
-    if (lv)
+    Layer* lv = view->GetParentLayer();
+    if (dynamic_cast<Layers::ListView*>(lv))
     {
-        if (m_ButtonActivation)
-        {
-            RemoveActivationClient(m_ButtonActivation);
-            delete m_ButtonActivation;
-        }
-        m_ButtonActivation = new CCallback<Layer>(lv, &Layer::SetContent);
-        AddActivationClient(m_ButtonActivation);
-    }
+        ActivationListeners.Add(lv, &Layer::SetData);
+     }
 }
 
 

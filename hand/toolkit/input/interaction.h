@@ -7,7 +7,6 @@
 class Chord;
 class Hand;
 class Layer;
-class ICallback;
 namespace Hmi { class Item; }
 namespace Layers {
     class List;
@@ -42,12 +41,11 @@ public:
 private:
     void Rebuild();
     void Clear();
-    void RemoveTargetCb(Hmi::Item* caller);
+    void RemoveTargetCb(Layers::Interface* target);
 
     Hand* m_Hand;
 
     std::vector<Layers::Interface*> m_Stack;
-    ICallback* m_TargetExit;
 
     std::vector<Group*> m_Groups;
     Group* m_Focus = nullptr;

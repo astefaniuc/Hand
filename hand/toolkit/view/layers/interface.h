@@ -20,9 +20,6 @@ public:
     Interface();
     ~Interface();
 
-    void AddOnExit(ICallback* cb);
-    void RemoveOnExit(ICallback* cb);
-
     void SetInteractionControl(Interaction::Control* hand);
     void RemoveInteractionControl();
 
@@ -30,8 +27,10 @@ public:
 
     void CollectShortcuts();
 
+    Listeners<Interface> ExitListeners;
+
 protected:
-    void SetContent(Hmi::Item* data) override;
+    void SetData(Hmi::Item* data) override;
     void Rebuild() override;
 
     Drawer* CreatetDrawer() override;

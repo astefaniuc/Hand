@@ -27,22 +27,10 @@ Interface::~Interface()
 }
 
 
-void Interface::AddOnExit(ICallback* cb)
+void Interface::SetData(Hmi::Item* data)
 {
-    GetLayerControls()->GetChild(EXIT)->AddActivationClient(cb);
-}
-
-
-void Interface::RemoveOnExit(ICallback* cb)
-{
-    GetLayerControls()->GetChild(EXIT)->RemoveActivationClient(cb);
-}
-
-
-void Interface::SetContent(Hmi::Item* data)
-{
-    m_Controls->SetContent(static_cast<Hmi::Interface*>(data)->GetControls());
-    Map::SetContent(data);
+    m_Controls->SetData(static_cast<Hmi::Interface*>(data)->GetControls());
+    Map::SetData(data);
 }
 
 
@@ -64,7 +52,7 @@ void Interface::GetActiveItems(std::vector<Hmi::Item*>& out)
 
     Hmi::Item* view = static_cast<Hmi::Interface*>(m_Data)->GetView();
 
-    out.push_back(m_Controls->GetContent());
+    out.push_back(m_Controls->GetData());
     if (view)
         out.push_back(view);
     out.push_back(GetLayerControls());
@@ -79,8 +67,8 @@ void Interface::CollectShortcuts()
         m_Shortcuts->Clear();
 
     GetLayerControls()->GetShortcuts(nullptr, m_Shortcuts);
-    if (GetContent())
-        GetContent()->GetShortcuts(GetContent()->GetInterface(), m_Shortcuts);
+    if (GetData())
+        GetData()->GetShortcuts(GetData()->GetInterface(), m_Shortcuts);
 }
 
 
@@ -115,9 +103,7 @@ void Interface::RemoveInteractionControl()
 
 void Interface::Quit(Hmi::Item* caller)
 {
-    if (caller != GetLayerControls()->GetChild(EXIT))
-        // Notify all listeners
-        GetLayerControls()->GetChild(EXIT)->Activate();
+    ExitListeners.Execute(this);
 
     Map::Quit(nullptr);
 }

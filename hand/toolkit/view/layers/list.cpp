@@ -74,9 +74,9 @@ void List::ClearFocus()
 }
 
 
-void List::Clear()
+void List::ClearContent()
 {
-    Layer::Clear();
+    Layer::ClearContent();
     if (m_Layout)
         m_Layout->Clear();
 }

@@ -18,14 +18,6 @@ Item::~Item()
 
     delete m_ExpandedView;
     delete m_ButtonView;
-
-    for (ICallback* ic : m_SelectionChange)
-        delete ic;
-    for (ICallback* ic : m_Activation)
-        delete ic;
-    for (ICallback* ic : m_DataChanged)
-        delete ic;
-
     delete m_Shortcut;
 }
 
@@ -41,29 +33,7 @@ Interface* Item::GetParentInterface()
 void Item::SetSelected(bool isSelected)
 {
     m_IsSelected = isSelected;
-    Execute(m_SelectionChange);
-}
-
-
-void Item::RemoveCallback(ICallback* callback, Listeners& list)
-{
-    // TODO: Do we need thread safety here?
-    for (unsigned i = 0; i < list.size(); ++i)
-    {
-        // TODO: a memory compare may be a safer way to check for equality.
-        if (list[i] == callback)
-        {
-            list.erase(list.begin() + i);
-            return;
-        }
-    }
-}
-
-
-void Item::Execute(const Listeners& list)
-{
-    for (ICallback* listener : list)
-        listener->Execute(this);
+    SelectionListeners.Execute(this);
 }
 
 
@@ -79,7 +49,7 @@ void Item::SetExpandedView(Layer* layer)
 {
     delete m_ExpandedView;
     m_ExpandedView = layer;
-    m_ExpandedView->SetContent(this);
+    m_ExpandedView->SetData(this);
 }
 
 
@@ -95,7 +65,7 @@ void Item::SetButtonView(Layer* layer)
 {
     delete m_ButtonView;
     m_ButtonView = layer;
-    m_ButtonView->SetContent(this);
+    m_ButtonView->SetData(this);
 }
 
 

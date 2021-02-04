@@ -27,8 +27,8 @@ public:
     virtual void DrawContent(SDL_Surface* buffer) = 0;
 
     // Set pointer to a data tree node
-    virtual void SetContent(Hmi::Item* data);
-    Hmi::Item* GetContent() const { return m_Data; }
+    virtual void SetData(Hmi::Item* data);
+    Hmi::Item* GetData() const { return m_Data; }
 
     void SetTheme(Theme* theme) override;
     Theme* GetTheme();
@@ -48,6 +48,7 @@ public:
 
     void Exit() final { Quit(nullptr); }
     void Clear() override;
+    virtual void ClearContent();
 
     // Focus management interface
 
@@ -92,7 +93,6 @@ protected:
     Hmi::Item* m_Data = nullptr;
 
 private:
-    ICallback* m_DataCb = nullptr;
     bool m_ModifiedContent = false;
     bool m_IsModified = true;
 };

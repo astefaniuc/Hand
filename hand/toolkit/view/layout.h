@@ -30,6 +30,7 @@ public:
 
     void Exit() override { delete this; }
     void Clear() override;
+    virtual void ClearFields() { m_Fields.clear(); }
 
 protected:
     std::vector<Field*> m_Fields;

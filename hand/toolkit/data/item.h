@@ -2,40 +2,10 @@
 #define HAND_GRAPH_HMIITEM_H
 
 #include "input/chord.h"
+#include "base/listeners.h"
 #include <string>
 #include <sstream>
 #include <vector>
-
-
-namespace Hmi { class Item; }
-
-class ICallback
-{
-public:
-    virtual ~ICallback() = default;
-    virtual void Execute(Hmi::Item* caller) = 0;
-};
-
-
-template <class CallbackOwner>
-class CCallback : public ICallback
-{
-    typedef void (CallbackOwner::*TCallback)(Hmi::Item*);
-
-public:
-    CCallback(CallbackOwner* obj, TCallback func)
-        : m_Object(obj), m_Function(func) {}
-
-    void Execute(Hmi::Item* caller) final
-    {
-        if (m_Object && m_Function)
-            (m_Object->*m_Function)(caller);
-    }
-
-private:
-    CallbackOwner* m_Object;
-    TCallback m_Function;
-};
 
 
 class Layer;
@@ -86,34 +56,8 @@ public:
 
     void SetSelected(bool isSelected);
     bool IsSelected() const { return m_IsSelected; }
-    /// The callback is executed whenever the selection changes.
-    void AddSelectionClient(ICallback* client)
-    {
-        m_SelectionChange.push_back(client);
-    }
-    void RemoveSelectionClient(ICallback* client)
-    {
-        RemoveCallback(client, m_SelectionChange);
-    }
 
-    void Activate() { Execute(m_Activation); }
-    void AddActivationClient(ICallback* client)
-    {
-        m_Activation.push_back(client);
-    }
-    void RemoveActivationClient(ICallback* client)
-    {
-        RemoveCallback(client, m_Activation);
-    }
-
-    void AddDataChangedClient(ICallback* client)
-    {
-        m_DataChanged.push_back(client);
-    }
-    void RemoveDataChangedClient(ICallback* client)
-    {
-        RemoveCallback(client, m_DataChanged);
-    }
+    void Activate() { ActivationListeners.Execute(this); }
 
     // Persistent chord suggestion, this item assumes the ownership.
     Chord* GetShortcut() const { return m_Shortcut; }
@@ -125,16 +69,15 @@ public:
     /// You can keep HmiItems in the closer focus while the user descends into details.
     void SetVisualKeepLevel(int level);
 
+    Listeners<Item> SelectionListeners;
+    Listeners<Item> ActivationListeners;
+    Listeners<Item> DataListeners;
+
 protected:
-    typedef std::vector<ICallback*> Listeners;
-
-    void RemoveCallback(ICallback* client, Listeners& clientsList);
-    void Execute(const Listeners& list);
-
     virtual Layer* CreateExpandedView() = 0;
     virtual Layer* CreateButtonView();
 
-    void NotifyChanged() { Execute(m_DataChanged); }
+    void NotifyChanged() { DataListeners.Execute(this); }
 
 private:
     std::string m_Name;
@@ -144,10 +87,6 @@ private:
     Layer* m_ExpandedView = nullptr;
     Layer* m_ButtonView = nullptr;
     bool m_IsSelected = false;
-
-    Listeners m_SelectionChange;
-    Listeners m_Activation;
-    Listeners m_DataChanged;
 
     Chord* m_Shortcut = nullptr;
 };

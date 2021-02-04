@@ -56,8 +56,7 @@ User::~User()
 
 void User::Start()
 {
-    static_cast<Layers::Interface*>(m_View.GetExpandedView())->
-        AddOnExit(new CCallback<User>(this, &User::Stop));
+    static_cast<Layers::Interface*>(m_View.GetExpandedView())->ExitListeners.Add(this, &User::Stop);
 
     m_Control->Start();
 

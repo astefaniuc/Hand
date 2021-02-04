@@ -10,6 +10,7 @@
 class EventHandler;
 class ModuleLib;
 namespace Interaction { class Control; }
+namespace Layers { class Interface; }
 
 /// Manages the items to be shown on screen and the input modes.
 class User
@@ -22,7 +23,7 @@ public:
     void Update();
 
     void Start();
-    void Stop(Hmi::Item*){ m_MainThread.notify_all(); }
+    void Stop(Layers::Interface*){ m_MainThread.notify_all(); }
 
 private:
     EventHandler* m_Input;

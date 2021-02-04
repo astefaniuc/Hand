@@ -8,18 +8,18 @@
 namespace Hmi {
 
 
-template <class CallbackOwner>
+template <class CbOwner>
 class Action : public Item
 {
-    typedef void (CallbackOwner::*TCallback)(Item*);
+    typedef void (CbOwner::*TCallback)(Item*);
 
 public:
     Action(
         const std::string& name, const std::string& description,
-        CallbackOwner* obj, TCallback func)
+        CbOwner* obj, TCallback func)
         : Item(name, description)
     {
-        AddActivationClient(new CCallback<CallbackOwner>(obj, func));
+        ActivationListeners.Add(obj, func);
     }
 
 //Parameter...

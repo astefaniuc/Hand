@@ -14,14 +14,12 @@ namespace Interaction {
 Control::Control(Hand* hand) : m_Hand(hand)
 {
     m_Hand->SetInteraction(this);
-    m_TargetExit = new CCallback<Control>(this, &Control::RemoveTargetCb);
 }
 
 
 Control::~Control()
 {
     delete m_Hand;
-    delete m_TargetExit;
 }
 
 
@@ -32,7 +30,7 @@ void Control::Start()
         // Show init screen
         Hmi::Item* initView = m_Hand->GetInitScreen();
         // TODO: built-in way to add/set the parent view
-        dynamic_cast<Hmi::List*>(m_Stack[0]->GetContent()->GetInterface()->GetView())
+        dynamic_cast<Hmi::List*>(m_Stack[0]->GetData()->GetInterface()->GetView())
             ->Attach(initView);
         SetTarget(dynamic_cast<Layers::Interface*>(initView->GetExpandedView()));
     }
@@ -42,20 +40,19 @@ void Control::Start()
 void Control::Rebuild()
 {
     Clear();
-    if (!m_Stack.back())
+    if (!m_Stack.size())
         return;
 
     m_Stack.back()->SetInteractionControl(this);
 
     if (m_ShortCuts)
     {
-        Hmi::List* cmds = static_cast<Hmi::List*>(m_ShortCuts->GetTarget()->GetContent());
+        Hmi::List* cmds = static_cast<Hmi::List*>(m_ShortCuts->GetTarget()->GetData());
         for (auto i = 0; i < cmds->Size(); ++i)
         {
             Hmi::Item* item = cmds->GetChild(i);
             item->GetShortcut()->Assign(item);
             m_ShortCuts->Add(new Command(m_ShortCuts, item->GetShortcut()));
-
         }
     }
 
@@ -87,7 +84,7 @@ void Control::SetTarget(Layers::Interface* target)
     if (m_Stack.size())
         m_Stack.back()->RemoveInteractionControl();
     m_Stack.push_back(target);
-    target->AddOnExit(m_TargetExit);
+    target->ExitListeners.Add(this, &Control::RemoveTargetCb);
 
     Rebuild();
 }
@@ -99,7 +96,7 @@ void Control::RemoveTarget(Layers::Interface* target)
     if (it != m_Stack.rend())
     {
         (*it)->RemoveInteractionControl();
-        (*it)->RemoveOnExit(m_TargetExit);
+        (*it)->ExitListeners.Remove(this);
         m_Stack.erase((++it).base());
 
         Rebuild();
@@ -107,16 +104,17 @@ void Control::RemoveTarget(Layers::Interface* target)
 }
 
 
-void Control::RemoveTargetCb(Hmi::Item* caller)
+void Control::RemoveTargetCb(Layers::Interface* target)
 {
-    Hmi::Item* target = caller->GetParentInterface();
     for (auto it = m_Stack.rbegin(); it != m_Stack.rend(); ++it)
     {
-        if ((*it)->GetContent() == target)
+        if (*it == target)
         {
             (*it)->RemoveInteractionControl();
-            (*it)->RemoveOnExit(m_TargetExit);
+            (*it)->ExitListeners.Remove(this);
             m_Stack.erase((++it).base());
+
+            Rebuild();
             return;
         }
     }
