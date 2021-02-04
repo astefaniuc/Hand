@@ -112,6 +112,23 @@ Chord* Hand::Assign(Hmi::Item* item, InteractionLevel interaction)
 }
 
 
+Chord* Hand::Reserve(Chord* shortcut)
+{
+    unsigned level = shortcut->keys.size();
+    if (level > m_NumberOfKeys)
+        return shortcut;
+
+    StateNode::PeersList& cmds = *m_InputState->GetCommands(level);
+    for (StateNode* cmd : cmds)
+    {
+        Chord* chord = cmd->GetChord();
+        if (shortcut->IsValid(*chord))
+            return chord;
+    }
+    return shortcut;
+}
+
+
 bool Hand::Press(int k)
 {
     if (m_Keys.size() < m_NumberOfKeys)

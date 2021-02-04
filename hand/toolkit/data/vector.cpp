@@ -27,7 +27,7 @@ void List::ConnectButton(Layer* view)
     if (dynamic_cast<Layers::ListView*>(lv))
     {
         ActivationListeners.Add(lv, &Layer::SetData);
-     }
+    }
 }
 
 

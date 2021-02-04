@@ -51,8 +51,9 @@ void Control::Rebuild()
         for (auto i = 0; i < cmds->Size(); ++i)
         {
             Hmi::Item* item = cmds->GetChild(i);
-            item->GetShortcut()->Assign(item);
-            m_ShortCuts->Add(new Command(m_ShortCuts, item->GetShortcut()));
+            Chord* chord = m_Hand->Reserve(item->GetShortcut());
+            chord->Assign(item);
+            m_ShortCuts->Add(new Command(m_ShortCuts, chord));
         }
     }
 

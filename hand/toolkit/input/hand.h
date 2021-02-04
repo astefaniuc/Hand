@@ -46,6 +46,7 @@ public:
     unsigned GetNumberOfKeys() { return m_NumberOfKeys; }
 
     Chord* Assign(Hmi::Item* item, InteractionLevel interaction);
+    Chord* Reserve(Chord* shortcut);
 
     // Returns the Key symbol at specified position
     Hmi::Note* GetKey(unsigned index);
