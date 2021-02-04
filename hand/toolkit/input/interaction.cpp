@@ -212,11 +212,15 @@ void Group::Update()
 {
     Clear();
 
+    Hand::InteractionLevel level = Hand::Peripherial;
+    if (m_Layer->HasFocus())
+        level = Hand::Focus;
+
     std::vector<Hmi::Item*> commands;
     m_Layer->GetActiveItems(commands);
     for (Hmi::Item* item : commands)
     {
-        Chord* chord = GetControl()->GetHand()->Assign(item, item->GetShortcut());
+        Chord* chord = GetControl()->GetHand()->Assign(item, level);
         if (!chord)
             // No more free chords
             return;
@@ -229,6 +233,7 @@ void Group::Update()
 Command::Command(Group* parent, Chord* chord)
     : m_Parent(parent), m_Chord(chord)
 {
+    m_Chord->GetItem()->GetButtonView()->SetCommand(this);
 }
 
 
@@ -236,6 +241,8 @@ Command::~Command()
 {
     if (m_Parent)
         m_Parent->Remove(this);
+
+    m_Chord->GetItem()->GetButtonView()->ReleaseCommand();
     m_Chord->ClearItem();
 }
 

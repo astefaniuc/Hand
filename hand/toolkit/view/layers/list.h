@@ -30,6 +30,7 @@ public:
 
     void SetFocus();
     void RemoveFocus();
+    bool HasFocus() { return m_HasFocus; }
 
     Hmi::List* GetLayerControls() override;
     virtual void GetActiveItems(std::vector<Hmi::Item*>& out) {}

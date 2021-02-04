@@ -88,16 +88,24 @@ bool Hand::Init()
 }
 
 
-Chord* Hand::Assign(Hmi::Item* item, Chord* chord)
+Chord* Hand::Assign(Hmi::Item* item, InteractionLevel interaction)
 {
-    StateNode::PeersList& cmds = *m_InputState->GetCommands(1);
-    for (StateNode* cmd : cmds)
-    {
-        Chord* chord = cmd->GetChord();
-        if (!chord->Assign(item))
-            continue;
+    unsigned lower = 1;
+    if (interaction == Peripherial)
+        lower = m_PeripherialLevel;
+    unsigned upper = m_NumberOfKeys + 1;
 
-        return chord;
+    for (; lower < upper; ++lower)
+    {
+        StateNode::PeersList& cmds = *m_InputState->GetCommands(lower);
+        for (StateNode* cmd : cmds)
+        {
+            Chord* chord = cmd->GetChord();
+            if (!chord->Assign(item))
+                continue;
+
+            return chord;
+        }
     }
 
     return nullptr;

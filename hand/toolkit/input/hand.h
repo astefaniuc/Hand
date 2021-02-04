@@ -24,6 +24,12 @@ namespace Interaction { class Control; }
 class Hand : public Module
 {
 public:
+    enum InteractionLevel
+    {
+        Focus,
+        Peripherial
+    };
+
     Hand(Device* dev);
     ~Hand();
 
@@ -39,7 +45,7 @@ public:
 
     unsigned GetNumberOfKeys() { return m_NumberOfKeys; }
 
-    Chord* Assign(Hmi::Item* item, Chord* chord);
+    Chord* Assign(Hmi::Item* item, InteractionLevel interaction);
 
     // Returns the Key symbol at specified position
     Hmi::Note* GetKey(unsigned index);
@@ -54,8 +60,10 @@ private:
     void AddKey(int key_id);
     void DeleteKey(unsigned index);
 
-    // Number of controls
+    // Number of fingers/hw controls
     unsigned m_NumberOfKeys = NUMBER_OF_BUTTONS;
+    unsigned m_PeripherialLevel = 3;
+
     std::vector<int> m_Keys;
     Hmi::Vector* m_KeysHmi;
     Device* m_Device;
