@@ -13,7 +13,7 @@ class Data : public Map
 protected:
     void Rebuild() override;
 
-    Drawer* CreatetDrawer() override;
+    Drawer* GetDrawerFromTheme() override;
     Layout* CreateLayout() override { return Layouts::CreateData(); }
 
 

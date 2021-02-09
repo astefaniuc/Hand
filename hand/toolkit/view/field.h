@@ -63,8 +63,6 @@ public:
         virtual Layout* GetLayout() = 0;
         virtual Layers::List* GetListLayer() = 0;
 
-        virtual void SetTheme(Theme* theme) = 0;
-
         virtual Field* GetField(const std::string& name, bool create = true) = 0;
 
         virtual SDL_Rect ComputeSize(const SDL_Rect& outer) = 0;

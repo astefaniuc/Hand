@@ -99,14 +99,6 @@ Layers::List* Layout::GetListLayer()
 }
 
 
-void Layout::SetTheme(Theme* theme)
-{
-    for (auto field : m_Fields)
-        if (field->IsValid())
-            field->GetItem()->SetTheme(theme);
-}
-
-
 void Layout::Clear()
 {
     for (auto field : m_Fields)

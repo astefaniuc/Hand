@@ -18,8 +18,6 @@ public:
     Layers::List* GetListLayer() override;
     void SetLayer(Layers::List* parent);
 
-    void SetTheme(Theme* theme) override;
-
     bool IsValid() const;
     bool IsExpanding(Orientation direction) override;
 

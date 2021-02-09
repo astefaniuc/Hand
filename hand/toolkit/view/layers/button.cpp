@@ -6,7 +6,7 @@
 namespace Layers {
 
 
-Drawer* Button::CreatetDrawer()
+Drawer* Button::GetDrawerFromTheme()
 {
     return GetTheme()->GetButtonDrawer(this);
 }

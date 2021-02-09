@@ -27,7 +27,7 @@ protected:
 
     void AddLayer(Hmi::Item* data);
 
-    Drawer* CreatetDrawer() override;
+    Drawer* GetDrawerFromTheme() override;
     Layout* CreateLayout() override { return new Layouts::List(); }
 
 private:

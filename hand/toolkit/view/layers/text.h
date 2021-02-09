@@ -20,7 +20,7 @@ public:
     void DrawContent(SDL_Surface*) override {}
 
 protected:
-    Drawer* CreatetDrawer() override { return GetTheme()->GetTextDrawer(this); }
+    Drawer* GetDrawerFromTheme() override { return GetTheme()->GetTextDrawer(this); }
 
     // Terminal layer. TODO: remove this from base class.
     void Rebuild() override {}

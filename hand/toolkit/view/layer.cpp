@@ -42,10 +42,7 @@ void Layer::SetTheme(Theme* theme)
 {
     m_Theme = theme;
     if (m_Theme && m_Drawer)
-        CreatetDrawer();
-
-    if (GetLayout())
-        GetLayout()->SetTheme(theme);
+        GetDrawerFromTheme();
 }
 
 
@@ -70,7 +67,7 @@ Drawer* Layer::GetDrawer()
     if (m_Drawer)
         return m_Drawer;
 
-    return CreatetDrawer();
+    return GetDrawerFromTheme();
 }
 
 

@@ -15,7 +15,7 @@ void Data::Rebuild()
 }
 
 
-Drawer* Data::CreatetDrawer()
+Drawer* Data::GetDrawerFromTheme()
 {
     return GetTheme()->GetDataDrawer(this);
 }

@@ -32,7 +32,7 @@ public:
     virtual void SetData(Hmi::Item* data);
     Hmi::Item* GetData() const { return m_Data; }
 
-    void SetTheme(Theme* theme) override;
+    void SetTheme(Theme* theme);
     Theme* GetTheme();
 
     Drawer* GetDrawer();
@@ -75,7 +75,7 @@ protected:
     /// Rebuild sub-layer structure on content or layout changes.
     virtual void Rebuild() = 0;
 
-    virtual Drawer* CreatetDrawer() = 0;
+    virtual Drawer* GetDrawerFromTheme() = 0;
 
     /// The Field::Item implementation:
     Field* GetField(const std::string& name, bool create = true) final { return nullptr; }

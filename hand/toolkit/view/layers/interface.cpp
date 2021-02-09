@@ -140,7 +140,7 @@ void Interface::Quit(Hmi::Item* caller)
 }
 
 
-Drawer* Interface::CreatetDrawer() { return GetTheme()->GetViewDrawer(this); }
+Drawer* Interface::GetDrawerFromTheme() { return GetTheme()->GetViewDrawer(this); }
 Layout* Interface::CreateLayout() { return Layouts::CreateView(); }
 
 }

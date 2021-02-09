@@ -17,7 +17,7 @@ public:
 protected:
     void Rebuild() override;
 
-    Drawer* CreatetDrawer() override;
+    Drawer* GetDrawerFromTheme() override;
     Layout* CreateLayout() override;
 
     void GetActiveItems(std::vector<Hmi::Item*>& out) override

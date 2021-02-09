@@ -42,7 +42,7 @@ protected:
     void SetData(Hmi::Item* data) override;
     void Rebuild() override;
 
-    Drawer* CreatetDrawer() override;
+    Drawer* GetDrawerFromTheme() override;
     Layout* CreateLayout() override;
 
 //    void Keep(enum mode)
