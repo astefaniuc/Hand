@@ -26,6 +26,7 @@ void List::ConnectButton(Layer* view)
     Layer* lv = view->GetParentLayer();
     if (dynamic_cast<Layers::ListView*>(lv))
     {
+        ActivationListeners.Remove(lv);
         ActivationListeners.Add(lv, &Layer::SetData);
     }
 }
