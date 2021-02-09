@@ -37,6 +37,8 @@ public:
 
     Drawer* GetDrawer();
     void SetDrawer(Drawer* drawer);
+    /// Remove Drawer without calling Drawer::Exit().
+    void RemoveDrawer() { m_Drawer = nullptr; }
 
     Layout* GetLayout() override { return nullptr; }
     Layers::List* GetListLayer() override { return nullptr; }

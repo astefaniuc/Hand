@@ -10,7 +10,7 @@ class Theme;
 class Drawer
 {
 public:
-    virtual ~Drawer() {}
+    virtual void Exit() = 0;
 
     virtual void Draw(SDL_Surface* buffer) = 0;
     virtual SDL_Rect ComputeSize(const SDL_Rect& content) = 0;
@@ -19,6 +19,8 @@ public:
     virtual void SetLayer(Layer* layer) { m_Layer = layer; }
 
 protected:
+    virtual ~Drawer() = default;
+
     Layer* m_Layer = nullptr;
 };
 

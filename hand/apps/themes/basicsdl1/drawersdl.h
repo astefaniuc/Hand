@@ -13,7 +13,10 @@ class BasicSdl1;
 class DrawerSdl : public Drawer
 {
 public:
-    DrawerSdl(BasicSdl1* theme, Hmi::List* config) : m_Theme(theme), m_Properties(config) {}
+    DrawerSdl(BasicSdl1* theme, Layer* layer, Hmi::List* config);
+    ~DrawerSdl();
+
+    void Exit() override;
 
     void Draw(SDL_Surface* buffer) override;
 

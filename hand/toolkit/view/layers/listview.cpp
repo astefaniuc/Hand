@@ -28,7 +28,7 @@ void ListView::Rebuild()
 }
 
 
-Drawer* ListView::CreatetDrawer() { return GetTheme()->GetViewDrawer(); }
+Drawer* ListView::CreatetDrawer() { return GetTheme()->GetViewDrawer(this); }
 Layout* ListView::CreateLayout() { return Layouts::CreateListView(); }
 
 

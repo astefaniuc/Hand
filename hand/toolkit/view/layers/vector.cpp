@@ -64,7 +64,7 @@ void Vector::GetActiveItems(std::vector<Hmi::Item*>& out)
 
 Drawer* Vector::CreatetDrawer()
 {
-    return GetTheme()->GetListDrawer();
+    return GetTheme()->GetListDrawer(this);
 }
 
 

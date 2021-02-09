@@ -59,9 +59,11 @@ BasicSdl1::BasicSdl1() : m_Hmi("BasicSdl1", "Basic SDL1 visual theme")
 
 BasicSdl1::~BasicSdl1()
 {
-    for (auto curr = Fonts.begin(); curr != Fonts.end(); ++curr)
-        TTF_CloseFont((*curr).second);
+    for (auto it = Fonts.begin(); it != Fonts.end(); ++it)
+        TTF_CloseFont((*it).second);
 
+    for (DrawerSdl* d : m_Drawers)
+        delete d;
     // TODO: we can't call atexit(SDL_Quit) here because it doesn' work from a lib
     // And what if multiple SDL themes are loaded?
 }
@@ -166,5 +168,18 @@ void BasicSdl1::UpdateScreen()
         ((Field::Item*)m_ScreenRoot)->UpdatePositions(res);
         m_ScreenRoot->Draw(m_Surface);
         SDL_Flip(m_Surface);
+    }
+}
+
+
+void BasicSdl1::Remove(DrawerSdl* child)
+{
+    for (auto it = m_Drawers.begin(); it != m_Drawers.end(); ++it)
+    {
+        if (*it == child)
+        {
+            m_Drawers.erase(it);
+            break;
+        }
     }
 }

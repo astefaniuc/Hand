@@ -13,8 +13,7 @@ Layer::~Layer()
 void Layer::Quit(Hmi::Item*)
 {
     SetModified();
-    delete m_Drawer;
-    m_Drawer = nullptr;
+    SetDrawer(nullptr);
     Clear();
 }
 
@@ -43,7 +42,7 @@ void Layer::SetTheme(Theme* theme)
 {
     m_Theme = theme;
     if (m_Theme && m_Drawer)
-        SetDrawer(CreatetDrawer());
+        CreatetDrawer();
 
     if (GetLayout())
         GetLayout()->SetTheme(theme);
@@ -60,19 +59,18 @@ Theme* Layer::GetTheme()
 
 void Layer::SetDrawer(Drawer* a_drawer)
 {
-    delete m_Drawer;
+    if (m_Drawer)
+        m_Drawer->Exit();
     m_Drawer = a_drawer;
 }
 
 
 Drawer* Layer::GetDrawer()
 {
-    if (!m_Drawer)
-    {
-        SetDrawer(CreatetDrawer());
-        m_Drawer->SetLayer(this);
-    }
-    return m_Drawer;
+    if (m_Drawer)
+        return m_Drawer;
+
+    return CreatetDrawer();
 }
 
 

@@ -29,11 +29,14 @@ public:
     /// Frames are scaled based on this.
     unsigned GetBaseSize();
 
-    Drawer* GetButtonDrawer() override { return new DrawerSdl(this, m_Buttons); }
-    Drawer* GetDataDrawer() override { return new DrawerSdl(this, m_Datas); }
-    Drawer* GetListDrawer() override { return new DrawerSdl(this, m_Lists); }
-    Drawer* GetTextDrawer() override { return new Text(this, m_Texts); }
-    Drawer* GetViewDrawer() override { return new DrawerSdl(this, m_Views); }
+    Drawer* GetButtonDrawer(Layer* layer) override { return new DrawerSdl(this, layer, m_Buttons); }
+    Drawer* GetDataDrawer(Layer* layer) override { return new DrawerSdl(this, layer, m_Datas); }
+    Drawer* GetListDrawer(Layer* layer) override { return new DrawerSdl(this, layer, m_Lists); }
+    Drawer* GetTextDrawer(Layer* layer) override { return new Text(this, layer, m_Texts); }
+    Drawer* GetViewDrawer(Layer* layer) override { return new DrawerSdl(this, layer, m_Views); }
+
+    void Register(DrawerSdl* child) { m_Drawers.push_back(child); }
+    void Remove(DrawerSdl* child);
 
 protected:
     // App mode interface
@@ -55,6 +58,7 @@ protected:
     bool m_IsFullscreen = false;
     // Stores once rendered fonts
     std::map<int, TTF_Font*> Fonts;
+    std::vector<DrawerSdl*> m_Drawers;
 };
 
 #endif // HAND_THEMES_BASICSDL1_H

@@ -11,11 +11,11 @@ public:
     virtual void InitScreen(Layer* root) = 0;
     virtual void UpdateScreen() = 0;
 
-    virtual Drawer* GetButtonDrawer() = 0;
-    virtual Drawer* GetDataDrawer() = 0;
-    virtual Drawer* GetListDrawer() = 0;
-    virtual Drawer* GetTextDrawer() = 0;
-    virtual Drawer* GetViewDrawer() = 0;
+    virtual Drawer* GetButtonDrawer(Layer*) = 0;
+    virtual Drawer* GetDataDrawer(Layer*) = 0;
+    virtual Drawer* GetListDrawer(Layer*) = 0;
+    virtual Drawer* GetTextDrawer(Layer*) = 0;
+    virtual Drawer* GetViewDrawer(Layer*) = 0;
 };
 
 #endif // HAND_VIEW_THEME_H

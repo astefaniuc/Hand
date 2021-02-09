@@ -5,6 +5,28 @@
 #include <SDL/SDL_ttf.h>
 
 
+DrawerSdl::DrawerSdl(BasicSdl1* theme, Layer* layer, Hmi::List* config)
+    : m_Theme(theme), m_Properties(config)
+{
+    SetLayer(layer);
+    layer->SetDrawer(this);
+    m_Theme->Register(this);
+}
+
+
+DrawerSdl::~DrawerSdl()
+{
+    m_Layer->RemoveDrawer();
+}
+
+
+void DrawerSdl::Exit()
+{
+    m_Theme->Remove(this);
+    delete this;
+}
+
+
 void DrawerSdl::Draw(SDL_Surface* buffer)
 {
     m_Buffer = buffer;
