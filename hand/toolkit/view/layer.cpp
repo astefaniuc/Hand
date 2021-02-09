@@ -76,6 +76,15 @@ Drawer* Layer::GetDrawer()
 }
 
 
+Layers::Interface* Layer::GetInterface()
+{
+    Layers::List* parent = GetParentLayer();
+    if (parent)
+        return parent->GetInterface();
+    return nullptr;
+}
+
+
 void Layer::SetModified()
 {
     Layers::List* parent = GetParentLayer();

@@ -14,7 +14,6 @@ List::~List()
 
 SDL_Rect List::ComputeSize(const SDL_Rect& outer)
 {
-    GetLayout();
     Update();
 
     SDL_Rect ret = GetDrawer()->ComputeSize(
@@ -55,8 +54,16 @@ void List::SetLayout(Layout* a_layout)
 
 void List::Update()
 {
-    if (m_Layout)
-        Layer::Update();
+    // Force a layout if yet not set.
+    GetLayout();
+    Layer::Update();
+}
+
+
+bool List::IsExpanding(Orientation direction)
+{
+    Update();
+    return GetLayout()->IsExpanding(direction);
 }
 
 

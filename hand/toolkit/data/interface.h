@@ -7,7 +7,6 @@
 
 class Layer;
 
-
 namespace Hmi {
 
 
@@ -17,11 +16,9 @@ public:
     Interface(
         const std::string& name,
         const std::string& description,
-        Module* manipulator = nullptr)
-        : Map(name, description, manipulator) { Add(CONTROL, new Vector("Controls", "")); }
+        Module* manipulator = nullptr);
 
-    void SetView(Item* view) { Add(VIEW, view); }
-    Item* GetView() const { return GetChild(VIEW); }
+    Vector* GetView() { return &m_ViewStack; }
 
     Vector* GetControls() { return static_cast<Vector*>(GetChild(CONTROL)); }
     void AddControl(Item* control) { GetControls()->Add(control); }
@@ -34,6 +31,8 @@ public:
 private:
     Layer* CreateExpandedView() override;
     void ConnectButton(Layer* view) override;
+
+    Vector m_ViewStack;
 };
 
 }

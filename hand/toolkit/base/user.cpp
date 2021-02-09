@@ -14,8 +14,7 @@
 
 User::User(EventHandler* a_input)
     : m_Input(a_input),
-      m_View("User", "User view"),
-      m_ViewStack("View", "")
+      m_View("User", "User view")
 {
     Layers::List* baseView = m_View.GetExpandedView()->GetListLayer();
 
@@ -24,10 +23,6 @@ User::User(EventHandler* a_input)
     layout->GetField(TITLE)->SetVisible(false);
     layout->GetField(DESCRIPTION)->SetVisible(false);
     baseView->SetLayout(layout);
-
-    m_View.SetView(&m_ViewStack);
-
-    static_cast<Layers::Vector*>(m_ViewStack.GetExpandedView())->SetExpandChildren(true);
 
     m_ThemeLoader = new ModuleLib();
     m_View.AddControl(new Hmi::Note(
@@ -78,7 +73,7 @@ bool User::LoadApp(Hmi::Note* a_path)
     {
         m_RunningApps.push_back(app);
         Hmi::Item* hmi = app->GetHmi();
-        m_ViewStack.Attach(hmi);
+        m_View.GetView()->Attach(hmi);
         m_Control->SetTarget(dynamic_cast<Layers::Interface*>(hmi->GetExpandedView()));
         return true;
     }

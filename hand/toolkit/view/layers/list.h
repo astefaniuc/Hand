@@ -44,9 +44,7 @@ protected:
     /// Field::Item interface:
     SDL_Rect ComputeSize(const SDL_Rect& outer) override;
     void UpdatePositions(const SDL_Rect& outer) override;
-    bool IsExpanding(Orientation direction) override {
-        return GetLayout()->IsExpanding(direction);
-    }
+    bool IsExpanding(Orientation direction) override;
 
     void ClearContent() override;
 

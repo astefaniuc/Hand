@@ -2,6 +2,7 @@
 #define HAND_VIEW_LAYER_MASTERLAYER_H
 
 #include "view/layers/map.h"
+#include "data/interface.h"
 
 
 namespace Hmi { class Vector; }
@@ -19,6 +20,14 @@ class Interface : public Map
 public:
     Interface();
     ~Interface();
+
+    void Update() override;
+
+    Interface* GetInterface() override { return this; }
+
+    Hmi::Vector* GetView() { return m_Data->GetInterface()->GetView(); }
+    void AddView(Hmi::Item* item);
+    void AttachView(Hmi::Item* item);
 
     void SetInteractionControl(Interaction::Control* hand);
     void RemoveInteractionControl();
@@ -40,9 +49,13 @@ protected:
     void Quit(Hmi::Item* caller) override;
 
 private:
+    void SetViewRemoveCallback(Hmi::Item* item);
+    void AddToRemoveFromView(Interface* item) { m_ToRemoveFromView.push_back(item); }
+
     ListView* m_Controls;
     Interaction::Control* m_InteractionControl = nullptr;
     Hmi::Vector* m_Shortcuts = nullptr;
+    std::vector<Interface*> m_ToRemoveFromView;
 };
 
 }

@@ -22,7 +22,7 @@ Item::~Item()
 }
 
 
-Interface* Item::GetParentInterface()
+Interface* Item::GetInterface()
 {
     if (m_Parent)
         return m_Parent->GetInterface();
@@ -49,7 +49,8 @@ void Item::SetExpandedView(Layer* layer)
 {
     delete m_ExpandedView;
     m_ExpandedView = layer;
-    m_ExpandedView->SetData(this);
+    if (m_ExpandedView)
+        m_ExpandedView->SetData(this);
 }
 
 

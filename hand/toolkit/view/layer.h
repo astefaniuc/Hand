@@ -6,8 +6,10 @@
 #include <SDL/SDL.h> // TODO: remove SDL dependency here
 
 
-namespace Hmi { class Item; }
-namespace Layers { class List; }
+namespace Layers {
+    class List;
+    class Interface;
+}
 namespace Interaction
 {
     class Control;
@@ -59,6 +61,7 @@ public:
     virtual void ReleaseCommand() {}
 
     virtual Hmi::List* GetLayerControls() { return nullptr; }
+    virtual Layers::Interface* GetInterface();
 
 protected:
     virtual bool CanUpdate() { return true; }

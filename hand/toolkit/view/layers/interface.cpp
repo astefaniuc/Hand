@@ -1,6 +1,5 @@
 #include "view/layers/interface.h"
 #include "view/layers/listview.h"
-#include "data/interface.h"
 #include "data/method.h"
 #include "data/vector.h"
 #include "view/theme.h"
@@ -29,8 +28,19 @@ Interface::~Interface()
 
 void Interface::SetData(Hmi::Item* data)
 {
-    m_Controls->SetData(static_cast<Hmi::Interface*>(data)->GetControls());
+    m_Controls->SetData(data->GetInterface()->GetControls());
     Map::SetData(data);
+}
+
+
+void Interface::Update()
+{
+    // Remove view items in the next iteration.
+    for (Interface* layer : m_ToRemoveFromView)
+        GetView()->Remove(layer->GetData());
+    m_ToRemoveFromView.clear();
+
+    Map::Update();
 }
 
 
@@ -38,7 +48,7 @@ void Interface::Rebuild()
 {
     Map::Rebuild();
 
-    Hmi::Item* view = static_cast<Hmi::Interface*>(m_Data)->GetView();
+    Hmi::Item* view = m_Data->GetInterface()->GetView();
 
     if (view)
         Insert(VIEW, view->GetExpandedView());
@@ -50,12 +60,33 @@ void Interface::Rebuild()
 void Interface::GetActiveItems(std::vector<Hmi::Item*>& out)
 {
 
-    Hmi::Item* view = static_cast<Hmi::Interface*>(m_Data)->GetView();
+    Hmi::Item* view = m_Data->GetInterface()->GetView();
 
     out.push_back(m_Controls->GetData());
     if (view)
         out.push_back(view);
     out.push_back(GetLayerControls());
+}
+
+
+void Interface::AddView(Hmi::Item* item)
+{
+    GetView()->Add(item);
+    SetViewRemoveCallback(item);
+}
+
+
+void Interface::AttachView(Hmi::Item* item)
+{
+    GetView()->Add(item);
+    SetViewRemoveCallback(item);
+}
+
+
+void Interface::SetViewRemoveCallback(Hmi::Item* item)
+{
+    item->GetExpandedView()->GetInterface()->ExitListeners.Add(
+        this, &Interface::AddToRemoveFromView);
 }
 
 
@@ -103,9 +134,9 @@ void Interface::RemoveInteractionControl()
 
 void Interface::Quit(Hmi::Item* caller)
 {
-    ExitListeners.Execute(this);
-
     Map::Quit(nullptr);
+
+    ExitListeners.Execute(this);
 }
 
 

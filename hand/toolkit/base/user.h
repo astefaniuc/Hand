@@ -33,7 +33,6 @@ private:
 
     std::vector<ModuleLib*> m_RunningApps;
     Hmi::Interface m_View;
-    Hmi::Vector m_ViewStack;
 
     std::mutex m_Mutex;
     std::condition_variable m_MainThread;

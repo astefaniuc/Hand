@@ -42,8 +42,7 @@ public:
     void SetParent(Hmi::List* parent) { m_Parent = parent; }
     Hmi::List* GetParent() const { return m_Parent; }
 
-    Interface* GetParentInterface();
-    virtual Interface* GetInterface() { return GetParentInterface(); }
+    virtual Interface* GetInterface();
 
 
     Layer* GetExpandedView();

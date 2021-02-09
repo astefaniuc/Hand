@@ -18,7 +18,6 @@ enum default_number_of_items
 
 class Device;
 class InputState;
-namespace Hmi { class Interface; }
 namespace Interaction { class Control; }
 
 class Hand : public Module
@@ -72,8 +71,6 @@ private:
 
     Chord m_Record;
     Interaction::Control* m_Interaction;
-
-    Hmi::Interface* m_InitScreen = nullptr;
 };
 
 #endif //HAND_INPUT_HAND_H
