@@ -3,7 +3,7 @@
 
 #include "view/theme.h"
 #include "data/map.h"
-#include "data/vector.h"
+#include "data/interface.h"
 #include "text.h"
 #include <SDL/SDL_ttf.h>
 #include <map>
@@ -20,7 +20,7 @@ public:
     BasicSdl1();
     ~BasicSdl1();
 
-    Hmi::Item* GetHmi() override { return &m_Hmi; }
+    Hmi::Interface* GetHmi() override { return &m_Hmi; }
 
     void InitScreen(Layer* root) override;
     void UpdateScreen() override;
@@ -45,7 +45,7 @@ protected:
     void SetWindowed();
     SDL_Rect GetResolution();
 
-    Hmi::Vector m_Hmi;
+    Hmi::Interface m_Hmi;
     Hmi::Map* m_Buttons;
     Hmi::Map* m_Datas;
     Hmi::Map* m_Lists;

@@ -50,10 +50,10 @@ BasicSdl1::BasicSdl1() : m_Hmi("BasicSdl1", "Basic SDL1 visual theme")
     m_Views->Add(new Rect(FRAMESIZE, "Relative frame size [%]", .5, .5, 1.0, 1.0));
     m_Views->Add(new Hmi::TData<bool>(DRAWFRAME, "Draw a visible frame around item", true));
 
-    m_Hmi.Add(m_Buttons);
-    m_Hmi.Add(m_Lists);
-    m_Hmi.Add(m_Texts);
-    m_Hmi.Add(m_Views);
+    m_Hmi.AddControl(m_Buttons);
+    m_Hmi.AddControl(m_Lists);
+    m_Hmi.AddControl(m_Texts);
+    m_Hmi.AddControl(m_Views);
 }
 
 

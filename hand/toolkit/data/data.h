@@ -27,12 +27,7 @@ public:
 class Data : public Item
 {
 public:
-    Data(const std::string& name, const std::string& description, Module* manipulator)
-        : Item(name, description), m_Manipulator(manipulator)
-    {
-//        if (m_Manipulator)
-//            AddActivationClient(m_Manipulator->GetHmi());
-    }
+    Data(const std::string& name, const std::string& description, Module* manipulator);
     ~Data();
 
     virtual std::string GetValueString() = 0;
@@ -45,10 +40,10 @@ public:
     Persistence* GetPersistence() { return m_Storage; }
 
 protected:
+    virtual void ShowHide(Item*);
+
     Layer* CreateExpandedView() override;
     Layer* CreateButtonView() override;
-
-    void ConnectButton(Layer* view) override;
 
     Persistence* m_Storage = nullptr;
 
@@ -67,12 +62,12 @@ public:
     // TEMP?
     virtual bool IsValid(const DataType& input) = 0;
 
-    Item* GetHmi() override { return m_Interface; }
-    void SetHmi(Item* interface) { m_Interface = interface; }
+    Interface* GetHmi() override { return m_Interface; }
+    void SetHmi(Interface* interface) { m_Interface = interface; }
 
 protected:
     TData<DataType>* m_Item = nullptr;
-    Item* m_Interface = nullptr;
+    Interface* m_Interface = nullptr;
 };
 
 

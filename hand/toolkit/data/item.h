@@ -51,8 +51,6 @@ public:
     Layer* GetButtonView();
     void SetButtonView(Layer* layer);
 
-    virtual void ConnectButton(Layer* view) {}
-
     void SetSelected(bool isSelected);
     bool IsSelected() const { return m_IsSelected; }
 

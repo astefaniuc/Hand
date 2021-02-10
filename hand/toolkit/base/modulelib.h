@@ -16,8 +16,6 @@ public:
 
     bool IsValid(const std::string&) override;
 
-    Hmi::Item* GetHmi() override;
-
     bool Load();
     void Close();
     Module* GetObject();

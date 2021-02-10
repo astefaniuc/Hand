@@ -31,8 +31,9 @@ public:
     void GetShortcuts(Hmi::Interface* caller, Hmi::List* out) override;
 
 protected:
+    void ShowHide(Item*) override;
+
     Layer* CreateButtonView() override;
-    void ConnectButton(Layer* view) override;
 };
 
 }

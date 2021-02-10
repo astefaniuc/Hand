@@ -22,14 +22,6 @@ bool ModuleLib::Load()
 }
 
 
-Hmi::Item* ModuleLib::GetHmi()
-{
-    if (!m_Module)
-        m_Module = Create();
-    return m_Module->GetHmi();
-}
-
-
 void ModuleLib::Close()
 {
     if (Library)

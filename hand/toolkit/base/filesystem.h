@@ -2,14 +2,19 @@
 #define HAND_BASE_FILESYSTEM_H
 
 #include "data/data.h"
+#include "data/interface.h"
 #include "data/vector.h"
 
 
 class Path : public Hmi::Manipulator<std::string>
 {
 public:
+    Path() { m_Interface = new Hmi::Interface("Path", "TODO"); }
+    ~Path() { delete m_Interface; }
+
     std::string GetAbsolute();
     std::string GetRelative();
+
 };
 
 

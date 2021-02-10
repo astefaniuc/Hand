@@ -78,7 +78,7 @@ void Interface::AddView(Hmi::Item* item)
 
 void Interface::AttachView(Hmi::Item* item)
 {
-    GetView()->Add(item);
+    GetView()->Attach(item);
     SetViewRemoveCallback(item);
 }
 
@@ -87,6 +87,8 @@ void Interface::SetViewRemoveCallback(Hmi::Item* item)
 {
     item->GetExpandedView()->GetInterface()->ExitListeners.Add(
         this, &Interface::AddToRemoveFromView);
+    if (m_InteractionControl)
+        m_InteractionControl->SetTarget(item->GetExpandedView()->GetInterface());
 }
 
 

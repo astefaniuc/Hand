@@ -1,8 +1,16 @@
 #include "data/data.h"
 #include "view/layers/data.h"
+#include "view/layers/interface.h"
 
 
 namespace Hmi {
+
+
+Data::Data(const std::string& name, const std::string& description, Module* manipulator)
+    : Item(name, description), m_Manipulator(manipulator)
+{
+    ActivationListeners.Add(this, &Data::ShowHide);
+}
 
 
 Data::~Data()
@@ -15,6 +23,19 @@ void Data::SetManipulator(Module* manipulator)
 {
     delete m_Manipulator;
     m_Manipulator = manipulator;
+}
+
+
+void Data::ShowHide(Item*)
+{
+    if (!m_Manipulator)
+        return;
+
+    Item* item = m_Manipulator->GetHmi();
+    if (!item->GetExpandedView()->IsVisible())
+        GetButtonView()->GetInterface()->AttachView(item);
+    else
+        item->GetExpandedView()->Exit();
 }
 
 
@@ -36,11 +57,4 @@ Layer* Data::CreateButtonView()
     return new Layers::Data();
 }
 
-void Data::ConnectButton(Layer* view)
-{
-    if (m_Manipulator)
-    {
-        // TODO ...
-    }
-}
 }

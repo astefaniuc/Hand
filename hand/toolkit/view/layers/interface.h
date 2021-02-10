@@ -30,6 +30,7 @@ public:
     void AttachView(Hmi::Item* item);
 
     void SetInteractionControl(Interaction::Control* hand);
+    Interaction::Control* GetInteractionControl() { return m_InteractionControl; }
     void RemoveInteractionControl();
 
     void GetActiveItems(std::vector<Hmi::Item*>& out) override;

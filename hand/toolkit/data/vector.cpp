@@ -21,14 +21,17 @@ Layer* List::CreateButtonView()
 }
 
 
-void List::ConnectButton(Layer* view)
+void List::ShowHide(Item*)
 {
-    Layer* lv = view->GetParentLayer();
-    if (dynamic_cast<Layers::ListView*>(lv))
+    if (!GetExpandedView()->IsVisible())
     {
-        ActivationListeners.Remove(lv);
-        ActivationListeners.Add(lv, &Layer::SetData);
+        Layers::ListView* lv = dynamic_cast<Layers::ListView*>(
+            GetButtonView()->GetParentLayer()->GetParentLayer());
+        if (lv)
+            lv->SetData(this);
     }
+    else
+        GetExpandedView()->Exit();
 }
 
 

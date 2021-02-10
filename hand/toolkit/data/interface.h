@@ -29,8 +29,8 @@ public:
     void GetShortcuts(Hmi::Interface* caller, Hmi::List* out) override;
 
 private:
+    void ShowHide(Item*) override;
     Layer* CreateExpandedView() override;
-    void ConnectButton(Layer* view) override;
 
     Vector m_ViewStack;
 };

@@ -38,7 +38,7 @@ Hand::~Hand()
 }
 
 
-Hmi::Item* Hand::GetInitScreen()
+Hmi::Interface* Hand::GetInitScreen()
 {
     Layouts::Placed::Map* handLayout = new Layouts::Placed::Map();
     handLayout->SetField(Finger[Chord::Thumb], { 0.21, 0.6, 0.0, 0.0 });

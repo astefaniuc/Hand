@@ -26,14 +26,7 @@ Control::~Control()
 void Control::Start()
 {
     if (!m_Hand->Init())
-    {
-        // Show init screen
-        Hmi::Item* initView = m_Hand->GetInitScreen();
-        // TODO: built-in way to add/set the parent view
-        m_Stack[0]->AddView(initView);
-
-        SetTarget(dynamic_cast<Layers::Interface*>(initView->GetExpandedView()));
-    }
+        m_Stack[0]->AddView(m_Hand->GetInitScreen());
 }
 
 

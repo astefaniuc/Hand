@@ -26,15 +26,18 @@ void Interface::GetShortcuts(Hmi::Interface* caller, Hmi::List* out)
 }
 
 
-Layer* Interface::CreateExpandedView()
+void Interface::ShowHide(Item*)
 {
-    return new Layers::Interface();
+    if (!GetExpandedView()->IsVisible())
+        GetButtonView()->GetInterface()->AttachView(this);
+    else
+        GetExpandedView()->Exit();
 }
 
 
-void Interface::ConnectButton(Layer* view)
+Layer* Interface::CreateExpandedView()
 {
-//    AddActivationClient(CCallback<Interface>(this));
+    return new Layers::Interface();
 }
 
 }
