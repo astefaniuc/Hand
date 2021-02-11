@@ -41,10 +41,12 @@ std::string Path::GetRelative()
 }
 
 
+
 bool Folder::IsValid(const std::string&)
 {
     return is_directory(GetPath(m_Item));
 }
+
 
 Hmi::List* Folder::GetContent()
 {
@@ -69,7 +71,13 @@ Hmi::List* Folder::GetContent()
     return ret;
 }
 
-// ----------------------------------------------------------------
+
+
+void File::Init()
+{
+    m_Interface->GetView()->Attach(m_Item);
+}
+
 
 bool File::IsValid(const std::string&)
 {

@@ -58,12 +58,16 @@ template <typename DataType>
 class Manipulator : public Module
 {
 public:
-    void SetItem(TData<DataType>* toHandle) { m_Item = toHandle; }
-    // TEMP?
+    void SetItem(TData<DataType>* toHandle)
+    {
+        m_Item = toHandle;
+        Init();
+    }
     virtual bool IsValid(const DataType& input) = 0;
 
+    virtual void Init() {}
+
     Interface* GetHmi() override { return m_Interface; }
-    void SetHmi(Interface* interface) { m_Interface = interface; }
 
 protected:
     TData<DataType>* m_Item = nullptr;
