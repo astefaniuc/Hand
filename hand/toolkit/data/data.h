@@ -40,7 +40,7 @@ public:
     Persistence* GetPersistence() { return m_Storage; }
 
 protected:
-    virtual void ShowHide(Item*);
+    virtual void Expand(Item*);
 
     Layer* CreateExpandedView() override;
     Layer* CreateButtonView() override;

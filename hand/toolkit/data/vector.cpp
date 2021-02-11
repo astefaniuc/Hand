@@ -21,7 +21,7 @@ Layer* List::CreateButtonView()
 }
 
 
-void List::ShowHide(Item*)
+void List::Expand(Item*)
 {
     if (!GetExpandedView()->IsVisible())
     {

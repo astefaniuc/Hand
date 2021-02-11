@@ -9,7 +9,7 @@ namespace Hmi {
 Data::Data(const std::string& name, const std::string& description, Module* manipulator)
     : Item(name, description), m_Manipulator(manipulator)
 {
-    ActivationListeners.Add(this, &Data::ShowHide);
+    ActivationListeners.Add(this, &Data::Expand);
 }
 
 
@@ -26,7 +26,7 @@ void Data::SetManipulator(Module* manipulator)
 }
 
 
-void Data::ShowHide(Item*)
+void Data::Expand(Item*)
 {
     if (!m_Manipulator)
         return;

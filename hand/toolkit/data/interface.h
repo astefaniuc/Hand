@@ -29,7 +29,7 @@ public:
     void GetShortcuts(Hmi::Interface* caller, Hmi::List* out) override;
 
 private:
-    void ShowHide(Item*) override;
+    void Expand(Item*) override;
     Layer* CreateExpandedView() override;
 
     Vector m_ViewStack;

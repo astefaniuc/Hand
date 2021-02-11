@@ -27,7 +27,7 @@ void Interface::GetShortcuts(Hmi::Interface* caller, Hmi::List* out)
 }
 
 
-void Interface::ShowHide(Item*)
+void Interface::Expand(Item*)
 {
     GetButtonView()->GetInterface()->Show(this, false);
 }
