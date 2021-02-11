@@ -17,6 +17,8 @@ public:
     virtual void Add(Item* child) = 0;
     /// Insert a child item without assuming ownership of it.
     virtual void Attach(Item* child) = 0;
+    virtual bool Contains(Item* item) = 0;
+
     /// Removes the item from the children list. Owned children are destroyed.
     virtual void Remove(Item* child) = 0;
 

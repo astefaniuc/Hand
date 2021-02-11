@@ -16,6 +16,15 @@ void Map::Add(const std::string& key, Item* child)
 }
 
 
+bool Map::Contains(Item* item)
+{
+    for (auto it = m_Value.begin(); it != m_Value.end(); ++it)
+        if (it->second == item)
+            return true;
+    return false;
+}
+
+
 void Map::Remove(Item* child)
 {
     if (child->GetParent() == this)

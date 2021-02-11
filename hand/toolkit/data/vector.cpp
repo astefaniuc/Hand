@@ -49,6 +49,15 @@ void Vector::Attach(Item* child)
 }
 
 
+bool Vector::Contains(Item* item)
+{
+    for (Item* child : m_Value)
+        if (child == item)
+            return true;
+    return false;
+}
+
+
 void Vector::Remove(Item* child)
 {
     if (child->GetParent() == this)

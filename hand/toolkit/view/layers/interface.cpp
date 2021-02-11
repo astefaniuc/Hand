@@ -70,7 +70,7 @@ void Interface::GetActiveItems(std::vector<Hmi::Item*>& out)
 
 void Interface::Show(Hmi::Item* item, bool deleteOnExit)
 {
-    if (!item->GetExpandedView()->IsVisible())
+    if (!GetView()->Contains(item))
     {
         if (deleteOnExit)
             GetView()->Add(item);

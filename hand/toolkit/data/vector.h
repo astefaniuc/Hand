@@ -21,6 +21,7 @@ public:
     void Add(Item* child) override;
     /// Insert a child item without assuming ownership of it.
     void Attach(Item* child) override;
+    bool Contains(Item* item) override;
     /// Removes the item from the children list. Owned children are destroyed.
     void Remove(Item* child) override;
 

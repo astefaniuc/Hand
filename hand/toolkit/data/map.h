@@ -28,6 +28,7 @@ public:
     /// Insert a child item without assuming ownership of it.
     void Attach(const std::string& key, Item* child) { m_Value[key] = child; }
     void Attach(Item* child) { m_Value[child->GetName()] = child; }
+    bool Contains(Item* item) override;
     void Remove(Item* child) override;
 
     Item* GetChild(const std::string& name) const override;
