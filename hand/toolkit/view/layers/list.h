@@ -26,6 +26,7 @@ public:
     void ReleaseInteractionGroup() override;
 
     bool SetCommand(Interaction::Command* ctrl) override;
+    Interaction::Command* GetCommand() override { return m_Command; }
     void ReleaseCommand() override;
 
     void SetFocus();

@@ -30,8 +30,6 @@ void List::Expand(Item*)
         if (lv)
             lv->SetData(this);
     }
-    else
-        GetExpandedView()->Exit();
 }
 
 

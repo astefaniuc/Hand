@@ -228,6 +228,9 @@ void Group::Update()
     m_Layer->GetActiveItems(commands);
     for (Hmi::Item* item : commands)
     {
+        if (item->GetButtonView()->GetCommand())
+            continue;
+
         Chord* chord = GetControl()->GetHand()->Assign(item, level);
         if (!chord)
             // No more free chords

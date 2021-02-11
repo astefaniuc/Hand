@@ -13,8 +13,8 @@ void Map::Rebuild()
     Insert(TITLE, &m_Name);
     if (!m_Data->GetInfo().empty())
         Insert(DESCRIPTION, &m_Info);
-    if (m_Command)
-        Insert(CONTROL, m_Command->GetLayer());
+    if (GetCommand())
+        Insert(CONTROL, GetCommand()->GetLayer());
 }
 
 

@@ -60,6 +60,7 @@ public:
     virtual void ReleaseInteractionGroup() {}
 
     virtual bool SetCommand(Interaction::Command* ctrl) { return false; }
+    virtual Interaction::Command* GetCommand() { return nullptr; }
     virtual void ReleaseCommand() {}
 
     virtual Hmi::List* GetLayerControls() { return nullptr; }
