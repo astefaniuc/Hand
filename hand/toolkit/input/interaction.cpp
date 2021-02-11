@@ -2,6 +2,7 @@
 #include "input/hand.h"
 #include "data/interface.h"
 #include "data/list.h"
+#include "data/method.h"
 #include "view/layer.h"
 #include "view/layers/list.h"
 #include "view/layers/interface.h"
@@ -14,19 +15,23 @@ namespace Interaction {
 Control::Control(Hand* hand) : m_Hand(hand)
 {
     m_Hand->SetInteraction(this);
+    m_MoveControlUp = new Hmi::Action<Control>(
+        "Parent control", "Set the input control to the parent interface.",
+        this, &Control::PopTargetCb);
 }
 
 
 Control::~Control()
 {
     delete m_Hand;
+    delete m_MoveControlUp;
 }
 
 
 void Control::Start()
 {
     if (!m_Hand->Init())
-        m_Stack[0]->AddView(m_Hand->GetInitScreen());
+        m_Stack[0]->Show(m_Hand->GetInitScreen(), true);
 }
 
 
@@ -36,6 +41,8 @@ void Control::Rebuild()
     if (!m_Stack.size())
         return;
 
+    if (m_Stack.size() > 1)
+        m_Stack.back()->GetLayerControls()->Attach(m_MoveControlUp);
     m_Stack.back()->SetInteractionControl(this);
 
     if (m_ShortCuts)
@@ -88,13 +95,7 @@ void Control::RemoveTarget(Layers::Interface* target)
 {
     auto it = std::find(m_Stack.rbegin(), m_Stack.rend(), target);
     if (it != m_Stack.rend())
-    {
-        (*it)->RemoveInteractionControl();
-        (*it)->ExitListeners.Remove(this);
-        m_Stack.erase((++it).base());
-
-        Rebuild();
-    }
+        RemoveTarget(it);
 }
 
 
@@ -104,16 +105,29 @@ void Control::RemoveTargetCb(Layers::Interface* target)
     {
         if (*it == target)
         {
-            (*it)->RemoveInteractionControl();
-            (*it)->ExitListeners.Remove(this);
-            m_Stack.erase((++it).base());
-
-            Rebuild();
+            RemoveTarget(it);
             return;
         }
     }
 }
 
+
+void Control::PopTargetCb(Hmi::Item*)
+{
+    auto it = m_Stack.rbegin();
+    RemoveTarget(it);
+}
+
+
+void Control::RemoveTarget(std::vector<Layers::Interface*>::reverse_iterator& target)
+{
+    (*target)->RemoveInteractionControl();
+    (*target)->GetLayerControls()->Remove(m_MoveControlUp);
+    (*target)->ExitListeners.Remove(this);
+    m_Stack.erase((++target).base());
+
+    Rebuild();
+}
 
 void Control::Add(Group* child)
 {

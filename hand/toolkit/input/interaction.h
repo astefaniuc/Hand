@@ -42,6 +42,8 @@ private:
     void Rebuild();
     void Clear();
     void RemoveTargetCb(Layers::Interface* target);
+    void PopTargetCb(Hmi::Item*);
+    void RemoveTarget(std::vector<Layers::Interface*>::reverse_iterator& target);
 
     Hand* m_Hand;
 
@@ -50,6 +52,8 @@ private:
     std::vector<Group*> m_Groups;
     Group* m_Focus = nullptr;
     Group* m_ShortCuts = nullptr;
+
+    Hmi::Item* m_MoveControlUp;
 };
 
 

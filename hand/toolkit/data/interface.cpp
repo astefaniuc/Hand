@@ -16,6 +16,7 @@ Interface::Interface(const std::string& name, const std::string& description, Mo
     Attach(VIEW, &m_ViewStack);
 }
 
+
 void Interface::GetShortcuts(Hmi::Interface* caller, Hmi::List* out)
 {
     if (caller != this)
@@ -28,10 +29,7 @@ void Interface::GetShortcuts(Hmi::Interface* caller, Hmi::List* out)
 
 void Interface::ShowHide(Item*)
 {
-    if (!GetExpandedView()->IsVisible())
-        GetButtonView()->GetInterface()->AttachView(this);
-    else
-        GetExpandedView()->Exit();
+    GetButtonView()->GetInterface()->Show(this, false);
 }
 
 

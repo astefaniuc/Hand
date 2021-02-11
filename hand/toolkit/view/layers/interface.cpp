@@ -59,7 +59,6 @@ void Interface::Rebuild()
 
 void Interface::GetActiveItems(std::vector<Hmi::Item*>& out)
 {
-
     Hmi::Item* view = m_Data->GetInterface()->GetView();
 
     out.push_back(m_Controls->GetData());
@@ -69,24 +68,18 @@ void Interface::GetActiveItems(std::vector<Hmi::Item*>& out)
 }
 
 
-void Interface::AddView(Hmi::Item* item)
+void Interface::Show(Hmi::Item* item, bool deleteOnExit)
 {
-    GetView()->Add(item);
-    SetViewRemoveCallback(item);
-}
+    if (!item->GetExpandedView()->IsVisible())
+    {
+        if (deleteOnExit)
+            GetView()->Add(item);
+        else
+            GetView()->Attach(item);
 
-
-void Interface::AttachView(Hmi::Item* item)
-{
-    GetView()->Attach(item);
-    SetViewRemoveCallback(item);
-}
-
-
-void Interface::SetViewRemoveCallback(Hmi::Item* item)
-{
-    item->GetExpandedView()->GetInterface()->ExitListeners.Add(
-        this, &Interface::AddToRemoveFromView);
+        item->GetExpandedView()->GetInterface()->ExitListeners.Add(
+            this, &Interface::AddToRemoveFromView);
+    }
     if (m_InteractionControl)
         m_InteractionControl->SetTarget(item->GetExpandedView()->GetInterface());
 }
@@ -122,6 +115,8 @@ void Interface::SetInteractionControl(Interaction::Control* control)
     if (m_Shortcuts->Size())
         control->SetShortcuts(new Interaction::Group(
             m_Shortcuts->GetExpandedView()->GetListLayer()));
+
+    control->Add(new Interaction::Group(GetLayerControls()->GetExpandedView()->GetListLayer()));
 
     SetModified();
 }

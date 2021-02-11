@@ -31,11 +31,7 @@ void Data::ShowHide(Item*)
     if (!m_Manipulator)
         return;
 
-    Item* item = m_Manipulator->GetHmi();
-    if (!item->GetExpandedView()->IsVisible())
-        GetButtonView()->GetInterface()->AttachView(item);
-    else
-        item->GetExpandedView()->Exit();
+    GetButtonView()->GetInterface()->Show(m_Manipulator->GetHmi(), false);
 }
 
 

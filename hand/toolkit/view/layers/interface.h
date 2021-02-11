@@ -26,11 +26,9 @@ public:
     Interface* GetInterface() override { return this; }
 
     Hmi::Vector* GetView() { return m_Data->GetInterface()->GetView(); }
-    void AddView(Hmi::Item* item);
-    void AttachView(Hmi::Item* item);
+    void Show(Hmi::Item* item, bool deleteOnExit);
 
     void SetInteractionControl(Interaction::Control* hand);
-    Interaction::Control* GetInteractionControl() { return m_InteractionControl; }
     void RemoveInteractionControl();
 
     void GetActiveItems(std::vector<Hmi::Item*>& out) override;
@@ -50,7 +48,6 @@ protected:
     void Quit(Hmi::Item* caller) override;
 
 private:
-    void SetViewRemoveCallback(Hmi::Item* item);
     void AddToRemoveFromView(Interface* item) { m_ToRemoveFromView.push_back(item); }
 
     ListView* m_Controls;

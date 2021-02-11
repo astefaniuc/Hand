@@ -42,7 +42,7 @@ BasicSdl1::BasicSdl1() : m_Hmi("BasicSdl1", "Basic SDL1 visual theme")
     m_Texts->Add(new Rgb(FRAMECOLOR, "", 30, 30, 75));
     m_Texts->Add(new Rect(FRAMESIZE, "Relative frame size [%]", .5, .5, 1.0, 1.0));
     m_Texts->Add(new Rgb(FONTCOLOR, "", 180, 180, 180));
-    m_Texts->Add(new Hmi::TData<unsigned>(FONTSIZE, "", 20));
+    m_Texts->Add(new Hmi::TData<unsigned>(FONTSIZE, "", 16));
 
     m_Views = new Hmi::Map("Views", "Customize");
     m_Views->Add(new Rgb(BACKGROUNDCOLOR, "", 5, 0, 14));
