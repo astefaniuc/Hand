@@ -16,13 +16,15 @@ User::User(EventHandler* a_input)
     : m_Input(a_input),
       m_View("User", "User view")
 {
-    Layers::List* baseView = m_View.GetExpandedView()->GetListLayer();
-
     Layout* layout = Layouts::CreateView();
     layout->GetField(VIEW)->SetExpanding(true, true);
     layout->GetField(TITLE)->SetVisible(false);
     layout->GetField(DESCRIPTION)->SetVisible(false);
-    baseView->SetLayout(layout);
+
+    m_ViewLayer = new Layers::Interface();
+    m_ViewLayer->SetLayout(layout);
+    m_ViewLayer->ExitListeners.Add(this, &User::Stop);
+    m_View.SetExpandedView(m_ViewLayer);
 
     m_ThemeLoader = new ModuleLib();
     m_View.AddControl(new Hmi::Note(
@@ -31,12 +33,13 @@ User::User(EventHandler* a_input)
 
     // TODO: load settings
     Theme* theme = static_cast<Theme*>(m_ThemeLoader->GetObject());
-    baseView->SetTheme(theme);
-    theme->InitScreen(baseView);
+    m_ViewLayer->SetTheme(theme);
+    theme->InitScreen(m_ViewLayer);
     m_View.AttachControl(theme->GetHmi());
 
+
     m_Control = new Interaction::Control(new Hand(m_Input->GetDevice(Device::Keyboard)));
-    m_Control->SetTarget(dynamic_cast<Layers::Interface*>(baseView));
+    m_Control->SetTarget(m_ViewLayer);
 
     m_Input->SetUser(this);
 }
@@ -46,13 +49,13 @@ User::~User()
 {
     for (ModuleLib* app : m_RunningApps)
         delete app;
+
+//    delete m_ViewLayer;
 }
 
 
 void User::Start()
 {
-    static_cast<Layers::Interface*>(m_View.GetExpandedView())->ExitListeners.Add(this, &User::Stop);
-
     m_Control->Start();
 
     m_Input->Start();
@@ -61,7 +64,6 @@ void User::Start()
     m_MainThread.wait(lock);
 
     m_Input->Stop();
-    m_View.GetExpandedView()->Exit();
 }
 
 
@@ -85,5 +87,5 @@ bool User::LoadApp(Hmi::Note* a_path)
 
 void User::Update()
 {
-    m_View.GetExpandedView()->GetTheme()->UpdateScreen();
+    m_ViewLayer->GetTheme()->UpdateScreen();
 }

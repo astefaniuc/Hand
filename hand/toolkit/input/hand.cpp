@@ -40,30 +40,40 @@ Hand::~Hand()
 
 Hmi::Interface* Hand::GetInitScreen()
 {
-    Layouts::Placed::Map* handLayout = new Layouts::Placed::Map();
-    handLayout->SetField(Finger[Chord::Thumb], { 0.21, 0.6, 0.0, 0.0 });
-    handLayout->SetField(Finger[Chord::Pointer], { 0.3, 0.4, 0.0, 0.0 });
-    handLayout->SetField(Finger[Chord::Middle], { 0.45, 0.39, 0.0, 0.0 });
-    handLayout->SetField(Finger[Chord::Ring], { 0.6, 0.41, 0.0, 0.0 });
-    handLayout->SetField(Finger[Chord::Little], { 0.7, 0.5, 0.0, 0.0 });
-
-    Layers::Vector* handLayer = static_cast<Layers::Vector*>(m_KeysHmi->GetExpandedView());
-    handLayer->SetLayout(handLayout);
-    handLayer->SetExpandChildren(true);
-
-    Layout* screenLayout = Layouts::CreateView();
-    screenLayout->GetField(DESCRIPTION)->SetAlignment(VAlignment::Bottom, HAlignment::HCenter);
-    screenLayout->GetField(CONTROL)->SetVisible(false);
-    screenLayout->GetField(LAYER_CONTROLS)->SetVisible(false);
-
     Hmi::Interface* initScreen = new Hmi::Interface(
         "Keyboard Initialization",
         "Press 5 keys on the keyboard, to initialize a Hand device.");
     initScreen->GetView()->Attach(m_KeysHmi);
-
-    initScreen->GetExpandedView()->GetListLayer()->SetLayout(screenLayout);
+    m_KeysHmi->SetLayerInitializer(this, &Hand::InitHandLayer);
+    initScreen->SetLayerInitializer(this, &Hand::InitInitLayer);
 
     return initScreen;
+}
+
+
+void Hand::InitInitLayer(Layer* l)
+{
+    Layout* layout = Layouts::CreateView();
+    layout->GetField(DESCRIPTION)->SetAlignment(VAlignment::Bottom, HAlignment::HCenter);
+    layout->GetField(CONTROL)->SetVisible(false);
+    layout->GetField(LAYER_CONTROLS)->SetVisible(false);
+
+    static_cast<Layers::List*>(l)->SetLayout(layout);
+}
+
+
+void Hand::InitHandLayer(Layer* l)
+{
+    Layouts::Placed::Map* layout = new Layouts::Placed::Map();
+    layout->SetField(Finger[Chord::Thumb], { 0.21, 0.6, 0.0, 0.0 });
+    layout->SetField(Finger[Chord::Pointer], { 0.3, 0.4, 0.0, 0.0 });
+    layout->SetField(Finger[Chord::Middle], { 0.45, 0.39, 0.0, 0.0 });
+    layout->SetField(Finger[Chord::Ring], { 0.6, 0.41, 0.0, 0.0 });
+    layout->SetField(Finger[Chord::Little], { 0.7, 0.5, 0.0, 0.0 });
+
+    Layers::Vector* lv = static_cast<Layers::Vector*>(l);
+    lv->SetLayout(layout);
+    lv->SetExpandChildren(true);
 }
 
 

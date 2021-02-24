@@ -31,7 +31,6 @@ public:
 
     bool IsOwner(void* owner) final { return (m_Object == owner); }
 
-
 private:
     CbOwner* m_Object;
     TCallback m_Function;

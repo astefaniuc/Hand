@@ -60,6 +60,9 @@ private:
     void AddKey(int key_id);
     void DeleteKey(unsigned index);
 
+    void InitInitLayer(Layer* l);
+    void InitHandLayer(Layer* l);
+
     // Number of fingers/hw controls
     unsigned m_NumberOfKeys = NUMBER_OF_BUTTONS;
     unsigned m_PeripherialLevel = 3;

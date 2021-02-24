@@ -66,6 +66,14 @@ public:
     /// You can keep HmiItems in the closer focus while the user descends into details.
     void SetVisualKeepLevel(int level);
 
+    template <class CbOwner>
+    void SetLayerInitializer(CbOwner* obj, void (CbOwner::*method)(Layer*))
+    {
+        if (m_LayerInitializer)
+            delete m_LayerInitializer;
+        m_LayerInitializer = new CCallback<CbOwner, Layer>(obj, method);
+    }
+
     Listeners<Item> SelectionListeners;
     Listeners<Item> ActivationListeners;
     Listeners<Item> DataListeners;
@@ -86,6 +94,8 @@ private:
     bool m_IsSelected = false;
 
     Chord* m_Shortcut = nullptr;
+
+    ICallback<Layer>* m_LayerInitializer = nullptr;
 };
 
 }

@@ -16,6 +16,7 @@ Item::~Item()
         tmp->Remove(this);
     }
 
+    delete m_LayerInitializer;
     delete m_ExpandedView;
     delete m_ButtonView;
     delete m_Shortcut;
@@ -40,7 +41,11 @@ void Item::SetSelected(bool isSelected)
 Layer* Item::GetExpandedView()
 {
     if (!m_ExpandedView)
+    {
         SetExpandedView(CreateExpandedView());
+        if (m_LayerInitializer)
+            m_LayerInitializer->Execute(m_ExpandedView);
+    }
     return m_ExpandedView;
 }
 

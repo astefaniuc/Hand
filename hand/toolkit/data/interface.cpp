@@ -10,9 +10,9 @@ Interface::Interface(const std::string& name, const std::string& description, Mo
     : Map(name, description, manipulator),
       m_ViewStack("View", "")
 {
-    Add(CONTROL, new Vector("Controls", ""));
+    m_ViewStack.SetLayerInitializer(this, &Interface::InitListViewLayer);
 
-    static_cast<Layers::Vector*>(m_ViewStack.GetExpandedView())->SetExpandChildren(true);
+    Add(CONTROL, new Vector("Controls", ""));
     Attach(VIEW, &m_ViewStack);
 }
 
@@ -36,6 +36,12 @@ void Interface::Expand(Item*)
 Layer* Interface::CreateExpandedView()
 {
     return new Layers::Interface();
+}
+
+
+void Interface::InitListViewLayer(Layer* l)
+{
+    static_cast<Layers::Vector*>(l)->SetExpandChildren(true);
 }
 
 }

@@ -28,9 +28,10 @@ public:
 
     void GetShortcuts(Hmi::Interface* caller, Hmi::List* out) override;
 
-private:
+protected:
     void Expand(Item*) override;
     Layer* CreateExpandedView() override;
+    void InitListViewLayer(Layer* l);
 
     Vector m_ViewStack;
 };
