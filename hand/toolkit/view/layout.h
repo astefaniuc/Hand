@@ -14,7 +14,6 @@ public:
 
     Field::Item* GetItem(const std::string& name);
 
-    Layout* GetLayout() override { return this; }
     Layers::List* GetListLayer() override;
     void SetLayer(Layers::List* parent);
 

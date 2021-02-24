@@ -13,7 +13,7 @@ class List : public Layer
 public:
     ~List();
 
-    Layout* GetLayout() override;
+    Layout* GetLayout();
     void SetLayout(Layout* layout);
 
     Layers::List* GetListLayer() override { return this; }

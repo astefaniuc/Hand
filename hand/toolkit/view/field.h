@@ -60,7 +60,6 @@ public:
 
         Layers::List* GetParentLayer();
 
-        virtual Layout* GetLayout() = 0;
         virtual Layers::List* GetListLayer() = 0;
 
         virtual Field* GetField(const std::string& name, bool create = true) = 0;

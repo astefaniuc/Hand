@@ -47,7 +47,8 @@ void List::SetLayout(Layout* a_layout)
 {
     delete m_Layout;
     m_Layout = a_layout;
-    m_Layout->SetLayer(this);
+    if (m_Layout)
+        m_Layout->SetLayer(this);
     SetModifiedContent();
 }
 
