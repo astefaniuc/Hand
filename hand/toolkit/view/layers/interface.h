@@ -25,7 +25,6 @@ public:
 
     Interface* GetInterface() override { return this; }
 
-    Hmi::Vector* GetView() { return m_Data->GetInterface()->GetView(); }
     void Show(Hmi::Item* item, bool deleteOnExit);
 
     void SetInteractionControl(Interaction::Control* hand);
@@ -38,6 +37,7 @@ public:
     Listeners<Interface> ExitListeners;
 
 protected:
+    Hmi::Vector* GetView() { return m_Data->GetInterface()->GetView(); }
     void SetData(Hmi::Item* data) override;
     void Rebuild() override;
 

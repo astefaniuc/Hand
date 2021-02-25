@@ -48,10 +48,7 @@ void Interface::Rebuild()
 {
     Map::Rebuild();
 
-    Hmi::Item* view = m_Data->GetInterface()->GetView();
-
-    if (view)
-        Insert(VIEW, view->GetExpandedView());
+    Insert(VIEW, GetView()->GetExpandedView());
     Insert(CONTROL, m_Controls);
     Insert(LAYER_CONTROLS, GetLayerControls()->GetExpandedView());
 }
@@ -59,11 +56,8 @@ void Interface::Rebuild()
 
 void Interface::GetActiveItems(std::vector<Hmi::Item*>& out)
 {
-    Hmi::Item* view = m_Data->GetInterface()->GetView();
-
     out.push_back(m_Controls->GetData());
-    if (view)
-        out.push_back(view);
+    out.push_back(GetView());
     out.push_back(GetLayerControls());
 }
 
