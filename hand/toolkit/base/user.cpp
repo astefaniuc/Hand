@@ -24,7 +24,7 @@ User::User(EventHandler* a_input)
     m_ViewLayer = new Layers::Interface();
     m_ViewLayer->SetLayout(layout);
     m_ViewLayer->ExitListeners.Add(this, &User::Stop);
-    m_View.SetExpandedView(m_ViewLayer);
+    m_ViewLayer->SetData(&m_View);
 
     m_ThemeLoader = new ModuleLib();
     m_View.AddControl(new Hmi::Note(
@@ -76,7 +76,7 @@ bool User::LoadApp(Hmi::Note* a_path)
         m_RunningApps.push_back(app);
         Hmi::Item* hmi = app->GetHmi();
         m_View.GetView()->Attach(hmi);
-        m_Control->SetTarget(dynamic_cast<Layers::Interface*>(hmi->GetExpandedView()));
+        m_Control->SetTarget(hmi->GetExpandedView()->GetInterface());
         return true;
     }
 

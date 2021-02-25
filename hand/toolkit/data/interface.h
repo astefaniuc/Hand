@@ -6,6 +6,7 @@
 
 
 class Layer;
+namespace Layers { class Interface; }
 
 namespace Hmi {
 
@@ -28,10 +29,11 @@ public:
 
     void GetShortcuts(Hmi::Interface* caller, Hmi::List* out) override;
 
+    void DeleteCb(Layers::Interface*) { delete this; }
+
 protected:
     void Expand(Item*) override;
     Layer* CreateExpandedView() override;
-    void InitListViewLayer(Layer* l);
 
     Vector m_ViewStack;
 };

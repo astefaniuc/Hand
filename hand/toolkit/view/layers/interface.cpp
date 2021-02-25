@@ -1,5 +1,6 @@
 #include "view/layers/interface.h"
 #include "view/layers/listview.h"
+#include "view/layers/vector.h"
 #include "data/method.h"
 #include "data/vector.h"
 #include "view/theme.h"
@@ -17,6 +18,8 @@ Interface::Interface()
     GetLayerControls()->Add(exit);
 
     m_Controls = new ListView();
+    m_View = new Vector();
+    m_View->SetExpandChildren(true);
 }
 
 
@@ -29,18 +32,10 @@ Interface::~Interface()
 void Interface::SetData(Hmi::Item* data)
 {
     m_Controls->SetData(data->GetInterface()->GetControls());
+    if (data->GetInterface()->GetView())
+        m_View->SetData(data->GetInterface()->GetView());
+    m_View->Update();
     Map::SetData(data);
-}
-
-
-void Interface::Update()
-{
-    // Remove view items in the next iteration.
-    for (Interface* layer : m_ToRemoveFromView)
-        GetView()->Remove(layer->GetData());
-    m_ToRemoveFromView.clear();
-
-    Map::Update();
 }
 
 
@@ -48,7 +43,7 @@ void Interface::Rebuild()
 {
     Map::Rebuild();
 
-    Insert(VIEW, GetView()->GetExpandedView());
+    Insert(VIEW, m_View);
     Insert(CONTROL, m_Controls);
     Insert(LAYER_CONTROLS, GetLayerControls()->GetExpandedView());
 }
@@ -62,20 +57,15 @@ void Interface::GetActiveItems(std::vector<Hmi::Item*>& out)
 }
 
 
-void Interface::Show(Hmi::Item* item, bool deleteOnExit)
+void Interface::Show(Layer* item)
 {
-    if (!GetView()->Contains(item))
-    {
-        if (deleteOnExit)
-            GetView()->Add(item);
-        else
-            GetView()->Attach(item);
-
-        item->GetExpandedView()->GetInterface()->ExitListeners.Add(
-            this, &Interface::AddToRemoveFromView);
-    }
+    m_View->Insert(item);
     if (m_InteractionControl)
-        m_InteractionControl->SetTarget(item->GetExpandedView()->GetInterface());
+    {
+        Layers::Interface* i = item->GetInterface();
+        if (i && (i == item))
+            m_InteractionControl->SetTarget(i);
+    }
 }
 
 

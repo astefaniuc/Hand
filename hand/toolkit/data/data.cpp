@@ -31,7 +31,7 @@ void Data::Expand(Item*)
     if (!m_Manipulator)
         return;
 
-    GetButtonView()->GetInterface()->Show(m_Manipulator->GetHmi(), false);
+    GetButtonView()->GetInterface()->Show(m_Manipulator->GetHmi()->GetExpandedView());
 }
 
 

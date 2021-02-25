@@ -31,7 +31,7 @@ Control::~Control()
 void Control::Start()
 {
     if (!m_Hand->Init())
-        m_Stack[0]->Show(m_Hand->GetInitScreen(), true);
+        m_Stack[0]->Show(m_Hand->GetInitScreen());
 }
 
 

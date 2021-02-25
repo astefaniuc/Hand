@@ -38,7 +38,7 @@ Hand::~Hand()
 }
 
 
-Hmi::Interface* Hand::GetInitScreen()
+Layer* Hand::GetInitScreen()
 {
     Hmi::Interface* initScreen = new Hmi::Interface(
         "Keyboard Initialization",
@@ -47,7 +47,9 @@ Hmi::Interface* Hand::GetInitScreen()
     m_KeysHmi->SetLayerInitializer(this, &Hand::InitHandLayer);
     initScreen->SetLayerInitializer(this, &Hand::InitInitLayer);
 
-    return initScreen;
+    Layers::Interface* ret = initScreen->GetExpandedView()->GetInterface();
+    ret->ExitListeners.Add(initScreen, &Hmi::Interface::DeleteCb);
+    return ret;
 }
 
 

@@ -46,7 +46,6 @@ public:
 
 
     Layer* GetExpandedView();
-    void SetExpandedView(Layer* layer);
 
     Layer* GetButtonView();
     void SetButtonView(Layer* layer);
@@ -89,7 +88,6 @@ private:
     std::string m_Info;
 
     Hmi::List* m_Parent = nullptr;
-    Layer* m_ExpandedView = nullptr;
     Layer* m_ButtonView = nullptr;
     bool m_IsSelected = false;
 

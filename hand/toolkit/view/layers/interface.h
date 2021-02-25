@@ -10,6 +10,7 @@ namespace Hmi { class Vector; }
 namespace Layers {
 
 class ListView;
+class Vector;
 
 /// The Interface is a composed Layer, managing the basic layout and theme.
 /// For the sub-layers, the main command list is mandatory; other layers may be
@@ -21,11 +22,11 @@ public:
     Interface();
     ~Interface();
 
-    void Update() override;
+    void SetData(Hmi::Item* data) override;
 
     Interface* GetInterface() override { return this; }
 
-    void Show(Hmi::Item* item, bool deleteOnExit);
+    void Show(Layer* item);
 
     void SetInteractionControl(Interaction::Control* hand);
     void RemoveInteractionControl();
@@ -38,7 +39,6 @@ public:
 
 protected:
     Hmi::Vector* GetView() { return m_Data->GetInterface()->GetView(); }
-    void SetData(Hmi::Item* data) override;
     void Rebuild() override;
 
     Drawer* GetDrawerFromTheme() override;
@@ -48,12 +48,10 @@ protected:
     void Quit(Hmi::Item* caller) override;
 
 private:
-    void AddToRemoveFromView(Interface* item) { m_ToRemoveFromView.push_back(item); }
-
     ListView* m_Controls;
+    Vector* m_View = nullptr;
     Interaction::Control* m_InteractionControl = nullptr;
     Hmi::Vector* m_Shortcuts = nullptr;
-    std::vector<Interface*> m_ToRemoveFromView;
 };
 
 }
