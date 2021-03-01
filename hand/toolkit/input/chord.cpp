@@ -25,12 +25,8 @@ bool Chord::Assign(Layer* item)
 }
 
 
-Layer* Chord::GetLayer(Hand* hand)
+Layer* Chord::CreateLayer(Hand* hand)
 {
-    if (m_Layer)
-        // TODO: different hands
-        return m_Layer;
-
     std::string shrtct;
     int last = int(keys.size()) - 1;
     for (size_t i = 0; i < keys.size(); ++i)
@@ -40,6 +36,5 @@ Layer* Chord::GetLayer(Hand* hand)
             shrtct += "+";
     }
 
-    m_Layer = new Layers::Text(shrtct);
-    return m_Layer;
+    return new Layers::Text(shrtct);
 }

@@ -36,13 +36,12 @@ public:
     Layer* GetItem() const { return m_Item; }
     void ClearItem() { m_Item = nullptr; }
 
-    Layer* GetLayer(Hand* hand);
+    Layer* CreateLayer(Hand* hand);
 
     std::vector<Finger> keys;
 
 private:
     Layer* m_Item = nullptr;
-    Layer* m_Layer = nullptr;
 };
 
 #endif // HAND_INPUT_CHORD_H

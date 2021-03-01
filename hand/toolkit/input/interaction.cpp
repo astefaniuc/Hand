@@ -158,17 +158,17 @@ void Control::Execute(const Chord& chord)
 
 
 
-Group::Group(Layers::List* layer) : m_Layer(layer)
+Group::Group(Layers::List* layer) : m_Target(layer)
 {
-    m_Layer->Update();
-    m_Layer->SetInteraction(this);
+    m_Target->Update();
+    m_Target->SetInteraction(this);
 }
 
 
 Group::~Group()
 {
     Clear();
-    m_Layer->SetInteraction(nullptr);
+    m_Target->SetInteraction(nullptr);
     m_Parent->Remove(this);
 }
 
@@ -205,7 +205,7 @@ void Group::Update()
         level = Hand::Focus;
 
     std::vector<Layer*> commands;
-    m_Layer->GetActiveItems(commands);
+    m_Target->GetActiveItems(commands);
     for (Layer* item : commands)
     {
         if (item->GetCommand())
@@ -256,12 +256,16 @@ Command::~Command()
     m_Chord->GetItem()->ReleaseCommand();
     m_Chord->ClearItem();
     m_Parent->Remove(this);
+    delete m_Layer;
 }
 
 
 Layer* Command::GetLayer()
 {
-    return m_Chord->GetLayer(m_Parent->GetControl()->GetHand());
+    if (!m_Layer)
+        m_Layer = m_Chord->CreateLayer(m_Parent->GetControl()->GetHand());
+    return m_Layer;
+
 }
 
 }

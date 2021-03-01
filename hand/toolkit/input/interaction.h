@@ -89,7 +89,7 @@ public:
     void Add(Command* child) { m_Commands.push_back(child); }
     void Remove(Command* child);
 
-    Layers::List* GetTarget() { return m_Layer; }
+    Layers::List* GetTarget() { return m_Target; }
 
     void SetFocus();
     void RemoveFocus();
@@ -100,7 +100,7 @@ private:
     Control* m_Parent = nullptr;
     std::vector<Command*> m_Commands;
 
-    Layers::List* m_Layer;
+    Layers::List* m_Target;
 
     Filter m_Filter = Visible;
     Mode m_Mode = Activate;
@@ -125,6 +125,7 @@ public:
 private:
     Group* m_Parent;
     Chord* m_Chord;
+    Layer* m_Layer = nullptr;
 };
 
 }
