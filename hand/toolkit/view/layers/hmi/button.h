@@ -1,14 +1,14 @@
-#ifndef HAND_VIEW_LAYER_BUTTON_H
-#define HAND_VIEW_LAYER_BUTTON_H
+#ifndef HAND_VIEW_LAYER_HMI_BUTTON_H
+#define HAND_VIEW_LAYER_HMI_BUTTON_H
 
-#include "view/layers/map.h"
+#include "view/layers/hmi/item.h"
 #include "view/layouts/builtin.h"
 
 
 namespace Layers {
 
 
-class Button : public Map
+class Button : public Item
 {
 protected:
     Drawer* GetDrawerFromTheme() override;
@@ -16,4 +16,4 @@ protected:
 };
 
 }
-#endif // HAND_VIEW_LAYER_BUTTON_H
+#endif // HAND_VIEW_LAYER_HMI_BUTTON_H

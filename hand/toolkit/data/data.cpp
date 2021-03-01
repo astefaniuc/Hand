@@ -1,6 +1,6 @@
 #include "data/data.h"
-#include "view/layers/data.h"
-#include "view/layers/interface.h"
+#include "view/layers/hmi/data.h"
+#include "view/layers/hmi/interface.h"
 
 
 namespace Hmi {

@@ -25,22 +25,14 @@ public:
     bool SetInteraction(Interaction::Group* focus) override;
     void ReleaseInteractionGroup() override;
 
-    bool SetCommand(Interaction::Command* ctrl) override;
-    Interaction::Command* GetCommand() override { return m_Command; }
-    void ReleaseCommand() override;
-
-    void SetFocus();
-    void RemoveFocus();
-    bool HasFocus() { return m_HasFocus; }
-
     Hmi::List* GetLayerControls() override;
-    virtual void GetActiveItems(std::vector<Hmi::Item*>& out) {}
+    virtual void GetActiveItems(std::vector<Layer*>& out) { GetLayout()->GetActiveLayer(out); }
 
 protected:
     virtual Layout* CreateLayout() = 0;
 
-    void UpdateFocus() override;
-    void ClearFocus() override;
+    void UpdateInteractionGroup() override;
+    void ClearInteractionGroup() override;
 
     /// Field::Item interface:
     SDL_Rect ComputeSize(const SDL_Rect& outer) override;
@@ -53,8 +45,6 @@ protected:
     Hmi::List* m_LayerCommands = nullptr;
 
     Interaction::Group* m_InteractionGroup = nullptr;
-    Interaction::Command* m_Command = nullptr;
-    bool m_HasFocus = false;
 };
 
 }

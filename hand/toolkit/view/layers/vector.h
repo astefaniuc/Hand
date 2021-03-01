@@ -20,8 +20,6 @@ public:
     unsigned GetMaxItemsToShow() { return m_MaxItemsToShow; }
     void SetMaxItemsToShow(unsigned count) { m_MaxItemsToShow = count; }
 
-    void GetActiveItems(std::vector<Hmi::Item*>& out) override;
-
 protected:
     void Rebuild() override;
 

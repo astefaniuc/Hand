@@ -106,7 +106,7 @@ void Layer::Update()
 
     ClearContent();
     Rebuild();
-    UpdateFocus();
+    UpdateInteractionGroup();
 
     m_ModifiedContent = false;
 }
@@ -121,7 +121,7 @@ void Layer::Clear()
 
 void Layer::ClearContent()
 {
-    ClearFocus();
+    ClearInteractionGroup();
     SetModifiedContent();
 }
 

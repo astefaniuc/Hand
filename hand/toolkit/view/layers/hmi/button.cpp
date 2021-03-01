@@ -1,5 +1,4 @@
-#include "view/layers/button.h"
-#include "view/layers/text.h"
+#include "view/layers/hmi/button.h"
 #include "view/theme.h"
 
 

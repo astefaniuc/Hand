@@ -19,9 +19,6 @@ public:
 
 protected:
     void Rebuild() override;
-
-    Text m_Name;
-    Text m_Info;
 };
 
 }

@@ -53,7 +53,7 @@ public:
     void Clear() override;
     virtual void ClearContent();
 
-    // Focus management interface
+    // Interaction interface
 
     virtual bool SetInteraction(Interaction::Group* hand) { return false; }
     virtual void ReleaseInteractionGroup() {}
@@ -67,9 +67,10 @@ public:
 
 protected:
     virtual bool CanUpdate() { return true; }
-    virtual void UpdateFocus() {}
-    virtual void ClearFocus() {}
+    virtual void UpdateInteractionGroup() {}
+    virtual void ClearInteractionGroup() {}
 
+    void GetActiveLayer(std::vector<Layer*>& out) { out.push_back(this); }
 
     void SetModifiedContent();
     /// Rebuild sub-layer structure on content or layout changes.

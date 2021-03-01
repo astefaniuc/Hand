@@ -15,8 +15,7 @@ bool Chord::IsValid(const Chord& input)
 }
 
 
-
-bool Chord::Assign(Hmi::Item* item)
+bool Chord::Assign(Layer* item)
 {
     if (m_Item)
         return false;
@@ -24,7 +23,6 @@ bool Chord::Assign(Hmi::Item* item)
     m_Item = item;
     return true;
 }
-
 
 
 Layer* Chord::GetLayer(Hand* hand)

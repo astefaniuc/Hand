@@ -68,14 +68,14 @@ bool List::IsExpanding(Orientation direction)
 }
 
 
-void List::UpdateFocus()
+void List::UpdateInteractionGroup()
 {
     if (m_InteractionGroup)
         m_InteractionGroup->Update();
 }
 
 
-void List::ClearFocus()
+void List::ClearInteractionGroup()
 {
     if (m_InteractionGroup)
         m_InteractionGroup->Clear();
@@ -108,37 +108,6 @@ bool List::SetInteraction(Interaction::Group* focus)
 void List::ReleaseInteractionGroup()
 {
     m_InteractionGroup = nullptr;
-}
-
-
-bool List::SetCommand(Interaction::Command* ctrl)
-{
-    m_Command = ctrl;
-    SetModifiedContent();
-    return true;
-}
-
-
-void List::ReleaseCommand()
-{
-    if (!m_Command)
-        return;
-    m_Command = nullptr;
-    SetModifiedContent();
-}
-
-
-void List::SetFocus()
-{
-    m_HasFocus = true;
-    m_InteractionGroup->GetControl()->Add(
-        new Interaction::Group(GetLayerControls()->GetExpandedView()->GetListLayer()));
-}
-
-
-void List::RemoveFocus()
-{
-    m_HasFocus = false;
 }
 
 }

@@ -1,7 +1,7 @@
 #include "data/vector.h"
-#include "view/layers/button.h"
+#include "view/layers/hmi/button.h"
 #include "view/layers/vector.h"
-#include "view/layers/listview.h"
+#include "view/layers/hmi/listview.h"
 
 
 namespace Hmi {

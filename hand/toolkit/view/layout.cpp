@@ -74,6 +74,14 @@ unsigned Layout::GetValidFields(std::vector<Field*>& out)
 }
 
 
+void Layout::GetActiveLayer(std::vector<Layer*>& out)
+{
+    for (auto field : m_Fields)
+        if (field->GetItem())
+            field->GetItem()->GetActiveLayer(out);
+}
+
+
 void Layout::Draw(SDL_Surface* buffer)
 {
     for (auto field : m_Fields)

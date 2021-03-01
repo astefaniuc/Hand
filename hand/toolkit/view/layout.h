@@ -29,6 +29,8 @@ public:
     void Clear() override;
     virtual void ClearFields() { m_Fields.clear(); }
 
+    void GetActiveLayer(std::vector<Layer*>& out) override;
+
 protected:
     std::vector<Field*> m_Fields;
     Layers::List* m_Layer = nullptr;

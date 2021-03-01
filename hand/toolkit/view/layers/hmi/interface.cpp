@@ -1,5 +1,5 @@
-#include "view/layers/interface.h"
-#include "view/layers/listview.h"
+#include "view/layers/hmi/interface.h"
+#include "view/layers/hmi/listview.h"
 #include "view/layers/vector.h"
 #include "data/method.h"
 #include "data/vector.h"
@@ -35,25 +35,17 @@ void Interface::SetData(Hmi::Item* data)
     if (data->GetInterface()->GetView())
         m_View->SetData(data->GetInterface()->GetView());
     m_View->Update();
-    Map::SetData(data);
+    Item::SetData(data);
 }
 
 
 void Interface::Rebuild()
 {
-    Map::Rebuild();
+    Item::Rebuild();
 
     Insert(VIEW, m_View);
     Insert(CONTROL, m_Controls);
     Insert(LAYER_CONTROLS, GetLayerControls()->GetExpandedView());
-}
-
-
-void Interface::GetActiveItems(std::vector<Hmi::Item*>& out)
-{
-    out.push_back(m_Controls->GetData());
-    out.push_back(GetView());
-    out.push_back(GetLayerControls());
 }
 
 
@@ -89,18 +81,14 @@ void Interface::SetInteractionControl(Interaction::Control* control)
 
     m_InteractionControl = control;
 
-    Interaction::Group* ctrlGroup = new Interaction::Group(m_Controls);
-    control->Add(ctrlGroup);
-    control->SetFocus(ctrlGroup);
-
-    control->Add(new Interaction::Group(this));
+    control->AddGroup(m_Controls, true);
+    control->AddGroup(this);
 
     CollectShortcuts();
     if (m_Shortcuts->Size())
-        control->SetShortcuts(new Interaction::Group(
-            m_Shortcuts->GetExpandedView()->GetListLayer()));
+        control->AddGroup(m_Shortcuts->GetExpandedView()->GetListLayer());
 
-    control->Add(new Interaction::Group(GetLayerControls()->GetExpandedView()->GetListLayer()));
+    control->AddGroup(GetLayerControls()->GetExpandedView()->GetListLayer());
 
     SetModified();
 }
@@ -115,8 +103,7 @@ void Interface::RemoveInteractionControl()
 
 void Interface::Quit(Hmi::Item* caller)
 {
-    Map::Quit(nullptr);
-
+    Item::Quit(nullptr);
     ExitListeners.Execute(this);
 }
 

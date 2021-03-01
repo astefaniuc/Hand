@@ -1,5 +1,4 @@
 #include "view/layers/map.h"
-#include "input/interaction.h"
 
 
 namespace Layers {
@@ -7,14 +6,7 @@ namespace Layers {
 
 void Map::Rebuild()
 {
-    m_Name.SetData(m_Data->GetName());
-    m_Info.SetData(m_Data->GetInfo());
-
-    Insert(TITLE, &m_Name);
-    if (!m_Data->GetInfo().empty())
-        Insert(DESCRIPTION, &m_Info);
-    if (GetCommand())
-        Insert(CONTROL, GetCommand()->GetLayer());
+   // TODO
 }
 
 

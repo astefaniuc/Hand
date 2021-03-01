@@ -8,7 +8,7 @@
 #include "input/inputstate.h"
 #include "view/theme.h"
 #include "view/layers/vector.h"
-#include "view/layers/interface.h"
+#include "view/layers/hmi/interface.h"
 #include "view/layouts/builtin.h"
 
 

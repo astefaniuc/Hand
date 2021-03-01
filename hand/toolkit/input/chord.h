@@ -7,7 +7,6 @@
 
 class Layer;
 class Hand;
-namespace Hmi { class Item; }
 
 class Chord
 {
@@ -33,8 +32,8 @@ public:
 
     virtual bool IsValid(const Chord& input);
 
-    bool Assign(Hmi::Item* item);
-    Hmi::Item* GetItem() const { return m_Item; }
+    bool Assign(Layer* item);
+    Layer* GetItem() const { return m_Item; }
     void ClearItem() { m_Item = nullptr; }
 
     Layer* GetLayer(Hand* hand);
@@ -42,7 +41,7 @@ public:
     std::vector<Finger> keys;
 
 private:
-    Hmi::Item* m_Item = nullptr;
+    Layer* m_Item = nullptr;
     Layer* m_Layer = nullptr;
 };
 

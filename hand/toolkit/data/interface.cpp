@@ -1,6 +1,5 @@
 #include "data/interface.h"
-#include "view/layers/interface.h"
-#include "view/layers/vector.h"
+#include "view/layers/hmi/interface.h"
 
 
 namespace Hmi {

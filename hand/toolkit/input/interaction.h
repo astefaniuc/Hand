@@ -31,10 +31,9 @@ public:
     void SetTarget(Layers::Interface* target);
     void RemoveTarget(Layers::Interface* target);
 
-    void Add(Group* child);
+    void AddGroup(Layers::List* child, bool hasFocus = false);
     void Remove(Group* child);
     void SetFocus(Group* child);
-    void SetShortcuts(Group* s);
 
     void Execute(const Chord& chord);
 
@@ -51,7 +50,6 @@ private:
 
     std::vector<Group*> m_Groups;
     Group* m_Focus = nullptr;
-    Group* m_ShortCuts = nullptr;
 
     Hmi::Item* m_MoveControlUp;
 };
@@ -93,6 +91,11 @@ public:
 
     Layers::List* GetTarget() { return m_Layer; }
 
+    void SetFocus();
+    void RemoveFocus();
+    bool HasFocus() { return m_HasFocus; }
+
+
 private:
     Control* m_Parent = nullptr;
     std::vector<Command*> m_Commands;
@@ -103,6 +106,7 @@ private:
     Mode m_Mode = Activate;
 
     bool m_Update = true;
+    bool m_HasFocus = false;
 };
 
 

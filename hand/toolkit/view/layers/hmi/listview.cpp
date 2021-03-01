@@ -1,4 +1,4 @@
-#include "view/layers/listview.h"
+#include "view/layers/hmi/listview.h"
 #include "view/layouts/builtin.h"
 #include "data/method.h"
 
@@ -15,13 +15,13 @@ void ListView::SetData(Hmi::Item* data)
     }
     m_ViewStack.push_back(data);
     m_DataControls.SetData(data);
-    Map::SetData(data);
+    Item::SetData(data);
 }
 
 
 void ListView::Rebuild()
 {
-    Map::Rebuild();
+    Item::Rebuild();
 
     Insert(VIEW, &m_DataControls);
     Insert(LAYER_CONTROLS, GetLayerControls()->GetExpandedView());
@@ -35,7 +35,7 @@ Layout* ListView::CreateLayout() { return Layouts::CreateListView(); }
 void ListView::Back(Hmi::Item*)
 {
     m_ViewStack.pop_back();
-    Map::SetData(m_ViewStack.back());
+    Item::SetData(m_ViewStack.back());
     m_DataControls.SetData(m_Data);
     if (m_ViewStack.size() == 1)
     {

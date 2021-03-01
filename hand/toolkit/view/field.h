@@ -63,6 +63,7 @@ public:
         virtual Layers::List* GetListLayer() = 0;
 
         virtual Field* GetField(const std::string& name, bool create = true) = 0;
+        virtual void GetActiveLayer(std::vector<Layer*>& out) = 0;
 
         virtual SDL_Rect ComputeSize(const SDL_Rect& outer) = 0;
         virtual void UpdatePositions(const SDL_Rect& outer) = 0;

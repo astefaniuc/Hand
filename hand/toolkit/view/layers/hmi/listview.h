@@ -1,7 +1,7 @@
-#ifndef HAND_VIEW_LAYERS_LISTVIEW_H
-#define HAND_VIEW_LAYERS_LISTVIEW_H
+#ifndef HAND_VIEW_LAYER_HMI_LISTVIEW_H
+#define HAND_VIEW_LAYER_HMI_LISTVIEW_H
 
-#include "view/layers/map.h"
+#include "view/layers/hmi/item.h"
 #include "view/layers/vector.h"
 #include "view/layout.h"
 
@@ -9,7 +9,7 @@
 namespace Layers {
 
 
-class ListView : public Map
+class ListView : public Item
 {
 public:
     void SetData(Hmi::Item* data) override;
@@ -20,7 +20,7 @@ protected:
     Drawer* GetDrawerFromTheme() override;
     Layout* CreateLayout() override;
 
-    void GetActiveItems(std::vector<Hmi::Item*>& out) override
+    void GetActiveItems(std::vector<Layer*>& out) override
     {
         m_DataControls.GetActiveItems(out);
     }
@@ -35,4 +35,4 @@ private:
 };
 
 }
-#endif // HAND_VIEW_LAYERS_LISTVIEW_H
+#endif // HAND_VIEW_LAYER_HMI_LISTVIEW_H

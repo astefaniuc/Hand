@@ -1,7 +1,7 @@
-#ifndef HAND_VIEW_LAYER_MASTERLAYER_H
-#define HAND_VIEW_LAYER_MASTERLAYER_H
+#ifndef HAND_VIEW_LAYER_HMI_INTERFACE_H
+#define HAND_VIEW_LAYER_HMI_INTERFACE_H
 
-#include "view/layers/map.h"
+#include "view/layers/hmi/item.h"
 #include "data/interface.h"
 
 
@@ -16,7 +16,7 @@ class Vector;
 /// For the sub-layers, the main command list is mandatory; other layers may be
 /// additional (system) command lists, a title, a main view, and a secondary view e.g.
 /// an info box or help.
-class Interface : public Map
+class Interface : public Item
 {
 public:
     Interface();
@@ -30,8 +30,6 @@ public:
 
     void SetInteractionControl(Interaction::Control* hand);
     void RemoveInteractionControl();
-
-    void GetActiveItems(std::vector<Hmi::Item*>& out) override;
 
     void CollectShortcuts();
 
@@ -55,4 +53,4 @@ private:
 };
 
 }
-#endif // HAND_VIEW_LAYER_MASTERLAYER_H
+#endif // HAND_VIEW_LAYER_HMI_INTERFACE_H

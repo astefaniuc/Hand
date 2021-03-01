@@ -5,7 +5,7 @@
 #include "data/method.h"
 #include "view/layer.h"
 #include "view/layers/list.h"
-#include "view/layers/interface.h"
+#include "view/layers/hmi/interface.h"
 #include <algorithm>
 
 
@@ -45,38 +45,29 @@ void Control::Rebuild()
         m_Stack.back()->GetLayerControls()->Attach(m_MoveControlUp);
     m_Stack.back()->SetInteractionControl(this);
 
-    if (m_ShortCuts)
+    if (!m_Focus)
     {
-        Hmi::List* cmds = static_cast<Hmi::List*>(m_ShortCuts->GetTarget()->GetData());
-        for (auto i = 0; i < cmds->Size(); ++i)
-        {
-            Hmi::Item* item = cmds->GetChild(i);
-            Chord* chord = m_Hand->Reserve(item->GetShortcut());
-            chord->Assign(item);
-            m_ShortCuts->Add(new Command(m_ShortCuts, chord));
-        }
+        if (!m_Groups.size())
+            return PopTargetCb(nullptr);
+
+        m_Focus = m_Groups[0];
     }
 
-    if (m_Focus && (m_Focus != m_ShortCuts))
-        m_Focus->Update();
+    m_Focus->Update();
 
     for (Group* child : m_Groups)
-        if ((child != m_ShortCuts) && (child != m_Focus))
+        if (child != m_Focus)
             child->Update();
 }
 
 
 void Control::Clear()
 {
-    for (Group* child : m_Groups)
-    {
-        child->SetControl(nullptr);
+    auto copy = m_Groups;
+    for (Group* child : copy)
         delete child;
-    }
-    m_Groups.clear();
 
     m_Focus = nullptr;
-    m_ShortCuts = nullptr;
 }
 
 
@@ -129,14 +120,14 @@ void Control::RemoveTarget(std::vector<Layers::Interface*>::reverse_iterator& ta
     Rebuild();
 }
 
-void Control::Add(Group* child)
-{
-    auto it = std::find(m_Groups.begin(), m_Groups.end(), child);
-    if (it != m_Groups.end())
-        return;
 
+void Control::AddGroup(Layers::List* items, bool hasFocus)
+{
+    Interaction::Group* child = new Interaction::Group(items);
     m_Groups.push_back(child);
     child->SetControl(this);
+    if (hasFocus)
+        SetFocus(child);
 }
 
 
@@ -151,16 +142,9 @@ void Control::Remove(Group* child)
 void Control::SetFocus(Group* child)
 {
     if (m_Focus)
-        m_Focus->GetTarget()->RemoveFocus();
+        m_Focus->RemoveFocus();
     m_Focus = child;
-    child->GetTarget()->SetFocus();
-}
-
-
-void Control::SetShortcuts(Group* s)
-{
-    m_ShortCuts = s;
-    Add(s);
+    child->SetFocus();
 }
 
 
@@ -169,35 +153,31 @@ void Control::Execute(const Chord& chord)
     for (auto group : m_Groups)
         for (auto command : group->GetCommands())
             if (command->GetChord()->IsValid(chord))
-                return command->GetChord()->GetItem()->Activate();
+                return command->GetChord()->GetItem()->GetData()->Activate();
 }
 
 
 
 Group::Group(Layers::List* layer) : m_Layer(layer)
 {
+    m_Layer->Update();
     m_Layer->SetInteraction(this);
 }
 
 
 Group::~Group()
 {
-    m_Layer->SetInteraction(nullptr);
-    if (m_Parent)
-        m_Parent->Remove(this);
-
     Clear();
+    m_Layer->SetInteraction(nullptr);
+    m_Parent->Remove(this);
 }
 
 
 void Group::Clear()
 {
-    for (Command* child : m_Commands)
-    {
-        child->RemoveParent();
+    auto copy = m_Commands;
+    for (Command* child : copy)
         delete child;
-    }
-    m_Commands.clear();
     m_Update = true;
 }
 
@@ -221,22 +201,45 @@ void Group::Update()
     Clear();
 
     Hand::InteractionLevel level = Hand::Peripherial;
-    if (m_Layer->HasFocus())
+    if (HasFocus())
         level = Hand::Focus;
 
-    std::vector<Hmi::Item*> commands;
+    std::vector<Layer*> commands;
     m_Layer->GetActiveItems(commands);
-    for (Hmi::Item* item : commands)
+    for (Layer* item : commands)
     {
-        if (item->GetButtonView()->GetCommand())
+        if (item->GetCommand())
             continue;
 
-        Chord* chord = GetControl()->GetHand()->Assign(item, level);
+        Chord* chord = nullptr;
+        Hmi::Item* data = item->GetData();
+        if (data && data->GetShortcut())
+        {
+            chord = GetControl()->GetHand()->Reserve(data->GetShortcut());
+            chord->Assign(item);
+        }
+        else
+            chord = GetControl()->GetHand()->Assign(item, level);
+
         if (!chord)
             // No more free chords
             return;
+
         Add(new Command(this, chord));
     }
+}
+
+
+void Group::SetFocus()
+{
+    m_HasFocus = true;
+    GetControl()->AddGroup(GetTarget()->GetLayerControls()->GetExpandedView()->GetListLayer());
+}
+
+
+void Group::RemoveFocus()
+{
+    m_HasFocus = false;
 }
 
 
@@ -244,17 +247,15 @@ void Group::Update()
 Command::Command(Group* parent, Chord* chord)
     : m_Parent(parent), m_Chord(chord)
 {
-    m_Chord->GetItem()->GetButtonView()->SetCommand(this);
+    m_Chord->GetItem()->SetCommand(this);
 }
 
 
 Command::~Command()
 {
-    if (m_Parent)
-        m_Parent->Remove(this);
-
-    m_Chord->GetItem()->GetButtonView()->ReleaseCommand();
+    m_Chord->GetItem()->ReleaseCommand();
     m_Chord->ClearItem();
+    m_Parent->Remove(this);
 }
 
 

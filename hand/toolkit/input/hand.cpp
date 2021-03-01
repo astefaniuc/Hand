@@ -5,7 +5,7 @@
 #include "input/interaction.h"
 #include "data/interface.h"
 #include "view/layer.h"
-#include "view/layers/interface.h"
+#include "view/layers/hmi/interface.h"
 #include "view/layers/text.h"
 #include "view/layers/vector.h"
 #include "view/layouts/placed.h"
@@ -97,7 +97,7 @@ bool Hand::Init()
 }
 
 
-Chord* Hand::Assign(Hmi::Item* item, InteractionLevel interaction)
+Chord* Hand::Assign(Layer* item, InteractionLevel interaction)
 {
     unsigned lower = 1;
     if (interaction == Peripherial)

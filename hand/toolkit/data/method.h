@@ -2,7 +2,7 @@
 #define HAND_GRAPH_METHOD_H
 
 #include "data/item.h"
-#include "view/layers/button.h"
+#include "view/layers/hmi/button.h"
 
 
 namespace Hmi {
