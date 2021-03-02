@@ -40,7 +40,7 @@ public:
     Persistence* GetPersistence() { return m_Storage; }
 
 protected:
-    virtual void Expand(Item*);
+    void Execute(Layers::Item* caller) override;
 
     Layer* CreateExpandedView() override;
     Layer* CreateButtonView() override;

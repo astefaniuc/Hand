@@ -103,7 +103,7 @@ void Control::RemoveTargetCb(Layers::Interface* target)
 }
 
 
-void Control::PopTargetCb(Hmi::Item*)
+void Control::PopTargetCb(Layers::Item*)
 {
     auto it = m_Stack.rbegin();
     RemoveTarget(it);
@@ -153,7 +153,7 @@ void Control::Execute(const Chord& chord)
     for (auto group : m_Groups)
         for (auto command : group->GetCommands())
             if (command->GetChord()->IsValid(chord))
-                return command->GetChord()->GetItem()->GetData()->Activate();
+                return command->GetChord()->GetItem()->Activate();
 }
 
 

@@ -7,6 +7,7 @@
 
 
 namespace Layers {
+    class Item;
     class List;
     class Interface;
 }
@@ -65,6 +66,8 @@ public:
     virtual Hmi::List* GetLayerControls() { return nullptr; }
     virtual Layers::Interface* GetInterface();
 
+    virtual void Activate() {}
+
 protected:
     virtual bool CanUpdate() { return true; }
     virtual void UpdateInteractionGroup() {}
@@ -85,7 +88,7 @@ protected:
     void UpdatePositions(const SDL_Rect& outer) override;
     bool IsExpanding(Orientation direction) override { return false; }
     bool IsValid() const final { return true; }
-    virtual void Quit(Hmi::Item*);
+    virtual void Quit(Layers::Item*);
 
     /// Callback.
     void OnNotifyChanged(Hmi::Item*) { SetModifiedContent(); }

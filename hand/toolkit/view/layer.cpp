@@ -10,7 +10,7 @@ Layer::~Layer()
 }
 
 
-void Layer::Quit(Hmi::Item*)
+void Layer::Quit(Layers::Item*)
 {
     SetModified();
     SetDrawer(nullptr);

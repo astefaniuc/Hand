@@ -9,6 +9,7 @@ class Hand;
 class Layer;
 namespace Hmi { class Item; }
 namespace Layers {
+    class Item;
     class List;
     class Interface;
 }
@@ -41,7 +42,7 @@ private:
     void Rebuild();
     void Clear();
     void RemoveTargetCb(Layers::Interface* target);
-    void PopTargetCb(Hmi::Item*);
+    void PopTargetCb(Layers::Item*);
     void RemoveTarget(std::vector<Layers::Interface*>::reverse_iterator& target);
 
     Hand* m_Hand;

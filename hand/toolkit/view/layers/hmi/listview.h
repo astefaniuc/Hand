@@ -25,8 +25,7 @@ protected:
         m_DataControls.GetActiveItems(out);
     }
 
-
-    void Back(Hmi::Item*);
+    void Back(Layers::Item*);
 
 private:
     Hmi::Item* m_Back = nullptr;

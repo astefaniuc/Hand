@@ -24,9 +24,9 @@ void Interface::GetShortcuts(Hmi::Interface* caller, Hmi::List* out)
 }
 
 
-void Interface::Expand(Item*)
+void Interface::Execute(Layers::Item* caller)
 {
-    GetButtonView()->GetInterface()->Show(GetExpandedView());
+    caller->GetInterface()->Show(GetExpandedView());
 }
 
 

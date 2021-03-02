@@ -21,12 +21,12 @@ Layer* List::CreateButtonView()
 }
 
 
-void List::Expand(Item*)
+void List::Execute(Layers::Item* caller)
 {
     if (!GetExpandedView()->IsVisible())
     {
         Layers::ListView* lv = dynamic_cast<Layers::ListView*>(
-            GetButtonView()->GetParentLayer()->GetParentLayer());
+            caller->GetParentLayer()->GetParentLayer());
         if (lv)
             lv->SetData(this);
     }

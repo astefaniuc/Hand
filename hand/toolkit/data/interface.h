@@ -32,7 +32,7 @@ public:
     void DeleteCb(Layers::Interface*) { delete this; }
 
 protected:
-    void Expand(Item*) override;
+    void Execute(Layers::Item* caller) override;
     Layer* CreateExpandedView() override;
 
     Vector m_ViewStack;

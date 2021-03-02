@@ -101,7 +101,7 @@ void Interface::RemoveInteractionControl()
 }
 
 
-void Interface::Quit(Hmi::Item* caller)
+void Interface::Quit(Item* caller)
 {
     Item::Quit(nullptr);
     ExitListeners.Execute(this);

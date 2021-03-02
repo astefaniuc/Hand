@@ -21,7 +21,6 @@ public:
     void Update() override;
     void DrawContent(SDL_Surface* buffer) override { GetLayout()->Draw(buffer); }
 
-
     bool SetInteraction(Interaction::Group* focus) override;
     void ReleaseInteractionGroup() override;
 

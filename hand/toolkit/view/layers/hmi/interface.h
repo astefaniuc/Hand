@@ -43,7 +43,7 @@ protected:
     Layout* CreateLayout() override;
 
 //    void Keep(enum mode)
-    void Quit(Hmi::Item* caller) override;
+    void Quit(Item* caller) override;
 
 private:
     ListView* m_Controls;

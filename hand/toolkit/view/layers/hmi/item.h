@@ -13,9 +13,15 @@ class Item : public Map
 public:
     ~Item() { Exit(); }
 
+    void SetData(Hmi::Item* data) override;
+
     bool SetCommand(Interaction::Command* ctrl) override;
     Interaction::Command* GetCommand() override { return m_Command; }
     void ReleaseCommand() override;
+
+    void Activate() override { ActivationListeners.Execute(this); }
+
+    Listeners<Layers::Item> ActivationListeners;
 
 protected:
     void Rebuild() override;

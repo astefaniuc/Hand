@@ -9,7 +9,6 @@ namespace Hmi {
 Data::Data(const std::string& name, const std::string& description, Module* manipulator)
     : Item(name, description), m_Manipulator(manipulator)
 {
-    ActivationListeners.Add(this, &Data::Expand);
 }
 
 
@@ -26,12 +25,12 @@ void Data::SetManipulator(Module* manipulator)
 }
 
 
-void Data::Expand(Item*)
+void Data::Execute(Layers::Item* caller)
 {
     if (!m_Manipulator)
         return;
 
-    GetButtonView()->GetInterface()->Show(m_Manipulator->GetHmi()->GetExpandedView());
+    caller->GetInterface()->Show(m_Manipulator->GetHmi()->GetExpandedView());
 }
 
 

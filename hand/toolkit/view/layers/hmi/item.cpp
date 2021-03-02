@@ -18,6 +18,13 @@ void Item::Rebuild()
 }
 
 
+void Item::SetData(Hmi::Item* data)
+{
+    Map::SetData(data);
+    ActivationListeners.Add(data, &Hmi::Item::Execute);
+}
+
+
 bool Item::SetCommand(Interaction::Command* ctrl)
 {
     m_Command = ctrl;

@@ -9,6 +9,7 @@
 
 
 class Layer;
+namespace Layers { class Item; }
 
 namespace Hmi {
 
@@ -50,12 +51,13 @@ public:
     Layer* GetButtonView();
     void SetButtonView(Layer* layer);
 
+    /// Called on buuton activation.
+    virtual void Execute(Layers::Item* callerButton) = 0;
+
     void SetSelected(bool isSelected);
     bool IsSelected() const { return m_IsSelected; }
 
-    void Activate() { ActivationListeners.Execute(this); }
-
-    // Persistent chord suggestion, this item assumes the ownership.
+    /// Persistent chord suggestion, this item assumes the ownership.
     Chord* GetShortcut() const { return m_Shortcut; }
     void SetShortcut(Chord* chord);
     virtual void GetShortcuts(Hmi::Interface* caller, Hmi::List* out);
@@ -74,7 +76,6 @@ public:
     }
 
     Listeners<Item> SelectionListeners;
-    Listeners<Item> ActivationListeners;
     Listeners<Item> DataListeners;
 
 protected:
