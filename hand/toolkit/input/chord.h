@@ -8,9 +8,8 @@
 class Layer;
 class Hand;
 
-class Chord
+struct Chord
 {
-public:
     enum Finger
     {
         Thumb = 0,
@@ -25,23 +24,17 @@ public:
         Pressed,
     };
 
-    Chord(std::initializer_list<Finger> a_keys = {}) : keys(a_keys) {}
+    Chord(std::initializer_list<Finger> a_keys = {}) : Keys(a_keys) {}
     virtual ~Chord() = default;
 
     static Chord* FullHand() { return new Chord({ Thumb, Pointer, Middle, Ring, Little }); }
 
     virtual bool IsValid(const Chord& input);
 
-    bool Assign(Layer* item);
-    Layer* GetItem() const { return m_Item; }
-    void ClearItem() { m_Item = nullptr; }
-
     Layer* CreateLayer(Hand* hand);
 
-    std::vector<Finger> keys;
-
-private:
-    Layer* m_Item = nullptr;
+    std::vector<Finger> Keys;
+    Layer* Item = nullptr;
 };
 
 #endif // HAND_INPUT_CHORD_H

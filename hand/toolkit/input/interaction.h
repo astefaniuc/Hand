@@ -4,7 +4,7 @@
 #include <vector>
 
 
-class Chord;
+struct Chord;
 class Hand;
 class Layer;
 namespace Hmi { class Item; }

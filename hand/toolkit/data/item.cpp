@@ -17,7 +17,6 @@ Item::~Item()
     }
 
     delete m_LayerInitializer;
-    delete m_ButtonView;
     delete m_Shortcut;
 }
 
@@ -49,17 +48,9 @@ Layer* Item::GetExpandedView()
 
 Layer* Item::GetButtonView()
 {
-    if (!m_ButtonView)
-        SetButtonView(CreateButtonView());
-    return m_ButtonView;
-}
-
-
-void Item::SetButtonView(Layer* layer)
-{
-    delete m_ButtonView;
-    m_ButtonView = layer;
-    m_ButtonView->SetData(this);
+    Layer* ret = CreateButtonView();
+    ret->SetData(this);
+    return ret;
 }
 
 
@@ -78,7 +69,7 @@ void Item::SetShortcut(Chord* chord)
 
 void Item::GetShortcuts(Hmi::Interface* caller, Hmi::List* out)
 {
-    if (m_Shortcut && !m_Shortcut->keys.empty())
+    if (m_Shortcut && !m_Shortcut->Keys.empty())
         out->Attach(this);
 }
 

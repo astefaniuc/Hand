@@ -69,7 +69,7 @@ Chord* StateNode::GetChord()
         m_Chord = new Chord();
         for (unsigned i = 0; i < m_Links.size(); ++i)
             if (GetParent(i))
-                m_Chord->keys.push_back(Chord::Finger(i));
+                m_Chord->Keys.push_back(Chord::Finger(i));
     }
     return m_Chord;
 }

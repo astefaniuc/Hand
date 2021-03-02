@@ -153,7 +153,7 @@ void Control::Execute(const Chord& chord)
     for (auto group : m_Groups)
         for (auto command : group->GetCommands())
             if (command->GetChord()->IsValid(chord))
-                return command->GetChord()->GetItem()->Activate();
+                return command->GetChord()->Item->Activate();
 }
 
 
@@ -214,17 +214,15 @@ void Group::Update()
         Chord* chord = nullptr;
         Hmi::Item* data = item->GetData();
         if (data && data->GetShortcut())
-        {
             chord = GetControl()->GetHand()->Reserve(data->GetShortcut());
-            chord->Assign(item);
-        }
         else
-            chord = GetControl()->GetHand()->Assign(item, level);
+            chord = GetControl()->GetHand()->GetFreeChord(level);
 
         if (!chord)
             // No more free chords
             return;
 
+        chord->Item = item;
         Add(new Command(this, chord));
     }
 }
@@ -247,14 +245,14 @@ void Group::RemoveFocus()
 Command::Command(Group* parent, Chord* chord)
     : m_Parent(parent), m_Chord(chord)
 {
-    m_Chord->GetItem()->SetCommand(this);
+    m_Chord->Item->SetCommand(this);
 }
 
 
 Command::~Command()
 {
-    m_Chord->GetItem()->ReleaseCommand();
-    m_Chord->ClearItem();
+    m_Chord->Item->ReleaseCommand();
+    m_Chord->Item = nullptr;
     m_Parent->Remove(this);
     delete m_Layer;
 }

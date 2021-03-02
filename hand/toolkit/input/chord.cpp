@@ -5,22 +5,12 @@
 
 bool Chord::IsValid(const Chord& input)
 {
-    if (!keys.size() || (keys.size() != input.keys.size()))
+    if (!Keys.size() || (Keys.size() != input.Keys.size()))
         return false;
 
-    for (unsigned i = 0; i < keys.size(); ++i)
-        if (keys[i] != input.keys[i])
+    for (unsigned i = 0; i < Keys.size(); ++i)
+        if (Keys[i] != input.Keys[i])
             return false;
-    return true;
-}
-
-
-bool Chord::Assign(Layer* item)
-{
-    if (m_Item)
-        return false;
-
-    m_Item = item;
     return true;
 }
 
@@ -28,10 +18,10 @@ bool Chord::Assign(Layer* item)
 Layer* Chord::CreateLayer(Hand* hand)
 {
     std::string shrtct;
-    int last = int(keys.size()) - 1;
-    for (size_t i = 0; i < keys.size(); ++i)
+    int last = int(Keys.size()) - 1;
+    for (size_t i = 0; i < Keys.size(); ++i)
     {
-        shrtct += hand->GetKey(keys[i])->GetValue();
+        shrtct += hand->GetKey(Keys[i])->GetValue();
         if (i < last)
             shrtct += "+";
     }

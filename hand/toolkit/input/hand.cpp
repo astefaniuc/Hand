@@ -97,7 +97,7 @@ bool Hand::Init()
 }
 
 
-Chord* Hand::Assign(Layer* item, InteractionLevel interaction)
+Chord* Hand::GetFreeChord(InteractionLevel interaction)
 {
     unsigned lower = 1;
     if (interaction == Peripherial)
@@ -110,7 +110,7 @@ Chord* Hand::Assign(Layer* item, InteractionLevel interaction)
         for (StateNode* cmd : cmds)
         {
             Chord* chord = cmd->GetChord();
-            if (!chord->Assign(item))
+            if (chord->Item)
                 continue;
 
             return chord;
@@ -123,18 +123,27 @@ Chord* Hand::Assign(Layer* item, InteractionLevel interaction)
 
 Chord* Hand::Reserve(Chord* shortcut)
 {
-    unsigned level = shortcut->keys.size();
+    unsigned level = shortcut->Keys.size();
     if (level > m_NumberOfKeys)
+    {
+        if (shortcut->Item)
+            return nullptr;
         return shortcut;
+    }
 
     StateNode::PeersList& cmds = *m_InputState->GetCommands(level);
     for (StateNode* cmd : cmds)
     {
         Chord* chord = cmd->GetChord();
         if (shortcut->IsValid(*chord))
+        {
+            if (chord->Item)
+                return nullptr;
             return chord;
+        }
     }
-    return shortcut;
+
+    return nullptr;
 }
 
 
@@ -149,9 +158,9 @@ bool Hand::Press(int k)
         return false;
 
     if (m_InputState->IsClean())
-        m_Record.keys.clear();
+        m_Record.Keys.clear();
     if (m_InputState->Press(index))
-        m_Record.keys.push_back((Chord::Finger)index);
+        m_Record.Keys.push_back((Chord::Finger)index);
 
     return true;
 }
@@ -168,7 +177,7 @@ bool Hand::Release(int k)
         // Device is during initialization
         DeleteKey(index);
         // Always ascending
-        m_Record.keys.pop_back();
+        m_Record.Keys.pop_back();
         m_InputState->Release(m_Keys.size());
         return true;
     }

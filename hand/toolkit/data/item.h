@@ -47,9 +47,7 @@ public:
 
 
     Layer* GetExpandedView();
-
     Layer* GetButtonView();
-    void SetButtonView(Layer* layer);
 
     /// Called on buuton activation.
     virtual void Execute(Layers::Item* callerButton) = 0;
@@ -89,7 +87,6 @@ private:
     std::string m_Info;
 
     Hmi::List* m_Parent = nullptr;
-    Layer* m_ButtonView = nullptr;
     bool m_IsSelected = false;
 
     Chord* m_Shortcut = nullptr;

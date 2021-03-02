@@ -5,7 +5,7 @@
 
 
 class Layer;
-class Chord;
+struct Chord;
 
 class StateNode
 {
