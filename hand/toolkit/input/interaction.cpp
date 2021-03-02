@@ -90,7 +90,7 @@ void Control::RemoveTarget(Layers::Interface* target)
 }
 
 
-void Control::RemoveTargetCb(Layers::Interface* target)
+void Control::RemoveTargetCb(Layer* target)
 {
     for (auto it = m_Stack.rbegin(); it != m_Stack.rend(); ++it)
     {

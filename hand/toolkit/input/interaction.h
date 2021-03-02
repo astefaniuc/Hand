@@ -41,7 +41,7 @@ public:
 private:
     void Rebuild();
     void Clear();
-    void RemoveTargetCb(Layers::Interface* target);
+    void RemoveTargetCb(Layer* target);
     void PopTargetCb(Layers::Item*);
     void RemoveTarget(std::vector<Layers::Interface*>::reverse_iterator& target);
 

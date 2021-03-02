@@ -68,6 +68,9 @@ public:
 
     virtual void Activate() {}
 
+
+    Listeners<Layer> ExitListeners;
+
 protected:
     virtual bool CanUpdate() { return true; }
     virtual void UpdateInteractionGroup() {}

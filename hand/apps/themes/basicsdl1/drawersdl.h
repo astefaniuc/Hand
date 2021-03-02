@@ -16,7 +16,7 @@ public:
     DrawerSdl(BasicSdl1* theme, Layer* layer, Hmi::List* config);
     ~DrawerSdl();
 
-    void Exit() override;
+    void Exit(Layer*) override;
 
     void Draw(SDL_Surface* buffer) override;
 

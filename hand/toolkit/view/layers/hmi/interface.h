@@ -33,8 +33,6 @@ public:
 
     void CollectShortcuts();
 
-    Listeners<Interface> ExitListeners;
-
 protected:
     Hmi::Vector* GetView() { return m_Data->GetInterface()->GetView(); }
     void Rebuild() override;
@@ -43,7 +41,6 @@ protected:
     Layout* CreateLayout() override;
 
 //    void Keep(enum mode)
-    void Quit(Item* caller) override;
 
 private:
     ListView* m_Controls;

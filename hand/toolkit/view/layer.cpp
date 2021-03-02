@@ -12,8 +12,8 @@ Layer::~Layer()
 
 void Layer::Quit(Layers::Item*)
 {
+    ExitListeners.Execute(this);
     SetModified();
-    SetDrawer(nullptr);
     Clear();
 }
 
@@ -57,8 +57,12 @@ Theme* Layer::GetTheme()
 void Layer::SetDrawer(Drawer* a_drawer)
 {
     if (m_Drawer)
-        m_Drawer->Exit();
+    {
+        m_Drawer->Exit(this);
+        ExitListeners.Remove(m_Drawer);
+    }
     m_Drawer = a_drawer;
+    ExitListeners.Add(m_Drawer, &Drawer::Exit);
 }
 
 

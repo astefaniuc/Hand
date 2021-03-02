@@ -83,12 +83,11 @@ void Interface::SetInteractionControl(Interaction::Control* control)
 
     control->AddGroup(m_Controls, true);
     control->AddGroup(this);
+    control->AddGroup(GetLayerControls()->GetExpandedView()->GetListLayer());
 
     CollectShortcuts();
     if (m_Shortcuts->Size())
         control->AddGroup(m_Shortcuts->GetExpandedView()->GetListLayer());
-
-    control->AddGroup(GetLayerControls()->GetExpandedView()->GetListLayer());
 
     SetModified();
 }
@@ -98,13 +97,6 @@ void Interface::RemoveInteractionControl()
 {
     m_InteractionControl = nullptr;
     SetModified();
-}
-
-
-void Interface::Quit(Item* caller)
-{
-    Item::Quit(nullptr);
-    ExitListeners.Execute(this);
 }
 
 

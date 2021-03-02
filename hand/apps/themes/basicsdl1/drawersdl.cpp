@@ -20,7 +20,7 @@ DrawerSdl::~DrawerSdl()
 }
 
 
-void DrawerSdl::Exit()
+void DrawerSdl::Exit(Layer*)
 {
     m_Theme->Remove(this);
     delete this;

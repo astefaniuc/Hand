@@ -29,7 +29,7 @@ public:
 
     void GetShortcuts(Hmi::Interface* caller, Hmi::List* out) override;
 
-    void DeleteCb(Layers::Interface*) { delete this; }
+    void DeleteCb(Layer*) { delete this; }
 
 protected:
     void Execute(Layers::Item* caller) override;
