@@ -1,7 +1,6 @@
 #include "view/layer.h"
 #include "view/layers/list.h"
 #include "view/theme.h"
-#include "input/interaction.h"
 
 
 Layer::~Layer()
@@ -36,6 +35,14 @@ void Layer::SetData(Hmi::Item* data)
     SetModifiedContent();
 
     m_Data = data;
+}
+
+
+void Layer::RemoveData()
+{
+    m_Data->DataListeners.Remove(this);
+    m_Data->ExitListeners.Remove(this);
+    m_Data = nullptr;
 }
 
 
@@ -111,7 +118,6 @@ void Layer::Update()
 
     ClearContent();
     Rebuild();
-    UpdateInteractionGroup();
 
     m_ModifiedContent = false;
 }
@@ -133,14 +139,6 @@ SDL_Rect Layer::ComputeSize(const SDL_Rect& outer)
 void Layer::UpdatePositions(const SDL_Rect& outer)
 {
     m_Size = GetDrawer()->GetContentSize(outer);
-}
-
-
-void Layer::RemoveData()
-{
-    m_Data->DataListeners.Remove(this);
-    m_Data->ExitListeners.Remove(this);
-    m_Data = nullptr;
 }
 
 

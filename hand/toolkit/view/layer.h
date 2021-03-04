@@ -11,12 +11,6 @@ namespace Layers {
     class List;
     class Interface;
 }
-namespace Interaction
-{
-    class Control;
-    class Group;
-    class Command;
-}
 class Theme;
 
 class Layer : public Field::Item
@@ -54,15 +48,6 @@ public:
     void Clear() override;
     virtual void ClearContent() {}
 
-    // Interaction interface
-
-    virtual bool SetInteraction(Interaction::Group* hand) { return false; }
-    virtual void ReleaseInteractionGroup() {}
-
-    virtual bool SetCommand(Interaction::Command* ctrl) { return false; }
-    virtual Interaction::Command* GetCommand() { return nullptr; }
-    virtual void ReleaseCommand() {}
-
     virtual Hmi::List* GetLayerControls() { return nullptr; }
     virtual Layers::Interface* GetInterface();
 
@@ -73,7 +58,6 @@ public:
 
 protected:
     virtual bool CanUpdate() { return true; }
-    virtual void UpdateInteractionGroup() {}
 
     void GetActiveLayer(std::vector<Layer*>& out) { out.push_back(this); }
 

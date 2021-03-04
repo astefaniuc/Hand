@@ -6,6 +6,7 @@
 
 
 namespace Hmi { class Vector; }
+namespace Interaction { class Control; }
 
 namespace Layers {
 

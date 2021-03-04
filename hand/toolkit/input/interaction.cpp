@@ -1,9 +1,6 @@
 #include "input/interaction.h"
 #include "input/hand.h"
-#include "data/interface.h"
-#include "data/list.h"
 #include "data/method.h"
-#include "view/layer.h"
 #include "view/layers/list.h"
 #include "view/layers/hmi/interface.h"
 #include <algorithm>
@@ -54,15 +51,8 @@ void Control::Rebuild()
     m_Stack.back()->Insert(LAYER_CONTROLS, interfaceCtrls);
     AddGroup(interfaceCtrls);
 
-
     if (!m_Focus)
-    {
-        if (!m_Groups.size())
-            return PopTargetCb(nullptr);
-
-        m_Focus = m_Groups[0];
-    }
-
+        SetFocus(m_Groups[0]);
     m_Focus->Update();
 
     for (Group* child : m_Groups)
@@ -99,14 +89,6 @@ void Control::OnTargetShow(Layer* inserted)
 }
 
 
-// void Control::RemoveTarget(Layers::Interface* target)
-// {
-//     auto it = std::find(m_Stack.rbegin(), m_Stack.rend(), target);
-//     if (it != m_Stack.rend())
-//         RemoveTarget(it);
-// }
-
-
 void Control::OnTargetExit(Layer* target)
 {
     for (auto it = m_Stack.rbegin(); it != m_Stack.rend(); ++it)
@@ -123,11 +105,10 @@ void Control::OnTargetExit(Layer* target)
 
 void Control::PopTargetCb(Layers::Item*)
 {
-    auto it = m_Stack.rbegin();
-    (*it)->GetLayerControls()->Remove(m_MoveControlUp);
-    (*it)->ExitListeners.Remove(this);
-    (*it)->ShowListeners.Remove(this);
-    m_Stack.erase((++it).base());
+    Layers::Interface* target = m_Stack.back();
+    target->ExitListeners.Remove(this);
+    target->ShowListeners.Remove(this);
+    m_Stack.pop_back();
 
     Rebuild();
 }
@@ -135,9 +116,8 @@ void Control::PopTargetCb(Layers::Item*)
 
 void Control::AddGroup(Layers::List* items, bool hasFocus)
 {
-    Interaction::Group* child = new Interaction::Group(items);
+    Interaction::Group* child = new Interaction::Group(items, this);
     m_Groups.push_back(child);
-    child->SetControl(this);
     if (hasFocus)
         SetFocus(child);
 }
@@ -170,20 +150,20 @@ void Control::Execute(const Chord& chord)
 
 
 
-Group::Group(Layers::List* layer) : m_Target(layer)
+Group::Group(Layers::List* layer, Control* parent)
+    : m_Target(layer), m_Parent(parent)
 {
     m_Target->Update();
     m_Target->ExitListeners.Add(this, &Group::OnTargetExit);
-    m_Target->SetInteraction(this);
 }
 
 
 Group::~Group()
 {
+    delete m_Focus;
     if (m_Target)
     {
         Clear();
-        m_Target->SetInteraction(nullptr);
         m_Target->ExitListeners.Remove(this);
     }
     m_Parent->Remove(this);
@@ -207,27 +187,18 @@ void Group::Remove(Command* child)
 }
 
 
-void Group::Release()
-{
-    Clear();
-}
-
-
 void Group::Update()
 {
     Clear();
 
     Hand::InteractionLevel level = Hand::Peripherial;
-    if (HasFocus())
+    if (m_Focus)
         level = Hand::Focus;
 
     std::vector<Layer*> commands;
     m_Target->GetActiveItems(commands);
     for (Layer* item : commands)
     {
-        if (item->GetCommand())
-            continue;
-
         Chord* chord = nullptr;
         Hmi::Item* data = item->GetData();
         if (data && data->GetShortcut())
@@ -242,19 +213,24 @@ void Group::Update()
         chord->Item = item;
         Add(new Command(this, chord));
     }
+
+    if (m_Focus)
+        m_Focus->Update();
 }
 
 
 void Group::SetFocus()
 {
-    m_HasFocus = true;
-    GetControl()->AddGroup(m_Target->GetLayerControls()->GetExpandedView()->GetListLayer());
+    Layers::List* layerCmds = m_Target->GetLayerControls()->GetExpandedView()->GetListLayer();
+    layerCmds->ExitListeners.Add(this, &Group::OnFocusExit);
+    m_Focus = new Group(layerCmds, m_Parent);
 }
 
 
 void Group::RemoveFocus()
 {
-    m_HasFocus = false;
+    delete m_Focus;
+    m_Focus = nullptr;
 }
 
 
@@ -269,7 +245,8 @@ void Group::OnTargetExit(Layer*)
 Command::Command(Group* parent, Chord* chord)
     : m_Parent(parent), m_Chord(chord)
 {
-    m_Chord->Item->SetCommand(this);
+    m_Chord->Item->Update();
+    m_Chord->Item->GetListLayer()->Insert(CONTROL, GetLayer());
     m_Chord->Item->ExitListeners.Add(this, &Command::OnTargetExit);
 }
 
@@ -278,7 +255,6 @@ Command::~Command()
 {
     if (m_Chord->Item)
     {
-        m_Chord->Item->ReleaseCommand();
         m_Chord->Item->ExitListeners.Remove(this);
         m_Chord->Item = nullptr;
         delete m_Layer;

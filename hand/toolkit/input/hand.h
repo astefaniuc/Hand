@@ -18,7 +18,6 @@ enum default_number_of_items
 
 class Device;
 class InputState;
-namespace Interaction { class Control; }
 
 class Hand : public Module
 {

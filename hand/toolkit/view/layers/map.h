@@ -2,8 +2,6 @@
 #define HAND_VIEW_LAYER_MAP_H
 
 #include "view/layers/list.h"
-#include "view/layers/text.h"
-#include <map>
 
 
 namespace Layers {

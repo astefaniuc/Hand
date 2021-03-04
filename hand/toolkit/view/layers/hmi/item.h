@@ -12,18 +12,12 @@ class Item : public Map
 public:
     void SetData(Hmi::Item* data) override;
 
-    bool SetCommand(Interaction::Command* ctrl) override;
-    Interaction::Command* GetCommand() override { return m_Command; }
-    void ReleaseCommand() override;
-
     void Activate() override { ActivationListeners.Notify(this); }
 
     Listeners<Layers::Item> ActivationListeners;
 
 protected:
     void Rebuild() override;
-
-    Interaction::Command* m_Command = nullptr;
 };
 
 }

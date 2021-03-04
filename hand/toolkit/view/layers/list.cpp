@@ -89,18 +89,11 @@ bool List::IsExpanding(Orientation direction)
 }
 
 
-void List::UpdateInteractionGroup()
-{
-    if (m_InteractionGroup)
-        m_InteractionGroup->Update();
-}
-
-
 void List::ClearContent()
 {
-    SetModifiedContent();
     if (m_Layout)
         m_Layout->Clear();
+    SetModifiedContent();
 }
 
 
@@ -109,19 +102,6 @@ Hmi::List* List::GetLayerControls()
     if (!m_LayerCommands)
         m_LayerCommands = new Hmi::Vector(LAYER_CONTROLS, "");
     return m_LayerCommands;
-}
-
-
-bool List::SetInteraction(Interaction::Group* focus)
-{
-    m_InteractionGroup = focus;
-    return true;
-}
-
-
-void List::ReleaseInteractionGroup()
-{
-    m_InteractionGroup = nullptr;
 }
 
 }

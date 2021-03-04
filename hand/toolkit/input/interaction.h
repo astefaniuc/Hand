@@ -1,5 +1,5 @@
-#ifndef HAND_INPUT_FOCUS_H
-#define HAND_INPUT_FOCUS_H
+#ifndef HAND_INPUT_INTERACTION_H
+#define HAND_INPUT_INTERACTION_H
 
 #include <vector>
 
@@ -30,7 +30,6 @@ public:
     Hand* GetHand() { return m_Hand; }
 
     void SetTarget(Layers::Interface* target);
-//    void RemoveTarget(Layers::Interface* target);
 
     void AddGroup(Layers::List* child, bool hasFocus = false);
     void Remove(Group* child);
@@ -76,18 +75,15 @@ public:
         AllShortcuts
     };
 
-    Group(Layers::List* layer);
+    Group(Layers::List* layer, Control* parent);
     ~Group();
 
+    void Update();
     void Clear();
 
     Control* GetControl() { return m_Parent; }
-    void SetControl(Control* parent) { m_Parent = parent; }
 
     const std::vector<Command*>& GetCommands() const { return m_Commands; }
-
-    void Release();
-    void Update();
 
     void Add(Command* child) { m_Commands.push_back(child); }
     void Remove(Command* child);
@@ -96,21 +92,21 @@ public:
 
     void SetFocus();
     void RemoveFocus();
-    bool HasFocus() { return m_HasFocus; }
+    bool HasFocus() { return m_Focus; }
 
 private:
     void OnTargetExit(Layer*);
-
-    Control* m_Parent = nullptr;
-    std::vector<Command*> m_Commands;
+    void OnFocusExit(Layer*) { m_Focus = nullptr; }
 
     Layers::List* m_Target;
+    Control* m_Parent;
+    std::vector<Command*> m_Commands;
 
     Filter m_Filter = Visible;
     Mode m_Mode = Activate;
 
     bool m_Update = true;
-    bool m_HasFocus = false;
+    Group* m_Focus = nullptr;
 };
 
 
@@ -135,4 +131,4 @@ private:
 };
 
 }
-#endif // HAND_INPUT_FOCUS_H
+#endif // HAND_INPUT_INTERACTION_H
