@@ -41,9 +41,19 @@ void Control::Rebuild()
     if (!m_Stack.size())
         return;
 
+    m_Stack.back()->Update();
+    m_Stack.back()->GetInteractionGroups(this);
+
+    Layers::List* interfaceCtrls =
+        m_Stack.back()->GetLayerControls()->GetExpandedView()->GetListLayer();
+    interfaceCtrls->Update();
+
     if (m_Stack.size() > 1)
-        m_Stack.back()->GetLayerControls()->Attach(m_MoveControlUp);
-    m_Stack.back()->SetInteractionControl(this);
+        interfaceCtrls->Insert(m_MoveControlUp->GetButtonView());
+
+    m_Stack.back()->Insert(LAYER_CONTROLS, interfaceCtrls);
+    AddGroup(interfaceCtrls);
+
 
     if (!m_Focus)
     {
@@ -73,30 +83,38 @@ void Control::Clear()
 
 void Control::SetTarget(Layers::Interface* target)
 {
-    if (m_Stack.size())
-        m_Stack.back()->RemoveInteractionControl();
     m_Stack.push_back(target);
-    target->ExitListeners.Add(this, &Control::RemoveTargetCb);
+    target->ExitListeners.Add(this, &Control::OnTargetExit);
+    target->ShowListeners.Add(this, &Control::OnTargetShow);
 
     Rebuild();
 }
 
 
-void Control::RemoveTarget(Layers::Interface* target)
+void Control::OnTargetShow(Layer* inserted)
 {
-    auto it = std::find(m_Stack.rbegin(), m_Stack.rend(), target);
-    if (it != m_Stack.rend())
-        RemoveTarget(it);
+    Layers::Interface* newTarget = dynamic_cast<Layers::Interface*>(inserted);
+    if (newTarget)
+        SetTarget(newTarget);
 }
 
 
-void Control::RemoveTargetCb(Layer* target)
+// void Control::RemoveTarget(Layers::Interface* target)
+// {
+//     auto it = std::find(m_Stack.rbegin(), m_Stack.rend(), target);
+//     if (it != m_Stack.rend())
+//         RemoveTarget(it);
+// }
+
+
+void Control::OnTargetExit(Layer* target)
 {
     for (auto it = m_Stack.rbegin(); it != m_Stack.rend(); ++it)
     {
         if (*it == target)
         {
-            RemoveTarget(it);
+            m_Stack.erase((++it).base());
+            Rebuild();
             return;
         }
     }
@@ -106,16 +124,10 @@ void Control::RemoveTargetCb(Layer* target)
 void Control::PopTargetCb(Layers::Item*)
 {
     auto it = m_Stack.rbegin();
-    RemoveTarget(it);
-}
-
-
-void Control::RemoveTarget(std::vector<Layers::Interface*>::reverse_iterator& target)
-{
-    (*target)->RemoveInteractionControl();
-    (*target)->GetLayerControls()->Remove(m_MoveControlUp);
-    (*target)->ExitListeners.Remove(this);
-    m_Stack.erase((++target).base());
+    (*it)->GetLayerControls()->Remove(m_MoveControlUp);
+    (*it)->ExitListeners.Remove(this);
+    (*it)->ShowListeners.Remove(this);
+    m_Stack.erase((++it).base());
 
     Rebuild();
 }
@@ -161,14 +173,19 @@ void Control::Execute(const Chord& chord)
 Group::Group(Layers::List* layer) : m_Target(layer)
 {
     m_Target->Update();
+    m_Target->ExitListeners.Add(this, &Group::OnTargetExit);
     m_Target->SetInteraction(this);
 }
 
 
 Group::~Group()
 {
-    Clear();
-    m_Target->SetInteraction(nullptr);
+    if (m_Target)
+    {
+        Clear();
+        m_Target->SetInteraction(nullptr);
+        m_Target->ExitListeners.Remove(this);
+    }
     m_Parent->Remove(this);
 }
 
@@ -231,7 +248,7 @@ void Group::Update()
 void Group::SetFocus()
 {
     m_HasFocus = true;
-    GetControl()->AddGroup(GetTarget()->GetLayerControls()->GetExpandedView()->GetListLayer());
+    GetControl()->AddGroup(m_Target->GetLayerControls()->GetExpandedView()->GetListLayer());
 }
 
 
@@ -241,20 +258,32 @@ void Group::RemoveFocus()
 }
 
 
+void Group::OnTargetExit(Layer*)
+{
+    m_Target = nullptr;
+    delete this;
+}
+
+
 
 Command::Command(Group* parent, Chord* chord)
     : m_Parent(parent), m_Chord(chord)
 {
     m_Chord->Item->SetCommand(this);
+    m_Chord->Item->ExitListeners.Add(this, &Command::OnTargetExit);
 }
 
 
 Command::~Command()
 {
-    m_Chord->Item->ReleaseCommand();
-    m_Chord->Item = nullptr;
+    if (m_Chord->Item)
+    {
+        m_Chord->Item->ReleaseCommand();
+        m_Chord->Item->ExitListeners.Remove(this);
+        m_Chord->Item = nullptr;
+        delete m_Layer;
+    }
     m_Parent->Remove(this);
-    delete m_Layer;
 }
 
 
@@ -264,6 +293,13 @@ Layer* Command::GetLayer()
         m_Layer = m_Chord->CreateLayer(m_Parent->GetControl()->GetHand());
     return m_Layer;
 
+}
+
+
+void Command::OnTargetExit(Layer*)
+{
+    m_Chord->Item = nullptr;
+    delete this;
 }
 
 }

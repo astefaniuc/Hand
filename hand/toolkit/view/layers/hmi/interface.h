@@ -12,15 +12,11 @@ namespace Layers {
 class ListView;
 class Vector;
 
-/// The Interface is a composed Layer, managing the basic layout and theme.
-/// For the sub-layers, the main command list is mandatory; other layers may be
-/// additional (system) command lists, a title, a main view, and a secondary view e.g.
-/// an info box or help.
+
 class Interface : public Item
 {
 public:
     Interface();
-    ~Interface();
 
     void SetData(Hmi::Item* data) override;
 
@@ -28,10 +24,11 @@ public:
 
     void Show(Layer* item);
 
-    void SetInteractionControl(Interaction::Control* hand);
-    void RemoveInteractionControl();
+    virtual void GetInteractionGroups(Interaction::Control* hand);
 
     void CollectShortcuts();
+
+    Listeners<Layer> ShowListeners;
 
 protected:
     Hmi::Vector* GetView() { return m_Data->GetInterface()->GetView(); }
@@ -45,7 +42,6 @@ protected:
 private:
     ListView* m_Controls;
     Vector* m_View = nullptr;
-    Interaction::Control* m_InteractionControl = nullptr;
     Hmi::Vector* m_Shortcuts = nullptr;
 };
 

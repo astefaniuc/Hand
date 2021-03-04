@@ -12,9 +12,6 @@ namespace Layers {
 class Vector : public List
 {
 public:
-    /// Returns 'sub'.
-    Layer* Insert(Layer* sub);
-
     void SetExpandChildren(bool expand);
 
     unsigned GetMaxItemsToShow() { return m_MaxItemsToShow; }

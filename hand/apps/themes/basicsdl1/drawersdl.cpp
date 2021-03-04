@@ -16,13 +16,15 @@ DrawerSdl::DrawerSdl(BasicSdl1* theme, Layer* layer, Hmi::List* config)
 
 DrawerSdl::~DrawerSdl()
 {
-    m_Layer->RemoveDrawer();
+    if (m_Layer)
+        m_Layer->RemoveDrawer();
 }
 
 
 void DrawerSdl::Exit(Layer*)
 {
     m_Theme->Remove(this);
+    m_Layer = nullptr;
     delete this;
 }
 

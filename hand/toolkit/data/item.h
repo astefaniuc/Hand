@@ -73,14 +73,15 @@ public:
         m_LayerInitializer = new CCallback<CbOwner, Layer>(obj, method);
     }
 
-    Listeners<Item> SelectionListeners;
     Listeners<Item> DataListeners;
+    Listeners<Item> ExitListeners;
+    Listeners<Item> SelectionListeners;
 
 protected:
     virtual Layer* CreateExpandedView() = 0;
     virtual Layer* CreateButtonView();
 
-    void NotifyChanged() { DataListeners.Execute(this); }
+    void NotifyChanged() { DataListeners.Notify(this); }
 
 private:
     std::string m_Name;

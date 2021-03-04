@@ -16,10 +16,13 @@ public:
     Layout* GetLayout();
     void SetLayout(Layout* layout);
 
-    Layers::List* GetListLayer() override { return this; }
+    void Insert(Layer* sub);
+    void Insert(const std::string& field, Layer* sub);
 
     void Update() override;
     void DrawContent(SDL_Surface* buffer) override { GetLayout()->Draw(buffer); }
+
+    Layers::List* GetListLayer() override { return this; }
 
     bool SetInteraction(Interaction::Group* focus) override;
     void ReleaseInteractionGroup() override;
@@ -31,7 +34,6 @@ protected:
     virtual Layout* CreateLayout() = 0;
 
     void UpdateInteractionGroup() override;
-    void ClearInteractionGroup() override;
 
     /// Field::Item interface:
     SDL_Rect ComputeSize(const SDL_Rect& outer) override;

@@ -6,15 +6,16 @@
 
 Layer::~Layer()
 {
-    Exit();
+    SetParentField(nullptr);
+    if (m_Data)
+        RemoveData();
+    ExitListeners.Notify(this);
 }
 
 
 void Layer::Quit(Layers::Item*)
 {
-    ExitListeners.Execute(this);
-    SetModified();
-    Clear();
+    delete this;
 }
 
 
@@ -28,10 +29,10 @@ void Layer::Draw(SDL_Surface* buffer)
 void Layer::SetData(Hmi::Item* data)
 {
     if (m_Data)
-        m_Data->DataListeners.Remove(this);
-    ClearContent();
+        RemoveData();
 
-    data->DataListeners.Add(this, &Layer::OnNotifyChanged);
+    data->DataListeners.Add(this, &Layer::OnDataChanged);
+    data->ExitListeners.Add(this, &Layer::OnDataExit);
     SetModifiedContent();
 
     m_Data = data;
@@ -118,15 +119,7 @@ void Layer::Update()
 
 void Layer::Clear()
 {
-    SetParentField(nullptr);
-    ClearContent();
-}
-
-
-void Layer::ClearContent()
-{
-    ClearInteractionGroup();
-    SetModifiedContent();
+    delete this;
 }
 
 
@@ -140,4 +133,19 @@ SDL_Rect Layer::ComputeSize(const SDL_Rect& outer)
 void Layer::UpdatePositions(const SDL_Rect& outer)
 {
     m_Size = GetDrawer()->GetContentSize(outer);
+}
+
+
+void Layer::RemoveData()
+{
+    m_Data->DataListeners.Remove(this);
+    m_Data->ExitListeners.Remove(this);
+    m_Data = nullptr;
+}
+
+
+void Layer::OnDataExit(Hmi::Item*)
+{
+    RemoveData();
+    delete this;
 }

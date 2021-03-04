@@ -49,8 +49,6 @@ User::~User()
 {
     for (ModuleLib* app : m_RunningApps)
         delete app;
-
-//    delete m_ViewLayer;
 }
 
 
@@ -74,9 +72,7 @@ bool User::LoadApp(Hmi::Note* a_path)
     if (app->Load())
     {
         m_RunningApps.push_back(app);
-        Hmi::Item* hmi = app->GetHmi();
-        m_View.GetView()->Attach(hmi);
-        m_Control->SetTarget(hmi->GetExpandedView()->GetInterface());
+        m_ViewLayer->Show(app->GetHmi()->GetExpandedView());
         return true;
     }
 

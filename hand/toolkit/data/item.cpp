@@ -16,6 +16,8 @@ Item::~Item()
         tmp->Remove(this);
     }
 
+    ExitListeners.Notify(this);
+
     delete m_LayerInitializer;
     delete m_Shortcut;
 }
@@ -32,7 +34,7 @@ Interface* Item::GetInterface()
 void Item::SetSelected(bool isSelected)
 {
     m_IsSelected = isSelected;
-    SelectionListeners.Execute(this);
+    SelectionListeners.Notify(this);
 }
 
 

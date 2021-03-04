@@ -11,12 +11,6 @@ namespace Layers {
 
 class Map : public List
 {
-public:
-    ~Map() { Exit(); }
-
-    /// Returns 'sub'.
-    void Insert(const std::string& field, Layer* sub);
-
 protected:
     void Rebuild() override;
 };

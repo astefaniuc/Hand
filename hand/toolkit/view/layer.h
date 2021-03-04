@@ -52,7 +52,7 @@ public:
 
     void Exit() final { Quit(nullptr); }
     void Clear() override;
-    virtual void ClearContent();
+    virtual void ClearContent() {}
 
     // Interaction interface
 
@@ -74,7 +74,6 @@ public:
 protected:
     virtual bool CanUpdate() { return true; }
     virtual void UpdateInteractionGroup() {}
-    virtual void ClearInteractionGroup() {}
 
     void GetActiveLayer(std::vector<Layer*>& out) { out.push_back(this); }
 
@@ -93,8 +92,11 @@ protected:
     bool IsValid() const final { return true; }
     virtual void Quit(Layers::Item*);
 
-    /// Callback.
-    void OnNotifyChanged(Hmi::Item*) { SetModifiedContent(); }
+    void RemoveData();
+
+    /// Callbacks.
+    void OnDataChanged(Hmi::Item*) { SetModifiedContent(); }
+    void OnDataExit(Hmi::Item*);
 
     Theme* m_Theme = nullptr;
     Drawer* m_Drawer = nullptr;

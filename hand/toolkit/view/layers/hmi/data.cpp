@@ -10,8 +10,7 @@ void Data::Rebuild()
 {
     Item::Rebuild();
 
-    m_DataText.SetData(static_cast<Hmi::Data*>(m_Data)->GetValueString());
-    Insert(VIEW, &m_DataText);
+    Insert(VIEW, new Text(static_cast<Hmi::Data*>(m_Data)->GetValueString()));
 }
 
 

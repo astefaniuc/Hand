@@ -12,6 +12,27 @@ List::~List()
 }
 
 
+void List::Insert(const std::string& name, Layer* child)
+{
+    if (!child)
+        return;
+
+    Field* field = GetLayout()->GetField(name, false);
+    if (!field)
+        return;
+
+    field->SetItem(child);
+    SetModified();
+}
+
+
+void List::Insert(Layer* a_child)
+{
+    GetLayout()->GetField(a_child->GetData()->GetName())->SetItem(a_child);
+    SetModified();
+}
+
+
 SDL_Rect List::ComputeSize(const SDL_Rect& outer)
 {
     Update();
@@ -75,16 +96,9 @@ void List::UpdateInteractionGroup()
 }
 
 
-void List::ClearInteractionGroup()
-{
-    if (m_InteractionGroup)
-        m_InteractionGroup->Clear();
-}
-
-
 void List::ClearContent()
 {
-    Layer::ClearContent();
+    SetModifiedContent();
     if (m_Layout)
         m_Layout->Clear();
 }

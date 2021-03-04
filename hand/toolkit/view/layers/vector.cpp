@@ -40,14 +40,6 @@ void Vector::AddLayer(Hmi::Item* data)
 }
 
 
-Layer* Vector::Insert(Layer* a_child)
-{
-    GetLayout()->GetField(a_child->GetData()->GetName())->SetItem(a_child);
-    SetModified();
-    return a_child;
-}
-
-
 Drawer* Vector::GetDrawerFromTheme()
 {
     return GetTheme()->GetListDrawer(this);

@@ -43,9 +43,14 @@ class Listeners
 public:
     typedef ICallback<CallerType> Callback;
 
-    ~Listeners() { Clear(); }
+    ~Listeners()
+    {
+        for (auto cb : m_Register)
+            delete cb;
+        m_Register.clear();
+    }
 
-    void Execute(CallerType* caller)
+    void Notify(CallerType* caller)
     {
         for (Callback* listener : m_Register)
             listener->Execute(caller);
@@ -69,12 +74,6 @@ public:
         }
     }
 
-    void Clear()
-    {
-        for (auto cb : m_Register)
-            delete cb;
-        m_Register.clear();
-    }
 private:
     std::vector<Callback*> m_Register;
 };

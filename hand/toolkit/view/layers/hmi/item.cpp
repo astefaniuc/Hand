@@ -1,4 +1,5 @@
 #include "view/layers/hmi/item.h"
+#include "view/layers/text.h"
 #include "input/interaction.h"
 
 
@@ -7,12 +8,9 @@ namespace Layers {
 
 void Item::Rebuild()
 {
-    m_Name.SetData(m_Data->GetName());
-    m_Info.SetData(m_Data->GetInfo());
-
-    Insert(TITLE, &m_Name);
+    Insert(TITLE, new Text(m_Data->GetName()));
     if (!m_Data->GetInfo().empty())
-        Insert(DESCRIPTION, &m_Info);
+        Insert(DESCRIPTION, new Text(m_Data->GetInfo()));
     if (GetCommand())
         Insert(CONTROL, GetCommand()->GetLayer());
 }

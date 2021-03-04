@@ -15,9 +15,6 @@ protected:
 
     Drawer* GetDrawerFromTheme() override;
     Layout* CreateLayout() override { return Layouts::CreateData(); }
-
-
-    Text m_DataText;
 };
 
 }

@@ -30,7 +30,7 @@ public:
     Hand* GetHand() { return m_Hand; }
 
     void SetTarget(Layers::Interface* target);
-    void RemoveTarget(Layers::Interface* target);
+//    void RemoveTarget(Layers::Interface* target);
 
     void AddGroup(Layers::List* child, bool hasFocus = false);
     void Remove(Group* child);
@@ -41,9 +41,11 @@ public:
 private:
     void Rebuild();
     void Clear();
-    void RemoveTargetCb(Layer* target);
+
+    // Callbacks.
+    void OnTargetExit(Layer* target);
+    void OnTargetShow(Layer* inserted);
     void PopTargetCb(Layers::Item*);
-    void RemoveTarget(std::vector<Layers::Interface*>::reverse_iterator& target);
 
     Hand* m_Hand;
 
@@ -96,8 +98,9 @@ public:
     void RemoveFocus();
     bool HasFocus() { return m_HasFocus; }
 
-
 private:
+    void OnTargetExit(Layer*);
+
     Control* m_Parent = nullptr;
     std::vector<Command*> m_Commands;
 
@@ -124,6 +127,8 @@ public:
     Layer* GetLayer();
 
 private:
+    void OnTargetExit(Layer*);
+
     Group* m_Parent;
     Chord* m_Chord;
     Layer* m_Layer = nullptr;
