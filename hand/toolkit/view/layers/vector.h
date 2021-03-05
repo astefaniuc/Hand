@@ -23,7 +23,7 @@ protected:
     void AddLayer(Hmi::Item* data);
 
     Drawer* GetDrawerFromTheme() override;
-    Layout* CreateLayout() override { return new Layouts::List(); }
+    Layout* CreateLayout() override { return new Layouts::Vector(); }
 
 private:
     unsigned m_StartPosition = 0;

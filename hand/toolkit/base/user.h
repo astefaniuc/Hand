@@ -23,7 +23,7 @@ public:
     void Update();
 
     void Start();
-    void Stop(Layer*) { m_MainThread.notify_all(); }
+    void Stop(Layer*);
 
 private:
     EventHandler* m_Input;

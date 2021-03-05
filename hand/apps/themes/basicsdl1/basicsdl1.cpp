@@ -137,7 +137,6 @@ SDL_Rect BasicSdl1::GetResolution()
 void BasicSdl1::InitScreen(Layer* root)
 {
     m_ScreenRoot = root;
-    root->ExitListeners.Add(this, &BasicSdl1::OnScreenRootExit);
     DrawerSdl::GetDrawer(root)->RemoveFrame();
     // Start SDL as the default drawing engine:
     // Initialize the SDL library:
@@ -162,7 +161,7 @@ void BasicSdl1::InitScreen(Layer* root)
 
 void BasicSdl1::UpdateScreen()
 {
-    if (!m_ScreenRoot || !m_ScreenRoot->IsModified())
+    if (!m_ScreenRoot->IsModified())
         return;
 
     SDL_Rect res = GetResolution();

@@ -105,7 +105,6 @@ private:
     Filter m_Filter = Visible;
     Mode m_Mode = Activate;
 
-    bool m_Update = true;
     Group* m_Focus = nullptr;
 };
 

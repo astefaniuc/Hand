@@ -20,10 +20,7 @@ protected:
     Drawer* GetDrawerFromTheme() override;
     Layout* CreateLayout() override;
 
-    void GetActiveItems(std::vector<Layer*>& out) override
-    {
-        m_DataControls->GetActiveItems(out);
-    }
+    void GetActiveItems(std::vector<Layer*>& out) override;
 
     void Back(Layers::Item*);
 

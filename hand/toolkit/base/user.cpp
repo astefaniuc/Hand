@@ -65,6 +65,13 @@ void User::Start()
 }
 
 
+void User::Stop(Layer*)
+{
+    m_ViewLayer = nullptr;
+    m_MainThread.notify_all();
+}
+
+
 bool User::LoadApp(Hmi::Note* a_path)
 {
     ModuleLib* app = new ModuleLib();
@@ -83,5 +90,6 @@ bool User::LoadApp(Hmi::Note* a_path)
 
 void User::Update()
 {
-    m_ViewLayer->GetTheme()->UpdateScreen();
+    if (m_ViewLayer)
+        m_ViewLayer->GetTheme()->UpdateScreen();
 }

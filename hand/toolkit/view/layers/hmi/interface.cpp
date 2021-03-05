@@ -16,20 +16,6 @@ Interface::Interface()
     exit->SetShortcut(Chord::FullHand());
 
     GetLayerControls()->Add(exit);
-
-    m_Controls = new ListView();
-    m_View = new Vector();
-    m_View->SetExpandChildren(true);
-}
-
-
-void Interface::SetData(Hmi::Item* data)
-{
-    m_Controls->SetData(data->GetInterface()->GetControls());
-    if (data->GetInterface()->GetView())
-        m_View->SetData(data->GetInterface()->GetView());
-    m_View->Update();
-    Item::SetData(data);
 }
 
 
@@ -37,8 +23,17 @@ void Interface::Rebuild()
 {
     Item::Rebuild();
 
-    Insert(VIEW, m_View);
+    m_Controls = new ListView();
+    m_Controls->SetData(m_Data->GetInterface()->GetControls());
     Insert(CONTROL, m_Controls);
+
+    if (m_Data->GetInterface()->GetView())
+    {
+        m_View = new Vector();
+        m_View->SetExpandChildren(true);
+        m_View->SetData(m_Data->GetInterface()->GetView());
+        Insert(VIEW, m_View);
+    }
 }
 
 
@@ -64,6 +59,8 @@ void Interface::CollectShortcuts()
 
 void Interface::GetInteractionGroups(Interaction::Control* control)
 {
+    Update();
+
     control->AddGroup(m_Controls, true);
     control->AddGroup(m_View);
 

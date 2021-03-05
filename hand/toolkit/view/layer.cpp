@@ -115,10 +115,10 @@ void Layer::Update()
     if (!m_ModifiedContent || !CanUpdate())
         return;
 
+    m_ModifiedContent = false;
+
     ClearContent();
     Rebuild();
-
-    m_ModifiedContent = false;
 }
 
 

@@ -107,11 +107,19 @@ Layers::List* Layout::GetListLayer()
 }
 
 
-void Layout::Clear()
+void Layout::CleanFields()
 {
     for (auto field : m_Fields)
         if (field->IsValid())
             field->GetItem()->Clear();
+}
+
+
+void Layout::DeleteFields()
+{
+    for (auto field : m_Fields)
+        delete field;
+    m_Fields.clear();
 }
 
 

@@ -19,13 +19,13 @@ public:
     void Insert(Layer* sub);
     void Insert(const std::string& field, Layer* sub);
 
-    void Update() override;
     void DrawContent(SDL_Surface* buffer) override { GetLayout()->Draw(buffer); }
 
     Layers::List* GetListLayer() override { return this; }
 
     Hmi::List* GetLayerControls() override;
     virtual void GetActiveItems(std::vector<Layer*>& out) { GetLayout()->GetActiveLayer(out); }
+
 
 protected:
     virtual Layout* CreateLayout() = 0;
@@ -35,10 +35,12 @@ protected:
     void UpdatePositions(const SDL_Rect& outer) override;
     bool IsExpanding(Orientation direction) override;
 
-    void ClearContent() override;
+    void ClearContent() override { GetLayout()->Clear(); }
 
-    Layout* m_Layout = nullptr;
     Hmi::List* m_LayerCommands = nullptr;
+
+private:
+    Layout* m_Layout = nullptr;
 };
 
 }

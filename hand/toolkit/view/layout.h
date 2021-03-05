@@ -26,12 +26,14 @@ public:
     void Draw(SDL_Surface* buffer) final;
 
     void Exit() override { delete this; }
-    void Clear() override;
-    virtual void ClearFields() { m_Fields.clear(); }
+    void Clear() override { CleanFields(); }
 
     void GetActiveLayer(std::vector<Layer*>& out) override;
 
 protected:
+    void CleanFields();
+    void DeleteFields();
+
     std::vector<Field*> m_Fields;
     Layers::List* m_Layer = nullptr;
 };
@@ -67,6 +69,13 @@ private:
 
     Orientation m_Orientation = Horizontal;
     Expansion m_ExpansionMode = Compact;
+};
+
+
+class Vector : public List
+{
+public:
+    void Clear() override { DeleteFields(); }
 };
 
 

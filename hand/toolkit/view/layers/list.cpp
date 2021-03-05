@@ -35,8 +35,6 @@ void List::Insert(Layer* a_child)
 
 SDL_Rect List::ComputeSize(const SDL_Rect& outer)
 {
-    Update();
-
     SDL_Rect ret = GetDrawer()->ComputeSize(
         GetLayout()->ComputeSize(GetDrawer()->GetContentSize(outer)));
 
@@ -60,7 +58,8 @@ Layout* List::GetLayout()
 {
     if (!m_Layout)
         SetLayout(CreateLayout());
-     return m_Layout;
+    Update();
+    return m_Layout;
 }
 
 
@@ -74,26 +73,9 @@ void List::SetLayout(Layout* a_layout)
 }
 
 
-void List::Update()
-{
-    // Force a layout if yet not set.
-    GetLayout();
-    Layer::Update();
-}
-
-
 bool List::IsExpanding(Orientation direction)
 {
-    Update();
     return GetLayout()->IsExpanding(direction);
-}
-
-
-void List::ClearContent()
-{
-    if (m_Layout)
-        m_Layout->Clear();
-    SetModifiedContent();
 }
 
 

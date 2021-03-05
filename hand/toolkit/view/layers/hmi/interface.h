@@ -19,8 +19,6 @@ class Interface : public Item
 public:
     Interface();
 
-    void SetData(Hmi::Item* data) override;
-
     Interface* GetInterface() override { return this; }
 
     void Show(Layer* item);

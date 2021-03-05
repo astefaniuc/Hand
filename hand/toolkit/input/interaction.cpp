@@ -38,12 +38,10 @@ void Control::Rebuild()
     if (!m_Stack.size())
         return;
 
-    m_Stack.back()->Update();
     m_Stack.back()->GetInteractionGroups(this);
 
     Layers::List* interfaceCtrls =
         m_Stack.back()->GetLayerControls()->GetExpandedView()->GetListLayer();
-    interfaceCtrls->Update();
 
     if (m_Stack.size() > 1)
         interfaceCtrls->Insert(m_MoveControlUp->GetButtonView());
@@ -153,7 +151,6 @@ void Control::Execute(const Chord& chord)
 Group::Group(Layers::List* layer, Control* parent)
     : m_Target(layer), m_Parent(parent)
 {
-    m_Target->Update();
     m_Target->ExitListeners.Add(this, &Group::OnTargetExit);
 }
 
@@ -175,7 +172,6 @@ void Group::Clear()
     auto copy = m_Commands;
     for (Command* child : copy)
         delete child;
-    m_Update = true;
 }
 
 
@@ -246,7 +242,6 @@ Command::Command(Group* parent, Chord* chord)
     : m_Parent(parent), m_Chord(chord)
 {
     m_Layer = m_Chord->CreateLayer(m_Parent->GetControl()->GetHand());
-    m_Chord->Item->Update();
     m_Chord->Item->GetListLayer()->Insert(CONTROL, m_Layer);
     m_Chord->Item->ExitListeners.Add(this, &Command::OnTargetExit);
 }

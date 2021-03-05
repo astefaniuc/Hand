@@ -9,8 +9,6 @@ namespace Layers {
 
 void Vector::Rebuild()
 {
-    m_Layout->ClearFields();
-
     if (!GetData())
         return;
 
