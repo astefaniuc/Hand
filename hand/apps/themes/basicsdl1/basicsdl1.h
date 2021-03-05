@@ -45,6 +45,8 @@ protected:
     void SetWindowed();
     SDL_Rect GetResolution();
 
+    void OnScreenRootExit(Layer*) { m_ScreenRoot = nullptr; }
+
     Hmi::Interface m_Hmi;
     Hmi::Map* m_Buttons;
     Hmi::Map* m_Datas;

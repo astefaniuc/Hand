@@ -245,8 +245,9 @@ void Group::OnTargetExit(Layer*)
 Command::Command(Group* parent, Chord* chord)
     : m_Parent(parent), m_Chord(chord)
 {
+    m_Layer = m_Chord->CreateLayer(m_Parent->GetControl()->GetHand());
     m_Chord->Item->Update();
-    m_Chord->Item->GetListLayer()->Insert(CONTROL, GetLayer());
+    m_Chord->Item->GetListLayer()->Insert(CONTROL, m_Layer);
     m_Chord->Item->ExitListeners.Add(this, &Command::OnTargetExit);
 }
 
@@ -260,15 +261,6 @@ Command::~Command()
         delete m_Layer;
     }
     m_Parent->Remove(this);
-}
-
-
-Layer* Command::GetLayer()
-{
-    if (!m_Layer)
-        m_Layer = m_Chord->CreateLayer(m_Parent->GetControl()->GetHand());
-    return m_Layer;
-
 }
 
 

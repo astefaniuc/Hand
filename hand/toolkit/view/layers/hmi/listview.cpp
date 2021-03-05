@@ -15,17 +15,14 @@ void ListView::SetData(Hmi::Item* data)
         GetLayerControls()->Add(m_Back);
     }
     m_ViewStack.push_back(data);
-    m_DataControls.SetData(data);
     Item::SetData(data);
 }
 
 
 void ListView::Rebuild()
 {
-    Item::Rebuild();
-
-    Insert(VIEW, &m_DataControls);
-    Insert(LAYER_CONTROLS, GetLayerControls()->GetExpandedView());
+    m_DataControls = m_Data->GetExpandedView()->GetListLayer();
+    Insert(VIEW, m_DataControls);
 }
 
 
@@ -37,7 +34,6 @@ void ListView::Back(Layers::Item*)
 {
     m_ViewStack.pop_back();
     Item::SetData(m_ViewStack.back());
-    m_DataControls.SetData(m_Data);
     if (m_ViewStack.size() == 1)
     {
         delete m_Back;

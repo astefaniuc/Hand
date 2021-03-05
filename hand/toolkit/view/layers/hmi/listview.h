@@ -22,14 +22,14 @@ protected:
 
     void GetActiveItems(std::vector<Layer*>& out) override
     {
-        m_DataControls.GetActiveItems(out);
+        m_DataControls->GetActiveItems(out);
     }
 
     void Back(Layers::Item*);
 
 private:
     Hmi::Item* m_Back = nullptr;
-    Vector m_DataControls;
+    List* m_DataControls = nullptr;
     std::vector<Hmi::Item*> m_ViewStack;
 };
 

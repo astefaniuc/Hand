@@ -120,7 +120,6 @@ public:
     void RemoveParent() { m_Parent = nullptr; }
     // Active chord, external ownership.
     Chord* GetChord() const { return m_Chord; }
-    Layer* GetLayer();
 
 private:
     void OnTargetExit(Layer*);

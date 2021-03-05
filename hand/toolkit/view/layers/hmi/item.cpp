@@ -15,8 +15,15 @@ void Item::Rebuild()
 
 void Item::SetData(Hmi::Item* data)
 {
-    Map::SetData(data);
+    List::SetData(data);
     ActivationListeners.Add(data, &Hmi::Item::Execute);
+}
+
+
+void Item::RemoveData()
+{
+    ActivationListeners.Remove(m_Data);
+    List::RemoveData();
 }
 
 }

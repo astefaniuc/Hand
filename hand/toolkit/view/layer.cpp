@@ -29,12 +29,11 @@ void Layer::SetData(Hmi::Item* data)
 {
     if (m_Data)
         RemoveData();
+    m_Data = data;
 
     data->DataListeners.Add(this, &Layer::OnDataChanged);
     data->ExitListeners.Add(this, &Layer::OnDataExit);
     SetModifiedContent();
-
-    m_Data = data;
 }
 
 
@@ -144,6 +143,6 @@ void Layer::UpdatePositions(const SDL_Rect& outer)
 
 void Layer::OnDataExit(Hmi::Item*)
 {
-    RemoveData();
+    m_Data = nullptr;
     delete this;
 }

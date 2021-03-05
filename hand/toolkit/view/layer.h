@@ -26,6 +26,7 @@ public:
     // Set pointer to a data tree node
     virtual void SetData(Hmi::Item* data);
     Hmi::Item* GetData() const { return m_Data; }
+    virtual void RemoveData();
 
     void SetTheme(Theme* theme);
     Theme* GetTheme();
@@ -75,8 +76,6 @@ protected:
     bool IsExpanding(Orientation direction) override { return false; }
     bool IsValid() const final { return true; }
     virtual void Quit(Layers::Item*);
-
-    void RemoveData();
 
     /// Callbacks.
     void OnDataChanged(Hmi::Item*) { SetModifiedContent(); }
