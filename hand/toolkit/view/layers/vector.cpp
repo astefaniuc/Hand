@@ -1,5 +1,4 @@
 #include "view/layers/vector.h"
-#include "view/layers/hmi/button.h"
 #include "data/list.h"
 #include "view/theme.h"
 
@@ -49,7 +48,7 @@ void Vector::SetExpandChildren(bool expand)
     if (m_ExpandChildren != expand)
     {
         m_ExpandChildren = expand;
-        SetModifiedContent();
+        Update();
     }
 }
 

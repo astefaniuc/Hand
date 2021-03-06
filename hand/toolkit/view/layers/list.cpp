@@ -58,18 +58,24 @@ Layout* List::GetLayout()
 {
     if (!m_Layout)
         SetLayout(CreateLayout());
-    Update();
     return m_Layout;
 }
 
 
-void List::SetLayout(Layout* a_layout)
+void List::SetLayout(Layout* layout)
 {
-    delete m_Layout;
-    m_Layout = a_layout;
+    if (m_Layout)
+    {
+        std::vector<Layer*> layers;
+        m_Layout->GetActiveLayer(layers);
+        for (Layer* layer : layers)
+            layout->GetField(layer->GetParentField()->GetName())->SetItem(layer);
+        delete m_Layout;
+    }
+    m_Layout = layout;
     if (m_Layout)
         m_Layout->SetLayer(this);
-    SetModifiedContent();
+    SetModified();
 }
 
 

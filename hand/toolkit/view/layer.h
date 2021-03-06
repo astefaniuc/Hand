@@ -18,8 +18,6 @@ class Layer : public Field::Item
 public:
     virtual ~Layer();
 
-    // Checks and updates content and triggers a re-draw if needed
-    virtual void Update();
     void Draw(SDL_Surface* buffer) final;
     virtual void DrawContent(SDL_Surface* buffer) = 0;
 
@@ -40,13 +38,13 @@ public:
 
     const SDL_Rect& GetSize() const { return m_Size; }
 
-    bool IsModified() { return (m_IsModified || m_ModifiedContent); }
+    bool IsModified() { return m_IsModified; }
     void SetModified();
 
     bool IsVisible() { return (m_Field && m_Field->IsVisible()); }
 
     void Exit() final { Quit(nullptr); }
-    void Clear() override;
+    void Clear() override { delete this; }
     virtual void ClearContent() {}
 
     virtual Hmi::List* GetLayerControls() { return nullptr; }
@@ -58,12 +56,10 @@ public:
     Listeners<Layer> ExitListeners;
 
 protected:
-    virtual bool CanUpdate() { return true; }
-
     void GetActiveLayer(std::vector<Layer*>& out) { out.push_back(this); }
 
-    void SetModifiedContent();
     /// Rebuild sub-layer structure on content or layout changes.
+    void Update();
     virtual void Rebuild() = 0;
 
     virtual Drawer* GetDrawerFromTheme() = 0;
@@ -78,7 +74,7 @@ protected:
     virtual void Quit(Layers::Item*);
 
     /// Callbacks.
-    void OnDataChanged(Hmi::Item*) { SetModifiedContent(); }
+    void OnDataChanged(Hmi::Item*) { Update(); }
     void OnDataExit(Hmi::Item*);
 
     Theme* m_Theme = nullptr;
@@ -90,7 +86,6 @@ protected:
     Hmi::Item* m_Data = nullptr;
 
 private:
-    bool m_ModifiedContent = false;
     bool m_IsModified = true;
 };
 

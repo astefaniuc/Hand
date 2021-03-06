@@ -26,13 +26,6 @@ void ListView::Rebuild()
 }
 
 
-void ListView::GetActiveItems(std::vector<Layer*>& out)
-{
-    Update();
-    m_DataControls->GetActiveItems(out);
-}
-
-
 Drawer* ListView::GetDrawerFromTheme() { return GetTheme()->GetViewDrawer(this); }
 Layout* ListView::CreateLayout() { return Layouts::CreateListView(); }
 

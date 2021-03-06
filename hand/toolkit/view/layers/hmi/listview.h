@@ -3,7 +3,6 @@
 
 #include "view/layers/hmi/item.h"
 #include "view/layers/vector.h"
-#include "view/layout.h"
 
 
 namespace Layers {
@@ -20,7 +19,7 @@ protected:
     Drawer* GetDrawerFromTheme() override;
     Layout* CreateLayout() override;
 
-    void GetActiveItems(std::vector<Layer*>& out) override;
+    void GetActiveItems(std::vector<Layer*>& out) override { m_DataControls->GetActiveItems(out); }
 
     void Back(Layers::Item*);
 

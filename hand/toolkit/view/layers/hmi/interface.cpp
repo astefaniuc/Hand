@@ -59,8 +59,6 @@ void Interface::CollectShortcuts()
 
 void Interface::GetInteractionGroups(Interaction::Control* control)
 {
-    Update();
-
     control->AddGroup(m_Controls, true);
     control->AddGroup(m_View);
 

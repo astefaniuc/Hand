@@ -27,13 +27,16 @@ void Layer::Draw(SDL_Surface* buffer)
 
 void Layer::SetData(Hmi::Item* data)
 {
+    ClearContent();
     if (m_Data)
         RemoveData();
-    m_Data = data;
 
+    m_Data = data;
     data->DataListeners.Add(this, &Layer::OnDataChanged);
     data->ExitListeners.Add(this, &Layer::OnDataExit);
-    SetModifiedContent();
+
+    Rebuild();
+    SetModified();
 }
 
 
@@ -100,37 +103,8 @@ void Layer::SetModified()
 }
 
 
-void Layer::SetModifiedContent()
-{
-    if (m_ModifiedContent)
-        return;
-
-    SetModified();
-    m_ModifiedContent = true;
-}
-
-
-void Layer::Update()
-{
-    if (!m_ModifiedContent || !CanUpdate())
-        return;
-
-    m_ModifiedContent = false;
-
-    ClearContent();
-    Rebuild();
-}
-
-
-void Layer::Clear()
-{
-    delete this;
-}
-
-
 SDL_Rect Layer::ComputeSize(const SDL_Rect& outer)
 {
-    Update();
     return GetDrawer()->ComputeSize(outer);
 }
 
@@ -138,6 +112,14 @@ SDL_Rect Layer::ComputeSize(const SDL_Rect& outer)
 void Layer::UpdatePositions(const SDL_Rect& outer)
 {
     m_Size = GetDrawer()->GetContentSize(outer);
+}
+
+
+void Layer::Update()
+{
+    ClearContent();
+    Rebuild();
+    SetModified();
 }
 
 

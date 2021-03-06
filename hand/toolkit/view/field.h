@@ -82,6 +82,8 @@ public:
     Field(const std::string& name) : m_Name(name) {}
     ~Field();
 
+    const std::string& GetName() { return m_Name; }
+
     /// Returns the size from the matching sub-layer.
     SDL_Rect ComputeSize(const SDL_Rect& outer);
     void SetPlacedPosition(const SDL_Rect& outer);
