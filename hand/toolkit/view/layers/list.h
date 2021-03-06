@@ -16,8 +16,11 @@ public:
     Layout* GetLayout();
     void SetLayout(Layout* layout);
 
-    void Insert(Layer* sub);
-    void Insert(const std::string& field, Layer* sub);
+    void Insert(Layer* sub) { Insert(sub->GetData()->GetName(), sub); }
+    void Insert(const std::string& field, Layer* sub)
+    {
+        GetLayout()->GetField(field)->SetItem(sub);
+    }
 
     void DrawContent(SDL_Surface* buffer) override { GetLayout()->Draw(buffer); }
 
@@ -33,7 +36,7 @@ protected:
     /// Field::Item interface:
     SDL_Rect ComputeSize(const SDL_Rect& outer) override;
     void UpdatePositions(const SDL_Rect& outer) override;
-    bool IsExpanding(Orientation direction) override;
+    bool IsExpanding(Orientation direction) override { return GetLayout()->IsExpanding(direction); }
 
     void ClearContent() override { GetLayout()->Clear(); }
 

@@ -12,25 +12,6 @@ List::~List()
 }
 
 
-void List::Insert(const std::string& name, Layer* child)
-{
-    if (!child)
-        return;
-
-    Field* field = GetLayout()->GetField(name, false);
-    if (!field)
-        return;
-
-    field->SetItem(child);
-}
-
-
-void List::Insert(Layer* a_child)
-{
-    GetLayout()->GetField(a_child->GetData()->GetName())->SetItem(a_child);
-}
-
-
 SDL_Rect List::ComputeSize(const SDL_Rect& outer)
 {
     SDL_Rect ret = GetDrawer()->ComputeSize(
@@ -73,12 +54,6 @@ void List::SetLayout(Layout* layout)
     m_Layout = layout;
     if (m_Layout)
         m_Layout->SetLayer(this);
-}
-
-
-bool List::IsExpanding(Orientation direction)
-{
-    return GetLayout()->IsExpanding(direction);
 }
 
 
