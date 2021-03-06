@@ -21,7 +21,7 @@ void Layer::Quit(Layers::Item*)
 void Layer::Draw(SDL_Surface* buffer)
 {
     GetDrawer()->Draw(buffer);
-    m_IsModified = false;
+    SetModified(false);
 }
 
 
@@ -36,7 +36,6 @@ void Layer::SetData(Hmi::Item* data)
     data->ExitListeners.Add(this, &Layer::OnDataExit);
 
     Rebuild();
-    SetModified();
 }
 
 
@@ -94,15 +93,6 @@ Layers::Interface* Layer::GetInterface()
 }
 
 
-void Layer::SetModified()
-{
-    Layers::List* parent = GetParentLayer();
-    if (parent && !parent->IsModified())
-        parent->SetModified();
-    m_IsModified = true;
-}
-
-
 SDL_Rect Layer::ComputeSize(const SDL_Rect& outer)
 {
     return GetDrawer()->ComputeSize(outer);
@@ -119,7 +109,6 @@ void Layer::Update()
 {
     ClearContent();
     Rebuild();
-    SetModified();
 }
 
 

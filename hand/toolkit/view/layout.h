@@ -14,7 +14,8 @@ public:
 
     Field::Item* GetItem(const std::string& name);
 
-    Layers::List* GetListLayer() override;
+    Item* GetParentFieldItem() final;
+    Layers::List* GetListLayer() final;
     void SetLayer(Layers::List* parent);
 
     bool IsValid() const;

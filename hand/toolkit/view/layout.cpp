@@ -87,6 +87,7 @@ void Layout::Draw(SDL_Surface* buffer)
     for (auto field : m_Fields)
         if (field->IsValid())
             field->GetItem()->Draw(buffer);
+    SetModified(false);
 }
 
 
@@ -95,6 +96,15 @@ void Layout::SetLayer(Layers::List* parent)
     if (m_Layer)
         m_Layer->SetLayout(nullptr);
     m_Layer = parent;
+    SetModified();
+}
+
+
+Field::Item* Layout::GetParentFieldItem()
+{
+    if (m_Layer)
+        return m_Layer;
+    return Field::Item::GetParentFieldItem();
 }
 
 

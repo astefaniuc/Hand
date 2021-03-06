@@ -38,9 +38,6 @@ public:
 
     const SDL_Rect& GetSize() const { return m_Size; }
 
-    bool IsModified() { return m_IsModified; }
-    void SetModified();
-
     bool IsVisible() { return (m_Field && m_Field->IsVisible()); }
 
     void Exit() final { Quit(nullptr); }
@@ -84,9 +81,6 @@ protected:
     SDL_Rect m_Size = { 0, 0, 0, 0 };
 
     Hmi::Item* m_Data = nullptr;
-
-private:
-    bool m_IsModified = true;
 };
 
 

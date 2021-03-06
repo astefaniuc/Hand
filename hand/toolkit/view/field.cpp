@@ -46,9 +46,31 @@ void Field::Item::SetParentField(Field* field)
 
 Layers::List* Field::Item::GetParentLayer()
 {
-    if (GetParentField() && GetParentField()->GetParentLayout())
-        return GetParentField()->GetParentLayout()->GetListLayer();
+    if (GetParentFieldItem())
+        return GetParentFieldItem()->GetListLayer();
     return nullptr;
+}
+
+
+Field::Item* Field::Item::GetParentFieldItem()
+{
+    if (m_Field)
+        return m_Field->GetParentLayout();
+    return nullptr;
+}
+
+
+
+void Field::Item::SetModified(bool state)
+{
+    m_IsModified = state;
+    if (!state)
+        return;
+
+    Field::Item* parent = GetParentFieldItem();
+    if (parent && !parent->IsModified())
+        parent->SetModified();
+    m_IsModified = true;
 }
 
 
@@ -75,6 +97,20 @@ void Field::SetItem(Item* item)
         m_Item->Exit();
     m_Item = item;
     m_Item->SetParentField(this);
+
+    if (m_Parent)
+        m_Parent->SetModified();
+}
+
+
+void Field::RemoveItem()
+{
+    if (!m_Item)
+        return;
+    m_Item = nullptr;
+
+    if (m_Parent)
+        m_Parent->SetModified();
 }
 
 

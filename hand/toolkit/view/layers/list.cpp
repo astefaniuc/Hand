@@ -22,14 +22,12 @@ void List::Insert(const std::string& name, Layer* child)
         return;
 
     field->SetItem(child);
-    SetModified();
 }
 
 
 void List::Insert(Layer* a_child)
 {
     GetLayout()->GetField(a_child->GetData()->GetName())->SetItem(a_child);
-    SetModified();
 }
 
 
@@ -75,7 +73,6 @@ void List::SetLayout(Layout* layout)
     m_Layout = layout;
     if (m_Layout)
         m_Layout->SetLayer(this);
-    SetModified();
 }
 
 

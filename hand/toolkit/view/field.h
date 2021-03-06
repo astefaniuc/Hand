@@ -58,6 +58,7 @@ public:
         void SetParentField(Field* field);
         Field* GetParentField() { return m_Field; }
 
+        virtual Item* GetParentFieldItem();
         Layers::List* GetParentLayer();
 
         virtual Layers::List* GetListLayer() = 0;
@@ -75,8 +76,14 @@ public:
         virtual void Exit() = 0;
         virtual void Clear() = 0;
 
+        bool IsModified() { return m_IsModified; }
+        void SetModified(bool state = true);
+
     protected:
         Field* m_Field = nullptr;
+
+    private:
+        bool m_IsModified = true;
     };
 
     Field(const std::string& name) : m_Name(name) {}
@@ -92,11 +99,10 @@ public:
 
     void SetItem(Item* item);
     Item* GetItem() { return m_Item; }
+    void RemoveItem();
 
     Layout* GetParentLayout() { return m_Parent; }
     void SetParentLayout(Layout* parent) { m_Parent = parent; }
-
-    void RemoveItem() { m_Item = nullptr; }
 
     void SetVisible(bool visible) { m_IsVisible = visible; }
     bool IsVisible() { return m_IsVisible; }
