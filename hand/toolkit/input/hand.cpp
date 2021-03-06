@@ -187,7 +187,7 @@ bool Hand::Release(int k)
 
 int Hand::GetKeyIndex(int k)
 {
-    for (int i = 0; i < m_Keys.size(); ++i)
+    for (size_t i = 0; i < m_Keys.size(); ++i)
         if (m_Keys[i] == k)
             return i;
 

@@ -61,10 +61,8 @@ void Control::Rebuild()
 
 void Control::Clear()
 {
-    auto copy = m_Groups;
-    for (Group* child : copy)
+    for (Group* child : m_Groups)
         delete child;
-
     m_Focus = nullptr;
 }
 
@@ -163,14 +161,12 @@ Group::~Group()
         Clear();
         m_Target->ExitListeners.Remove(this);
     }
-    m_Parent->Remove(this);
 }
 
 
 void Group::Clear()
 {
-    auto copy = m_Commands;
-    for (Command* child : copy)
+    for (Command* child : m_Commands)
         delete child;
 }
 
@@ -233,6 +229,7 @@ void Group::RemoveFocus()
 void Group::OnTargetExit(Layer*)
 {
     m_Target = nullptr;
+    m_Parent->Remove(this);
     delete this;
 }
 
@@ -255,13 +252,13 @@ Command::~Command()
         m_Chord->Item = nullptr;
         delete m_Layer;
     }
-    m_Parent->Remove(this);
 }
 
 
 void Command::OnTargetExit(Layer*)
 {
     m_Chord->Item = nullptr;
+    m_Parent->Remove(this);
     delete this;
 }
 

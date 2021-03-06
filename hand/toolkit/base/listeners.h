@@ -10,7 +10,7 @@ class ICallback
 public:
     virtual ~ICallback() = default;
     virtual void Execute(CallerType* caller) = 0;
-    virtual bool IsOwner(void* owner) = 0;
+    virtual void* GetObject() = 0;
 };
 
 
@@ -29,7 +29,7 @@ public:
             (m_Object->*m_Function)(caller);
     }
 
-    bool IsOwner(void* owner) final { return (m_Object == owner); }
+    void* GetObject() final { return m_Object; }
 
 private:
     CbOwner* m_Object;
@@ -65,7 +65,7 @@ public:
     {
         for (unsigned i = 0; i < m_Register.size(); ++i)
         {
-            if (m_Register[i]->IsOwner(listener))
+            if (m_Register[i]->GetObject() == listener)
             {
                 delete m_Register[i];
                 m_Register.erase(m_Register.begin() + i);

@@ -40,9 +40,9 @@ void Item::SetSelected(bool isSelected)
 Layer* Item::GetExpandedView()
 {
     Layer* ret = CreateExpandedView();
-    ret->SetData(this);
     if (m_LayerInitializer)
         m_LayerInitializer->Execute(ret);
+    ret->SetData(this);
     return ret;
 }
 

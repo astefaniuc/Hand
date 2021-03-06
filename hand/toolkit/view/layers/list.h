@@ -29,7 +29,6 @@ public:
     Hmi::List* GetLayerControls() override;
     virtual void GetActiveItems(std::vector<Layer*>& out) { GetLayout()->GetActiveLayer(out); }
 
-
 protected:
     virtual Layout* CreateLayout() = 0;
 

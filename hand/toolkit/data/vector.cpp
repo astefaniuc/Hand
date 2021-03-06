@@ -10,7 +10,7 @@ namespace Hmi {
 void List::GetShortcuts(Hmi::Interface* caller, Hmi::List* out)
 {
     Item::GetShortcuts(caller, out);
-    for (auto i = 0; i < Size(); ++i)
+    for (unsigned i = 0; i < Size(); ++i)
         GetChild(i)->GetShortcuts(caller, out);
 }
 
@@ -63,7 +63,7 @@ void Vector::Remove(Item* child)
     if (child->GetParent() == this)
         delete child;
 
-    for (unsigned i = 0; i < m_Value.size(); ++i)
+    for (size_t i = 0; i < m_Value.size(); ++i)
     {
         if (m_Value[i] == child)
         {

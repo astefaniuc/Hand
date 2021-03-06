@@ -22,7 +22,7 @@ Layer* Chord::CreateLayer(Hand* hand)
     for (size_t i = 0; i < Keys.size(); ++i)
     {
         shrtct += hand->GetKey(Keys[i])->GetValue();
-        if (i < last)
+        if (int(i) < last)
             shrtct += "+";
     }
 
