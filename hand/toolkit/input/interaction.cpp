@@ -63,6 +63,7 @@ void Control::Clear()
 {
     for (Group* child : m_Groups)
         delete child;
+    m_Groups.clear();
     m_Focus = nullptr;
 }
 
@@ -168,6 +169,7 @@ void Group::Clear()
 {
     for (Command* child : m_Commands)
         delete child;
+    m_Commands.clear();
 }
 
 
