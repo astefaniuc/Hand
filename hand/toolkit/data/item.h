@@ -79,7 +79,7 @@ public:
     Listeners<Item> SelectionListeners;
 
 protected:
-    virtual Layer* CreateExpandedView() = 0;
+    virtual Layer* CreateExpandedView()  { return CreateExpandedData(); }
     virtual Layer* CreateButtonView();
     virtual Layer* CreateExpandedData() { return nullptr; }
     virtual Layer* CreateCompressedData() { return nullptr; }

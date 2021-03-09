@@ -19,6 +19,7 @@ public:
 
 protected:
     void Rebuild() override;
+    void OnDataChanged(Hmi::Item*) override {}
 };
 
 }

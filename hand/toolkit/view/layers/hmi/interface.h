@@ -30,7 +30,7 @@ public:
     Listeners<Layer> ShowListeners;
 
 protected:
-    Hmi::Vector* GetView() { return m_Data->GetInterface()->GetView(); }
+    List* GetView() { return GetLayout()->GetField(VIEW, false)->GetItem()->GetListLayer(); }
     void Rebuild() override;
 
     Drawer* GetDrawerFromTheme() override;
@@ -40,7 +40,6 @@ protected:
 
 private:
     ListView* m_Controls;
-    List* m_View = nullptr;
     Hmi::Vector* m_Shortcuts = nullptr;
 };
 

@@ -60,7 +60,6 @@ Layer* Item::GetExpandedData()
     Layer* ret = CreateExpandedData();
     if (ret)
         ret->SetData(this);
-//    DataListeners.Add(ret, &Layer::OnDataChanged);
     return ret;
 }
 
@@ -70,8 +69,6 @@ Layer* Item::GetCompressedData()
     Layer* ret = CreateCompressedData();
     if (ret)
         ret->SetData(this);
-//    DataListeners.Add(ret, &Layer::OnDataChanged);
-
     return ret;
 }
 

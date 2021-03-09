@@ -42,8 +42,6 @@ public:
 protected:
     void Execute(Layers::Item* caller) override;
 
-    Layer* CreateExpandedView() override;
-    Layer* CreateButtonView() override;
     Layer* CreateExpandedData() override { return CreateCompressedData(); }
     Layer* CreateCompressedData() override;
 

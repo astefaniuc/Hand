@@ -193,6 +193,9 @@ void Group::Update()
     m_Target->GetActiveItems(commands);
     for (Layer* item : commands)
     {
+        if (!item->GetListLayer())
+            continue;
+
         Chord* chord = nullptr;
         Hmi::Item* data = item->GetData();
         if (data && data->GetShortcut())

@@ -7,9 +7,10 @@ namespace Layers {
 
 void Item::Rebuild()
 {
-    Insert(TITLE, new Text(m_Data->GetName()));
+    Insert(TITLE, new RawText(m_Data->GetName()));
     if (!m_Data->GetInfo().empty())
-        Insert(DESCRIPTION, new Text(m_Data->GetInfo()));
+        Insert(DESCRIPTION, new RawText(m_Data->GetInfo()));
+
     Layer* data = nullptr;
     if (m_ExpandChildren)
         data = m_Data->GetExpandedData();

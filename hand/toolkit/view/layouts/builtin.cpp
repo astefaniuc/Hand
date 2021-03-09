@@ -9,15 +9,6 @@ Layout* CreateButton()
 {
     return
         SplitV(
-            SplitH(VIEW, TITLE),
-            SplitH(DESCRIPTION, CONTROL));
-}
-
-
-Layout* CreateData()
-{
-    return
-        SplitV(
             SplitH(TITLE, VIEW),
             SplitH(DESCRIPTION, CONTROL));
 }

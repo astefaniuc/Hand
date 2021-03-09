@@ -16,6 +16,7 @@ Interface::Interface()
     exit->SetShortcut(Chord::FullHand());
 
     GetLayerControls()->Add(exit);
+    SetExpandChildren(true);
 }
 
 
@@ -27,16 +28,16 @@ void Interface::Rebuild()
     m_Controls->SetData(m_Data->GetInterface()->GetControls());
     Insert(CONTROL, m_Controls);
 
-    m_View = new Vector();
-    m_View->SetExpandChildren(true);
-    m_View->SetData(m_Data->GetInterface()->GetView());
-    Insert(VIEW, m_View);
+    Vector* view = new Vector();
+    view->SetExpandChildren(true);
+    view->SetData(m_Data->GetInterface()->GetView());
+    Insert(VIEW, view);
 }
 
 
 void Interface::Show(Layer* item)
 {
-    m_View->Insert(item);
+    GetView()->Insert(item);
     ShowListeners.Notify(item);
 }
 
@@ -57,7 +58,7 @@ void Interface::CollectShortcuts()
 void Interface::GetInteractionGroups(Interaction::Control* control)
 {
     control->AddGroup(m_Controls, true);
-    control->AddGroup(m_View);
+    control->AddGroup(GetView());
 
     // CollectShortcuts();
     // if (m_Shortcuts->Size())

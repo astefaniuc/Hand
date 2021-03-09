@@ -20,14 +20,15 @@ extern "C" void Destroy(Theme* theme)
 BasicSdl1::BasicSdl1() : m_Hmi("BasicSdl1", "Basic SDL1 visual theme")
 {
     // Properties
-    m_Buttons = new Hmi::Map("Buttons", "Customize");
-    m_Buttons->Add(new Rgb(BACKGROUNDCOLOR, "", 80, 75, 10));
-    m_Buttons->Add(new Rgb(FRAMECOLOR, "", 125, 115, 35));
+    m_Buttons = new Hmi::Map("Datas", "Customize");
+    m_Buttons->Add(new Rgb(BACKGROUNDCOLOR, "", 45, 45, 75));
+    m_Buttons->Add(new Rgb(FRAMECOLOR, "", 75, 70, 130));
     m_Buttons->Add(new Rect(FRAMESIZE, "Relative frame size [%]", .5, .5, 1.0, 1.0));
+    m_Buttons->Add(new Hmi::TData<bool>(DRAWFRAME, "Draw a visible frame around item", true));
 
-    m_Datas = new Hmi::Map("Datas", "Customize");
-    m_Datas->Add(new Rgb(BACKGROUNDCOLOR, "", 45, 45, 75));
-    m_Datas->Add(new Rgb(FRAMECOLOR, "", 75, 70, 130));
+    m_Datas = new Hmi::Map("Buttons", "Customize");
+    m_Datas->Add(new Rgb(BACKGROUNDCOLOR, "", 80, 75, 10));
+    m_Datas->Add(new Rgb(FRAMECOLOR, "", 125, 115, 35));
     m_Datas->Add(new Rect(FRAMESIZE, "Relative frame size [%]", .5, .5, 1.0, 1.0));
     m_Datas->Add(new Hmi::TData<bool>(DRAWFRAME, "Draw a visible frame around item", true));
 

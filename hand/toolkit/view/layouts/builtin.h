@@ -8,7 +8,7 @@ namespace Layouts {
 
 
 Layout* CreateButton();
-Layout* CreateData();
+//Layout* CreateData();
 Layout* CreateListView();
 Layout* CreateView();
 

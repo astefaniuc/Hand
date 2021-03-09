@@ -1,18 +1,18 @@
 #ifndef HAND_VIEW_LAYER_HMI_DATA_H
 #define HAND_VIEW_LAYER_HMI_DATA_H
 
-#include "view/layers/hmi/item.h"
-#include "view/layouts/builtin.h"
+#include "view/layer.h"
+//#include "view/layouts/builtin.h"
 
 
 namespace Layers {
 
 
-class Data : public Item
+class Data : public Layer
 {
 protected:
     Drawer* GetDrawerFromTheme() override;
-    Layout* CreateLayout() override { return Layouts::CreateData(); }
+//    Layout* CreateLayout() override { return Layouts::CreateData(); }
 };
 
 }

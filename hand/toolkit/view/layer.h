@@ -49,6 +49,10 @@ public:
 
     virtual void Activate() {}
 
+    /// Callbacks.
+    virtual void OnDataChanged(Hmi::Item*) { Update(); }
+    void OnDataExit(Hmi::Item*);
+
 
     Listeners<Layer> ExitListeners;
 
@@ -69,10 +73,6 @@ protected:
     bool IsExpanding(Orientation direction) override { return false; }
     bool IsValid() const final { return true; }
     virtual void Quit(Layers::Item*);
-
-    /// Callbacks.
-    void OnDataChanged(Hmi::Item*) { Update(); }
-    void OnDataExit(Hmi::Item*);
 
     Theme* m_Theme = nullptr;
     Drawer* m_Drawer = nullptr;

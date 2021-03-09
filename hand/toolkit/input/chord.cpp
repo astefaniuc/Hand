@@ -26,5 +26,5 @@ Layer* Chord::CreateLayer(Hand* hand)
             shrtct += "+";
     }
 
-    return new Layers::Text(shrtct);
+    return new Layers::RawText(shrtct);
 }

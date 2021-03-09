@@ -71,7 +71,6 @@ void Hand::InitHandLayer(Layer* l)
 
     Layers::List* ll = l->GetListLayer();
     ll->SetLayout(layout);
-    ll->SetExpandChildren(true);
 }
 
 

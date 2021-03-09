@@ -39,8 +39,9 @@ Layer* Interface::CreateExpandedView()
 
 Layer* Interface::CreateExpandedData()
 {
-    Layers::List* ret = GetView()->GetExpandedData()->GetListLayer();
+    Layers::List* ret = new Layers::Vector();
     ret->SetExpandChildren(true);
+    ret->SetData(GetView());
     return ret;
 }
 

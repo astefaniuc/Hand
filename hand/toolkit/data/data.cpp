@@ -1,5 +1,4 @@
 #include "data/data.h"
-#include "view/layers/hmi/data.h"
 #include "view/layers/hmi/interface.h"
 #include "view/layers/text.h"
 
@@ -42,21 +41,9 @@ void Data::SetPersistence(Persistence* storage)
 }
 
 
-Layer* Data::CreateExpandedView()
-{
-    return new Layers::Data();
-}
-
-
-Layer* Data::CreateButtonView()
-{
-    return new Layers::Data();
-}
-
-
 Layer* Data::CreateCompressedData()
 {
-    return new Layers::Text(GetValueString());
+    return new Layers::DataText();
 }
 
 }
