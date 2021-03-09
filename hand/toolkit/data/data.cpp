@@ -1,6 +1,7 @@
 #include "data/data.h"
 #include "view/layers/hmi/data.h"
 #include "view/layers/hmi/interface.h"
+#include "view/layers/text.h"
 
 
 namespace Hmi {
@@ -50,6 +51,12 @@ Layer* Data::CreateExpandedView()
 Layer* Data::CreateButtonView()
 {
     return new Layers::Data();
+}
+
+
+Layer* Data::CreateCompressedData()
+{
+    return new Layers::Text(GetValueString());
 }
 
 }

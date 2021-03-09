@@ -10,6 +10,14 @@ void Item::Rebuild()
     Insert(TITLE, new Text(m_Data->GetName()));
     if (!m_Data->GetInfo().empty())
         Insert(DESCRIPTION, new Text(m_Data->GetInfo()));
+    Layer* data = nullptr;
+    if (m_ExpandChildren)
+        data = m_Data->GetExpandedData();
+    else
+        data = m_Data->GetCompressedData();
+
+    if (data)
+        Insert(VIEW, data);
 }
 
 

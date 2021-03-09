@@ -42,14 +42,4 @@ Drawer* Vector::GetDrawerFromTheme()
     return GetTheme()->GetListDrawer(this);
 }
 
-
-void Vector::SetExpandChildren(bool expand)
-{
-    if (m_ExpandChildren != expand)
-    {
-        m_ExpandChildren = expand;
-        Update();
-    }
-}
-
 }

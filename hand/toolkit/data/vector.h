@@ -33,10 +33,11 @@ public:
     /// Removes all child items; own items are destroyed.
     void Clear() override;
 
-    std::string GetValueString() override { return "TODO"; }
+    std::string GetValueString() override { return "..."; }
 
 private:
-    Layer* CreateExpandedView() override;
+    Layer* CreateExpandedData() override;
+    Layer* CreateExpandedView() override { return CreateExpandedData(); }
 
     std::vector<Item*> m_Value;
 };

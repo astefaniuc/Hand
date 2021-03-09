@@ -11,8 +11,6 @@ namespace Layers {
 class Data : public Item
 {
 protected:
-    void Rebuild() override;
-
     Drawer* GetDrawerFromTheme() override;
     Layout* CreateLayout() override { return Layouts::CreateData(); }
 };

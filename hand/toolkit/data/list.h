@@ -34,8 +34,6 @@ public:
 
 protected:
     void Execute(Layers::Item* caller) override;
-
-    Layer* CreateButtonView() override;
 };
 
 }

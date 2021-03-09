@@ -21,7 +21,7 @@ void ListView::SetData(Hmi::Item* data)
 
 void ListView::Rebuild()
 {
-    m_DataControls = m_Data->GetExpandedView()->GetListLayer();
+    m_DataControls = m_Data->GetExpandedData()->GetListLayer();
     Insert(VIEW, m_DataControls);
 }
 

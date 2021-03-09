@@ -20,7 +20,6 @@ public:
         : Item(name, description), m_Object(obj), m_Function(func) {}
 
 private:
-    Layer* CreateButtonView() override { return new Layers::Button(); }
     Layer* CreateExpandedView() override { return CreateButtonView(); }
 
     void Execute(Layers::Item* caller) final

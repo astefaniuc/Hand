@@ -1,5 +1,6 @@
 #include "data/interface.h"
 #include "view/layers/hmi/interface.h"
+#include "view/layers/vector.h"
 
 
 namespace Hmi {
@@ -33,6 +34,14 @@ void Interface::Execute(Layers::Item* caller)
 Layer* Interface::CreateExpandedView()
 {
     return new Layers::Interface();
+}
+
+
+Layer* Interface::CreateExpandedData()
+{
+    Layers::List* ret = GetView()->GetExpandedData()->GetListLayer();
+    ret->SetExpandChildren(true);
+    return ret;
 }
 
 }

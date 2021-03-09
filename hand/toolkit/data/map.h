@@ -39,7 +39,7 @@ public:
     /// Removes all child items; own items are destroyed.
     void Clear() override;
 
-    std::string GetValueString() override { return "TODO"; }
+    std::string GetValueString() override { return "..."; }
 
 private:
     std::map<std::string, Item*> m_Value;

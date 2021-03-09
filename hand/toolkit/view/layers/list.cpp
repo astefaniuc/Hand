@@ -64,4 +64,15 @@ Hmi::List* List::GetLayerControls()
     return m_LayerCommands;
 }
 
+
+void List::SetExpandChildren(bool expand)
+{
+    if (m_ExpandChildren != expand)
+    {
+        m_ExpandChildren = expand;
+        if (m_Data)
+            Update();
+    }
+}
+
 }

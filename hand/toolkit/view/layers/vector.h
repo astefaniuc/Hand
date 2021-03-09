@@ -12,8 +12,6 @@ namespace Layers {
 class Vector : public List
 {
 public:
-    void SetExpandChildren(bool expand);
-
     unsigned GetMaxItemsToShow() { return m_MaxItemsToShow; }
     void SetMaxItemsToShow(unsigned count) { m_MaxItemsToShow = count; }
 
@@ -28,7 +26,6 @@ protected:
 private:
     unsigned m_StartPosition = 0;
     unsigned m_MaxItemsToShow = 5;
-    bool m_ExpandChildren = false;
 };
 
 }

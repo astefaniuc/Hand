@@ -44,6 +44,8 @@ protected:
 
     Layer* CreateExpandedView() override;
     Layer* CreateButtonView() override;
+    Layer* CreateExpandedData() override { return CreateCompressedData(); }
+    Layer* CreateCompressedData() override;
 
     Persistence* m_Storage = nullptr;
 

@@ -27,13 +27,10 @@ void Interface::Rebuild()
     m_Controls->SetData(m_Data->GetInterface()->GetControls());
     Insert(CONTROL, m_Controls);
 
-    if (m_Data->GetInterface()->GetView())
-    {
-        m_View = new Vector();
-        m_View->SetExpandChildren(true);
-        m_View->SetData(m_Data->GetInterface()->GetView());
-        Insert(VIEW, m_View);
-    }
+    m_View = new Vector();
+    m_View->SetExpandChildren(true);
+    m_View->SetData(m_Data->GetInterface()->GetView());
+    Insert(VIEW, m_View);
 }
 
 

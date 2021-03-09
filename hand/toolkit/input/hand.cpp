@@ -69,9 +69,9 @@ void Hand::InitHandLayer(Layer* l)
     layout->SetField(Finger[Chord::Ring], { 0.6, 0.41, 0.0, 0.0 });
     layout->SetField(Finger[Chord::Little], { 0.7, 0.5, 0.0, 0.0 });
 
-    Layers::Vector* lv = static_cast<Layers::Vector*>(l);
-    lv->SetLayout(layout);
-    lv->SetExpandChildren(true);
+    Layers::List* ll = l->GetListLayer();
+    ll->SetLayout(layout);
+    ll->SetExpandChildren(true);
 }
 
 

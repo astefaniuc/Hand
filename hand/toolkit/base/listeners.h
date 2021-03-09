@@ -25,8 +25,7 @@ public:
 
     void Execute(CallerType* caller) final
     {
-        if (m_Object && m_Function)
-            (m_Object->*m_Function)(caller);
+        (m_Object->*m_Function)(caller);
     }
 
     void* GetObject() final { return m_Object; }

@@ -40,7 +40,7 @@ protected:
 
 private:
     ListView* m_Controls;
-    Vector* m_View = nullptr;
+    List* m_View = nullptr;
     Hmi::Vector* m_Shortcuts = nullptr;
 };
 

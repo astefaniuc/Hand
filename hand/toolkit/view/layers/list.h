@@ -29,6 +29,8 @@ public:
     Hmi::List* GetLayerControls() override;
     virtual void GetActiveItems(std::vector<Layer*>& out) { GetLayout()->GetActiveLayer(out); }
 
+    void SetExpandChildren(bool expand);
+
 protected:
     virtual Layout* CreateLayout() = 0;
 
@@ -40,6 +42,7 @@ protected:
     void ClearContent() override { GetLayout()->Clear(); }
 
     Hmi::List* m_LayerCommands = nullptr;
+    bool m_ExpandChildren = false;
 
 private:
     Layout* m_Layout = nullptr;

@@ -34,6 +34,7 @@ public:
 protected:
     void Execute(Layers::Item* caller) override;
     Layer* CreateExpandedView() override;
+    Layer* CreateExpandedData() override;
 
     Vector m_ViewStack;
 };

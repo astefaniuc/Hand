@@ -15,12 +15,6 @@ void List::GetShortcuts(Hmi::Interface* caller, Hmi::List* out)
 }
 
 
-Layer* List::CreateButtonView()
-{
-    return new Layers::Button();
-}
-
-
 void List::Execute(Layers::Item* caller)
 {
     if (!GetExpandedView()->IsVisible())
@@ -101,7 +95,7 @@ void Vector::Clear()
 }
 
 
-Layer* Vector::CreateExpandedView()
+Layer* Vector::CreateExpandedData()
 {
     return new Layers::Vector();
 }

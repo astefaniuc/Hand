@@ -45,11 +45,12 @@ public:
 
     virtual Interface* GetInterface();
 
-
     Layer* GetExpandedView();
     Layer* GetButtonView();
+    Layer* GetExpandedData();
+    Layer* GetCompressedData();
 
-    /// Called on buuton activation.
+    /// Called on button activation.
     virtual void Execute(Layers::Item* callerButton) = 0;
 
     void SetSelected(bool isSelected);
@@ -80,6 +81,8 @@ public:
 protected:
     virtual Layer* CreateExpandedView() = 0;
     virtual Layer* CreateButtonView();
+    virtual Layer* CreateExpandedData() { return nullptr; }
+    virtual Layer* CreateCompressedData() { return nullptr; }
 
     void NotifyChanged() { DataListeners.Notify(this); }
 
