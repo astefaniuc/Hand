@@ -12,7 +12,7 @@ void ListView::SetData(Hmi::Item* data)
     Item::SetData(data);
 
     m_ViewStack.push_back(data);
-    if (m_ViewStack.size() > 1)
+    if (!m_Back && (m_ViewStack.size() > 1))
     {
         m_Back = new Hmi::Action<ListView>("Back", "Previous list", this, &ListView::Back);
         GetLayerControls()->Add(m_Back);
