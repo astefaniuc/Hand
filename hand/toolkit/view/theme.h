@@ -13,6 +13,7 @@ public:
 
     virtual Drawer* GetButtonDrawer(Layer*) = 0;
     virtual Drawer* GetDataDrawer(Layer*) = 0;
+    virtual Drawer* GetChordDrawer(Layer*) = 0;
     virtual Drawer* GetListDrawer(Layer*) = 0;
     virtual Drawer* GetTextDrawer(Layer*) = 0;
     virtual Drawer* GetViewDrawer(Layer*) = 0;

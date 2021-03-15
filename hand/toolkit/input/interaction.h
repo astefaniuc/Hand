@@ -127,7 +127,7 @@ private:
 
     Group* m_Parent;
     Chord* m_Chord;
-    Layer* m_Layer = nullptr;
+    Layers::List* m_Layer = nullptr;
 };
 
 }

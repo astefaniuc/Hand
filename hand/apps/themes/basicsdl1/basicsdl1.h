@@ -31,6 +31,7 @@ public:
 
     Drawer* GetButtonDrawer(Layer* layer) override { return new DrawerSdl(this, layer, m_Buttons); }
     Drawer* GetDataDrawer(Layer* layer) override { return new DrawerSdl(this, layer, m_Datas); }
+    Drawer* GetChordDrawer(Layer* layer) override { return new DrawerSdl(this, layer, m_Chords); }
     Drawer* GetListDrawer(Layer* layer) override { return new DrawerSdl(this, layer, m_Lists); }
     Drawer* GetTextDrawer(Layer* layer) override { return new Text(this, layer, m_Texts); }
     Drawer* GetViewDrawer(Layer* layer) override { return new DrawerSdl(this, layer, m_Views); }
@@ -48,6 +49,7 @@ protected:
     Hmi::Vector m_Hmi;
     Hmi::Map* m_Buttons;
     Hmi::Map* m_Datas;
+    Hmi::Map* m_Chords;
     Hmi::Map* m_Lists;
     Hmi::Map* m_Texts;
     Hmi::Map* m_Views;

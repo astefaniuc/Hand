@@ -1,5 +1,5 @@
-#ifndef HAND_VIEW_LAYER_HMI_DATA_H
-#define HAND_VIEW_LAYER_HMI_DATA_H
+#ifndef HAND_VIEW_LAYER_HMI_CHORD_H
+#define HAND_VIEW_LAYER_HMI_CHORD_H
 
 #include "view/layers/list.h"
 
@@ -7,7 +7,7 @@
 namespace Layers {
 
 
-class Data : public List
+class Chord : public List
 {
 protected:
     void Rebuild() override {}
@@ -16,4 +16,4 @@ protected:
 };
 
 }
-#endif // HAND_VIEW_LAYER_HMI_DATA_H
+#endif // HAND_VIEW_LAYER_HMI_CHORD_H

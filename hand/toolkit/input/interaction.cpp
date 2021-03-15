@@ -2,6 +2,7 @@
 #include "input/hand.h"
 #include "data/method.h"
 #include "view/layers/list.h"
+#include "view/layers/hmi/chord.h"
 #include "view/layers/hmi/interface.h"
 #include <algorithm>
 
@@ -271,7 +272,8 @@ void Group::OnTargetExit(Layer*)
 Command::Command(Group* parent, Chord* chord)
     : m_Parent(parent), m_Chord(chord)
 {
-    m_Layer = m_Chord->CreateLayer(m_Parent->GetControl()->GetHand());
+    m_Layer = new Layers::Chord();
+    m_Layer->Insert("", m_Chord->CreateLayer(m_Parent->GetControl()->GetHand()));
     m_Chord->Item->GetListLayer()->Insert(CONTROL, m_Layer);
     m_Chord->Item->ExitListeners.Add(this, &Command::OnTargetExit);
 }
