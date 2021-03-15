@@ -34,6 +34,9 @@ public:
 
 protected:
     void Execute(Layers::Item* caller) override;
+
+    Layer* CreateExpandedData() override;
+    Layer* CreateExpandedView() override { return CreateExpandedData(); }
 };
 
 }

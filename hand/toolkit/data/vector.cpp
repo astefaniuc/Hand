@@ -27,6 +27,12 @@ void List::Execute(Layers::Item* caller)
 }
 
 
+Layer* List::CreateExpandedData()
+{
+    return new Layers::Vector();
+}
+
+
 
 void Vector::Add(Item* child)
 {
@@ -92,12 +98,6 @@ void Vector::Clear()
 
     m_Value.clear();
     NotifyChanged();
-}
-
-
-Layer* Vector::CreateExpandedData()
-{
-    return new Layers::Vector();
 }
 
 }

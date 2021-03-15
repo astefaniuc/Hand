@@ -36,9 +36,6 @@ public:
     std::string GetValueString() override { return "..."; }
 
 private:
-    Layer* CreateExpandedData() override;
-    Layer* CreateExpandedView() override { return CreateExpandedData(); }
-
     std::vector<Item*> m_Value;
 };
 
