@@ -36,6 +36,7 @@ void Layer::SetData(Hmi::Item* data)
     data->ExitListeners.Add(this, &Layer::OnDataExit);
 
     Rebuild();
+    DataListeners.Notify(this);
 }
 
 
@@ -109,6 +110,7 @@ void Layer::Update()
 {
     ClearContent();
     Rebuild();
+    DataListeners.Notify(this);
 }
 
 

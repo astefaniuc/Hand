@@ -35,7 +35,7 @@ public:
     bool Init();
     void SetInteraction(Interaction::Control* control) { m_Interaction = control; }
 
-    Hmi::Interface* GetHmi() override { return nullptr; }
+    void GetHmi(Layer*) override {}
     Layer* GetInitScreen();
 
     bool Press(int keyId);

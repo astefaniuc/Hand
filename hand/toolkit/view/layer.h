@@ -55,6 +55,7 @@ public:
 
 
     Listeners<Layer> ExitListeners;
+    Listeners<Layer> DataListeners;
 
 protected:
     void GetActiveLayer(std::vector<Layer*>& out) { out.push_back(this); }

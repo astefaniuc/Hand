@@ -83,8 +83,6 @@ public:
 
     Control* GetControl() { return m_Parent; }
 
-    const std::vector<Command*>& GetCommands() const { return m_Commands; }
-
     void Add(Command* child) { m_Commands.push_back(child); }
     void Remove(Command* child);
 
@@ -92,11 +90,14 @@ public:
 
     void SetFocus();
     void RemoveFocus();
-    bool HasFocus() { return m_Focus; }
+    bool HasFocus() { return m_HasFocus; }
+
+    bool Execute(const Chord& chord);
 
 private:
     void OnTargetExit(Layer*);
     void OnFocusExit(Layer*) { m_Focus = nullptr; }
+    void OnTargetDataChanged(Layer*) { Update(); }
 
     Layers::List* m_Target;
     Control* m_Parent;
@@ -106,6 +107,7 @@ private:
     Mode m_Mode = Activate;
 
     Group* m_Focus = nullptr;
+    bool m_HasFocus = false;
 };
 
 

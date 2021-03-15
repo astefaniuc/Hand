@@ -52,7 +52,8 @@ protected:
 
 
 template<typename DataType> class TData;
-
+// Helper to avoid circular include
+void Show(Layer* target, Interface* view);
 
 template <typename DataType>
 class Manipulator : public Module
@@ -67,7 +68,10 @@ public:
 
     virtual void Init() {}
 
-    Interface* GetHmi() override { return m_Interface; }
+    void GetHmi(Layer* caller) override
+    {
+        Show(caller, m_Interface);
+    }
 
 protected:
     TData<DataType>* m_Item = nullptr;

@@ -6,6 +6,13 @@
 namespace Hmi {
 
 
+void Show(Layer* target, Interface* view)
+{
+    target->GetInterface()->Show(view->GetExpandedView());
+}
+
+
+
 Data::Data(const std::string& name, const std::string& description, Module* manipulator)
     : Item(name, description), m_Manipulator(manipulator)
 {
@@ -30,7 +37,7 @@ void Data::Execute(Layers::Item* caller)
     if (!m_Manipulator)
         return;
 
-    caller->GetInterface()->Show(m_Manipulator->GetHmi()->GetExpandedView());
+    m_Manipulator->GetHmi(caller);
 }
 
 

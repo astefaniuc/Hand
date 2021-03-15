@@ -3,7 +3,7 @@
 
 #include "view/theme.h"
 #include "data/map.h"
-#include "data/interface.h"
+#include "data/vector.h"
 #include "text.h"
 #include <SDL/SDL_ttf.h>
 #include <map>
@@ -20,7 +20,7 @@ public:
     BasicSdl1();
     ~BasicSdl1();
 
-    Hmi::Interface* GetHmi() override { return &m_Hmi; }
+    void GetHmi(Layer* caller) override;
 
     void InitScreen(Layer* root) override;
     void UpdateScreen() override;
@@ -40,12 +40,12 @@ public:
 
 protected:
     // App mode interface
-    void ToggleFullscreen(Hmi::Item*);
+    void ToggleFullscreen(Layers::Item*);
     void SetFullscreen();
     void SetWindowed();
     SDL_Rect GetResolution();
 
-    Hmi::Interface m_Hmi;
+    Hmi::Vector m_Hmi;
     Hmi::Map* m_Buttons;
     Hmi::Map* m_Datas;
     Hmi::Map* m_Lists;

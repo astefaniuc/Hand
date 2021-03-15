@@ -1,6 +1,9 @@
 #include "basicsdl1.h"
 #include "defines.h"
+#include "data/interface.h"
+#include "data/method.h"
 #include "view/layer.h"
+#include "view/layers/hmi/interface.h"
 #include <iostream>
 
 
@@ -51,10 +54,15 @@ BasicSdl1::BasicSdl1() : m_Hmi("BasicSdl1", "Basic SDL1 visual theme")
     m_Views->Add(new Rect(FRAMESIZE, "Relative frame size [%]", .5, .5, 1.0, 1.0));
     m_Views->Add(new Hmi::TData<bool>(DRAWFRAME, "Draw a visible frame around item", true));
 
-    m_Hmi.AddControl(m_Buttons);
-    m_Hmi.AddControl(m_Lists);
-    m_Hmi.AddControl(m_Texts);
-    m_Hmi.AddControl(m_Views);
+    Hmi::Interface* settings = new Hmi::Interface("Settings", "");
+    settings->AddControl(m_Buttons);
+    settings->AddControl(m_Lists);
+    settings->AddControl(m_Texts);
+    settings->AddControl(m_Views);
+
+    m_Hmi.Add(settings);
+    m_Hmi.Add(new Hmi::Action<BasicSdl1>(
+        "Toggle full screen", "", this, &BasicSdl1::ToggleFullscreen));
 }
 
 
@@ -67,6 +75,12 @@ BasicSdl1::~BasicSdl1()
         delete d;
     // TODO: we can't call atexit(SDL_Quit) here because it doesn' work from a lib
     // And what if multiple SDL themes are loaded?
+}
+
+
+void BasicSdl1::GetHmi(Layer* caller)
+{
+    caller->GetData()->GetInterface()->AttachControl(&m_Hmi);
 }
 
 
@@ -95,18 +109,18 @@ unsigned BasicSdl1::GetBaseSize()
 }
 
 
-void BasicSdl1::ToggleFullscreen(Hmi::Item*)
+void BasicSdl1::ToggleFullscreen(Layers::Item*)
 {
     m_IsFullscreen ? SetWindowed() : SetFullscreen();
+    m_ScreenRoot->SetModified(true);
 }
 
 
 void BasicSdl1::SetFullscreen()
 {
-    // This is the only way to get the HW screen resolution
-    const SDL_VideoInfo* info = SDL_GetVideoInfo();
+    SDL_Rect** resos = SDL_ListModes(NULL, SDL_FULLSCREEN);;
     m_Surface = SDL_SetVideoMode(
-            info->current_w, info->current_h, 32,
+            resos[0]->w, resos[0]->h, 32,
             SDL_DOUBLEBUF | SDL_HWSURFACE | SDL_FULLSCREEN);
 
     m_IsFullscreen = true;
@@ -153,10 +167,6 @@ void BasicSdl1::InitScreen(Layer* root)
         std::cout << TTF_GetError() << std::endl;
         exit(22);
     }
-
-    // Add a func to toggle fullscreen <-> windowed mode
-    // TODO
-//    new Action<Screen>("Toggle full screen", "", this, &Screen::ToggleFullscreen);
 }
 
 

@@ -35,7 +35,7 @@ User::User(EventHandler* a_input)
     Theme* theme = static_cast<Theme*>(m_ThemeLoader->GetObject());
     m_ViewLayer->SetTheme(theme);
     theme->InitScreen(m_ViewLayer);
-    m_View.AttachControl(theme->GetHmi());
+    theme->GetHmi(m_ViewLayer);
 
 
     m_Control = new Interaction::Control(new Hand(m_Input->GetDevice(Device::Keyboard)));
@@ -79,7 +79,7 @@ bool User::LoadApp(Hmi::Note* a_path)
     if (app->Load())
     {
         m_RunningApps.push_back(app);
-        m_ViewLayer->Show(app->GetHmi()->GetExpandedView());
+        app->GetHmi(m_ViewLayer);
         return true;
     }
 

@@ -9,13 +9,14 @@ namespace Layers {
 
 void ListView::SetData(Hmi::Item* data)
 {
-    if (m_Data && !m_Back)
+    Item::SetData(data);
+
+    m_ViewStack.push_back(data);
+    if (m_ViewStack.size() > 1)
     {
         m_Back = new Hmi::Action<ListView>("Back", "Previous list", this, &ListView::Back);
         GetLayerControls()->Add(m_Back);
     }
-    m_ViewStack.push_back(data);
-    Item::SetData(data);
 }
 
 

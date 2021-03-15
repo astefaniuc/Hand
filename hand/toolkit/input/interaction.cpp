@@ -140,9 +140,8 @@ void Control::SetFocus(Group* child)
 void Control::Execute(const Chord& chord)
 {
     for (auto group : m_Groups)
-        for (auto command : group->GetCommands())
-            if (command->GetChord()->IsValid(chord))
-                return command->GetChord()->Item->Activate();
+        if (group->Execute(chord))
+            return;
 }
 
 
@@ -151,16 +150,19 @@ Group::Group(Layers::List* layer, Control* parent)
     : m_Target(layer), m_Parent(parent)
 {
     m_Target->ExitListeners.Add(this, &Group::OnTargetExit);
+    m_Target->DataListeners.Add(this, &Group::OnTargetDataChanged);
 }
 
 
 Group::~Group()
 {
-    delete m_Focus;
+    if (m_Focus)
+        RemoveFocus();
     if (m_Target)
     {
         Clear();
         m_Target->ExitListeners.Remove(this);
+        m_Target->DataListeners.Remove(this);
     }
 }
 
@@ -186,7 +188,7 @@ void Group::Update()
     Clear();
 
     Hand::InteractionLevel level = Hand::Peripherial;
-    if (m_Focus)
+    if (m_HasFocus)
         level = Hand::Focus;
 
     std::vector<Layer*> commands;
@@ -211,23 +213,49 @@ void Group::Update()
         Add(new Command(this, chord));
     }
 
-    if (m_Focus)
+    if (m_HasFocus)
+    {
+        if (!m_Focus)
+            SetFocus();
         m_Focus->Update();
+    }
 }
 
 
 void Group::SetFocus()
 {
+    m_HasFocus = true;
+
     Layers::List* layerCmds = m_Target->GetLayerControls()->GetExpandedView()->GetListLayer();
     layerCmds->ExitListeners.Add(this, &Group::OnFocusExit);
+    m_Target->Insert(LAYER_CONTROLS, layerCmds);
     m_Focus = new Group(layerCmds, m_Parent);
 }
 
 
 void Group::RemoveFocus()
 {
+    delete m_Focus->GetTarget();
     delete m_Focus;
     m_Focus = nullptr;
+    m_HasFocus = false;
+}
+
+
+bool Group::Execute(const Chord& chord)
+{
+    for (auto command : m_Commands)
+    {
+        if (command->GetChord()->IsValid(chord))
+        {
+            command->GetChord()->Item->Activate();
+            return true;
+        }
+    }
+    if (m_Focus)
+        return m_Focus->Execute(chord);
+
+    return false;
 }
 
 

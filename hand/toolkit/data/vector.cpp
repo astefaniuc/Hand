@@ -17,13 +17,10 @@ void List::GetShortcuts(Hmi::Interface* caller, Hmi::List* out)
 
 void List::Execute(Layers::Item* caller)
 {
-    if (!GetExpandedView()->IsVisible())
-    {
-        Layers::ListView* lv = dynamic_cast<Layers::ListView*>(
-            caller->GetParentLayer()->GetParentLayer());
-        if (lv)
-            lv->SetData(this);
-    }
+    Layers::ListView* lv = dynamic_cast<Layers::ListView*>(
+        caller->GetParentLayer()->GetParentLayer());
+    if (lv)
+        lv->SetData(this);
 }
 
 

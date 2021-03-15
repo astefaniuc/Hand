@@ -16,7 +16,7 @@ Layout* CreateButton()
 
 Layout* CreateListView()
 {
-    return SplitH(LAYER_CONTROLS, VIEW);
+    return SplitH(VIEW, LAYER_CONTROLS);
 }
 
 
