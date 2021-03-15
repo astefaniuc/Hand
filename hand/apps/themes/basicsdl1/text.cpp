@@ -2,7 +2,6 @@
 #include "defines.h"
 #include "basicsdl1.h"
 #include "view/layers/text.h"
-// #include "SDL/SDL_Image.h"
 
 
 SDL_Rect Text::ComputeSize(const SDL_Rect& a_content)

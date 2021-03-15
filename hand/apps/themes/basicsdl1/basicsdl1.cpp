@@ -23,25 +23,25 @@ BasicSdl1::BasicSdl1() : m_Hmi("BasicSdl1", "Basic SDL1 visual theme")
     m_Buttons = new Hmi::Map("Datas", "Customize");
     m_Buttons->Add(new Rgb(BACKGROUNDCOLOR, "", 45, 45, 75));
     m_Buttons->Add(new Rgb(FRAMECOLOR, "", 75, 70, 130));
-    m_Buttons->Add(new Rect(FRAMESIZE, "Relative frame size [%]", .5, .5, 1.0, 1.0));
+    m_Buttons->Add(new Rect(FRAMESIZE, "Relative frame size [%]", .5, .5, 0.6, 0.6));
     m_Buttons->Add(new Hmi::TData<bool>(DRAWFRAME, "Draw a visible frame around item", true));
 
     m_Datas = new Hmi::Map("Buttons", "Customize");
     m_Datas->Add(new Rgb(BACKGROUNDCOLOR, "", 80, 75, 10));
     m_Datas->Add(new Rgb(FRAMECOLOR, "", 125, 115, 35));
-    m_Datas->Add(new Rect(FRAMESIZE, "Relative frame size [%]", .5, .5, 1.0, 1.0));
+    m_Datas->Add(new Rect(FRAMESIZE, "Relative frame size [%]", .5, .5, 0.6, 0.6));
     m_Datas->Add(new Hmi::TData<bool>(DRAWFRAME, "Draw a visible frame around item", true));
 
     m_Lists = new Hmi::Map("Lists", "Customize");
     m_Lists->Add(new Rgb(BACKGROUNDCOLOR, "", 0, 11, 11));
     m_Lists->Add(new Rgb(FRAMECOLOR, "", 2, 26, 26));
-    m_Lists->Add(new Rect(FRAMESIZE, "Relative frame size [%]", .5, .5, 1.0, 1.0));
+    m_Lists->Add(new Rect(FRAMESIZE, "Relative frame size [%]", .5, .5, 0.6, 0.6));
     m_Lists->Add(new Hmi::TData<bool>(DRAWFRAME, "Draw a visible frame around item", true));
 
     m_Texts = new Hmi::Map("Text fields", "Customize");
     m_Texts->Add(new Rgb(BACKGROUNDCOLOR, "", 1, 1, 1));
     m_Texts->Add(new Rgb(FRAMECOLOR, "", 30, 30, 75));
-    m_Texts->Add(new Rect(FRAMESIZE, "Relative frame size [%]", .5, .5, 1.0, 1.0));
+    m_Texts->Add(new Rect(FRAMESIZE, "Relative frame size [%]", .5, .5, 0.6, 0.6));
     m_Texts->Add(new Rgb(FONTCOLOR, "", 180, 180, 180));
     m_Texts->Add(new Hmi::TData<unsigned>(FONTSIZE, "", 16));
 

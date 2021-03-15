@@ -1,4 +1,5 @@
 #include "view/layers/hmi/item.h"
+#include "view/layers/hmi/data.h"
 #include "view/layers/text.h"
 
 
@@ -18,7 +19,11 @@ void Item::Rebuild()
         data = m_Data->GetCompressedData();
 
     if (data)
-        Insert(VIEW, data);
+    {
+        Data* frame = new Data();
+        frame->Insert(data);
+        Insert(VIEW, frame);
+    }
 }
 
 

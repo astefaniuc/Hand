@@ -4,6 +4,7 @@
 #include "data/interface.h"
 #include "view/layers/hmi/interface.h"
 #include "view/layers/vector.h"
+#include "view/layers/hmi/button.h"
 #include "view/layouts/placed.h"
 #include "view/layouts/builtin.h"
 #include <algorithm>
@@ -13,15 +14,32 @@ const std::string Hand::Finger[] = {
     "Thumb", "Pointer finger", "Middle finger", "Ring finger", "Little finger" };
 
 
+class Key : public Hmi::Note
+{
+public:
+    Key(Chord::Finger f) : Hmi::Note(Hand::Finger[f], "", "") {}
+
+protected:
+    Layer* CreateButtonView()
+    {
+        Layouts::List* layout = new Layouts::List();
+        layout->SetOrientation(Vertical);
+        Layers::Button* ret = new Layers::Button();
+        ret->SetLayout(layout);
+        return ret;
+    }
+};
+
+
 Hand::Hand(Device* dev) : Module(), m_Device(dev)
 {
     m_Device->SetUser(this);
     m_KeysHmi = new Hmi::Vector("Keys", "");
-    m_KeysHmi->Add(new Hmi::Note(Finger[Chord::Thumb], "", ""));
-    m_KeysHmi->Add(new Hmi::Note(Finger[Chord::Pointer], "", ""));
-    m_KeysHmi->Add(new Hmi::Note(Finger[Chord::Middle], "", ""));
-    m_KeysHmi->Add(new Hmi::Note(Finger[Chord::Ring], "", ""));
-    m_KeysHmi->Add(new Hmi::Note(Finger[Chord::Little], "", ""));
+    m_KeysHmi->Add(new Key(Chord::Thumb));
+    m_KeysHmi->Add(new Key(Chord::Pointer));
+    m_KeysHmi->Add(new Key(Chord::Middle));
+    m_KeysHmi->Add(new Key(Chord::Ring));
+    m_KeysHmi->Add(new Key(Chord::Little));
 
     m_InputState = new InputState(m_NumberOfKeys);
 }
