@@ -25,7 +25,7 @@ void EventHandlerSdl::Start()
     if (m_Timer)
         return;
     // 25 pix per sec
-    uint32_t interval = 1000/25;
+    uint32_t interval = 1000/60;
     m_Timer = SDL_AddTimer(interval, &PumpCallback, this);
     if (!m_Timer)
         exit(1);
@@ -43,19 +43,31 @@ void EventHandlerSdl::Stop()
 
 void EventHandlerSdl::Pump()
 {
-    // Executed 25x per sec
-    if (!m_Execution.try_lock())
+    std::unique_lock<std::mutex> lock(m_Execution, std::defer_lock);
+    if (!lock.try_lock())
         return;
 
+    bool forceRedraw = false;
     SDL_Event event;
     while (SDL_PollEvent(&event))
-        for (DeviceSdl* device : m_Devices)
-            if (device->Process(event))
-                break;
+    {
+        if (event.type == SDL_WINDOWEVENT)
+        {
+            if (event.window.event == SDL_WINDOWEVENT_CLOSE)
+            {
+                m_User->Stop(nullptr);
+                return;
+            }
+            forceRedraw = true;
+        }
+        else
+            for (DeviceSdl* device : m_Devices)
+                if (device->Process(event))
+                    break;
+    }
 
     // Trigger screen refresh.
-    m_User->Update();
-    m_Execution.unlock();
+    m_User->Update(forceRedraw);
 }
 
 

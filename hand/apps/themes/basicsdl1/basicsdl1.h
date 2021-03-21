@@ -5,7 +5,7 @@
 #include "data/map.h"
 #include "data/vector.h"
 #include "text.h"
-#include <SDL/SDL_ttf.h>
+#include <SDL2/SDL_ttf.h>
 #include <map>
 
 
@@ -23,7 +23,7 @@ public:
     void GetHmi(Layer* caller) override;
 
     void InitScreen(Layer* root) override;
-    void UpdateScreen() override;
+    void UpdateScreen(bool forced) override;
 
     virtual TTF_Font* GetFont(int size);
     /// Frames are scaled based on this.
@@ -42,8 +42,6 @@ public:
 protected:
     // App mode interface
     void ToggleFullscreen(Layers::Item*);
-    void SetFullscreen();
-    void SetWindowed();
     SDL_Rect GetResolution();
 
     Hmi::Vector m_Hmi;
@@ -56,8 +54,8 @@ protected:
 
     Layer* m_ScreenRoot = nullptr;
     // The whole screen TODO: can we use SDL_GetVideoSurface() instead?
-    SDL_Surface* m_Surface = nullptr;
-    bool m_IsFullscreen = false;
+    SDL_Window* m_Window = nullptr;
+
     // Stores once rendered fonts
     std::map<int, TTF_Font*> Fonts;
     std::vector<DrawerSdl*> m_Drawers;

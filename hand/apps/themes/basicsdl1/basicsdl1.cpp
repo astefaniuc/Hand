@@ -117,46 +117,6 @@ unsigned BasicSdl1::GetBaseSize()
 }
 
 
-void BasicSdl1::ToggleFullscreen(Layers::Item*)
-{
-    m_IsFullscreen ? SetWindowed() : SetFullscreen();
-    m_ScreenRoot->SetModified(true);
-}
-
-
-void BasicSdl1::SetFullscreen()
-{
-    SDL_Rect** resos = SDL_ListModes(NULL, SDL_FULLSCREEN);;
-    m_Surface = SDL_SetVideoMode(
-            resos[0]->w, resos[0]->h, 32,
-            SDL_DOUBLEBUF | SDL_HWSURFACE | SDL_FULLSCREEN);
-
-    m_IsFullscreen = true;
-}
-
-
-void BasicSdl1::SetWindowed()
-{
-    m_Surface = SDL_SetVideoMode(1280, 1024, 32, SDL_DOUBLEBUF | SDL_HWSURFACE);
-    m_IsFullscreen = false;
-}
-
-
-SDL_Rect BasicSdl1::GetResolution()
-{
-    const Uint16 maxUint16 = 65535;
-    const SDL_VideoInfo* inf = SDL_GetVideoInfo();
-
-    SDL_Rect tmp = { 0, 0, 0, 0 };
-    if ((inf->current_w <= maxUint16) && (inf->current_h <= maxUint16))
-    {
-        tmp.w = inf->current_w;
-        tmp.h = inf->current_h;
-    }
-    return tmp;
-}
-
-
 void BasicSdl1::InitScreen(Layer* root)
 {
     m_ScreenRoot = root;
@@ -168,26 +128,47 @@ void BasicSdl1::InitScreen(Layer* root)
         std::cout << SDL_GetError() << std::endl;
         exit(21);
     }
-    SetWindowed();
 
     if (TTF_Init() == -1)
     {
         std::cout << TTF_GetError() << std::endl;
         exit(22);
     }
+
+    DrawerSdl::GetDrawer(root)->RemoveFrame();
+
+    m_Window = SDL_CreateWindow(
+        "Hand", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 1024, SDL_WINDOW_RESIZABLE);
 }
 
 
-void BasicSdl1::UpdateScreen()
+void BasicSdl1::UpdateScreen(bool forced)
 {
-    if (!m_ScreenRoot->IsModified())
+    if (!forced && !m_ScreenRoot->IsModified())
         return;
 
     SDL_Rect res = GetResolution();
     ((Field::Item*)m_ScreenRoot)->ComputeSize(res);
     ((Field::Item*)m_ScreenRoot)->UpdatePositions(res);
-    m_ScreenRoot->Draw(m_Surface);
-    SDL_Flip(m_Surface);
+    m_ScreenRoot->Draw(SDL_GetWindowSurface(m_Window));
+    SDL_UpdateWindowSurface(m_Window);
+}
+
+
+void BasicSdl1::ToggleFullscreen(Layers::Item*)
+{
+    bool isFullscreen = SDL_GetWindowFlags(m_Window) & SDL_WINDOW_FULLSCREEN;
+    SDL_SetWindowFullscreen(m_Window, isFullscreen ? 0 : SDL_WINDOW_FULLSCREEN_DESKTOP);
+
+    m_ScreenRoot->SetModified(true);
+}
+
+
+SDL_Rect BasicSdl1::GetResolution()
+{
+    SDL_Rect tmp = { 0, 0, 0, 0 };
+    SDL_GetWindowSize(m_Window, &tmp.w, &tmp.h);
+    return tmp;
 }
 
 

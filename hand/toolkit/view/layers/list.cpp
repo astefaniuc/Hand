@@ -43,7 +43,7 @@ Layout* List::GetLayout()
 
 void List::SetLayout(Layout* layout)
 {
-    if (m_Layout)
+    if (m_Layout && layout)
     {
         std::vector<Layer*> layers;
         m_Layout->GetActiveLayer(layers);

@@ -1,7 +1,7 @@
 #ifndef HAND_VIEW_DRAWER_H
 #define HAND_VIEW_DRAWER_H
 // TODO: remove dependency on SDL here
-#include <SDL/SDL.h>
+#include <SDL2/SDL.h>
 
 
 class Layer;

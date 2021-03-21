@@ -2,7 +2,7 @@
 #include "view/layers/list.h"
 #include "defines.h"
 #include "basicsdl1.h"
-#include <SDL/SDL_ttf.h>
+#include <SDL2/SDL_ttf.h>
 
 
 DrawerSdl::DrawerSdl(BasicSdl1* theme, Layer* layer, Hmi::List* config)

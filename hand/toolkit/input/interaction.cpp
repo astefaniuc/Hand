@@ -21,6 +21,7 @@ Control::Control(Hand* hand) : m_Hand(hand)
 
 Control::~Control()
 {
+    Clear();
     delete m_Hand;
     delete m_MoveControlUp;
 }

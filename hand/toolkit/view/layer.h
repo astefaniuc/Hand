@@ -3,7 +3,7 @@
 
 #include "view/drawer.h"
 #include "view/field.h"
-#include <SDL/SDL.h> // TODO: remove SDL dependency here
+#include <SDL2/SDL.h> // TODO: remove SDL dependency here
 
 
 namespace Layers {

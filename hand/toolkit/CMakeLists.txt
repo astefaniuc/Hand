@@ -16,7 +16,7 @@ add_subdirectory(data)
 add_subdirectory(input)
 add_subdirectory(view)
 
-target_link_libraries(${LIBNAME} PUBLIC dl boost_filesystem boost_system SDL SDL_ttf)
+target_link_libraries(${LIBNAME} PUBLIC dl boost_filesystem boost_system SDL2 SDL2_ttf)
 
 
 install(TARGETS ${LIBNAME} DESTINATION ${LIBDIR})

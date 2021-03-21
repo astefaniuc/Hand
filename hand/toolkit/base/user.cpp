@@ -65,8 +65,17 @@ void User::Start()
 }
 
 
-void User::Stop(Layer*)
+void User::Stop(Layer* caller)
 {
+    if (!caller)
+    {
+        // HACK: fix crash at exit form window x-button, TODO
+        delete m_ViewLayer->GetLayout();
+        m_ViewLayer->SetLayout(nullptr);
+        delete m_ViewLayer;
+    }
+    delete m_Control;
+    m_Control = nullptr;
     m_ViewLayer = nullptr;
     m_MainThread.notify_all();
 }
@@ -88,8 +97,8 @@ bool User::LoadApp(Hmi::Note* a_path)
 }
 
 
-void User::Update()
+void User::Update(bool forced)
 {
     if (m_ViewLayer)
-        m_ViewLayer->GetTheme()->UpdateScreen();
+        m_ViewLayer->GetTheme()->UpdateScreen(forced);
 }

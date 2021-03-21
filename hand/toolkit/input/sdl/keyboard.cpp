@@ -4,7 +4,7 @@
 
 bool Keyboard::Process(const SDL_Event& event)
 {
-    if (event.type == SDL_KEYDOWN)
+    if ((event.type == SDL_KEYDOWN) && (event.key.repeat == 0))
     {
         for (Hand* hand : m_Hands)
             if (hand->Press(event.key.keysym.sym))
@@ -24,5 +24,5 @@ bool Keyboard::Process(const SDL_Event& event)
 
 void Keyboard::GetKeyName(int k, Hmi::Note* a_out)
 {
-    a_out->SetValue(SDL_GetKeyName((SDLKey)k));
+    a_out->SetValue(SDL_GetKeyName((SDL_Keycode)k));
 }

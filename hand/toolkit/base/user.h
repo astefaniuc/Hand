@@ -20,10 +20,10 @@ public:
     virtual ~User();
 
     bool LoadApp(Hmi::Note* path);
-    void Update();
+    void Update(bool forced);
 
     void Start();
-    void Stop(Layer*);
+    void Stop(Layer* caller);
 
 private:
     EventHandler* m_Input;

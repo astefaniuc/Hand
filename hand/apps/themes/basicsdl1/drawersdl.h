@@ -1,7 +1,7 @@
 #ifndef HAND_THEME_BASICSDL1_DRAWERSDL_H
 #define HAND_THEME_BASICSDL1_DRAWERSDL_H
 
-#include <SDL/SDL.h>
+#include <SDL2/SDL.h>
 #include "data/list.h"
 #include "view/drawer.h"
 #include "view/datatypes/rect.h"

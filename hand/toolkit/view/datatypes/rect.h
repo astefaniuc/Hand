@@ -1,7 +1,7 @@
 #ifndef HAND_VIEW_DATATYPES_RECT_H
 #define HAND_VIEW_DATATYPES_RECT_H
 
-#include <SDL/SDL.h>
+#include <SDL2/SDL.h>
 #include "data/vector.h"
 #include "data/data.h"
 

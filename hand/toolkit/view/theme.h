@@ -9,7 +9,7 @@ class Theme : public Module
 {
 public:
     virtual void InitScreen(Layer* root) = 0;
-    virtual void UpdateScreen() = 0;
+    virtual void UpdateScreen(bool forced) = 0;
 
     virtual Drawer* GetButtonDrawer(Layer*) = 0;
     virtual Drawer* GetDataDrawer(Layer*) = 0;

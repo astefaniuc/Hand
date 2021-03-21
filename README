@@ -1,32 +1,23 @@
-#### Status: ####
------------------
-pre-alpha (https://github.com/astefaniuc/Hand/wiki/Software-Status)
+Status: 
+pre-alpha
 
-# Supported OS: #
------------------
+Supported OS: 
 Linux
 
-#### Build: #####
------------------
+Build:
 > ./build.sh
 
-##### Run: ######
------------------
+Run:
 > cd <your_path>/hand
 > ./hand.sh
-or
-> ./hand.sh <fullpath>/binaries/lib/apps/test1.so
 
-# Dependencies: #
------------------
-libsdl1.2
-libsdl-ttf2.0
-libboost-system1.46
+Dependencies:
+libsdl2
+libsdl2-ttf
+libboost-system
 
-### License: ####
------------------
-Hand is free software. I mean, really free. Do with it whatever you think is best for you. 
+License:
+Hand is free software. Do with it whatever you think is best for you. 
 
-##### Wiki: #####
------------------
+Wiki, not up-to-date:
 https://github.com/astefaniuc/Hand/wiki
