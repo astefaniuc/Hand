@@ -3,6 +3,7 @@
 
 #include "base/module.h"
 #include "data/item.h"
+#include "data/manipulator/manipulator.h"
 #include <sstream>
 
 
@@ -49,34 +50,6 @@ protected:
     Persistence* m_Storage = nullptr;
 
     Module* m_Manipulator = nullptr;
-};
-
-
-template<typename DataType> class TData;
-// Helper to avoid circular include
-void Show(Layer* target, Interface* view);
-
-template <typename DataType>
-class Manipulator : public Module
-{
-public:
-    void SetItem(TData<DataType>* toHandle)
-    {
-        m_Item = toHandle;
-        Init();
-    }
-    virtual bool IsValid(const DataType& input) = 0;
-
-    virtual void Init() {}
-
-    void GetHmi(Layer* caller) override
-    {
-        Show(caller, m_Interface);
-    }
-
-protected:
-    TData<DataType>* m_Item = nullptr;
-    Interface* m_Interface = nullptr;
 };
 
 

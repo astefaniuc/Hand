@@ -30,7 +30,7 @@ public:
     /// Removes all child items; own items are destroyed.
     virtual void Clear() = 0;
 
-    void GetShortcuts(Hmi::Interface* caller, Hmi::List* out) override;
+    void GetShortcuts(Interface* caller, List* out) override;
 
 protected:
     void Execute(Layers::Item* caller) override;

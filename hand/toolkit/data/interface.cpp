@@ -15,7 +15,7 @@ Interface::Interface(const std::string& name, const std::string& description, Mo
 }
 
 
-void Interface::GetShortcuts(Hmi::Interface* caller, Hmi::List* out)
+void Interface::GetShortcuts(Interface* caller, List* out)
 {
     if (caller != this)
         // Don't descend into sub-interfaces. TODO: exported shortcuts.
@@ -41,7 +41,6 @@ Layer* Interface::CreateExpandedData()
 {
     Layers::List* ret = new Layers::Vector();
     ret->SetExpandChildren(true);
-//    ret->SetData(GetView());
     return ret;
 }
 

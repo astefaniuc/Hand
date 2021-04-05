@@ -86,7 +86,7 @@ void Item::SetShortcut(Chord* chord)
 }
 
 
-void Item::GetShortcuts(Hmi::Interface* caller, Hmi::List* out)
+void Item::GetShortcuts(Interface* caller, List* out)
 {
     if (m_Shortcut && !m_Shortcut->Keys.empty())
         out->Attach(this);

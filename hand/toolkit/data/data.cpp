@@ -1,15 +1,9 @@
 #include "data/data.h"
-#include "view/layers/hmi/interface.h"
+#include "view/layers/hmi/item.h"
 #include "view/layers/text.h"
 
 
 namespace Hmi {
-
-
-void Show(Layer* target, Interface* view)
-{
-    target->GetInterface()->Show(view->GetExpandedView());
-}
 
 
 
@@ -59,4 +53,5 @@ std::string TData<uint8_t>::GetValueString()
 {
     return std::to_string(m_Value);
 }
+
 }

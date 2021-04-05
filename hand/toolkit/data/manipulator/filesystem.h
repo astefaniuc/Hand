@@ -1,5 +1,5 @@
-#ifndef HAND_BASE_FILESYSTEM_H
-#define HAND_BASE_FILESYSTEM_H
+#ifndef HAND_DATA_MANIPULATOR_FILESYSTEM_H
+#define HAND_DATA_MANIPULATOR_FILESYSTEM_H
 
 #include "data/data.h"
 #include "data/interface.h"
@@ -40,4 +40,4 @@ public:
     std::string GetExtension();
 };
 
-#endif // HAND_BASE_FILESYSTEM_H
+#endif // HAND_DATA_MANIPULATOR_FILESYSTEM_H

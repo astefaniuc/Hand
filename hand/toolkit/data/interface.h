@@ -3,6 +3,7 @@
 
 #include "data/map.h"
 #include "data/vector.h"
+#include "include/stdfields.h"
 
 
 class Layer;
@@ -27,7 +28,7 @@ public:
 
     Interface* GetInterface() override { return this; }
 
-    void GetShortcuts(Hmi::Interface* caller, Hmi::List* out) override;
+    void GetShortcuts(Interface* caller, List* out) override;
 
     void DeleteCb(Layer*) { delete this; }
 

@@ -2,7 +2,6 @@
 #define HAND_DATA_MAP_H
 
 #include "data/list.h"
-#include "include/stdfields.h"
 #include <map>
 
 
@@ -24,7 +23,7 @@ public:
 
     /// Insert a child item and assume ownership of it.
     void Add(const std::string& key, Item* child);
-    void Add(Hmi::Item* child) { Add(child->GetName(), child); }
+    void Add(Item* child) { Add(child->GetName(), child); }
     /// Insert a child item without assuming ownership of it.
     void Attach(const std::string& key, Item* child) { m_Value[key] = child; }
     void Attach(Item* child) { m_Value[child->GetName()] = child; }

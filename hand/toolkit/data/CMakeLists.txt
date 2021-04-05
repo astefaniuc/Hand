@@ -4,3 +4,5 @@ target_sources(${LIBNAME} PRIVATE
     item.cpp
     map.cpp
     vector.cpp)
+
+add_subdirectory(manipulator)

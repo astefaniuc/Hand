@@ -7,7 +7,7 @@
 namespace Hmi {
 
 
-void List::GetShortcuts(Hmi::Interface* caller, Hmi::List* out)
+void List::GetShortcuts(Interface* caller, List* out)
 {
     Item::GetShortcuts(caller, out);
     for (unsigned i = 0; i < Size(); ++i)

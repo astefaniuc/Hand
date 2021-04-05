@@ -39,8 +39,8 @@ public:
     void SetInfo(const std::string& info, InfoLevel type, bool persistent = true) {}
 
     /// The parent is the object owner; HmiItems without a parent have to be explicitly deleted.
-    void SetParent(Hmi::List* parent) { m_Parent = parent; }
-    Hmi::List* GetParent() const { return m_Parent; }
+    void SetParent(List* parent) { m_Parent = parent; }
+    List* GetParent() const { return m_Parent; }
 
     virtual Interface* GetInterface();
 
@@ -58,7 +58,7 @@ public:
     /// Persistent chord suggestion, this item assumes the ownership.
     Chord* GetShortcut() const { return m_Shortcut; }
     void SetShortcut(Chord* chord);
-    virtual void GetShortcuts(Hmi::Interface* caller, Hmi::List* out);
+    virtual void GetShortcuts(Interface* caller, List* out);
 
     // Layout options
 
@@ -89,7 +89,7 @@ private:
     std::string m_Name;
     std::string m_Info;
 
-    Hmi::List* m_Parent = nullptr;
+    List* m_Parent = nullptr;
     bool m_IsSelected = false;
 
     Chord* m_Shortcut = nullptr;
