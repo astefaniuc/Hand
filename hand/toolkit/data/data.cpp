@@ -53,4 +53,10 @@ Layer* Data::CreateCompressedData()
     return new Layers::DataText();
 }
 
+
+template<>
+std::string TData<uint8_t>::GetValueString()
+{
+    return std::to_string(m_Value);
+}
 }

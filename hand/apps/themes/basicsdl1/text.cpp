@@ -28,13 +28,15 @@ SDL_Rect Text::ComputeSize(const SDL_Rect& a_content)
 
 void Text::Draw(SDL_Surface* buffer)
 {
-    const std::string& text = static_cast<Layers::Text*>(m_Layer)->GetData();
-    if (text.empty())
-        return;
-
     if (m_Layer->IsModified())
     {
         SDL_FreeSurface(m_Buffer);
+        m_Buffer = nullptr;
+
+        const std::string& text = static_cast<Layers::Text*>(m_Layer)->GetData();
+        if (text.empty())
+            return;
+
         m_Buffer = RenderText(text, GetFontSize(), GetFontColor());
     }
 

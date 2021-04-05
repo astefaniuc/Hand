@@ -3,6 +3,7 @@
 
 #include "base/module.h"
 #include "data/item.h"
+#include <sstream>
 
 
 namespace Hmi {
@@ -116,6 +117,7 @@ public:
     std::string GetValueString() override
     {
         std::ostringstream s;
+        s.flags(std::ios_base::dec | std::ios_base::boolalpha);
         s << m_Value;
         return s.str();
     }
