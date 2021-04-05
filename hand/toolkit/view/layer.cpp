@@ -14,7 +14,15 @@ Layer::~Layer()
 
 void Layer::Quit(Layers::Item*)
 {
-    delete this;
+    m_IsValid = false;
+    SetModified();
+}
+
+
+void Layer::Prune()
+{
+    if (!m_IsValid)
+        delete this;
 }
 
 
@@ -27,7 +35,6 @@ void Layer::Draw(SDL_Surface* buffer)
 
 void Layer::SetData(Hmi::Item* data)
 {
-    ClearContent();
     if (m_Data)
         RemoveData();
 
@@ -35,8 +42,7 @@ void Layer::SetData(Hmi::Item* data)
     data->DataListeners.Add(this, &Layer::OnDataChanged);
     data->ExitListeners.Add(this, &Layer::OnDataExit);
 
-    Rebuild();
-    DataListeners.Notify(this);
+    Update();
 }
 
 
@@ -117,5 +123,5 @@ void Layer::Update()
 void Layer::OnDataExit(Hmi::Item*)
 {
     m_Data = nullptr;
-    delete this;
+    Exit();
 }

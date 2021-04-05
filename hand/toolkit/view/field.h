@@ -75,6 +75,7 @@ public:
 
         virtual void Exit() = 0;
         virtual void Clear() = 0;
+        virtual void Prune() = 0;
 
         bool IsModified() { return m_IsModified; }
         void SetModified(bool state = true);
@@ -124,7 +125,7 @@ public:
 
 private:
     // Content size and position
-    SDL_Rect m_Size;
+    SDL_Rect m_Size = { 0, 0, 0, 0 };
     Item* m_Item = nullptr;
     Layout* m_Parent = nullptr;
 

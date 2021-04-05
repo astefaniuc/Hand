@@ -36,7 +36,6 @@ void EventHandlerSdl::Stop()
 {
     if (!m_Timer)
         return;
-    std::unique_lock<std::mutex> lock(m_Execution);
     SDL_RemoveTimer(m_Timer);
 }
 
@@ -55,7 +54,7 @@ void EventHandlerSdl::Pump()
         {
             if (event.window.event == SDL_WINDOWEVENT_CLOSE)
             {
-                m_User->Stop(nullptr);
+                m_User->Stop();
                 return;
             }
             forceRedraw = true;

@@ -55,6 +55,14 @@ bool Layout::IsValid() const
 }
 
 
+void Layout::Prune()
+{
+    for (auto field : m_Fields)
+        if (field->GetItem())
+            field->GetItem()->Prune();
+}
+
+
 bool Layout::IsExpanding(Orientation direction)
 {
     for (auto field : m_Fields)

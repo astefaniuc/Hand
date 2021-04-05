@@ -22,6 +22,8 @@ public:
         GetLayout()->GetField(field)->SetItem(sub);
     }
 
+    void Prune() override;
+
     void DrawContent(SDL_Surface* buffer) override { GetLayout()->Draw(buffer); }
 
     Layers::List* GetListLayer() override { return this; }

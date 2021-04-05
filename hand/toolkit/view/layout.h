@@ -28,6 +28,7 @@ public:
 
     void Exit() override { delete this; }
     void Clear() override { CleanFields(); }
+    void Prune() override;
 
     void GetActiveLayer(std::vector<Layer*>& out) override;
 

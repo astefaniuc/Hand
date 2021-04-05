@@ -23,9 +23,11 @@ public:
     void Update(bool forced);
 
     void Start();
-    void Stop(Layer* caller);
+    void Stop();
 
 private:
+    void StopCb(Layer* cb) { m_ViewLayer = nullptr; }
+
     EventHandler* m_Input;
     ModuleLib* m_ThemeLoader;
 

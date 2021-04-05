@@ -23,7 +23,7 @@ User::User(EventHandler* a_input)
 
     m_ViewLayer = new Layers::Interface();
     m_ViewLayer->SetLayout(layout);
-    m_ViewLayer->ExitListeners.Add(this, &User::Stop);
+    m_ViewLayer->ExitListeners.Add(this, &User::StopCb);
     m_ViewLayer->SetData(&m_View);
 
     m_ThemeLoader = new ModuleLib();
@@ -47,6 +47,7 @@ User::User(EventHandler* a_input)
 
 User::~User()
 {
+    delete m_Control;
     for (ModuleLib* app : m_RunningApps)
         delete app;
 }
@@ -60,24 +61,12 @@ void User::Start()
     // Stop the main execution line
     std::unique_lock<std::mutex> lock(m_Mutex);
     m_MainThread.wait(lock);
-
-    m_Input->Stop();
 }
 
 
-void User::Stop(Layer* caller)
+void User::Stop()
 {
-    if (!caller)
-    {
-        // HACK: fix crash at exit form window x-button, TODO
-        delete m_ViewLayer->GetLayout();
-        m_ViewLayer->SetLayout(nullptr);
-        delete m_ViewLayer;
-    }
-    delete m_Control;
-    m_Control = nullptr;
-    m_ViewLayer = nullptr;
-    m_MainThread.notify_all();
+    m_ViewLayer->Exit();
 }
 
 
@@ -99,6 +88,13 @@ bool User::LoadApp(Hmi::Note* a_path)
 
 void User::Update(bool forced)
 {
-    if (m_ViewLayer)
-        m_ViewLayer->GetTheme()->UpdateScreen(forced);
+    m_ViewLayer->Prune();
+    if (!m_ViewLayer)
+    {
+        m_Input->Stop();
+        m_MainThread.notify_all();
+        return;
+    }
+    m_Control->Update();
+    m_ViewLayer->GetTheme()->UpdateScreen(forced);
 }

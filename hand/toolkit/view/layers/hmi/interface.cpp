@@ -1,5 +1,6 @@
 #include "view/layers/hmi/interface.h"
 #include "view/layers/hmi/listview.h"
+#include "view/layers/text.h"
 #include "view/layers/vector.h"
 #include "data/method.h"
 #include "data/vector.h"
@@ -22,7 +23,10 @@ Interface::Interface()
 
 void Interface::Rebuild()
 {
-    Item::Rebuild();
+    Insert(TITLE, new RawText(m_Data->GetName()));
+    if (!m_Data->GetInfo().empty())
+        Insert(DESCRIPTION, new RawText(m_Data->GetInfo()));
+
 
     m_Controls = new ListView();
     m_Controls->SetData(m_Data->GetInterface()->GetControls());

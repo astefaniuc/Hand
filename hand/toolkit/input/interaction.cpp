@@ -21,7 +21,13 @@ Control::Control(Hand* hand) : m_Hand(hand)
 
 Control::~Control()
 {
+    for (Layers::Interface* target : m_Stack)
+    {
+        target->ExitListeners.Remove(this);
+        target->ShowListeners.Remove(this);
+    }
     Clear();
+
     delete m_Hand;
     delete m_MoveControlUp;
 }
@@ -34,8 +40,11 @@ void Control::Start()
 }
 
 
-void Control::Rebuild()
+void Control::Update()
 {
+    if (!m_IsModified)
+        return;
+
     Clear();
     if (!m_Stack.size())
         return;
@@ -58,6 +67,8 @@ void Control::Rebuild()
     for (Group* child : m_Groups)
         if (child != m_Focus)
             child->Update();
+
+    m_IsModified = false;
 }
 
 
@@ -76,7 +87,7 @@ void Control::SetTarget(Layers::Interface* target)
     target->ExitListeners.Add(this, &Control::OnTargetExit);
     target->ShowListeners.Add(this, &Control::OnTargetShow);
 
-    Rebuild();
+    m_IsModified = true;
 }
 
 
@@ -95,7 +106,7 @@ void Control::OnTargetExit(Layer* target)
         if (*it == target)
         {
             m_Stack.erase((++it).base());
-            Rebuild();
+            m_IsModified = true;
             return;
         }
     }
@@ -109,7 +120,7 @@ void Control::PopTargetCb(Layers::Item*)
     target->ShowListeners.Remove(this);
     m_Stack.pop_back();
 
-    Rebuild();
+    m_IsModified = true;
 }
 
 

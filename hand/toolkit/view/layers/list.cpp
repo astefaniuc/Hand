@@ -12,6 +12,15 @@ List::~List()
 }
 
 
+void List::Prune()
+{
+    if (!m_IsValid)
+        delete this;
+    else if (m_Layout)
+        m_Layout->Prune();
+}
+
+
 SDL_Rect List::ComputeSize(const SDL_Rect& outer)
 {
     SDL_Rect ret = GetDrawer()->ComputeSize(

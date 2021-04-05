@@ -77,7 +77,7 @@ void Field::Item::SetModified(bool state)
 Field::~Field()
 {
     if (m_Item)
-        m_Item->Exit();
+        delete m_Item;
 }
 
 
@@ -94,12 +94,10 @@ Field* Field::GetField(const std::string& name) const
 void Field::SetItem(Item* item)
 {
     if (m_Item && (item != m_Item))
-        m_Item->Exit();
+        delete m_Item;
     m_Item = item;
     m_Item->SetParentField(this);
-
-    if (m_Parent)
-        m_Parent->SetModified();
+    m_Item->SetModified();
 }
 
 
@@ -108,6 +106,7 @@ void Field::RemoveItem()
     if (!m_Item)
         return;
     m_Item = nullptr;
+    m_Size = { 0, 0, 0, 0 };
 
     if (m_Parent)
         m_Parent->SetModified();

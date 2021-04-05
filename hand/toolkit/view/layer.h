@@ -41,6 +41,7 @@ public:
     bool IsVisible() { return (m_Field && m_Field->IsVisible()); }
 
     void Exit() final { Quit(nullptr); }
+    void Prune() override;
     void Clear() override { delete this; }
     virtual void ClearContent() {}
 
@@ -72,7 +73,8 @@ protected:
     SDL_Rect ComputeSize(const SDL_Rect& outer) override;
     void UpdatePositions(const SDL_Rect& outer) override;
     bool IsExpanding(Orientation direction) override { return false; }
-    bool IsValid() const final { return true; }
+    bool IsValid() const final { return m_IsValid; }
+
     virtual void Quit(Layers::Item*);
 
     Theme* m_Theme = nullptr;
@@ -82,6 +84,7 @@ protected:
     SDL_Rect m_Size = { 0, 0, 0, 0 };
 
     Hmi::Item* m_Data = nullptr;
+    bool m_IsValid = true;
 };
 
 

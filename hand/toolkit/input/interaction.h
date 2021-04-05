@@ -26,6 +26,7 @@ public:
     ~Control();
 
     void Start();
+    void Update();
 
     Hand* GetHand() { return m_Hand; }
 
@@ -38,7 +39,6 @@ public:
     void Execute(const Chord& chord);
 
 private:
-    void Rebuild();
     void Clear();
 
     // Callbacks.
@@ -54,6 +54,8 @@ private:
     Group* m_Focus = nullptr;
 
     Hmi::Item* m_MoveControlUp;
+
+    bool m_IsModified = false;
 };
 
 
