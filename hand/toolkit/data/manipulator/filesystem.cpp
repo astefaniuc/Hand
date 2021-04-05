@@ -4,6 +4,7 @@
 
 
 namespace bfs = boost::filesystem;
+namespace Manipulator {
 
 
 bfs::path GetPath(Hmi::TData<std::string>* a_in)
@@ -59,7 +60,7 @@ Hmi::List* Folder::GetContent()
     bfs::directory_iterator end;
     for (bfs::directory_iterator iter(path); iter != end ; ++iter)
     {
-        Manipulator<std::string>* manip = nullptr;
+        Typed<std::string>* manip = nullptr;
         if (is_regular_file(iter->status()))
             manip = new File();
         else if (is_directory(iter->status()))
@@ -88,4 +89,6 @@ bool File::IsValid(const std::string&)
 std::string File::GetExtension()
 {
     return GetPath(m_Item).extension().string();
+}
+
 }

@@ -18,7 +18,7 @@ public:
     Interface(
         const std::string& name,
         const std::string& description,
-        Module* manipulator = nullptr);
+        Manipulator::Base* manip = nullptr);
 
     Vector* GetView() { return &m_ViewStack; }
 

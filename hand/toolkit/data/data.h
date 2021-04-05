@@ -29,12 +29,13 @@ public:
 class Data : public Item
 {
 public:
-    Data(const std::string& name, const std::string& description, Module* manipulator);
+    Data(const std::string& name, const std::string& description, Manipulator::Base* manip)
+        : Item(name, description), m_Manipulator(manip) {}
     ~Data();
 
     virtual std::string GetValueString() = 0;
     /// Deletes a previously stored manipulator.
-    void SetManipulator(Module* manipulator);
+    void SetManipulator(Manipulator::Base* manip);
     Module* GetManipulator() { return m_Manipulator; }
 
     /// Deletes a previously stored persistence object.
@@ -61,7 +62,7 @@ public:
         const std::string& name,
         const std::string& description,
         const DataType& defaultVal,
-        Manipulator<DataType>* manipulator = nullptr)
+        Manipulator::Typed<DataType>* manipulator = nullptr)
         : Data(name, description, manipulator), m_Value(defaultVal)
     {
         if (manipulator)
@@ -74,7 +75,7 @@ public:
             return true;
         // The manipulator should call this with valid data.
         // TODO: remove this? What about Persistence?
-        if (m_Manipulator && !((Manipulator<DataType>*)m_Manipulator)->IsValid(val))
+        if (m_Manipulator && !((Manipulator::Typed<DataType>*)m_Manipulator)->IsValid(val))
             return false;
 
         m_Value = val;

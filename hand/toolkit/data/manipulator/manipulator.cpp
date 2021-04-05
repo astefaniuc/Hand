@@ -2,12 +2,13 @@
 #include "view/layers/hmi/interface.h"
 
 
-namespace Hmi {
+namespace Manipulator {
 
 
-void Show(Layer* target, Interface* view)
+void Base::GetHmi(Layer* target)
 {
-    target->GetInterface()->Show(view->GetExpandedView());
+    if (m_Interface)
+        target->GetInterface()->Show(m_Interface->GetExpandedView());
 }
 
 }

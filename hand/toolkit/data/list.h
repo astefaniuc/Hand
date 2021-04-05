@@ -10,8 +10,8 @@ namespace Hmi {
 class List : public Data
 {
 public:
-    List(const std::string& name, const std::string& description, Module* manipulator)
-        : Data(name, description, manipulator) {}
+    List(const std::string& name, const std::string& description, Manipulator::Base* manip)
+        : Data(name, description, manip) {}
 
     /// Insert a child item and assume ownership of it.
     virtual void Add(Item* child) = 0;

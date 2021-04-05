@@ -17,8 +17,8 @@ public:
     Map(
         const std::string& name,
         const std::string& description,
-        Module* manipulator = nullptr)
-        : List(name, description, manipulator) {}
+        Manipulator::Base* manip = nullptr)
+        : List(name, description, manip) {}
     ~Map() { Clear(); }
 
     /// Insert a child item and assume ownership of it.

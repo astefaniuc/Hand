@@ -8,7 +8,7 @@
 #define LIBRARY_FILE_EXTENSION ".so"
 
 
-class ModuleLib : public File
+class ModuleLib : public Manipulator::File
 {
 public:
     ModuleLib() { /*TODO*/ }

@@ -6,8 +6,9 @@
 namespace Hmi {
 
 
-Interface::Interface(const std::string& name, const std::string& description, Module* manipulator)
-    : Map(name, description, manipulator),
+Interface::Interface(
+    const std::string& name, const std::string& description, Manipulator::Base* manip)
+    : Map(name, description, manip),
       m_ViewStack("View", "")
 {
     Add(CONTROLS, new Vector("Controls", ""));

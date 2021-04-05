@@ -6,7 +6,10 @@
 #include "data/vector.h"
 
 
-class Path : public Hmi::Manipulator<std::string>
+namespace Manipulator {
+
+
+class Path : public Typed<std::string>
 {
 public:
     ~Path() { delete m_Interface; }
@@ -40,4 +43,5 @@ public:
     std::string GetExtension();
 };
 
+}
 #endif // HAND_DATA_MANIPULATOR_FILESYSTEM_H

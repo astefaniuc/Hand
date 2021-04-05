@@ -6,23 +6,16 @@
 namespace Hmi {
 
 
-
-Data::Data(const std::string& name, const std::string& description, Module* manipulator)
-    : Item(name, description), m_Manipulator(manipulator)
-{
-}
-
-
 Data::~Data()
 {
     delete m_Manipulator;
 }
 
 
-void Data::SetManipulator(Module* manipulator)
+void Data::SetManipulator(Manipulator::Base* manip)
 {
     delete m_Manipulator;
-    m_Manipulator = manipulator;
+    m_Manipulator = manip;
 }
 
 
