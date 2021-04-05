@@ -71,7 +71,7 @@ void Hand::InitInitLayer(Layer* l)
 {
     Layout* layout = Layouts::CreateView();
     layout->GetField(DESCRIPTION)->SetAlignment(VAlignment::Bottom, HAlignment::HCenter);
-    layout->GetField(CONTROL)->SetVisible(false);
+    layout->GetField(CONTROLS)->SetVisible(false);
     layout->GetField(LAYER_CONTROLS)->SetVisible(false);
 
     static_cast<Layers::List*>(l)->SetLayout(layout);

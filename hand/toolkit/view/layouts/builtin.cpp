@@ -10,7 +10,7 @@ Layout* CreateButton()
     return
         SplitV(
             SplitH(TITLE, VIEW),
-            SplitH(DESCRIPTION, CONTROL));
+            SplitH(DESCRIPTION, CHORD));
 }
 
 
@@ -28,7 +28,7 @@ Layout* CreateView()
     ret->GetField(TITLE);
     ret->GetField(VIEW);
     ret->GetField(DESCRIPTION);
-    ret->SetField(MakeField(SplitH(CONTROL, LAYER_CONTROLS)));
+    ret->SetField(MakeField(SplitH(CONTROLS, LAYER_CONTROLS)));
 
     return ret;
 }

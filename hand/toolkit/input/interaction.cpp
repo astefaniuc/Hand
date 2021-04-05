@@ -51,14 +51,14 @@ void Control::Update()
 
     m_Stack.back()->GetInteractionGroups(this);
 
-    Layers::List* interfaceCtrls =
-        m_Stack.back()->GetLayerControls()->GetExpandedView()->GetListLayer();
+    m_InterfaceCtrls = m_Stack.back()->GetLayerControls()->GetExpandedView()->GetListLayer();
+    m_InterfaceCtrls->ExitListeners.Add(this, &Control::OnInterfaceCtrlsExit);
 
     if (m_Stack.size() > 1)
-        interfaceCtrls->Insert(m_MoveControlUp->GetButtonView());
+        m_InterfaceCtrls->Insert(m_MoveControlUp->GetButtonView());
 
-    m_Stack.back()->Insert(LAYER_CONTROLS, interfaceCtrls);
-    AddGroup(interfaceCtrls);
+    m_Stack.back()->Insert(LAYER_CONTROLS, m_InterfaceCtrls);
+    AddGroup(m_InterfaceCtrls);
 
     if (!m_Focus)
         SetFocus(m_Groups[0]);
@@ -78,6 +78,7 @@ void Control::Clear()
         delete child;
     m_Groups.clear();
     m_Focus = nullptr;
+    delete m_InterfaceCtrls;
 }
 
 
@@ -286,7 +287,7 @@ Command::Command(Group* parent, Chord* chord)
 {
     m_Layer = new Layers::Chord();
     m_Layer->Insert("", m_Chord->CreateLayer(m_Parent->GetControl()->GetHand()));
-    m_Chord->Item->GetListLayer()->Insert(CONTROL, m_Layer);
+    m_Chord->Item->GetListLayer()->Insert(CHORD, m_Layer);
     m_Chord->Item->ExitListeners.Add(this, &Command::OnTargetExit);
 }
 

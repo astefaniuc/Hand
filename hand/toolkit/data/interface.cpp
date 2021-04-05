@@ -10,7 +10,7 @@ Interface::Interface(const std::string& name, const std::string& description, Mo
     : Map(name, description, manipulator),
       m_ViewStack("View", "")
 {
-    Add(CONTROL, new Vector("Controls", ""));
+    Add(CONTROLS, new Vector("Controls", ""));
     Attach(VIEW, &m_ViewStack);
 }
 

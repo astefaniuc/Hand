@@ -2,7 +2,8 @@
 #define HAND_INCLUDE_STDFIELDS_H
 
 
-#define CONTROL "Control"
+#define CHORD "Chord"
+#define CONTROLS "Controls"
 #define DESCRIPTION "Description"
 #define EXIT "Exit"
 #define ICON "Icon"

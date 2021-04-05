@@ -28,7 +28,7 @@ void Map::UpdatePositions(const SDL_Rect& outer)
 Map* CreateView()
 {
     Map* ret = new Map();
-    ret->SetField(CONTROL, { 0.2, 0.8, 0.6, 0.2 });
+    ret->SetField(CONTROLS, { 0.2, 0.8, 0.6, 0.2 });
     ret->SetField(DESCRIPTION, { 0.8, 0.3, 0.2, 0.4 });
     ret->SetField(TITLE, { 0.0, 0.0, 1.0, 0.04 });
     ret->SetField(VIEW, { 0.0, 0.04, 0.8, 0.76 });

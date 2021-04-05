@@ -45,6 +45,7 @@ private:
     void OnTargetExit(Layer* target);
     void OnTargetShow(Layer* inserted);
     void PopTargetCb(Layers::Item*);
+    void OnInterfaceCtrlsExit(Layer*) { m_InterfaceCtrls = nullptr; }
 
     Hand* m_Hand;
 
@@ -53,6 +54,7 @@ private:
     std::vector<Group*> m_Groups;
     Group* m_Focus = nullptr;
 
+    Layers::List* m_InterfaceCtrls = nullptr;
     Hmi::Item* m_MoveControlUp;
 
     bool m_IsModified = false;

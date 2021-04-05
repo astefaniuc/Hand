@@ -30,7 +30,7 @@ void Interface::Rebuild()
 
     m_Controls = new ListView();
     m_Controls->SetData(m_Data->GetInterface()->GetControls());
-    Insert(CONTROL, m_Controls);
+    Insert(CONTROLS, m_Controls);
 
     Vector* view = new Vector();
     view->SetExpandChildren(true);

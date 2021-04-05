@@ -21,7 +21,7 @@ public:
 
     Vector* GetView() { return &m_ViewStack; }
 
-    Vector* GetControls() { return static_cast<Vector*>(GetChild(CONTROL)); }
+    Vector* GetControls() { return static_cast<Vector*>(GetChild(CONTROLS)); }
     void AddControl(Item* control) { GetControls()->Add(control); }
     void AttachControl(Item* control) { GetControls()->Attach(control); }
 
