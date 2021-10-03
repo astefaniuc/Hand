@@ -13,7 +13,7 @@ namespace Interaction {
 Control::Control(Hand* hand) : m_Hand(hand)
 {
     m_Hand->SetInteraction(this);
-    m_MoveControlUp = new Hmi::Action<Control>(
+    m_MoveControlUp = new Data::Action(
         "Parent control", "Set the input control to the parent interface.",
         this, &Control::PopTargetCb);
 }
@@ -213,7 +213,7 @@ void Group::Update()
             continue;
 
         Chord* chord = nullptr;
-        Hmi::Item* data = item->GetData();
+        Data::Item* data = item->GetData();
         if (data && data->GetShortcut())
             chord = GetControl()->GetHand()->Reserve(data->GetShortcut());
         else

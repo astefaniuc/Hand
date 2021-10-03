@@ -3,7 +3,7 @@
 #include "view/layers/hmi/button.h"
 
 
-namespace Hmi {
+namespace Data {
 
 
 Item::~Item()

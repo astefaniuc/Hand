@@ -7,10 +7,10 @@
 #include <sstream>
 
 
-namespace Hmi {
+namespace Data
+{
 
-
-class Data;
+class Base;
 
 
 class Persistence
@@ -21,22 +21,25 @@ public:
     virtual bool SetFile(const std::string& path) = 0;
     virtual const std::string& GetFile() const = 0;
 
-    virtual bool Load(Data* in) const = 0;
-    virtual bool Save(Data* out) const = 0;
+    virtual bool Load(Base* in) const = 0;
+    virtual bool Save(Base* out) const = 0;
 };
 
 
-class Data : public Item
+class Base : public Item
 {
 public:
-    Data(const std::string& name, const std::string& description, Manipulator::Base* manip)
+    Base(const std::string& name, const std::string& description, Manipulator::Base* manip)
         : Item(name, description), m_Manipulator(manip) {}
-    ~Data();
+    ~Base();
 
     virtual std::string GetValueString() = 0;
+    virtual std::string GetTypeName() { return m_TypeName; };
+    void SetTypeName(const std::string& name) { m_TypeName = name; }
+
     /// Deletes a previously stored manipulator.
     void SetManipulator(Manipulator::Base* manip);
-    Module* GetManipulator() { return m_Manipulator; }
+    Manipulator::Base* GetManipulator();
 
     /// Deletes a previously stored persistence object.
     void SetPersistence(Persistence* storage);
@@ -50,20 +53,21 @@ protected:
 
     Persistence* m_Storage = nullptr;
 
-    Module* m_Manipulator = nullptr;
+    Manipulator::Base* m_Manipulator = nullptr;
+    std::string m_TypeName;
 };
 
 
 template<typename DataType>
-class TData : public Data
+class Typed : public Base
 {
 public:
-    TData(
+    Typed(
         const std::string& name,
         const std::string& description,
-        const DataType& defaultVal,
+        const DataType& defaultValue,
         Manipulator::Typed<DataType>* manipulator = nullptr)
-        : Data(name, description, manipulator), m_Value(defaultVal)
+        : Base(name, description, manipulator), m_Value(defaultValue), m_DefaultValue(defaultValue)
     {
         if (manipulator)
             manipulator->SetItem(this);
@@ -87,6 +91,8 @@ public:
     const DataType& GetValue() const { return m_Value; }
     const DataType& operator()() const { return m_Value; }
 
+    const DataType& GetDefaultValue() const { return m_DefaultValue; }
+
     /// Get the value as a human readable string.
     std::string GetValueString() override
     {
@@ -95,13 +101,57 @@ public:
         s << m_Value;
         return s.str();
     }
+    std::string GetTypeName() override { return ::GetTypeName<DataType>(); }
 
 private:
     DataType m_Value;
+    DataType m_DefaultValue;
 };
 
 
-typedef TData<std::string> Note;
+template <typename DataType>
+class Numeric : public Typed<DataType>
+{
+public:
+    // Expose the Typed<DataType> ctor with default values for min & max.
+    using Typed<DataType>::Typed;
+
+    Numeric(
+        const std::string& name,
+        const std::string& description,
+        const DataType& defaultValue,
+        DataType min,
+        DataType max,
+        Manipulator::Typed<DataType>* manipulator = nullptr)
+        : Typed<DataType>(name, description, manipulator)
+    {
+        static_assert(min <= defaultValue, "Value should be >= min");
+        static_assert(defaultValue <= max, "Value should be <= max");
+    }
+
+    DataType GetMin() { return m_Min; }
+    DataType GetMax() { return m_Max; }
+
+private:
+    DataType m_Min = std::numeric_limits<DataType>::min();
+    DataType m_Max = std::numeric_limits<DataType>::max();
+};
+
+
+typedef Typed<bool> Bool;
+typedef Typed<double> Double;
+typedef Typed<float> Float;
+typedef Typed<int> Int;
+typedef Typed<int8_t> Int8;
+typedef Typed<int16_t> Int16;
+typedef Typed<int32_t> Int32;
+typedef Typed<int64_t> Int64;
+typedef Typed<std::string> String;
+typedef Typed<uint8_t> Uint8;
+typedef Typed<uint16_t> Uint16;
+typedef Typed<uint32_t> Uint32;
+typedef Typed<uint64_t> Uint64;
+typedef Typed<unsigned> Unsigned;
 
 }
 #endif // HAND_GRAPH_DATA_H

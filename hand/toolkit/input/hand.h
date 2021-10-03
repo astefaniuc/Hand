@@ -47,7 +47,7 @@ public:
     Chord* Reserve(Chord* shortcut);
 
     // Returns the Key symbol at specified position
-    Hmi::Note* GetKey(unsigned index);
+    Data::String* GetKey(unsigned index);
 
     /// Finger names.
     static const std::string Finger[5];
@@ -67,7 +67,7 @@ private:
     unsigned m_PeripherialLevel = 3;
 
     std::vector<int> m_Keys;
-    Hmi::Vector* m_KeysHmi;
+    Data::Vector* m_KeysHmi;
     Device* m_Device;
     InputState* m_InputState = nullptr;
 

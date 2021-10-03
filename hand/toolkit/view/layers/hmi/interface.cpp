@@ -13,7 +13,7 @@ namespace Layers {
 
 Interface::Interface()
 {
-    Hmi::Action<Interface>* exit = new Hmi::Action<Interface>(EXIT, "Close interface", this, &Interface::Quit);
+    Data::Item* exit = new Data::Action<Interface>(EXIT, "Close interface", this, &Interface::Quit);
     exit->SetShortcut(Chord::FullHand());
 
     GetLayerControls()->Add(exit);
@@ -26,7 +26,6 @@ void Interface::Rebuild()
     Insert(TITLE, new RawText(m_Data->GetName()));
     if (!m_Data->GetInfo().empty())
         Insert(DESCRIPTION, new RawText(m_Data->GetInfo()));
-
 
     m_Controls = new ListView();
     m_Controls->SetData(m_Data->GetInterface()->GetControls());
@@ -49,7 +48,7 @@ void Interface::Show(Layer* item)
 void Interface::CollectShortcuts()
 {
     if (!m_Shortcuts)
-        m_Shortcuts = new Hmi::Vector("Shortcuts", "");
+        m_Shortcuts = new Data::Vector("Shortcuts", "");
     else
         m_Shortcuts->Clear();
 

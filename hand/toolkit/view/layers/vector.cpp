@@ -11,7 +11,7 @@ void Vector::Rebuild()
     if (!GetData())
         return;
 
-    Hmi::List* listData = dynamic_cast<Hmi::List*>(GetData());
+    Data::List* listData = dynamic_cast<Data::List*>(GetData());
     if (listData)
     {
         unsigned count = listData->Size() - m_StartPosition;
@@ -28,7 +28,7 @@ void Vector::Rebuild()
 }
 
 
-void Vector::AddLayer(Hmi::Item* data)
+void Vector::AddLayer(Data::Item* data)
 {
     if (m_ExpandChildren)
         Insert(data->GetExpandedView());

@@ -11,7 +11,7 @@ namespace Layers {
 class ListView : public Item
 {
 public:
-    void SetData(Hmi::Item* data) override;
+    void SetData(Data::Item* data) override;
 
 protected:
     void Rebuild() override;
@@ -24,9 +24,9 @@ protected:
     void Back(Layers::Item*);
 
 private:
-    Hmi::Item* m_Back = nullptr;
+    Data::Item* m_Back = nullptr;
     List* m_DataControls = nullptr;
-    std::vector<Hmi::Item*> m_ViewStack;
+    std::vector<Data::Item*> m_ViewStack;
 };
 
 }

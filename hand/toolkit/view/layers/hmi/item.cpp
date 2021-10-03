@@ -3,10 +3,7 @@
 #include "view/layers/text.h"
 
 
-namespace Layers {
-
-
-void Item::Rebuild()
+void Layers::Item::Rebuild()
 {
     Insert(TITLE, new RawText(m_Data->GetName()));
     if (!m_Data->GetInfo().empty())
@@ -27,17 +24,15 @@ void Item::Rebuild()
 }
 
 
-void Item::SetData(Hmi::Item* data)
+void Layers::Item::SetData(::Data::Item* data)
 {
     List::SetData(data);
-    ActivationListeners.Add(data, &Hmi::Item::Execute);
+    ActivationListeners.Add(data, &::Data::Item::Execute);
 }
 
 
-void Item::RemoveData()
+void Layers::Item::RemoveData()
 {
     ActivationListeners.Remove(m_Data);
     List::RemoveData();
-}
-
 }

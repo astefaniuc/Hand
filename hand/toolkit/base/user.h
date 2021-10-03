@@ -19,7 +19,7 @@ public:
     User(EventHandler* input);
     virtual ~User();
 
-    bool LoadApp(Hmi::Note* path);
+    bool LoadApp(Data::String* path);
     void Update(bool forced);
 
     void Start();
@@ -34,7 +34,7 @@ private:
     Interaction::Control* m_Control;
 
     std::vector<ModuleLib*> m_RunningApps;
-    Hmi::Interface m_View;
+    Data::Interface m_View;
     Layers::Interface* m_ViewLayer;
 
     std::mutex m_Mutex;

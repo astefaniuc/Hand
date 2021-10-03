@@ -7,7 +7,7 @@
 class Text : public DrawerSdl
 {
 public:
-    Text(BasicSdl1* theme, Layer* layer, Hmi::List* config)
+    Text(BasicSdl1* theme, Layer* layer, Data::List* config)
         : DrawerSdl(theme, layer, config) {}
     ~Text() { SDL_FreeSurface(m_Buffer); }
 

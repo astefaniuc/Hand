@@ -8,7 +8,7 @@
 class Layer;
 
 
-namespace Hmi {
+namespace Data {
 
 
 class Map : public List

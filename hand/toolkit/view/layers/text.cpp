@@ -17,7 +17,7 @@ void RawText::SetData(const std::string& text)
 
 std::string DataText::GetData()
 {
-    return static_cast<Hmi::Data*>(m_Data)->GetValueString();
+    return static_cast<Data::Base*>(m_Data)->GetValueString();
 }
 
 }

@@ -22,8 +22,8 @@ public:
     virtual void DrawContent(SDL_Surface* buffer) = 0;
 
     // Set pointer to a data tree node
-    virtual void SetData(Hmi::Item* data);
-    Hmi::Item* GetData() const { return m_Data; }
+    virtual void SetData(Data::Item* data);
+    Data::Item* GetData() const { return m_Data; }
     virtual void RemoveData();
 
     void SetTheme(Theme* theme);
@@ -45,14 +45,14 @@ public:
     void Clear() override { delete this; }
     virtual void ClearContent() {}
 
-    virtual Hmi::List* GetLayerControls() { return nullptr; }
+    virtual Data::List* GetLayerControls() { return nullptr; }
     virtual Layers::Interface* GetInterface();
 
     virtual void Activate() {}
 
     /// Callbacks.
-    virtual void OnDataChanged(Hmi::Item*) { Update(); }
-    void OnDataExit(Hmi::Item*);
+    virtual void OnDataChanged(Data::Item*) { Update(); }
+    void OnDataExit(Data::Item*);
 
 
     Listeners<Layer> ExitListeners;
@@ -83,7 +83,7 @@ protected:
     /// The layers content/active rectangle and its position.
     SDL_Rect m_Size = { 0, 0, 0, 0 };
 
-    Hmi::Item* m_Data = nullptr;
+    Data::Item* m_Data = nullptr;
     bool m_IsValid = true;
 };
 

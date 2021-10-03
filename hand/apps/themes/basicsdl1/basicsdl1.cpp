@@ -23,44 +23,44 @@ extern "C" void Destroy(Theme* theme)
 BasicSdl1::BasicSdl1() : m_Hmi("BasicSdl1", "Basic SDL1 visual theme")
 {
     // Properties
-    m_Buttons = new Hmi::Map("Datas", "Customize");
+    m_Buttons = new Data::Map("Datas", "Customize");
     m_Buttons->Add(new Rgb(BACKGROUNDCOLOR, "", 45, 45, 75));
     m_Buttons->Add(new Rgb(FRAMECOLOR, "", 75, 70, 130));
     m_Buttons->Add(new Rect(FRAMESIZE, "Relative frame size [%]", .5, .5, 0.7, 0.7));
-    m_Buttons->Add(new Hmi::TData<bool>(DRAWFRAME, "Draw a visible frame around item", true));
+    m_Buttons->Add(new Data::Bool(DRAWFRAME, "Draw a visible frame around item", true));
 
-    m_Datas = new Hmi::Map("Buttons", "Customize");
+    m_Datas = new Data::Map("Buttons", "Customize");
     m_Datas->Add(new Rgb(BACKGROUNDCOLOR, "", 40, 40, 85));
     m_Datas->Add(new Rgb(FRAMECOLOR, "", 65, 60, 150));
     m_Datas->Add(new Rect(FRAMESIZE, "Relative frame size [%]", .5, .5, 0.4, 0.4));
-    m_Datas->Add(new Hmi::TData<bool>(DRAWFRAME, "Draw a visible frame around item", true));
+    m_Datas->Add(new Data::Bool(DRAWFRAME, "Draw a visible frame around item", true));
 
-    m_Chords = new Hmi::Map("Chords", "Customize");
+    m_Chords = new Data::Map("Chords", "Customize");
     m_Chords->Add(new Rgb(BACKGROUNDCOLOR, "", 30, 75, 20));
     m_Chords->Add(new Rgb(FRAMECOLOR, "", 55, 105, 45));
     m_Chords->Add(new Rect(FRAMESIZE, "Relative frame size [%]", .5, .5, 0.4, 0.4));
-    m_Chords->Add(new Hmi::TData<bool>(DRAWFRAME, "Draw a visible frame around item", true));
+    m_Chords->Add(new Data::Bool(DRAWFRAME, "Draw a visible frame around item", true));
 
-    m_Lists = new Hmi::Map("Lists", "Customize");
+    m_Lists = new Data::Map("Lists", "Customize");
     m_Lists->Add(new Rgb(BACKGROUNDCOLOR, "", 0, 11, 11));
     m_Lists->Add(new Rgb(FRAMECOLOR, "", 2, 26, 26));
     m_Lists->Add(new Rect(FRAMESIZE, "Relative frame size [%]", .5, .5, 0.6, 0.6));
-    m_Lists->Add(new Hmi::TData<bool>(DRAWFRAME, "Draw a visible frame around item", true));
+    m_Lists->Add(new Data::Bool(DRAWFRAME, "Draw a visible frame around item", true));
 
-    m_Texts = new Hmi::Map("Text fields", "Customize");
+    m_Texts = new Data::Map("Text fields", "Customize");
     m_Texts->Add(new Rgb(BACKGROUNDCOLOR, "", 1, 1, 1));
     m_Texts->Add(new Rgb(FRAMECOLOR, "", 30, 30, 75));
     m_Texts->Add(new Rect(FRAMESIZE, "Relative frame size [%]", .5, .5, 0.6, 0.6));
     m_Texts->Add(new Rgb(FONTCOLOR, "", 180, 180, 180));
-    m_Texts->Add(new Hmi::TData<unsigned>(FONTSIZE, "", 16));
+    m_Texts->Add(new Data::Unsigned(FONTSIZE, "", 16));
 
-    m_Views = new Hmi::Map("Views", "Customize");
+    m_Views = new Data::Map("Views", "Customize");
     m_Views->Add(new Rgb(BACKGROUNDCOLOR, "", 5, 0, 14));
     m_Views->Add(new Rgb(FRAMECOLOR, "", 11, 2, 41));
     m_Views->Add(new Rect(FRAMESIZE, "Relative frame size [%]", .5, .5, 1.0, 1.0));
-    m_Views->Add(new Hmi::TData<bool>(DRAWFRAME, "Draw a visible frame around item", true));
+    m_Views->Add(new Data::Bool(DRAWFRAME, "Draw a visible frame around item", true));
 
-    Hmi::Interface* settings = new Hmi::Interface("Settings", "");
+    Data::Interface* settings = new Data::Interface("Settings", "");
     settings->AddControl(m_Buttons);
     settings->AddControl(m_Datas);
     settings->AddControl(m_Chords);
@@ -69,8 +69,7 @@ BasicSdl1::BasicSdl1() : m_Hmi("BasicSdl1", "Basic SDL1 visual theme")
     settings->AddControl(m_Views);
 
     m_Hmi.Add(settings);
-    m_Hmi.Add(new Hmi::Action<BasicSdl1>(
-        "Toggle full screen", "", this, &BasicSdl1::ToggleFullscreen));
+    m_Hmi.Add(new Data::Action("Toggle full screen", "", this, &BasicSdl1::ToggleFullscreen));
 }
 
 
@@ -113,7 +112,7 @@ TTF_Font* BasicSdl1::GetFont(int size)
 
 unsigned BasicSdl1::GetBaseSize()
 {
-    return ((Hmi::TData<unsigned>*)(m_Texts->GetChild(FONTSIZE)))->GetValue();
+    return ((Data::Unsigned*)(m_Texts->GetChild(FONTSIZE)))->GetValue();
 }
 
 

@@ -4,7 +4,7 @@
 #include "data/list.h"
 
 
-namespace Hmi {
+namespace Data {
 
 
 class Vector : public List

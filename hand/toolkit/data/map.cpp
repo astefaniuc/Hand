@@ -1,7 +1,7 @@
 #include "data/map.h"
 
 
-namespace Hmi {
+namespace Data {
 
 
 void Map::Add(const std::string& key, Item* child)

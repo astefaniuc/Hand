@@ -66,10 +66,10 @@ void List::SetLayout(Layout* layout)
 }
 
 
-Hmi::List* List::GetLayerControls()
+Data::List* List::GetLayerControls()
 {
     if (!m_LayerCommands)
-        m_LayerCommands = new Hmi::Vector(LAYER_CONTROLS, "");
+        m_LayerCommands = new Data::Vector(LAYER_CONTROLS, "");
     return m_LayerCommands;
 }
 

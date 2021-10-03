@@ -2,12 +2,13 @@
 #define HAND_DATA_MANIPULATOR_MANIPULATOR_H
 
 #include "base/module.h"
+#include "base/typenames.h"
 #include <limits>
 
 
-namespace Hmi {
-    class Data;
-    template<typename DataType> class TData;
+namespace Data {
+    class Base;
+    template<typename DataType> class Typed;
     class Interface;
 }
 
@@ -18,11 +19,11 @@ namespace Manipulator {
 class Base : public Module
 {
 public:
-    void SetInterface(Hmi::Interface* hmi) { m_Interface = hmi; }
+    void SetInterface(Data::Interface* hmi) { m_Interface = hmi; }
     void GetHmi(Layer* caller) override;
 
 protected:
-    Hmi::Interface* m_Interface = nullptr;
+    Data::Interface* m_Interface = nullptr;
 };
 
 
@@ -30,7 +31,7 @@ template <typename DataType>
 class Typed : public Base
 {
 public:
-    void SetItem(Hmi::TData<DataType>* toHandle)
+    void SetItem(Data::Typed<DataType>* toHandle)
     {
         m_Item = toHandle;
         Init();
@@ -40,7 +41,7 @@ public:
     virtual void Init() {}
 
 protected:
-    Hmi::TData<DataType>* m_Item = nullptr;
+    Data::Typed<DataType>* m_Item = nullptr;
 };
 
 
@@ -48,13 +49,10 @@ template <typename DataType>
 class Numeric : public Typed<DataType>
 {
 public:
-    void SetMin(DataType min);
-    void SetMax(DataType max);
-    bool IsValid(const DataType& input) override { return ((input >= m_Min) && (input <= m_Max)); }
-
-protected:
-    DataType m_Min = std::numeric_limits<DataType>::min();
-    DataType m_Max = std::numeric_limits<DataType>::max();
+    bool IsValid(const DataType& input) override
+    {
+        return (input >= this->m_Item->GetMin()) && (input <= this->m_Item->GetMax());
+    }
 };
 
 }

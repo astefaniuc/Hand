@@ -126,6 +126,8 @@ public:
 private:
     // Content size and position
     SDL_Rect m_Size = { 0, 0, 0, 0 };
+    SDL_Rect m_AvailableSize = { 0, 0, 0, 0 };
+
     Item* m_Item = nullptr;
     Layout* m_Parent = nullptr;
 

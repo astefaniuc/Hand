@@ -4,7 +4,7 @@
 #include "view/layers/hmi/listview.h"
 
 
-namespace Hmi {
+namespace Data {
 
 
 void List::GetShortcuts(Interface* caller, List* out)

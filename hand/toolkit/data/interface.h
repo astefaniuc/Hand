@@ -4,12 +4,13 @@
 #include "data/map.h"
 #include "data/vector.h"
 #include "include/stdfields.h"
+#include "base/factory.h"
 
 
 class Layer;
 namespace Layers { class Interface; }
 
-namespace Hmi {
+namespace Data {
 
 
 class Interface : public Map
@@ -32,12 +33,22 @@ public:
 
     void DeleteCb(Layer*) { delete this; }
 
+
+    void AddFactory(IFactory<Manipulator::Base>* f, const std::string& target)
+    {
+        m_ManipulatorFactories.Register(f, target);
+    }
+
+    Manipulator::Base* GetManipulator(const std::string& type);
+
 protected:
     void Execute(Layers::Item* caller) override;
     Layer* CreateExpandedView() override;
     Layer* CreateExpandedData() override;
 
     Vector m_ViewStack;
+
+    FactorySet<Manipulator::Base> m_ManipulatorFactories;
 };
 
 }

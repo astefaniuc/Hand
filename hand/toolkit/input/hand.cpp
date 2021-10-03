@@ -14,10 +14,10 @@ const std::string Hand::Finger[] = {
     "Thumb", "Pointer finger", "Middle finger", "Ring finger", "Little finger" };
 
 
-class Key : public Hmi::Note
+class Key : public Data::String
 {
 public:
-    Key(Chord::Finger f) : Hmi::Note(Hand::Finger[f], "", "") {}
+    Key(Chord::Finger f) : Data::String(Hand::Finger[f], "", "") {}
 
 protected:
     Layer* CreateButtonView()
@@ -34,7 +34,7 @@ protected:
 Hand::Hand(Device* dev) : Module(), m_Device(dev)
 {
     m_Device->SetUser(this);
-    m_KeysHmi = new Hmi::Vector("Keys", "");
+    m_KeysHmi = new Data::Vector("Keys", "");
     m_KeysHmi->Add(new Key(Chord::Thumb));
     m_KeysHmi->Add(new Key(Chord::Pointer));
     m_KeysHmi->Add(new Key(Chord::Middle));
@@ -54,7 +54,7 @@ Hand::~Hand()
 
 Layer* Hand::GetInitScreen()
 {
-    Hmi::Interface* initScreen = new Hmi::Interface(
+    Data::Interface* initScreen = new Data::Interface(
         "Keyboard Initialization",
         "Press 5 keys on the keyboard, to initialize a Hand device.");
     initScreen->GetView()->Attach(m_KeysHmi);
@@ -62,7 +62,7 @@ Layer* Hand::GetInitScreen()
     initScreen->SetLayerInitializer(this, &Hand::InitInitLayer);
 
     Layers::Interface* ret = initScreen->GetExpandedView()->GetInterface();
-    ret->ExitListeners.Add(initScreen, &Hmi::Interface::DeleteCb);
+    ret->ExitListeners.Add(initScreen, &Data::Interface::DeleteCb);
     return ret;
 }
 
@@ -97,7 +97,7 @@ bool Hand::Init()
     for (unsigned i = 0; i < m_NumberOfKeys; ++i)
     {
         // Do we have keys to load?
-        Hmi::Note* data = GetKey(i);
+        Data::String* data = GetKey(i);
         if (!data)
             return false;
         std::string key_str = data->GetValue();
@@ -212,9 +212,9 @@ int Hand::GetKeyIndex(int k)
 }
 
 
-Hmi::Note* Hand::GetKey(unsigned pos)
+Data::String* Hand::GetKey(unsigned pos)
 {
-    return static_cast<Hmi::Note*>(m_KeysHmi->GetChild(pos));
+    return static_cast<Data::String*>(m_KeysHmi->GetChild(pos));
 }
 
 
@@ -229,10 +229,10 @@ void Hand::AddKey(int k)
 void Hand::DeleteKey(unsigned index)
 {
     // Adjust UI literals
-    Hmi::Note* curr = GetKey(index);
+    Data::String* curr = GetKey(index);
     for (unsigned i = index + 1; i < m_NumberOfKeys; ++i)
     {
-        Hmi::Note* next = GetKey(i);
+        Data::String* next = GetKey(i);
         curr->SetValue(next->GetValue());
         curr = next;
     }

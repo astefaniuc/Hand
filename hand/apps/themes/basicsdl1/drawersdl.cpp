@@ -5,7 +5,7 @@
 #include <SDL2/SDL_ttf.h>
 
 
-DrawerSdl::DrawerSdl(BasicSdl1* theme, Layer* layer, Hmi::List* config)
+DrawerSdl::DrawerSdl(BasicSdl1* theme, Layer* layer, Data::List* config)
     : m_Theme(theme), m_Properties(config)
 {
     SetLayer(layer);
@@ -143,7 +143,7 @@ void DrawerSdl::DrawFrame()
 
 bool DrawerSdl::GetDrawFrame() const
 {
-    Hmi::TData<bool>* data = dynamic_cast<Hmi::TData<bool>*>(m_Properties->GetChild(DRAWFRAME));
+    Data::Bool* data = dynamic_cast<Data::Bool*>(m_Properties->GetChild(DRAWFRAME));
     if (data)
         return data->GetValue();
     return true;

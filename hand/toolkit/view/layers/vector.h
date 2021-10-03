@@ -18,7 +18,7 @@ public:
 protected:
     void Rebuild() override;
 
-    void AddLayer(Hmi::Item* data);
+    void AddLayer(Data::Item* data);
 
     Drawer* GetDrawerFromTheme() override;
     Layout* CreateLayout() override { return new Layouts::Vector(); }

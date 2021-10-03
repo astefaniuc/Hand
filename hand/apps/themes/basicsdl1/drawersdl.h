@@ -13,7 +13,7 @@ class BasicSdl1;
 class DrawerSdl : public Drawer
 {
 public:
-    DrawerSdl(BasicSdl1* theme, Layer* layer, Hmi::List* config);
+    DrawerSdl(BasicSdl1* theme, Layer* layer, Data::List* config);
     ~DrawerSdl();
 
     void Exit(Layer*) override;
@@ -23,7 +23,7 @@ public:
     SDL_Rect ComputeSize(const SDL_Rect& content) override { return GetFramedSize(content); }
     SDL_Rect GetContentSize(const SDL_Rect& outer) override;
 
-    void SetProperties(Hmi::List* config) { m_Properties = config; }
+    void SetProperties(Data::List* config) { m_Properties = config; }
 
     static DrawerSdl* GetDrawer(Layer* from);
     static void BlitSurface(SDL_Surface* source, SDL_Rect* source_pos, SDL_Surface* target);
@@ -48,7 +48,7 @@ protected:
 
     BasicSdl1* m_Theme;
     SDL_Surface* m_Buffer = nullptr;
-    Hmi::List* m_Properties;
+    Data::List* m_Properties;
     bool m_ShowFrame = true;
 };
 

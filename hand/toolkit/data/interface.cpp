@@ -3,7 +3,7 @@
 #include "view/layers/vector.h"
 
 
-namespace Hmi {
+namespace Data {
 
 
 Interface::Interface(
@@ -42,6 +42,24 @@ Layer* Interface::CreateExpandedData()
 {
     Layers::List* ret = new Layers::Vector();
     ret->SetExpandChildren(true);
+    return ret;
+}
+
+
+Manipulator::Base* Interface::GetManipulator(const std::string& type)
+{
+    Manipulator::Base* ret = m_ManipulatorFactories.Create(type);
+    if (!ret)
+    {
+        List* parent = GetParent();
+        if (parent)
+        {
+            Interface* parentIface = parent->GetInterface();
+            if (parentIface)
+                return parentIface->GetManipulator(type);
+        }
+    }
+
     return ret;
 }
 

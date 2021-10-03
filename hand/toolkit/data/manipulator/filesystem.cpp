@@ -7,15 +7,15 @@ namespace bfs = boost::filesystem;
 namespace Manipulator {
 
 
-bfs::path GetPath(Hmi::TData<std::string>* a_in)
+bfs::path GetPath(Data::String* a_in)
 {
     // We can't do this in the ctor because the parent is not set.
     bfs::path path(a_in->GetValue());
     if (path.is_relative())
     {
         Folder* parentManip = nullptr;
-        Hmi::TData<std::string>* parentItem =
-            dynamic_cast<Hmi::TData<std::string>*>(a_in->GetParent());
+        Data::String* parentItem =
+            dynamic_cast<Data::String*>(a_in->GetParent());
         if (parentItem)
             parentManip = dynamic_cast<Folder*>(parentItem->GetManipulator());
 
@@ -49,13 +49,13 @@ bool Folder::IsValid(const std::string&)
 }
 
 
-Hmi::List* Folder::GetContent()
+Data::List* Folder::GetContent()
 {
     bfs::path path = GetPath(m_Item);
     if (!is_directory(path))
         return nullptr;
 
-    Hmi::Vector* ret = new Hmi::Vector(m_Item->GetValue(), "Content");
+    Data::Vector* ret = new Data::Vector(m_Item->GetValue(), "Content");
 
     bfs::directory_iterator end;
     for (bfs::directory_iterator iter(path); iter != end ; ++iter)
@@ -66,7 +66,7 @@ Hmi::List* Folder::GetContent()
         else if (is_directory(iter->status()))
             manip = new Folder();
 
-        ret->Add(new Hmi::TData<std::string>(iter->path().filename().string(), "", "", manip));
+        ret->Add(new Data::String(iter->path().filename().string(), "", "", manip));
     }
 
     return ret;

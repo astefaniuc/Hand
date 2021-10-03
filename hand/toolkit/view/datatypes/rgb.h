@@ -4,7 +4,7 @@
 #include "data/map.h"
 
 
-class Rgb : public Hmi::Map
+class Rgb : public Data::Map
 {
 public:
     Rgb(

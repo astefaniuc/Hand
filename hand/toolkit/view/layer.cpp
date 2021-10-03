@@ -33,7 +33,7 @@ void Layer::Draw(SDL_Surface* buffer)
 }
 
 
-void Layer::SetData(Hmi::Item* data)
+void Layer::SetData(Data::Item* data)
 {
     if (m_Data)
         RemoveData();
@@ -120,7 +120,7 @@ void Layer::Update()
 }
 
 
-void Layer::OnDataExit(Hmi::Item*)
+void Layer::OnDataExit(Data::Item*)
 {
     m_Data = nullptr;
     Exit();

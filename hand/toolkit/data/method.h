@@ -5,7 +5,7 @@
 #include "view/layers/hmi/button.h"
 
 
-namespace Hmi {
+namespace Data {
 
 
 template <class CbOwner>

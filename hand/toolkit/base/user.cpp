@@ -26,8 +26,10 @@ User::User(EventHandler* a_input)
     m_ViewLayer->ExitListeners.Add(this, &User::StopCb);
     m_ViewLayer->SetData(&m_View);
 
+    m_View.AddFactory(new TypeFactory<Manipulator::Typed<uint8_t>, Manipulator::Base>(), GetTypeName<uint8_t>());
+
     m_ThemeLoader = new ModuleLib();
-    m_View.AddControl(new Hmi::Note(
+    m_View.AddControl(new Data::String(
             "Theme", "Select visualization theme",
             "./binaries/lib/themes/basicsdl1.so", m_ThemeLoader));
 
@@ -70,7 +72,7 @@ void User::Stop()
 }
 
 
-bool User::LoadApp(Hmi::Note* a_path)
+bool User::LoadApp(Data::String* a_path)
 {
     ModuleLib* app = new ModuleLib();
     app->SetItem(a_path);

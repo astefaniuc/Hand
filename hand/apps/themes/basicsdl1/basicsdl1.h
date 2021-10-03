@@ -44,13 +44,13 @@ protected:
     void ToggleFullscreen(Layers::Item*);
     SDL_Rect GetResolution();
 
-    Hmi::Vector m_Hmi;
-    Hmi::Map* m_Buttons;
-    Hmi::Map* m_Datas;
-    Hmi::Map* m_Chords;
-    Hmi::Map* m_Lists;
-    Hmi::Map* m_Texts;
-    Hmi::Map* m_Views;
+    Data::Vector m_Hmi;
+    Data::Map* m_Buttons;
+    Data::Map* m_Datas;
+    Data::Map* m_Chords;
+    Data::Map* m_Lists;
+    Data::Map* m_Texts;
+    Data::Map* m_Views;
 
     Layer* m_ScreenRoot = nullptr;
     // The whole screen TODO: can we use SDL_GetVideoSurface() instead?

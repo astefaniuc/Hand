@@ -7,7 +7,7 @@
 struct Chord;
 class Hand;
 class Layer;
-namespace Hmi { class Item; }
+namespace Data { class Item; }
 namespace Layers {
     class Item;
     class List;
@@ -55,7 +55,7 @@ private:
     Group* m_Focus = nullptr;
 
     Layers::List* m_InterfaceCtrls = nullptr;
-    Hmi::Item* m_MoveControlUp;
+    Data::Item* m_MoveControlUp;
 
     bool m_IsModified = false;
 };

@@ -4,14 +4,14 @@
 #include "data/data.h"
 
 
-namespace Hmi {
+namespace Data {
 
 
-class List : public Data
+class List : public Base
 {
 public:
     List(const std::string& name, const std::string& description, Manipulator::Base* manip)
-        : Data(name, description, manip) {}
+        : Base(name, description, manip) {}
 
     /// Insert a child item and assume ownership of it.
     virtual void Add(Item* child) = 0;

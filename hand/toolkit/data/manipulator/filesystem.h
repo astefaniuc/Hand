@@ -22,20 +22,20 @@ public:
 class Folder : public Path
 {
 public:
-    Folder() { m_Interface = new Hmi::Interface("Folder", "TODO"); }
+    Folder() { m_Interface = new Data::Interface("Folder", "TODO"); }
 
     bool IsValid(const std::string&) override;
 
     /// Returns a list of files and sub-folders.
     // TODO: regular expressions for filtering
-    Hmi::List* GetContent();
+    Data::List* GetContent();
 };
 
 
 class File : public Path
 {
 public:
-    File() { m_Interface = new Hmi::Interface("File", ""); }
+    File() { m_Interface = new Data::Interface("File", ""); }
 
     void Init() override;
 

@@ -4,8 +4,8 @@
 #include "view/layers/list.h"
 
 
-namespace Layers {
-
+namespace Layers
+{
 
 class Data : public List
 {

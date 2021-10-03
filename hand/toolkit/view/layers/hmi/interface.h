@@ -5,10 +5,11 @@
 #include "data/interface.h"
 
 
-namespace Hmi { class Vector; }
+namespace Data { class Vector; }
 namespace Interaction { class Control; }
 
-namespace Layers {
+namespace Layers
+{
 
 class ListView;
 class Vector;
@@ -40,7 +41,7 @@ protected:
 
 private:
     ListView* m_Controls;
-    Hmi::Vector* m_Shortcuts = nullptr;
+    Data::Vector* m_Shortcuts = nullptr;
 };
 
 }

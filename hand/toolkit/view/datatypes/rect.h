@@ -19,7 +19,7 @@ struct RelRect
 
 
 
-class Rect : public Hmi::Vector
+class Rect : public Data::Vector
 {
 public:
     Rect(
@@ -32,9 +32,9 @@ public:
     void Reset();
 
 private:
-    Hmi::TData<double>* Get(const std::string& coordinate)
+    Data::Double* Get(const std::string& coordinate)
     {
-        return (Hmi::TData<double>*)GetChild(coordinate);
+        return (Data::Double*)GetChild(coordinate);
     }
 
     RelRect m_Value;

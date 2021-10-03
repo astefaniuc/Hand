@@ -4,13 +4,13 @@
 #include "view/layers/list.h"
 
 
-namespace Layers {
-
+namespace Layers
+{
 
 class Item : public List
 {
 public:
-    void SetData(Hmi::Item* data) override;
+    void SetData(::Data::Item* data) override;
     void RemoveData() override;
 
     void Activate() override { ActivationListeners.Notify(this); }
@@ -19,7 +19,7 @@ public:
 
 protected:
     void Rebuild() override;
-    void OnDataChanged(Hmi::Item*) override {}
+    void OnDataChanged(::Data::Item*) override {}
 };
 
 }
